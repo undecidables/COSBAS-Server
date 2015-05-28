@@ -45,6 +45,7 @@ dependencies {
 
     compile 'nu.pattern:opencv:2.4.9-7'
 
+    //TODO THis one breaks the build cause it can't find a dependency
     //compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
     // Testing framework.
