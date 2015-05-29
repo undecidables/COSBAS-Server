@@ -8,8 +8,9 @@ The Computer Science Biometric Access System's Server Code.
 
 
 ##Notes to the team
-    *We need to create the wiki.
-    *Please look into using git [commit keywords](https://help.github.com/articles/closing-issues-via-commit-messages/).
-    *Please document all code *immediately* using JavaDoc
-    *All http routes must be documented, maybe on the wiki somewhere? This gets really confusing to keep track of after a while...
-    *Please use *pull requests* to merge into main -- do **not** merge directly. This means someone else can review your code and we have a better history.
+
+    * We need to create the wiki.
+    * Please look into using git [commit keywords](https://help.github.com/articles/closing-issues-via-commit-messages/).
+    * Please document all code *immediately* using JavaDoc
+    * All http routes must be documented, maybe on the wiki somewhere? This gets really confusing to keep track of after a while...
+    * Please use *pull requests* to merge into main -- do **not** merge directly. This means someone else can review your code and we have a better history.
