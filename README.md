@@ -12,6 +12,7 @@ The Computer Science Biometric Access System's Server Code.
 * All http routes must be documented, maybe on the wiki somewhere? This gets really confusing to keep track of after a while...
 * Branches
     + Create a new branch for a new feature
+    + Before you start working on a recently merged branch please make sure to pull from master to update the branch to after the merge.
     + Use branch names with some relation to the feature you are working on.
     + Please use *pull requests* to merge into master -- do **not** merge directly. 
         - This means someone else can review your code if necessary and we have a better history of what was merged when
