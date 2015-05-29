@@ -15,6 +15,7 @@ buildscript {
     }
 }
 
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -28,11 +29,27 @@ jar {
 // In this section you declare where to find the dependencies of your project
 repositories {
     //jcenter()
+    mavenLocal()
     mavenCentral()
+    maven {
+        url "http://jasperreports.sourceforge.net/maven2"
+    }
+    maven {
+        url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+    }
 }
+
 
 sourceCompatibility = 7
 targetCompatibility = 7
+
+sourceSets {
+    jasper {
+        def srcDir = file(relativePath('src/main/resources/reports'))
+        def classesDir = srcDir
+    }
+}
+
 
 dependencies {
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
@@ -48,6 +65,7 @@ dependencies {
     //TODO THis one breaks the build cause it can't find a dependency
     //compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
+    compile 'net.sf.jasperreports:jasperreports:6.1.0'
     // Testing framework.
     testCompile "junit:junit"
 }
@@ -55,3 +73,22 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
+
+//All these stuff for jasper
+
+configurations.create('jasperreports')
+configurations.jasperreports {
+    transitive = true
+}
+/*
+task compileJasperJava(overwrite: true) << {
+    ant {
+        taskdef(name: 'jrc', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.jasperreports.asPath)
+        sourceSets.jasper.classesDir.mkdirs()
+        jrc(srcdir: sourceSets.jasper.srcDir, destdir: sourceSets.jasper.classesDir) {
+         *///   include(name:'**/*.jrxml')
+     /*   }
+    }
+}
+*/
+classes.dependsOn compileJasperJava
