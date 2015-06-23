@@ -50,11 +50,11 @@ dependencies {
     compile 'org.springframework.session:spring-session:1.0.1.RELEASE'
     //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
 
-   // compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
+    compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
 
-   // compile 'nu.pattern:opencv:2.4.9-7'
+    compile 'nu.pattern:opencv:2.4.9-7'
 
-   // compile 'net.sf.jasperreports:jasperreports:6.1.0'*/
+    compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
 
     testCompile "junit:junit"
@@ -66,8 +66,8 @@ task wrapper(type: Wrapper) {
 }
 
 // All these stuff for jasper
-// TODO Thouroughly test build script with JAsper reports
-/*
+ // TODO Thouroughly test build script with JAsper reports
+
 sourceSets {
     jasper
 }
@@ -77,6 +77,6 @@ configurations.jasperreports {
     transitive = true
 }
 
-classes.dependsOn compileJasperJava*/
+classes.dependsOn compileJasperJava
 
 
