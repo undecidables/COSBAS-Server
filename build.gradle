@@ -43,6 +43,7 @@ repositories {
 }
 
 dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
     compile 'org.springframework.security:spring-security-web:4.0.1.RELEASE'
     compile 'org.springframework.webflow:spring-webflow:2.4.0.RELEASE'
@@ -57,6 +58,7 @@ dependencies {
 
 
     testCompile "junit:junit"
+    testCompile "org.mockito:mockito-core:1.+"
 }
 
 task wrapper(type: Wrapper) {
