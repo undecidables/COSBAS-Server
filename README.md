@@ -6,6 +6,10 @@
 
 The Computer Science Biometric Access System's Server Code.
 
+## Running the Server
+
+To launch the server run gradle bootrun or gradlew bootrun in the projects root folder.  
+
 ## Notes to the team
 * Please look into using git [commit keywords](https://help.github.com/articles/closing-issues-via-commit-messages/).
 * Please document all code *immediately* using JavaDoc
