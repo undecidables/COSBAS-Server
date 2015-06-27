@@ -8,9 +8,10 @@ import java.time.LocalDateTime;
  * Contains: DoorID as sent by client, current time of the server.
  */
 public class AccessRequest {
-    public AccessRequest(String doorID, BiometricData[] data) {
+    public AccessRequest(String doorID, String action, BiometricData[] data) {
         this.doorID = doorID;
         this.data = data;
+        this.action = action;
     }
 
     public String getDoorID() {
@@ -24,6 +25,16 @@ public class AccessRequest {
     public BiometricData[] getData() {
         return data;
     }
+
+    public String getAction()
+    {
+        return action;
+    }
+
+    /**
+     * Action(eg. exit or entrance) sent from client
+     */
+    private final String action;
 
     /**
      * ID from client Request.
