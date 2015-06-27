@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<biometricReponse xmlns:th="http://www.thymeleaf.org">
-
-<success th:text="${success}" />
-
-</biometricReponse>

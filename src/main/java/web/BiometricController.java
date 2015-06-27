@@ -1,30 +1,26 @@
 /**
  * @author Renette
  * MVC COntroller for biometric system
+ * Responds with plain text to requests
  */
 
 package web;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+
+@RestController
 public class BiometricController {
 
-  /**
-   * An Example route, can be removed once we have something definite
-   * @return greeting page
-   */
-  @RequestMapping(method= RequestMethod.GET, value="/biometrics/access")
-  public String index(Model model) {
-    model.addAttribute("success", false);
+  @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access")
+  public String access(@RequestParam(value = "accessRequest", required = false, defaultValue = "World") String accessRequest, Model model) {
 
-
-    //TODO figure out how to serve xml files with thymeleaf.  View resolver/template resolver/extensions .....
-    return "access";
+    //TODO Call access function and serialize response to JSON
+    return "{TODO: Serialize response object to JSON}";
   }
 
 }
