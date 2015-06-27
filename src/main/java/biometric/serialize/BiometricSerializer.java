@@ -22,6 +22,6 @@ public abstract class BiometricSerializer {
      * TODO: I dont think String is correct input type... What data does http request use?
      */
     public AccessRequest parseRequest(String request) {
-        return new AccessRequest("0", new BiometricData[0]);
+        return new AccessRequest("0", "entrance", new BiometricData[0]);
     }
 }
