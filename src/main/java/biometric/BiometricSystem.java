@@ -5,12 +5,12 @@ package biometric;
  * Modules handles core biometric functions.
  */
 public class BiometricSystem {
-    Boolean requestAccess(AccessRequest req) {
+    AccessResponse requestAccess(AccessRequest req) {
         //Create correct type of access validor from request
         //Read from config file or something?
         //Validate
 
-        return false;
+        return new AccessResponse(req, false, "This has not been implemented yet.");
     }
 
     Boolean addUser(BiometricUser user) {

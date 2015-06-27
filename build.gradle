@@ -21,7 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-//I'm not sure if this is needed, but for safety sake we are declaring usage of Java 7
+//Java 8 because the system uses LocalDateTime API
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -49,10 +49,12 @@ dependencies {
     compile 'org.springframework.webflow:spring-webflow:2.4.0.RELEASE'
     compile 'org.springframework.session:spring-session:1.0.1.RELEASE'
     compile 'org.thymeleaf:thymeleaf:2.0.5'
-    //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
 
     compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
     compile 'com.google.code.gson:gson:2.3.1'
+
+    //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
+
 
     compile 'nu.pattern:opencv:2.4.9-7'
 

@@ -1,6 +1,6 @@
 package biometric.validators;
 
-import biometric.AccessRequest;
+import biometric.BiometricData;
 
 /**
  * Created by Renette on 2015-06-26.
@@ -9,7 +9,7 @@ import biometric.AccessRequest;
 public class CodeValidator implements AccessValidator {
 
     @Override
-    public boolean validate(AccessRequest request) {
+    public boolean validate(BiometricData request) {
         byte[] code = request.getData();
         //Lookup in db
         //Validate

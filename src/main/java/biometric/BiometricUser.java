@@ -5,6 +5,13 @@ package biometric;
  * A user with a user id and biometric data to be registered on ths system.
  */
 public class BiometricUser {
-    String id;
-    AccessRequest[] data;
+    /**
+     * User's login ID.
+     */
+    String userID;
+
+    /**
+     * Array of BiometricData Objects for user.
+     */
+    BiometricData[] data;
 }

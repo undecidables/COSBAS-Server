@@ -1,34 +1,43 @@
 package biometric;
 
+import java.time.LocalDateTime;
+
 /**
- * Created by Renette on 2015-06-26.
- * Access Request created from http request.
+ * Created by Renette on 2015-06-27.
+ * Access Request.
+ * Contains: DoorID as sent by client, current time of the server.
  */
 public class AccessRequest {
+    public AccessRequest(String doorID, BiometricData[] data) {
+        this.doorID = doorID;
+        this.data = data;
+    }
 
+    public String getDoorID() {
+        return doorID;
+    }
 
-    /**
-     * Identifies type of biometric data.
-     * TODO Maybe an enum is better - or is string & class stored somewhere in config file?
-     */
-    final String type;
+    public LocalDateTime getTime() {
+        return time;
+    }
 
-    public byte[] getData() {
+    public BiometricData[] getData() {
         return data;
     }
 
-    public String getType() {
-        return type;
-    }
+    /**
+     * ID from client Request.
+     */
+    private final String doorID;
 
     /**
-     * Actual biometric data data.
-     * TODO Make sure this is best format.
+     * Time request object created on server..
      */
-    final byte[] data;
+    private final LocalDateTime time = LocalDateTime.now();
 
-    public AccessRequest(String type, byte[] data) {
-        this.type = type;
-        this.data = data;
-    }
+    /**
+     * Array of biometric data from request.
+     */
+    private final BiometricData[] data;
+
 }
