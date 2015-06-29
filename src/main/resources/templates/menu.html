@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<nav th:fragment="navigation">
+			<ul th:if="${name == ''}">
+				<li>
+					<a href="/">
+						Home
+					</a>
+				</li>
+				<li>
+					<a href="makeAppointment.html">
+						Make appointment
+					</a>
+				</li>
+				<li>
+					<a href="login.html">
+						Login
+					</a>
+				</li>
+			</ul>
+
+			<ul th:if="${name != ''}">
+				<li>
+					<a href="/">
+						Home
+					</a>
+				</li>
+				<li>
+					<a href="makeAppointment.html">
+						Make appointment
+					</a>
+				</li>
+				<li>
+					<a href="checkAppointment.html">
+						Check appointments
+					</a>
+				</li>
+				<li>
+					<a href="addUser.html">
+						Add authorized user
+					</a>
+				</li>
+				<li>
+					<a href="logout.html">
+						Logout
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</body>
+</html>
