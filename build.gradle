@@ -24,10 +24,9 @@ apply plugin: 'spring-boot'
 
 
 jar {
-    baseName = 'gs-authenticating-ldap'
-    version =  '0.1.0'
+    baseName = 'cosbas'
+    version =  '0.0.1'
 }
-
 
 // In this section you declare where to find the dependencies of your project
 repositories {

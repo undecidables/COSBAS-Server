@@ -1,8 +1,6 @@
 package authentication;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
@@ -11,10 +9,8 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.Filter;
 import org.springframework.ldap.support.LdapUtils;
-
 import javax.naming.directory.DirContext;
 import java.util.List;
-
 /**
  * This class is a Spring LDAP Integrated LDAP Authenticator. It authenticates a user with LDAP by doing a simple binding with the user's DN (Domain Name) and password.
  * NOTE: By doing the binding, it's only necessary to send in the DN and cleartext password - the server automatically compares the cleartext password with the hashed+salted password.
