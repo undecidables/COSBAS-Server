@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE')
     }
 }
 
@@ -19,8 +19,11 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'war'
 apply plugin: 'spring-boot'
+
+//Java 8 because the system uses LocalDateTime API
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 
 jar {
@@ -33,47 +36,44 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url "http://jasperreports.sourceforge.net/maven2"
+        url 'http://jasperreports.sourceforge.net/maven2'
     }
     maven {
-        url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+        url 'http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/'
     }
 }
 
 
 dependencies {
 
-    compile files("${System.properties['java.home']}/../lib/tools.jar")
+   // compile files('${System.properties['java.home']}/../lib/tools.jar')
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile 'org.springframework.boot:spring-boot-starter-web' 
+    compile 'org.springframework.boot:spring-boot-starter-security' 
+    
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
-    compile 'org.springframework.security:spring-security-web:4.0.1.RELEASE'
+    compile 'org.springframework.security:spring-security-web:4.0.1.RELEASE' 
+    compile 'org.springframework.security:spring-security-ldap:3.2.5.RELEASE'
+    
     compile 'org.springframework.webflow:spring-webflow:2.4.0.RELEASE'
     compile 'org.springframework.session:spring-session:1.0.1.RELEASE'
 
+
     compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
 
-    compile 'org.springframework.security:spring-security-web:4.0.1.RELEASE'
+    compile 'org.springframework:spring-tx' 
+    compile 'org.apache.directory.server:apacheds-server-jndi:1.5.5' 
 
-
-    compile 'org.springframework.ldap:spring-ldap-core:2.0.2.RELEASE'
-    compile 'org.springframework.security:spring-security-ldap:3.2.5.RELEASE'
-
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.security:spring-security-ldap")
-    compile("org.springframework:spring-tx")
-    compile("org.apache.directory.server:apacheds-server-jndi:1.5.5")
-
+    compile 'org.thymeleaf:thymeleaf:2.0.5'
 
     compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
+    compile 'com.google.code.gson:gson:2.3.1'
 
     compile 'nu.pattern:opencv:2.4.9-7'
-
     compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
-
-    testCompile "junit:junit"
-    testCompile "org.mockito:mockito-core:1.+"
+    testCompile 'junit:junit'
+    testCompile 'org.mockito:mockito-core:1.+'
 }
 
 task wrapper(type: Wrapper) {
@@ -95,5 +95,5 @@ configurations.jasperreports {
 classes.dependsOn compileJasperJava
 
 springBoot {
-    mainClass = "authentication.Application"
+    mainClass = 'web.Application'
 }
