@@ -1,7 +1,7 @@
 /**
  * @author Renette
- * MVC Controller for appointment System.
- * This conmtroller serves Thymeleaf HTML templates - so Mostly for GET Requests
+ * Secondary controller for appointment System.
+ * This controller serves plain text. It is used for any URL'S that respond to Ajax requests with JSON.
  */
 
 package web;
@@ -11,21 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class AppointmentController {
+@RestController
+public class AppointmentRestController {
 
   /**
    * An Example route, can be removed once we have something definite
-   * @param name
-   * @return greeting page
+   * @param name Name to greet
+   * @return greeting JSON object
    */
-  @RequestMapping(method= RequestMethod.GET, value="/greeting")
+  @RequestMapping(method= RequestMethod.POST, value="/greeting")
   public String index(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
-    model.addAttribute("name", name);
-    return "greeting";
+    return "{greeting: \"Hello " + name + "\"}";
   }
 
-  //TODO: Map /  (root)
-  //TODO: Map /error
 }
