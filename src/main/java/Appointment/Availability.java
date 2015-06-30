@@ -1,6 +1,6 @@
 package Appointment;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Class to view and change the availability of a specific client.
@@ -15,7 +15,7 @@ public class Availability
     	return true;
     }
 
-    public void setAvailability(Date begin, Date end){
+    public void setAvailability(LocalDateTime begin, LocalDateTime end){
 
     }
 
