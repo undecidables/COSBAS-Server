@@ -53,10 +53,8 @@ dependencies {
     compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
     compile 'com.google.code.gson:gson:2.3.1'
 
-    //webAuthentication Dependencies
-    compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
-    compile("org.springframework:spring-tx")
-    //end
+    //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
+
 
     compile 'nu.pattern:opencv:2.4.9-7'
 
