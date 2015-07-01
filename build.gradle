@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE')
     }
 }
 
@@ -25,6 +25,7 @@ apply plugin: 'spring-boot'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
 jar {
     baseName = 'cosbas'
     version =  '0.0.1'
@@ -35,12 +36,13 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url "http://jasperreports.sourceforge.net/maven2"
+        url 'http://jasperreports.sourceforge.net/maven2'
     }
     maven {
-        url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+        url 'http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/'
     }
 }
+
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -53,7 +55,8 @@ dependencies {
     compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
     compile 'com.google.code.gson:gson:2.3.1'
 
-    //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
+    compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
+    compile("org.springframework:spring-tx")
 
 
     compile 'nu.pattern:opencv:2.4.9-7'
@@ -83,4 +86,6 @@ configurations.jasperreports {
 
 classes.dependsOn compileJasperJava
 
-
+springBoot {
+    mainClass = 'web.Application'
+}
