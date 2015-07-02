@@ -24,7 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll() //Allows people to access our resources
-                .antMatchers("/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/nav/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/login").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
