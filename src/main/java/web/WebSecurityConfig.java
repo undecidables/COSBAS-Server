@@ -14,11 +14,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
-
+/**
+ * This class is a Spring Security configuration file. This class is responsible for authenticating a user via LDAP and automatically integrates with the Spring MVC.
+ */
 @Configuration
 @EnableWebMvcSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * This is the basic navigation/security configuration. Currently, it's setup so that all links which have login, or nav, or root do not need to authenticate to navigate. Any other request
+     * will require the user to be logged in.
+     * Note: We permit to /login so that we don't infinitely get asked to log in when we try to log in.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -35,6 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
+    /**
+     * This configures the authentication method used - it's basically used to customize authentication to integrate with LDAP.
+     * We can't get the username from the login request via the configuration as far as I could see, so we have to add userDN patterns (the username is plugged into 'uid={0}' part.
+     */
     @Configuration
     protected static class AuthenticationConfiguration extends
             GlobalAuthenticationConfigurerAdapter {
