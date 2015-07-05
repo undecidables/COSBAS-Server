@@ -1,6 +1,6 @@
 package Appointment;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Appointments class used to Request and cancel appointments. 
@@ -9,7 +9,7 @@ import java.util.Date;
 public class Appointments 
 {
     
-    public String requestAppointment(String studentID, String lecturerID, Date dateTime)
+    public String requestAppointment(String appointerID, String staffID, LocalDateTime dateTime, String reason, Int durationInMinutes)
     {
         String appointmentID = "";
         
