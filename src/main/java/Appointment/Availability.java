@@ -22,6 +22,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
+import org.mortbay.util.ajax.JSON;
 
 /**
  * Class to view and change the availability of a specific client.
@@ -63,6 +64,17 @@ public class Availability
         Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         System.out.println("Please note that credentials have not yet been persisted. This means that we will have to authenticate with each use.");
         return credential;
+        /**
+         * TODO
+         * This is the credential object that we should persist in the database...
+         */
+    }
+
+    public static com.google.api.services.calendar.Calendar getCalendarService() throws IOException{
+        Credential credential = authorizeCOSBAS();
+        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 
     public boolean isAvailable(){
