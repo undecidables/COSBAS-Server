@@ -23,3 +23,6 @@ To launch the server run gradle bootrun or gradlew bootrun in the projects root 
     + Branches can be grouped into folders by having  a / in the name:
         - inf = infrastructure  (eg. inf/gradle)
         - bug 
+    + Login Details:
+        - Username: BCrawley
+        - Password: Crawley
