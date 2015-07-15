@@ -58,16 +58,6 @@ public class AppointmentController {
   }
 
   /**
-  * Route function to go to checkAppointment.html - Page where staff members can check all their appointments
-  * @return checkAppointment.html page
-  */
-  @RequestMapping(value = "/checkAppointment", method = RequestMethod.GET)
-  public String checkAppointment()
-  {
-    return "checkAppointment";
-  }
-
-  /**
   * Route function to go to addUser.html - Page where a new user can be added to the system
   * @return addUser.html page
   */
@@ -113,7 +103,7 @@ public class AppointmentController {
   * @return error.html page
   */
   @RequestMapping(value = "/error", method = RequestMethod.GET)
-  public String error()
+  public String handleError()
   {
     return "error";
   }
