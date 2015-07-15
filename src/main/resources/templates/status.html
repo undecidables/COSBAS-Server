@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Check Appointment Status</title>
+	</head>
+	<body>
+		<nav th:replace="menu :: navigation"></nav>
+		<h1 class="text-center">Check Appointment Status</h1>
+		<form class="col-lg-offset-4">
+			<label>Appointment ID: </label>
+			<input type="string" name="appointmentID"/>
+			<br/>
+			<label>Appointment made by(Your name): </label>
+			<input type="text" name="appointmentBy"/>
+			<br/>
+			<input type="submit" value="Check Appointment Status"/>
+		</form>
+		<br/>
+		<br/>
+		<div class="col-lg-offset-4">
+			Show status of the appointment here
+		</div>
+	</body>
+</html>

@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:include="head :: header"></head>
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Add user to the system</title>
+	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		Add authorized user
+		<h1 class="text-center">Add user to the system</h1>
+		<form class="col-lg-offset-4">
+			<label>Name:</label>
+			<input type="text" name="FirstName"/>
+			<br/>
+			<label>Surname:</label>
+			<input type="text" name="Surname"/>
+			<br/>
+			<label>finger print:</label>
+			<input type="file" name="fingerPrint"/>
+			<br/>
+			<label>Facial recognition:</label>
+			<input type="file" name="facialRecognition"/>
+			<br/>
+			all other information as needed in the DB
+			<br/>
+			<input type="submit" value="Add user"/>
+		</form>
 	</body>
 </html>

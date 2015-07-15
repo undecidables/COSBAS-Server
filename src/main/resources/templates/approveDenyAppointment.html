@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Approve/Deny Appointment</title>
+	</head>
+	<body>
+		<nav th:replace="menu :: navigation"></nav>
+		<h1 class="text-center">Approve or deny Appointments</h1>
+		<div class="container, text-center">List of the requested appointments
+			<form>
+				<label> Appointment with who at what time</label>
+				<br/>
+				<input type="submit" value="Accept"/>
+				<input type="submit" value="Deny"/>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:include="head :: header"></head>
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>COSBAS Service</title>
+	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		Home page
+		<h1 class="text-center">COSBAS Service</h1>
+		<div class="col-lg-9">Show calander here</div>
+		<div class="col-lg-3">Show selected day's appointments and requested appointments</div>
 	</body>
 </html>
