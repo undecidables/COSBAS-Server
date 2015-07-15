@@ -55,8 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         };
 
         http
-                .csrf().requireCsrfProtectionMatcher(csrfRequestMatcher)
-                .and()
+                //.csrf().requireCsrfProtectionMatcher(csrfRequestMatcher)
+                //.and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll() //Allows people to access our resources
                 .antMatchers("/nav/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
@@ -68,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll();
+
     }
 
     /**
