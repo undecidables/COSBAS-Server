@@ -18,7 +18,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.*;
+//import com.google.api.services.calendar.model.*;
 
 /**
  * Class to view and change the availability of a specific client.
@@ -57,7 +57,7 @@ public class Availability
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setAccessType("offline")
                 .build();
-        Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+        Credential credential = new  AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         System.out.println("Please note that credentials have not yet been persisted. This means that we will have to authenticate with each use.");
         return credential;
         /**
