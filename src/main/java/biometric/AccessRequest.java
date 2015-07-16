@@ -1,6 +1,7 @@
 package biometric;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by Renette on 2015-06-27.
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
  * Contains: DoorID as sent by client, current time of the server.
  */
 public class AccessRequest {
-    public AccessRequest(String doorID, String action, BiometricData[] data) {
+    public AccessRequest(String doorID, String action, List<BiometricData> data) {
         this.doorID = doorID;
         this.data = data;
         this.action = action;
@@ -22,7 +23,7 @@ public class AccessRequest {
         return time;
     }
 
-    public BiometricData[] getData() {
+    public List<BiometricData> getData() {
         return data;
     }
 
@@ -49,6 +50,6 @@ public class AccessRequest {
     /**
      * Array of biometric data from request.
      */
-    private final BiometricData[] data;
+    private final List<BiometricData> data;
 
 }
