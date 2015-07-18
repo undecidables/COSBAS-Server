@@ -1,17 +1,19 @@
 package biometric.serialize;
 
-import biometric.AccessRequest;
 import biometric.AccessResponse;
-import biometric.BiometricData;
 import com.google.gson.Gson;
 
-
 /**
- * Created by Renette on 2015-06-27.
+ * @autor Renette
  * Handles JSON conversion for Biometric System.
  * Could be replaced by another serializer if something other than JSON is preferred.
  */
+
+
 public class JSONSerializer extends BiometricSerializer {
+
+    public JSONSerializer() {super();}
+
     @Override
     public String serializeResponse(AccessResponse response) {
         Gson gson = new Gson();

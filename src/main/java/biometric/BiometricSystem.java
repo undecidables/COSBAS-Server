@@ -1,24 +1,24 @@
 package biometric;
 
 /**
- * Created by Renette on 2015-06-26.
+ * @author Renette
  * Modules handles core biometric functions.
  */
 public class BiometricSystem {
-    AccessResponse requestAccess(AccessRequest req) {
-        //Create correct type of access validor from request
+   public AccessResponse requestAccess(AccessRequest req) {
+        //Create correct type of access validator from request
         //Read from config file or something?
         //Validate
 
         return new AccessResponse(req, false, "This has not been implemented yet.");
     }
 
-    Boolean addUser(BiometricUser user) {
+    public Boolean addUser(BiometricUser user) {
         //Add info to db
         return false;
     }
 
-    Boolean removeUser(String id) {
+    public Boolean removeUser(String id) {
         //Remove info from db
         return false;
     }

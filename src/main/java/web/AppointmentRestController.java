@@ -6,6 +6,9 @@
 
 package web;
 
+import appointment.Appointments;
+import appointment.Availability;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AppointmentRestController {
 
+  @Autowired
+  public AppointmentRestController(Appointments appointments, Availability availability) {
+    this.appointments = appointments;
+    this.availability = availability;
+  }
+
+  private final Appointments appointments;
+  private final Availability availability;
   /**
    * An Example route, can be removed once we have something definite
    * @param name Name to greet
