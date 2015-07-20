@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Appointments 
 {
     
-    public String requestAppointment(String appointerID, String staffID, LocalDateTime dateTime, String reason, Int durationInMinutes)
+    public String requestAppointment(String appointerID, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes)
     {
         String appointmentID = "";
         
