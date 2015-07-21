@@ -2,19 +2,31 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
-    <!-- Unnecessary since controllers are automatically added, but kept here as an example bean.... -->
-    <!--bean id="biometricController" class="web.BiometricController">
-        <constructor-arg ref="serializer" />
-        <constructor-arg ref="authSystem" />
-    </bean-->
-
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
     <bean id="serializer" class="biometric.serialize.JSONSerializer" />
     <bean id="authSystem" class="biometric.BiometricSystem" />
     <bean id="appointments" class="appointment.Appointments" />
     <bean id="availability" class="appointment.Availability" />
+
+    <mongo:repositories base-package="db.repositories" />
+
+    <mongo:mongo port="${mongo.port}" host="${mongo.address}"/>
+
+    <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+        <constructor-arg name="username" value="${mongo.user}"/>
+        <constructor-arg name="password" value="${mongo.password}" />
+    </bean>
+
+    <!-- MongoTemplate for connecting and quering the documents in the database -->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongo" ref="mongo" />
+        <constructor-arg name="databaseName" value="${mongo.database}" />
+        <constructor-arg name="userCredentials" ref="mongoCredentials" />
+    </bean>
 
 </beans>
