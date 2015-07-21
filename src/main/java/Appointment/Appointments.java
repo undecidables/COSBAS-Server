@@ -33,7 +33,7 @@ public class Appointments
 
         repository.save(a);
         
-        return "";
+        return a.getId();
     }
     
     public void cancelAppointment(String cancelleeID, String appointmentID)
