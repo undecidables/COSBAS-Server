@@ -29,4 +29,23 @@
         <constructor-arg name="userCredentials" ref="mongoCredentials" />
     </bean>
 
+    <!-- OAuth -->
+    <oauth:client id="oauth2ClientFilter"/>
+
+    <oauth:resource id="google"
+                    type = "authorization_code"
+                    client-id="<client_ID>"
+                    client-secret="<client secret>"
+                    access-token-uri="https://accounts.google.com/o/oauth2/token"
+                    user-authorization-uri="https://accounts.google.com/o/oauth2/auth"
+                    scope="https://www.googleapis.com/auth/calendar"
+                    client-authentication-scheme="form"
+                    pre-established-redirect-uri="https://127.0.0.1/"/>
+
+    <bean id="googleClientService" class="appointment.Availability">
+            <property name="AvailabilityTemplate">
+                <oauth:rest-template resource="google" />
+            </property>
+    </bean>
+
 </beans>
