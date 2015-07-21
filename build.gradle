@@ -63,6 +63,7 @@ dependencies {
 
     compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
+    compile 'org.springframework.data:spring-data-mongodb:1.7.1.RELEASE'
 
     //spring security
     compile("org.springframework.boot:spring-boot-starter-security")
