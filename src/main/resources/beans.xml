@@ -36,8 +36,8 @@
 
     <oauth2:resource id="googleOauth2Resource"
                     type = "authorization_code"
-                    client-id="client_ID"
-                    client-secret="client secret"
+                    client-id="211837377506-ho65lr38gmos1aap6t4v0necohmjt5eh.apps.googleusercontent.com"
+                    client-secret="hDk-L1XTD9jIs53gXbJa6EDt"
                     access-token-uri="https://accounts.google.com/o/oauth2/token"
                     user-authorization-uri="https://accounts.google.com/o/oauth2/auth"
                     scope="https://www.googleapis.com/auth/calendar"
