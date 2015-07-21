@@ -6,6 +6,9 @@
 
 The Computer Science Biometric Access System's Server Code.
 
+##Information on COSBAS
+More information on COSBAS can be found on our Wiki-Page https://github.com/undecidables/Documentation/wiki
+
 ## Running the Server
 
 To launch the server run gradle bootrun or gradlew bootrun in the projects root folder.  
@@ -23,3 +26,6 @@ To launch the server run gradle bootrun or gradlew bootrun in the projects root 
     + Branches can be grouped into folders by having  a / in the name:
         - inf = infrastructure  (eg. inf/gradle)
         - bug 
+    + Login Details:
+        - Username: BCrawley
+        - Password: Crawley

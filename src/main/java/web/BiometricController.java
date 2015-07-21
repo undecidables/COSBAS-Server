@@ -6,21 +6,39 @@
 
 package web;
 
-import org.springframework.ui.Model;
+import biometric.AccessRequest;
+import biometric.AccessResponse;
+import biometric.BiometricSystem;
+import biometric.serialize.BiometricSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 
 
 @RestController
 public class BiometricController {
 
-  @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access")
-  public String access(@RequestParam(value = "accessRequest", required = false, defaultValue = "World") String accessRequest, Model model) {
+    final BiometricSerializer serializer;
+    final BiometricSystem authSystem;
 
-    //TODO Call access function and serialize response to JSON
-    return "{TODO: Serialize response object to JSON}";
-  }
+    @Autowired
+    public BiometricController(BiometricSerializer serializer, BiometricSystem authSystem) {
+        this.serializer = serializer;
+        this.authSystem = authSystem;
+    }
+
+    @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access", method= RequestMethod.POST)
+    public String access(HttpServletRequest request) throws IOException, ServletException {
+
+        AccessRequest aRequest = serializer.parseRequest(request);
+        AccessResponse response = authSystem.requestAccess(aRequest);
+        return serializer.serializeResponse(response);
+    }
 
 }

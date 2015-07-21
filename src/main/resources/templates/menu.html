@@ -3,7 +3,7 @@
 	<head></head>
 	<body>
 		<nav th:fragment="navigation">
-			<ul th:if="${name == ''}">
+			<ul th:if="${#httpServletRequest.remoteUser == null}">
 				<li>
 					<a href="/">
 						Home
@@ -21,7 +21,7 @@
 				</li>
 			</ul>
 
-			<ul th:if="${name != ''}">
+			<ul th:if="${#httpServletRequest.remoteUser != null}">
 				<li>
 					<a href="/">
 						Home

@@ -1,4 +1,4 @@
-package Appointment;
+package appointment;
 
 import java.io.IOException;
 import java.io.InputStream;
