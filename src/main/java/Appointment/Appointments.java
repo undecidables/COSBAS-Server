@@ -1,9 +1,9 @@
 package appointment;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import web.mongo_repositories.AppointmentRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Appointments class used to Request and cancel appointments. 
@@ -27,11 +27,13 @@ public class Appointments
         this.repository = repository;
     }
     
-    public String requestAppointment(String appointerID, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes)
+    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes)
     {
-        String appointmentID = "";
+        Appointment a = new Appointment(staffID, visitorIDs,dateTime, durationInMinutes, reason);
+
+        repository.save(a);
         
-        return appointmentID;
+        return "";
     }
     
     public void cancelAppointment(String cancelleeID, String appointmentID)

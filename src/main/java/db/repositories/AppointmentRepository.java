@@ -1,4 +1,4 @@
-package web.mongo_repositories;
+package db.repositories;
 
 import appointment.Appointment;
 import appointment.AppointmentDBAdapter;
