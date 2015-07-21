@@ -29,11 +29,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll() //Allows people to access our resources
                 .antMatchers("/nav/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/login").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/biometrics/access").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
