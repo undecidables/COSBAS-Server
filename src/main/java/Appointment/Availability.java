@@ -1,10 +1,13 @@
 package appointment;
 
+import org.springframework.web.client.RestOperations;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 //Google Calendar and OAuth Imports
@@ -72,6 +75,14 @@ public class Availability
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }*/
+
+    private RestOperations authorize;
+    public String getTrustedMessage(){
+        String dataUri = "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer";
+
+        Calendar service = authorize.getForObject(dataUri, Calendar.class);
+        return "passed";
+    }
 
     public boolean isAvailable() throws IOException{
         //com.google.api.services.calendar.Calendar service = getCalendarService();

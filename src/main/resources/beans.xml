@@ -3,10 +3,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/data/mongo
-        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd">
 
     <bean id="serializer" class="biometric.serialize.JSONSerializer" />
     <bean id="authSystem" class="biometric.BiometricSystem" />
@@ -30,22 +32,18 @@
     </bean>
 
     <!-- OAuth -->
-    <oauth:client id="oauth2ClientFilter"/>
+    <oauth2:client id="oauth2ClientFilter"/>
 
-    <oauth:resource id="google"
+    <oauth2:resource id="googleOauth2Resource"
                     type = "authorization_code"
-                    client-id="<client_ID>"
-                    client-secret="<client secret>"
+                    client-id="client_ID"
+                    client-secret="client secret"
                     access-token-uri="https://accounts.google.com/o/oauth2/token"
                     user-authorization-uri="https://accounts.google.com/o/oauth2/auth"
                     scope="https://www.googleapis.com/auth/calendar"
                     client-authentication-scheme="form"
-                    pre-established-redirect-uri="https://127.0.0.1/"/>
-
-    <bean id="googleClientService" class="appointment.Availability">
-            <property name="AvailabilityTemplate">
-                <oauth:rest-template resource="google" />
-            </property>
-    </bean>
+                    pre-established-redirect-uri="http://127.0.0.1/"/>
+    <oauth2:rest-template id="authorize"
+                          resource="googleOauth2Resource"/>
 
 </beans>
