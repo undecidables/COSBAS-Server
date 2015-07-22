@@ -46,6 +46,9 @@
                     client-authentication-scheme="form"
                     pre-established-redirect-uri="http://127.0.0.1/"/>
 
+    <!--bean id="googleClientService" class="appointment.Availability">
+            <oauth2:rest-template id="authorize" resource="googleOauth2Resource"/>
+    </bean-->
     <oauth2:rest-template id="authorize"
                           resource="googleOauth2Resource"/>
 

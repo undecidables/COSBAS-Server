@@ -76,12 +76,13 @@ public class Availability
                 .build();
     }*/
 
-    private RestOperations authorize;
-    public String getTrustedMessage(){
-        String dataUri = "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer";
+    private RestOperations doAuthorize;
 
-        Calendar service = authorize.getForObject(dataUri, Calendar.class);
-        return "passed";
+    public String getTrustedMessage(){
+        String dataUri = "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader";
+
+        Calendar service = doAuthorize.getForObject(dataUri, Calendar.class);
+        return dataUri;
     }
 
     public boolean isAvailable() throws IOException{
