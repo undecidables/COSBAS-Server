@@ -26,3 +26,6 @@ lib/
 Thumbs.db
 *jb_bak___
 
+#Temp Files
+*~
+
