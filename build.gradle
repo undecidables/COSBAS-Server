@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE')
     }
 }
 
@@ -21,9 +21,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-//I'm not sure if this is needed, but for safety sake we are declaring usage of Java 7
+//Java 8 because the system uses LocalDateTime API
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 
 jar {
     baseName = 'cosbas'
@@ -35,27 +36,46 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url "http://jasperreports.sourceforge.net/maven2"
+        url 'http://jasperreports.sourceforge.net/maven2'
     }
     maven {
-        url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+        url 'http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/'
     }
 }
 
+
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compile 'org.springframework:spring-context:4.1.6.RELEASE'
-    compile 'org.springframework.security:spring-security-web:4.0.1.RELEASE'
-    compile 'org.springframework.webflow:spring-webflow:2.4.0.RELEASE'
-    compile 'org.springframework.session:spring-session:1.0.1.RELEASE'
-    //compile 'org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE'
+    compile  "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile  "org.springframework:spring-context:4.1.6.RELEASE"
+    compile  "org.springframework.security:spring-security-web:4.0.1.RELEASE"
+    compile  "org.springframework.webflow:spring-webflow:2.4.0.RELEASE"
+    compile  "org.springframework.session:spring-session:1.0.1.RELEASE"
+    compile  "org.thymeleaf:thymeleaf:2.0.5"
 
-    compile 'com.google.apis:google-api-services-calendar:v3-rev126-1.20.0'
+    compile  "com.google.apis:google-api-services-calendar:v3-rev126-1.20.0"
+    compile  "com.google.code.gson:gson:2.3.1"
 
-    compile 'nu.pattern:opencv:2.4.9-7'
+    compile  "org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE"
+    compile "org.springframework:spring-tx"
 
-    compile 'net.sf.jasperreports:jasperreports:6.1.0'
 
+    compile  "nu.pattern:opencv:2.4.9-7"
+
+    //compile  "net.sf.jasperreports:jasperreports:6.1.0"
+
+
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+    compile 'org.springframework.data:spring-data-mongodb:1.7.1.RELEASE'
+
+
+    //spring security
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-web"
+
+
+
+    compile "org.springframework.security:spring-security-ldap"
+    compile "org.apache.directory.server:apacheds-server-jndi:1.5.5"
 
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core:1.+"
@@ -67,7 +87,7 @@ task wrapper(type: Wrapper) {
 
 // All these stuff for jasper
  // TODO Thouroughly test build script with JAsper reports
-
+/*
 sourceSets {
     jasper
 }
@@ -78,5 +98,7 @@ configurations.jasperreports {
 }
 
 classes.dependsOn compileJasperJava
-
-
+*/
+springBoot {
+    mainClass = 'web.Application'
+}

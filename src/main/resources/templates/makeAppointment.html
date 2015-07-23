@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Make Appointment</title>
+	</head>
+	<body>
+		<nav th:replace="menu :: navigation"></nav>
+		<h1 class="text-center">Request an appointment</h1>
+		<form class="col-lg-offset-4">
+			<label>Appointment with: </label>
+			<select name="appointmentWith">
+				<option>
+					Staff member
+				</option>
+			</select>
+			<br/>
+			<label>Date of the meeting: </label>
+			<input type="date" name="requestedDate"/><!--Can use datetime-local-->
+			<br/>
+			<label>Time of the meeting: </label>
+			<input type="time" name="requestedTime"/>
+			<br/>
+			<label>Appointment made by(Your name): </label>
+			<input type="text" name="appointmentBy"/>
+			<br/>
+			<input type="submit" value="Request Appointment"/>
+		</form>
+	</body>
+</html>

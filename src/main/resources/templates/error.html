@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Error Occurred</title>
+	</head>
+	<body>
+		<nav th:replace="menu :: navigation"></nav>
+		<p>Unfortunately an error has occured on the server. Please try again.</p>
+	</body>
+</html>

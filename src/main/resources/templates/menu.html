@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<nav class="navbar navbar-default" th:fragment="navigation">
+			<div class="navbar-header">
+      			<a class="navbar-brand" href="#">COSBAS Service</a>
+    		</div>
+			<ul class="nav navbar-nav" th:if="${#httpServletRequest.remoteUser == null}">
+				<!--li>
+					<a href="/">
+						Home
+					</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Appointments<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="makeAppointment.html">
+								Request appointment
+							</a>
+						</li>
+						<li>
+							<a href="cancel.html">
+								Cancel appointment
+							</a>
+						</li>
+						<li>
+							<a href="status.html">
+								Check appointment status
+							</a>
+						</li>
+					</ul>
+				</li-->
+				<li>
+					<a href="makeAppointment.html">
+						Request appointment
+					</a>
+				</li>
+				<li>
+					<a href="cancel.html">
+						Cancel appointment
+					</a>
+				</li>
+				<li>
+					<a href="status.html">
+						Check appointment status
+					</a>
+				</li>
+				<li>
+					<a href="login.html">
+						Login
+					</a>
+				</li>
+			</ul>
+
+			<ul class="nav navbar-nav" th:if="${#httpServletRequest.remoteUser != null}">
+				<li>
+					<a href="/">
+						Home
+					</a>
+				</li>
+				<li>
+					<a href="approveDenyAppointment">
+						Approve/Deny appointments
+					</a>
+				</li>
+				<!--li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Appointments<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="makeAppointment.html">
+								Request appointment
+							</a>
+						</li>
+						<li>
+							<a href="cancel.html">
+								Cancel appointment
+							</a>
+						</li>
+						<li>
+							<a href="status.html">
+								Check appointment status
+							</a>
+						</li>
+						<li>
+							<a href="checkAppointment.html">
+								Check appointments
+							</a>
+						</li>
+					</ul>
+				</li-->
+				<li>
+					<a href="makeAppointment.html">
+						Request appointment
+					</a>
+				</li>
+				<li>
+					<a href="cancel.html">
+						Cancel appointment
+					</a>
+				</li>
+				<li>
+					<a href="status.html">
+						Check appointment status
+					</a>
+				</li>
+				<!--li>
+					<a href="checkAppointment.html">
+						Check appointments
+					</a>
+				</li-->
+				<li>
+					<a href="addUser.html">
+						Add authorized user
+					</a>
+				</li>
+				<li>
+					<a href="logout.html">
+						Logout
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</body>
+</html>

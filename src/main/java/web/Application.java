@@ -1,19 +1,15 @@
 package web;
 
-/**
- * Created by Renette on 2015-06-23.
- * Main Spring application.
- * Can be built as a standalone jar
-*/
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
+@ImportResource("beans.xml")
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    public static void main(String[] args) throws Throwable {
+       SpringApplication.run(Application.class, args);
     }
 
 }
