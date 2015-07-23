@@ -1,5 +1,6 @@
 package appointment;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
@@ -75,8 +76,12 @@ public class Availability
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }*/
-
     private RestOperations doAuthorize;
+
+    public void setDoAuthorize(RestOperations d) {
+        doAuthorize = d;
+    }
+
 
     public String getTrustedMessage(){
         String dataUri = "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader";
