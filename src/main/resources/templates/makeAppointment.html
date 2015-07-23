@@ -3,6 +3,12 @@
 	<head th:include="head :: header"></head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		Make appointment here
+		<form th:action="@{/makeAppointment}" method="get">
+			<label>Name: <input type="text" name="Requestor" /></label>
+			<label>Email: <input type="email" name="Email" /></label>
+			<label>Date Of Appointment: <input type="date" name="Date" /></label>
+			<label>Time Of Appointment: <input type="time" name="Time" /></label>
+			<input type="submit" value="Submit" />
+		</form>
 	</body>
 </html>
