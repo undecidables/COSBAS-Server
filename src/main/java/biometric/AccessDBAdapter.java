@@ -1,18 +1,18 @@
-package appointment;
+package biomteric;
 
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 /**
- *  @author Renette
+ *  @author Vivian Venter
  *
  *  This interface exists for the sake of making the type of database pluggable.
  *  Extra Functions follow the query style of MongoRepositories.
  */
-public interface AppointmentDBAdapter extends CrudRepository<Appointment, String> {
+public interface AccessDBAdapter extends CrudRepository<Access, String> {
 
-    List<Appointment> findByStaffID(String staffID);
-    Appointment findById(String id);
+    List<Access> findByDoorID(String DoorID);
+    Access findById(String id);s
 	
 }
