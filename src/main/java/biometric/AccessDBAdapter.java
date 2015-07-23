@@ -13,6 +13,9 @@ import java.util.List;
 public interface AccessDBAdapter extends CrudRepository<Access, String> {
 
     List<Access> findByDoorID(String DoorID);
+    List<Access> findByAction(String Action);
+    List<Access> findByPersonID(String PersonID);
+
     Access findById(String id);
 	
 }

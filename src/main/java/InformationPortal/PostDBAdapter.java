@@ -13,6 +13,8 @@ import java.util.List;
 public interface PostDBAdapter extends CrudRepository<Post, String> {
 
     List<Post> findByPostID (String PostID);
+    List<Post> findByAuthorID (String AuthorID);
+
     Post findById(String id);
 
 }
