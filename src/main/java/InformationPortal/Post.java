@@ -16,6 +16,13 @@ public class Post {
     private String AuthorID;
     private LocalDateTime dateTime;
 
+    public Post(String authorID, String contents, LocalDateTime dateTime)
+    {
+        this.Contents = contents;
+        this.AuthorID = authorID;
+        this.dateTime = dateTime;
+    }
+
     public Post(String postID, String authorID, String contents, LocalDateTime dateTime)
     {
         this.Contents = contents;

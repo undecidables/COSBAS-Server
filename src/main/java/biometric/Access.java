@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 public class Access {
 	
 	@Id
+	private String id;
+
 	private String DoorID;
 	
 	private LocalDateTime dateTime;
