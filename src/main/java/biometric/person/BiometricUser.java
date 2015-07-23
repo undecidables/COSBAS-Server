@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 public abstract class BiometricUser {
 
     @Id
-   protected String PersonID;
+   protected String userID;
 
     /**
      * Array of BiometricData Objects for user.

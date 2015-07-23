@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface PersonDBAdapter extends CrudRepository<StaffMember, String> {
 
-    StaffMember findByPersonID (String PersonID);
+    StaffMember findByUserID (String PersonID);
 
     List<StaffMember> findByName (String Name);
     List<StaffMember> findBySurname (String Surname);
-    List<StaffMember> findByEmployID (String EmployID);
+
 
   //  StaffMember findById(String id);
 

@@ -5,7 +5,6 @@ package biometric.person;
  */
 public class StaffMember extends BiometricUser{
 
-    private String EmployID; //StaffID
     private String Name;
     private String Surname;
     private String Email;
@@ -15,8 +14,8 @@ public class StaffMember extends BiometricUser{
     // TODO: Add this requirement to the documentation
     private String AuthenticationKey;
 
-    public StaffMember(String EmployID, String Name, String Surname, String Email, String CellNo) {
-        this.EmployID = EmployID;
+    public StaffMember(String userID, String Name, String Surname, String Email, String CellNo) {
+        this.userID = userID;
         this.Name = Name;
         this.Surname = Surname;
         this.Email = Email;
@@ -27,12 +26,12 @@ public class StaffMember extends BiometricUser{
     /**
      * Getter and Setter Function
      */
-    public String getEmployID() {
-        return EmployID;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setEmployID(String employID) {
-        EmployID = employID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getName() {
