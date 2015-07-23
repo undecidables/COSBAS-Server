@@ -1,8 +1,8 @@
-package biometric;
+package biometric.request;
 
 /**
  * Created by Renette on 2015-06-26.
- * Access Request created from http request.
+ * AccessRecord Request created from http request.
  */
 public class BiometricData {
 

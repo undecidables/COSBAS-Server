@@ -1,10 +1,41 @@
 package biometric;
 
+import biometric.request.AccessResponse;
+import biometric.person.BiometricUser;
+import biometric.person.PersonDBAdapter;
+import biometric.request.AccessDBAdapter;
+import biometric.request.AccessRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * @author Renette
  * Modules handles core biometric functions.
  */
 public class BiometricSystem {
+
+    /**
+     * The database adapter/repository to use.
+     */
+    @Autowired
+    private AccessDBAdapter AccessRepository;
+
+    @Autowired
+    private PersonDBAdapter PersonRepository;
+
+
+    /**
+     * Setter based dependency injection since mongo automatically creates the bean.
+     * @param repository The repository to be injected.
+     */
+    public void setRepository(AccessDBAdapter repository) {
+        this.AccessRepository = repository;
+    }
+
+    public void setRepository(PersonDBAdapter repository) {
+        this.PersonRepository = repository;
+    }
+
+
    public AccessResponse requestAccess(AccessRequest req) {
         //Create correct type of access validator from request
         //Read from config file or something?
