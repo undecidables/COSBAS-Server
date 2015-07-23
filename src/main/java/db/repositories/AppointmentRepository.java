@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * @author Renette
- * Interface that handles fetching Appointment Objects from the mongo DB and saving appointment objects in the db.
+ * Interface that handles fetching appointment Objects from the mongo DB and saving appointment objects in the db.
  * Should not be implmented, Spring handles implementation.
  *
  * For more functions research the MongoRepository Interface.
