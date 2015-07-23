@@ -1,15 +1,9 @@
-package biometric;
-
-import org.apache.mina.util.byteaccess.ByteArray;
-import org.springframework.data.annotation.Id;
+package biometric.person;
 
 /**
- * Created by Vivian Venter
+ * @author  Vivian Venter
  */
-public class Person {
-
-    @Id
-    private String PersonID;
+public class StaffMember extends BiometricUser{
 
     private String EmployID; //StaffID
     private String Name;
@@ -21,13 +15,7 @@ public class Person {
     // TODO: Add this requirement to the documentation
     private String AuthenticationKey;
 
-    //I am not sure as what datatype this should be stored??
-    private ByteArray FaceData;
-    private ByteArray FingerPrintData;
-
-
-    public Person(String PersonID, String EmployID, String Name, String Surname, String Email, String CellNo ) {
-        this.PersonID = PersonID;
+    public StaffMember(String EmployID, String Name, String Surname, String Email, String CellNo) {
         this.EmployID = EmployID;
         this.Name = Name;
         this.Surname = Surname;
@@ -39,15 +27,6 @@ public class Person {
     /**
      * Getter and Setter Function
      */
-
-    public String getPersonID() {
-        return PersonID;
-    }
-
-    public void setPersonID(String personID) {
-        PersonID = personID;
-    }
-
     public String getEmployID() {
         return EmployID;
     }
@@ -96,13 +75,5 @@ public class Person {
         AuthenticationKey = autenticationKey;
     }
 
-    public ByteArray getFaceData() {
-        return FaceData;
-    }public void setFaceData(ByteArray faceData) {
-        FaceData = faceData;
-    }public ByteArray getFingerPrintData() {
-        return FingerPrintData;
-    }public void setFingerPrintData(ByteArray fingerPrintData) {
-        FingerPrintData = fingerPrintData;
-    }
+
 }

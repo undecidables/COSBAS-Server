@@ -1,9 +1,9 @@
-package biometric;
+package biometric.request;
 
 import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
-public class Access {
+public class AccessRecord {
 	
 	@Id
 	private String id;
@@ -14,7 +14,7 @@ public class Access {
 	private String Action;
 	private String PersonID;
 	
-	public Access(String DoorID, LocalDateTime dateTime, String Action, String PersonID) {
+	public AccessRecord(String DoorID, LocalDateTime dateTime, String Action, String PersonID) {
 		this.DoorID = DoorID;
 		this.dateTime = dateTime;
 		this.Action = Action;

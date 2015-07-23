@@ -6,8 +6,8 @@
 
 package web;
 
-import biometric.AccessRequest;
-import biometric.AccessResponse;
+import biometric.request.AccessRequest;
+import biometric.request.AccessResponse;
 import biometric.BiometricSystem;
 import biometric.serialize.BiometricSerializer;
 import org.springframework.beans.factory.annotation.Autowired;

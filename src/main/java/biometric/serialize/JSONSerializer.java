@@ -1,6 +1,6 @@
 package biometric.serialize;
 
-import biometric.AccessResponse;
+import biometric.request.AccessResponse;
 import com.google.gson.Gson;
 
 /**

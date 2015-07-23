@@ -1,6 +1,10 @@
 package biometric;
 
-import appointment.AppointmentDBAdapter;
+import biometric.request.AccessResponse;
+import biometric.person.BiometricUser;
+import biometric.person.PersonDBAdapter;
+import biometric.request.AccessDBAdapter;
+import biometric.request.AccessRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
