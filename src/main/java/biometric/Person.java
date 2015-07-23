@@ -1,11 +1,13 @@
 package biometric;
 
+import org.apache.mina.util.byteaccess.ByteArray;
 import org.springframework.data.annotation.Id;
 
 /**
  * Created by Vivian Venter
  */
 public class Person {
+
     @Id
     private String PersonID;
 
@@ -17,11 +19,11 @@ public class Person {
 
     // Each staff member will have its own dedicated Authentication Key
     // TODO: Add this requirement to the documentation
-    private String AutenticationKey;
+    private String AuthenticationKey;
 
     //I am not sure as what datatype this should be stored??
-    //private Image FaceData;
-    //private Image FingerPrintData;
+    private ByteArray FaceData;
+    private ByteArray FingerPrintData;
 
 
     public Person(String PersonID, String EmployID, String Name, String Surname, String Email, String CellNo ) {
@@ -86,11 +88,21 @@ public class Person {
         CellNo = cellNo;
     }
 
-    public String getAutenticationKey() {
-        return AutenticationKey;
+    public String getAuthenticationKey() {
+        return AuthenticationKey;
     }
 
-    public void setAutenticationKey(String autenticationKey) {
-        AutenticationKey = autenticationKey;
+    public void setAuthenticationKey(String autenticationKey) {
+        AuthenticationKey = autenticationKey;
+    }
+
+    public ByteArray getFaceData() {
+        return FaceData;
+    }public void setFaceData(ByteArray faceData) {
+        FaceData = faceData;
+    }public ByteArray getFingerPrintData() {
+        return FingerPrintData;
+    }public void setFingerPrintData(ByteArray fingerPrintData) {
+        FingerPrintData = fingerPrintData;
     }
 }
