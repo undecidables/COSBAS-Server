@@ -1,7 +1,7 @@
 package db.repositories;
 
-/*import appointment.Appointment;
-import appointment.AppointmentDBAdapter;*/
+import biometric.Access;
+import biometric.AccessDBAdapter;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -12,5 +12,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the AccessDBAdapter interface.
  */
-public interface AccessRepository  extends MongoRepository<Access, String>, AccessDBAdapter {s
+public interface AccessRepository  extends MongoRepository<Access, String>, AccessDBAdapter {
 }

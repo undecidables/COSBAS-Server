@@ -1,4 +1,4 @@
-package biomteric;
+package biometric;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,6 +13,6 @@ import java.util.List;
 public interface AccessDBAdapter extends CrudRepository<Access, String> {
 
     List<Access> findByDoorID(String DoorID);
-    Access findById(String id);s
+    Access findById(String id);
 	
 }
