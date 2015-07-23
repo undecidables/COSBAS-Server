@@ -10,6 +10,11 @@ import java.util.List;
  * @author Elzahn Botha
  */
 
+
+//Not sure if any of this works yet still working on it
+
+
+
 public class Appointments 
 {
 
@@ -54,10 +59,20 @@ public class Appointments
      */
     public void cancelAppointment(String cancelleeID, String appointmentID){
         //find appointment with ID
-        //check is cancelee is one who made the appointment/the appointment is with
-        //if so change status
-        //delete from calendar
-        //Notify participants 
+        Appointment tempAppointment = repository.findById(appointmentID);
+        //check is cancellee is one who made the appointment/the appointment is with
+         List<String> tempVisitors = tempAppointment.getVisitorIDs();
+         foreach(String visitor in tempVisitors)
+         {
+            //if so change status
+            if(visitor == cancelleeID)
+            {
+                tempAppointment.setStatus("Cancelled");
+                //delete from calendar
+                //Notify participants 
+                return;
+            }
+         }        
     }
 
     /**
@@ -67,8 +82,19 @@ public class Appointments
      */
     public void checkStatus(String appointmentID, String enquirer){
         //get appointment with ID
+         Appointment tempAppointment = repository.findById(appointmentID);
         //check is enquirer is one who made the appointment/the appointment is with
-        //print information/send back not sure yet
+          List<String> tempVisitors = tempAppointment.getVisitorIDs();
+         foreach(String visitor in tempVisitors)
+         {
+            //if so
+            if(visitor == enquirer)
+            {
+                //print information/send back not sure yet
+                return;
+            }
+         } 
+        
     }
 
     /**
@@ -76,7 +102,10 @@ public class Appointments
      * @param appointmentID - The appointmen's unique identifier
      */
     public void approveAppointment(String appointmentID){
+        //find the appointment in the db
+        Appointment tempAppointment = repository.findById(appointmentID);
         //set appointment status
+        tempAppointment.setStatus("Approved");
         //send confirmation email with the code
     }
 
@@ -85,7 +114,10 @@ public class Appointments
      * @param appointmentID - The appointmen's unique identifier
      */
     public void denyAppointment(String appointmentID){
+        //find the appointment in the db
+        Appointment tempAppointment = repository.findById(appointmentID);
         //set appointment status
+         tempAppointment.setStatus("Denied");
         //remove from calendar
         //notify participants
     }
