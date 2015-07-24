@@ -1,8 +1,8 @@
 package biometric.serialize;
 
-import biometric.AccessRequest;
-import biometric.AccessResponse;
-import biometric.BiometricData;
+import biometric.request.AccessRequest;
+import biometric.request.AccessResponse;
+import biometric.request.BiometricData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

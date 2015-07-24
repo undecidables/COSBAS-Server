@@ -1,11 +1,11 @@
-package biometric;
+package biometric.request;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Created by Renette on 2015-06-27.
- * Access Request.
+ * AccessRecord Request.
  * Contains: DoorID as sent by client, current time of the server.
  */
 public class AccessRequest {

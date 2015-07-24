@@ -1,4 +1,6 @@
-package biometric;
+package biometric.request;
+
+import biometric.request.AccessRequest;
 
 import java.time.LocalDateTime;
 

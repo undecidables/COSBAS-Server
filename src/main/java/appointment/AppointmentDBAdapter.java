@@ -14,6 +14,5 @@ public interface AppointmentDBAdapter extends CrudRepository<Appointment, String
 
     List<Appointment> findByStaffID(String staffID);
     Appointment findById(String id);
-
-
+	
 }
