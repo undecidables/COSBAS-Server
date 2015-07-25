@@ -12,12 +12,7 @@
         http://www.springframework.org/schema/security/oauth2
         http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
 
-    <bean id="serializer" class="biometric.serialize.JSONSerializer" />
-    <bean id="authSystem" class="biometric.BiometricSystem" />
-    <bean id="appointments" class="appointment.Appointments" />
-    <bean id="availability" class="appointment.Availability" />
-
-    <mongo:repositories base-package="db.repositories" />
+    <mongo:repositories base-package="org.undecidables.repositories" />
 
     <mongo:mongo port="${mongo.port}" host="${mongo.address}"/>
 
@@ -46,7 +41,7 @@
                     client-authentication-scheme="form"
                     pre-established-redirect-uri="http://127.0.0.1/"/>
 
-    <bean id="googleClientService" class="appointment.Availability">
+    <bean id="googleClientService" class="org.undecidables.appointment.Availability">
         <property  name="doAuthorize">
             <oauth2:rest-template id="authorize" resource="googleOauth2Resource"/>
         </property>

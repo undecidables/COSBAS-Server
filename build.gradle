@@ -103,5 +103,5 @@ configurations.jasperreports {
 classes.dependsOn compileJasperJava
 */
 springBoot {
-    mainClass = 'web.Application'
+    mainClass = 'org.undecidables.web.Application'
 }
