@@ -3,7 +3,6 @@ package db.repositories;
 import InformationPortal.Post;
 import InformationPortal.PostDBAdapter;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 
 /**
@@ -14,6 +13,5 @@ import org.springframework.stereotype.Repository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the AccessDBAdapter interface.
  */
-@Repository
 public interface PostRepository  extends MongoRepository<Post, String>, PostDBAdapter {
 }

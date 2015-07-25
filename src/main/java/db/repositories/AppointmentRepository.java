@@ -3,7 +3,6 @@ package db.repositories;
 import appointment.Appointment;
 import appointment.AppointmentDBAdapter;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author Renette
@@ -13,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the AppointmentDBAdapter interface.
  */
-@Repository
 public interface AppointmentRepository  extends MongoRepository<Appointment, String>, AppointmentDBAdapter {
 }

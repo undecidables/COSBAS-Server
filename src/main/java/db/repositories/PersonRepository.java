@@ -1,9 +1,8 @@
 package db.repositories;
 
-import biometric.person.StaffMember;
 import biometric.person.PersonDBAdapter;
+import biometric.person.StaffMember;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author Vivian Venter
@@ -13,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the PersonDBAdapter interface.
  */
-@Repository
 public interface PersonRepository  extends MongoRepository<StaffMember, String>, PersonDBAdapter {
 }

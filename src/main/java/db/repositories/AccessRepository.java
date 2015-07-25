@@ -1,9 +1,8 @@
 package db.repositories;
 
-import biometric.request.AccessRecord;
 import biometric.request.AccessDBAdapter;
+import biometric.request.AccessRecord;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author Vivian Venter
@@ -14,6 +13,5 @@ import org.springframework.stereotype.Repository;
  * Query Functions are defined in the AccessDBAdapter interface.
  */
 
-@Repository
 public interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessDBAdapter {
 }
