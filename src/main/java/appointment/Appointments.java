@@ -1,6 +1,7 @@
 package appointment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * Appointments class used to Request and cancel appointments. 
  * @author Elzahn
  */
-
+@Service
 public class Appointments 
 {
 

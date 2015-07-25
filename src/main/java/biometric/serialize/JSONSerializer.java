@@ -2,6 +2,7 @@ package biometric.serialize;
 
 import biometric.request.AccessResponse;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Component;
 
 /**
  * @autor Renette
@@ -9,7 +10,7 @@ import com.google.gson.Gson;
  * Could be replaced by another serializer if something other than JSON is preferred.
  */
 
-
+@Component
 public class JSONSerializer extends BiometricSerializer {
 
     public JSONSerializer() {super();}

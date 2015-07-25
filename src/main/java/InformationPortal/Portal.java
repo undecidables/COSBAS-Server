@@ -1,11 +1,14 @@
 package InformationPortal;
 
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
 /**
  * Created by Szymon on 01/07/2015.
  */
+@Service
 public class Portal {
 
     /**

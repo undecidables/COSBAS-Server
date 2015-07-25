@@ -1,15 +1,11 @@
 package appointment;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 //Google Calendar and OAuth Imports
 /*import com.google.api.client.auth.oauth2.Credential;
@@ -28,7 +24,7 @@ import com.google.api.services.calendar.CalendarScopes;*/
  * Class to view and change the availability of a specific client.
  * @author Jason Evans
  */
-
+@Service
 public class Availability 
 {
     private static final String APPLICATION_NAME = "COSBAS Calendar";
