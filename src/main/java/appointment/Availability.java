@@ -72,22 +72,9 @@ public class Availability
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
-    /*private RestOperations doAuthorize;
-
-    public void setDoAuthorize(RestOperations d) {
-        doAuthorize = d;
-    }*/
-
-
-    /*public String getTrustedMessage(){
-        String dataUri = "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader";
-
-        Calendar service = doAuthorize.getForObject(dataUri, Calendar.class);
-        return dataUri;
-    }*/
 
     public boolean isAvailable() throws IOException{
-        //com.google.api.services.calendar.Calendar service = getCalendarService();
+        com.google.api.services.calendar.Calendar service = getCalendarService();
     	return true;
     }
 
