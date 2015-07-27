@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
+
 /**
  * Created by JASON on 2015/07/24.
  */
@@ -18,7 +20,11 @@ public class AvailabilityTests {
 
     @Test
     public void testOAuth2Authentication(){
-        //String message = availabilityModule.getTrustedMessage();
-        TestCase.assertEquals("Testing", "Testing");
+        try {
+            boolean authorized = availabilityModule.doAuthorize();
+            TestCase.assertEquals("Could not authenticate via oAuth2", true, authorized);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

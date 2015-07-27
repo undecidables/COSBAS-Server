@@ -18,7 +18,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.calendar.CalendarScopes;
-//import com.google.api.services.calendar.model.*;
+import com.google.api.services.calendar.model.*;
 
 /**
  * Class to view and change the availability of a specific client.
@@ -28,6 +28,7 @@ import com.google.api.services.calendar.CalendarScopes;
 public class Availability 
 {
     private static final String APPLICATION_NAME = "COSBAS Calendar";
+    Credential credential;
 
     /**
      * TODO Storing the Credentials of a user after authentication...
@@ -66,8 +67,16 @@ public class Availability
          */
     }
 
-    public static com.google.api.services.calendar.Calendar getCalendarService() throws IOException{
-        Credential credential = authorizeCOSBAS();
+    public boolean doAuthorize() throws IOException{
+        credential = authorizeCOSBAS();
+        if (credential != null){
+            return true;
+        }
+        return false;
+    }
+
+    public com.google.api.services.calendar.Calendar getCalendarService() throws IOException{
+        this.doAuthorize();
         return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
