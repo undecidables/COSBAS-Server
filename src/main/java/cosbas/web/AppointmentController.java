@@ -74,6 +74,13 @@ public class AppointmentController {
     return "makeAppointment";
   }
 
+  @RequestMapping(value = "/chooseCalendarService", method = RequestMethod.GET)
+  public String chooseCalendarService(@RequestParam(value = "name", required = false, defaultValue = "") String name, Model model)
+  {
+    model.addAttribute("name", name);
+    return "chooseCalendarService";
+  }
+
   /**
   * Route function to go to logout.html
   * @param name - used to determin which menu to use. If anything is stored in name the logged in menu is used. 

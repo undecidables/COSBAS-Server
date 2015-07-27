@@ -1,4 +1,4 @@
-package cosbas.repositories;
+package cosbas.db.repositories;
 
 import cosbas.biometric.person.PersonDBAdapter;
 import cosbas.biometric.person.StaffMember;

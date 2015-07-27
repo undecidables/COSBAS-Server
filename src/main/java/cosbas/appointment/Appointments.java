@@ -13,7 +13,6 @@ import java.util.List;
 @Service
 public class Appointments 
 {
-
     /**
      * The database adapter/repository to use.
      */

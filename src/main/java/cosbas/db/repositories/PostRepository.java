@@ -1,8 +1,9 @@
-package cosbas.repositories;
+package cosbas.db.repositories;
 
-import cosbas.biometric.request.AccessDBAdapter;
-import cosbas.biometric.request.AccessRecord;
+import cosbas.InformationPortal.Post;
+import cosbas.InformationPortal.PostDBAdapter;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
 
 /**
  * @author Vivian Venter
@@ -12,6 +13,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the AccessDBAdapter interface.
  */
-
-public interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessDBAdapter {
+public interface PostRepository  extends MongoRepository<Post, String>, PostDBAdapter {
 }

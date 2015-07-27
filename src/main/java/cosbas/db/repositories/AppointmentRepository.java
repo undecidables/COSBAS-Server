@@ -1,4 +1,4 @@
-package cosbas.repositories;
+package cosbas.db.repositories;
 
 import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
