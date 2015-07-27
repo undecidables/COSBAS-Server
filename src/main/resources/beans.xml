@@ -41,7 +41,7 @@
                     client-authentication-scheme="form"
                     pre-established-redirect-uri="http://127.0.0.1/"/>
 
-    <bean id="googleClientService" class="org.undecidables.appointment.Availability">
+    <bean id="googleClientService" class="cosbas.appointment.Availability">
         <property  name="doAuthorize">
             <oauth2:rest-template id="authorize" resource="googleOauth2Resource"/>
         </property>
