@@ -14,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.time.LocalDateTime;
+ import java.util.Arrays;
+  import java.util.List;
 
 @Controller
 public class AppointmentController {
@@ -47,6 +50,63 @@ public class AppointmentController {
   public String index(@RequestParam(value = "name", required = false, defaultValue = "") String name, Model model)
   {
     model.addAttribute("name", name);
+    //Request Appointment
+   /* List<String> visitors = Arrays.asList("sup1", "sup2");
+     
+     LocalDateTime date = LocalDateTime.now();
+    appointments.requestAppointment(visitors, "13033922", date, "blah", 30);*/
+    String  visitors;
+   /* //test cancel
+    visitors = "sup1";
+
+    appointments.cancelAppointment(visitors, "55b7b95d0b6693fe5344fdc2");
+
+    //test already cancelled
+    visitors = "sup1";
+
+    appointments.cancelAppointment(visitors, "55b7b95d0b6693fe5344fdc2");
+
+    //test wrong person
+    visitors = "sups";
+
+    appointments.cancelAppointment(visitors, "55b7b95d0b6693fe5344fdc2");
+
+    //test wrong appointment
+    visitors = "sup1";
+
+    appointments.cancelAppointment(visitors, "55bsb95d0b6693fe5344fdc2");*/
+
+    /*//test wrong appointment
+    visitors = "sup1";
+
+    appointments.checkStatus(visitors, "55bsb95d0b6693fe5344fdc2");
+
+    //test wrong person
+    visitors = "sups";
+
+    appointments.checkStatus(visitors, "55b7b95d0b6693fe5344fdc2");
+
+    //test check status with person in a list - also works for cancel
+    visitors = "sup2";
+
+    appointments.checkStatus(visitors, "55b7bc810b66c713c94a9ac7");
+
+     //test check status and cancel with owner
+    visitors = "13033922";
+
+    appointments.cancelAppointment(visitors, "55b7bc810b66c713c94a9ac7");*/
+
+    /*//test Deny and Accept with cancelled appointment
+    appointments.approveAppointment("55b7bc810b66c713c94a9ac7");
+    appointments.denyAppointment("55b7bc810b66c713c94a9ac7");
+
+     //test Deny and Accept with incorrect appointment
+    appointments.approveAppointment("55b7bc810bdc713c94a9ac7");
+    appointments.denyAppointment("55b7bc810dc713c94a9ac7");
+
+    //test Deny and Accept with incorrect appointment
+    appointments.approveAppointment("55b7b95d0b6693fe5344fdc2");
+    appointments.denyAppointment("55b7bc810b66c713c94a9ac7");*/
     return "index";
   }
 
