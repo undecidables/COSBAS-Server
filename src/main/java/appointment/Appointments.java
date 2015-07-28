@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  * Appointments class used to Request and cancel appointments. 
@@ -62,8 +63,9 @@ public class Appointments
         Appointment tempAppointment = repository.findById(appointmentID);
         //check is cancellee is one who made the appointment/the appointment is with
          List<String> tempVisitors = tempAppointment.getVisitorIDs();
-         foreach(String visitor in tempVisitors)
+         for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
          {
+            String visitor = i.next();
             //if so change status
             if(visitor == cancelleeID)
             {
@@ -85,8 +87,9 @@ public class Appointments
          Appointment tempAppointment = repository.findById(appointmentID);
         //check is enquirer is one who made the appointment/the appointment is with
           List<String> tempVisitors = tempAppointment.getVisitorIDs();
-         foreach(String visitor in tempVisitors)
+         for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
          {
+            String visitor = i.next();
             //if so
             if(visitor == enquirer)
             {
