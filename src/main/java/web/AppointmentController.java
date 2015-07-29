@@ -31,17 +31,6 @@ public class AppointmentController {
   private final Availability availability;
 
   /**
-   * An Example route, can be removed once we have something definite
-   * @param name
-   * @return greeting page
-   */
-  @RequestMapping(method= RequestMethod.GET, value="/greeting")
-  public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
-    model.addAttribute("name", name);
-    return "greeting";
-  }
-
-  /**
   * Route function to go to index.html
   * @param name - used to determin which menu to use. If anything is stored in name the logged in menu is used. 
   * @return index.html page
