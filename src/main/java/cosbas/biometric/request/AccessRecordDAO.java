@@ -10,7 +10,7 @@ import java.util.List;
  *  This interface exists for the sake of making the type of database pluggable.
  *  Extra Functions follow the query style of MongoRepositories.
  */
-public interface AccessDBAdapter extends CrudRepository<AccessRecord, String> {
+public interface AccessRecordDAO extends CrudRepository<AccessRecord, String> {
 
     List<AccessRecord> findByDoorID(String DoorID);
     List<AccessRecord> findByAction(String Action);

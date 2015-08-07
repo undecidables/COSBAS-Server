@@ -1,6 +1,6 @@
 package cosbas.db.repositories;
 
-import cosbas.biometric.request.AccessDBAdapter;
+import cosbas.biometric.request.AccessRecordDAO;
 import cosbas.biometric.request.AccessRecord;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * Should not be implemented, Spring handles implementation.
  *
  * For more functions research the MongoRepository Interface.
- * Query Functions are defined in the AccessDBAdapter interface.
+ * Query Functions are defined in the AccessRecordDAO interface.
  */
 
-public interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessDBAdapter {
+public interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessRecordDAO {
 }

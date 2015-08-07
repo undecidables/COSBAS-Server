@@ -28,7 +28,7 @@ public class AccessResponse {
     }
 
     /**
-     * Should the person be allowed in.
+     * Should the data be allowed in.
      * (True = allowed, false = rejected)
      */
     private final Boolean result;

@@ -1,5 +1,4 @@
-package cosbas.biometric.person;
-import cosbas.biometric.request.BiometricData;
+package cosbas.biometric.data;
 import org.springframework.data.annotation.Id;
 /**
  * @author Renette
@@ -12,6 +11,7 @@ public abstract class BiometricUser {
 
     /**
      * Array of BiometricData Objects for user.
+     * TODO this might change since it is hard to query embedded docs
      */
     protected BiometricData[] data;
 }

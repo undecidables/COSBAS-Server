@@ -2,7 +2,8 @@ package cosbas.biometric.serialize;
 
 import cosbas.biometric.request.AccessRequest;
 import cosbas.biometric.request.AccessResponse;
-import cosbas.biometric.request.BiometricData;
+import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.BiometricTypes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public abstract class BiometricSerializer {
      * @return Parsed request object
      * TODO: I dont think String is correct input type... What data does http request use?
      */
-    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException {
+    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException {
 
         List<Part> parts = (List<Part>) request.getParts();
         List<BiometricData> biometricDatas = new ArrayList<BiometricData>();
@@ -65,7 +66,9 @@ public abstract class BiometricSerializer {
                     {
                         file = outputStream.toByteArray();
                     }
-                    BiometricData data = new BiometricData(part.getName(),file);
+
+                    BiometricTypes type = BiometricTypes.valueOf(part.getName());
+                    BiometricData data = new BiometricData(type,file);
                     biometricDatas.add(data);
                 }
             }

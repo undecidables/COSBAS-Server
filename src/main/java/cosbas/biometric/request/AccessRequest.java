@@ -1,5 +1,7 @@
 package cosbas.biometric.request;
 
+import cosbas.biometric.data.BiometricData;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

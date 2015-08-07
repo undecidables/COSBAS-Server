@@ -1,12 +1,14 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.request.BiometricData;
+import cosbas.biometric.data.BiometricData;
+import org.springframework.stereotype.Component;
 
 /**
- * Created by Renette on 2015-06-26.
+ * @author Renette
  * Validates temporary access code
  */
-public class CodeValidator implements AccessValidator {
+@Component
+public class CodeValidator extends AccessValidator {
 
     @Override
     public boolean validate(BiometricData request) {
