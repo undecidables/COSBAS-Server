@@ -1,5 +1,6 @@
 package cosbas.biometric.data;
 
+import cosbas.biometric.validators.BiometricTypes;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface BiometricDataDAO extends CrudRepository<BiometricData, String> 
 
     BiometricData findByPersonID(String PersonID);
     BiometricData findById(String id);
-    List<BiometricData> findByType (String type);
+    List<BiometricData> findByType (BiometricTypes type);
     List<BiometricData> findByData (Byte[] data);
 
 }

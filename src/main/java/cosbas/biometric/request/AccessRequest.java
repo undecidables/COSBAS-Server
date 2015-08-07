@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Created by Renette on 2015-06-27.
+ * @Author Renette on 2015-06-27.
  * AccessRecord Request.
  * Contains: DoorID as sent by client, current time of the server.
  */
