@@ -1,7 +1,7 @@
 package cosbas.db.repositories;
 
+import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.data.StaffMember;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -12,5 +12,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the BiometricDataDAO interface.
  */
-public interface PersonRepository  extends MongoRepository<StaffMember, String>, BiometricDataDAO {
+public interface PersonRepository  extends MongoRepository<BiometricData, String>, BiometricDataDAO {
 }

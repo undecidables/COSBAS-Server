@@ -18,7 +18,7 @@ public class AccessCode extends BiometricData {
     }
 
     public AccessCode (String person, byte[] code, LocalDateTime from, LocalDateTime to) {
-       super(person, BiometricTypes.CODE.toString(), code);
+       super(person, BiometricTypes.CODE, code);
         validFrom = from;
         validTo = to;
     }

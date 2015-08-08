@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 public class CodeValidator extends AccessValidator {
 
     @Override
+    protected boolean matches(BiometricData request, BiometricData dbItem) {
+        return false;
+    }
+
+    @Override
     public boolean validate(BiometricData request) {
         byte[] code = request.getData();
         //Lookup in db
