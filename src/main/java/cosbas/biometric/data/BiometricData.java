@@ -19,7 +19,7 @@ public class BiometricData {
      * The user with which the biometric data is associated.
      * Does not need to be set for request data but is stored in the database
      */
-    private String person;
+    private String personID;
     /**
      * Identifies type of biometric data.
      */
@@ -36,8 +36,8 @@ public class BiometricData {
         this.data = data;
     }
 
-    public BiometricData(String person, BiometricTypes type, byte[] data) {
-        this.person = person;
+    public BiometricData(String personId, BiometricTypes type, byte[] data) {
+        this.personID = personId;
         this.type = type;
         this.data = data;
     }
@@ -46,8 +46,8 @@ public class BiometricData {
         return id;
     }
 
-    public String getPerson() {
-        return person;
+    public String getPersonID() {
+        return personID;
     }
 
     public byte[] getData() {
