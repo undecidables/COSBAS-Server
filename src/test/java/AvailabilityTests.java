@@ -1,4 +1,4 @@
-import appointment.Availability;
+import cosbas.appointment.Availability;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;

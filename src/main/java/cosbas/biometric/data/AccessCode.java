@@ -23,6 +23,16 @@ public class AccessCode extends BiometricData {
         validTo = to;
     }
 
+    public AccessCode (String person, byte[] code) {
+        super(person, BiometricTypes.CODE, code);
+    }
+
+    public AccessCode(byte[] code) {
+        super(BiometricTypes.CODE, code);
+    }
+
+
+
     private LocalDateTime validFrom;
     private LocalDateTime validTo;
 }

@@ -14,10 +14,16 @@ import java.util.List;
 @Component
 public abstract class AccessValidator {
 
-   @Autowired
-   protected BiometricDataDAO repository;
+    protected BiometricDataDAO repository;
+
+    @Autowired
+    public void setRepository(BiometricDataDAO repository) {
+        this.repository = repository;
+    }
 
     abstract protected boolean matches(BiometricData request, BiometricData dbItem);
+
+
 
     /**
      * Validate whether the given data allows a user access,
@@ -25,7 +31,7 @@ public abstract class AccessValidator {
      * @param requestData The biometric data that needs to be validated.
      * @return True for valid - access allowed.
      */
-    public boolean validate(BiometricData requestData) {
+    public boolean validate(BiometricData requestData) throws BiometricTypeException {
         List<BiometricData> items = repository.findByType(requestData.getType());
         for (BiometricData item : items) {
             if (matches(requestData, item)) {

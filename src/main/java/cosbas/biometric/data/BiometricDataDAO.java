@@ -16,6 +16,6 @@ public interface BiometricDataDAO extends CrudRepository<BiometricData, String> 
     BiometricData findByPersonID(String PersonID);
     BiometricData findById(String id);
     List<BiometricData> findByType (BiometricTypes type);
-    List<BiometricData> findByData (Byte[] data);
+    List<BiometricData> findByData (byte[] data);
 
 }
