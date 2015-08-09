@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
@@ -28,9 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+
+
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**").permitAll() //Allows people to access our resources
+                .antMatchers("/resources/**").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/nav/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/login").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
@@ -41,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .permitAll();
     }
+
 
     /**
      * This configures the authentication method used - it's basically used to customize authentication to integrate with LDAP.

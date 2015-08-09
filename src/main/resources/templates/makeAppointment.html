@@ -6,25 +6,48 @@
 	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		<h1 class="text-center">Request an appointment</h1>
-		<form class="col-lg-offset-4">
-			<label>Appointment with: </label>
-			<select name="appointmentWith">
-				<option>
-					Staff member
-				</option>
-			</select>
-			<br/>
-			<label>Date of the meeting: </label>
-			<input type="date" name="requestedDate"/><!--Can use datetime-local-->
-			<br/>
-			<label>Time of the meeting: </label>
-			<input type="time" name="requestedTime"/>
-			<br/>
-			<label>Appointment made by(Your name): </label>
-			<input type="text" name="appointmentBy"/>
-			<br/>
-			<input type="submit" value="Request Appointment"/>
-		</form>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<br/>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Request an appointment</div>
+					<br/>
+					<form action="" method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="text-left">Appointment with:</p>
+								<select class="form-control" name="appointmentWith">
+									<option>
+										Staff member
+									</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<p class="text-left">Date of the meeting:</p>
+								<input class="form-control" type="date" name="requestedDate"/><!--Can use datetime-local-->
+							</div>
+							<div class="form-group">
+								<label class="text-left">Time of the meeting: </label>
+								<input class="form-control" type="time" name="requestedTime"/>
+							</div>
+							<div class="form-group">
+								<label class="text-left">Appointment made by (your name): </label>
+								<input class="form-control" type="text" name="appointmentBy"/>
+							</div>
+							<br/>
+							<div>
+								<button type="submit" class="btn btn-sm btn-success">Request Appointment</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

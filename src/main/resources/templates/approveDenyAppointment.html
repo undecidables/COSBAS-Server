@@ -6,14 +6,29 @@
 	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		<h1 class="text-center">Approve or deny Appointments</h1>
-		<div class="container, text-center">List of the requested appointments
-			<form>
-				<label> Appointment with who at what time</label>
-				<br/>
-				<input type="submit" value="Accept"/>
-				<input type="submit" value="Deny"/>
-			</form>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<br/>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Approve or Deny Appointments</div>
+					<br/>
+					<form action="" method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="text-left">Appointment with who at what time</p>
+								<input class="form-control" type="submit" value="Accept"/>
+								<input class="form-control" type="submit" value="Deny"/>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
