@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class FingerprintValidator extends AccessValidator {
 
     @Override
-    protected boolean matches(BiometricData request, BiometricData dbItem) {
+    protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
         return false;
     }
 

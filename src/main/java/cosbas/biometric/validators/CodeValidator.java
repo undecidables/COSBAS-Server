@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class CodeValidator extends AccessValidator {
 
     @Override
-    protected boolean matches(BiometricData request, BiometricData dbItem) {
+    protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
         if(!Arrays.equals(request.getData(), dbItem.getData()))
             return false;
 

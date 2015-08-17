@@ -21,7 +21,14 @@ public abstract class AccessValidator {
         this.repository = repository;
     }
 
-    abstract protected boolean matches(BiometricData request, BiometricData dbItem);
+    /**
+     *
+     * @param request
+     * @param dbItem 
+     * @param action In/Out
+     * @return
+     */
+    abstract protected boolean matches(BiometricData request, BiometricData dbItem, String action);
 
 
 
@@ -29,12 +36,14 @@ public abstract class AccessValidator {
      * Validate whether the given data allows a user access,
      * Template method that can be overridden in special cases such as access codes
      * @param requestData The biometric data that needs to be validated.
+     * @param action 'in' or 'out'
      * @return True for valid - access allowed.
      */
-    public boolean validate(BiometricData requestData) throws BiometricTypeException {
+    public boolean validate(BiometricData requestData, String action) throws BiometricTypeException {
+
         List<BiometricData> items = repository.findByType(requestData.getType());
         for (BiometricData item : items) {
-            if (matches(requestData, item)) {
+            if (matches(requestData, item, action)) {
                 return true;
             }
         }

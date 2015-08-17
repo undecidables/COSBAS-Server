@@ -5,8 +5,12 @@ import cosbas.biometric.request.AccessRecordDAO;
 import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.data.BiometricUser;
 import cosbas.biometric.request.AccessRequest;
+import cosbas.biometric.validators.AccessValidator;
+import cosbas.biometric.validators.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.xml.validation.Validator;
 
 /**
  * @author Renette
@@ -24,6 +28,8 @@ public class BiometricSystem {
     @Autowired
     private BiometricDataDAO PersonRepository;
 
+    @Autowired
+    private ValidatorFactory factory;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -42,6 +48,7 @@ public class BiometricSystem {
         //Create correct type of access validator from request
         //Read from config file or something?
         //Validate
+       //AccessValidator validator = factory.getValidator(req.type);
 
         return new AccessResponse(req, false, "This has not been implemented yet.");
     }

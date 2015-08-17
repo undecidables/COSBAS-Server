@@ -1,21 +1,14 @@
 package cosbas.biometric.validators;
 
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 /**
  * @author Renette
- * This factory class returns a Validator bean based on request type.
+ * This factory class provides the template for creating an access validator from the BiometricType
+ * Design patterns: Factory and Template Methiods
  */
-@Service
-public class ValidatorFactory {
-
-    @Autowired
-    private BeanFactory beanFactory;
+public abstract class ValidatorFactory {
 
     public Object getValidator(BiometricTypes bioType) {
-            return beanFactory.getBean (bioType.validatorClass);
+        return getBean(bioType.validatorClass);
     }
+    protected abstract AccessValidator getBean(Class c);
 }

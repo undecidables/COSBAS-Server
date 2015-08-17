@@ -38,8 +38,8 @@ public class CodeValidatorTest {
 
     @Test
     public void testMatches() throws Exception {
-        assertTrue(testee.matches(new AccessCode(code1), new AccessCode(code1)));
-        assertFalse(testee.matches(new AccessCode(code1), new AccessCode(code2)));
+        assertTrue(testee.matches(new AccessCode(code1), new AccessCode(code1), ));
+        assertFalse(testee.matches(new AccessCode(code1), new AccessCode(code2), ));
     }
 
     /**
