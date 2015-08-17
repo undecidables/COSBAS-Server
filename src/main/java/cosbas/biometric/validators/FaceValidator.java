@@ -14,12 +14,4 @@ public class FaceValidator extends AccessValidator {
     protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
         return false;
     }
-
-    @Override
-    public boolean validate(BiometricData request) {
-        byte[] img  = request.getData();
-        //Lookup in db
-        //Validate
-        return true;
-    }
 }
