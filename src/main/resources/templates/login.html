@@ -7,7 +7,7 @@
 <body>
 <nav th:replace="menu :: navigation"></nav>
 <br/>
-<div th:if="${#httpServletRequest.remoteUser == null}">
+<!--div th:if="${#httpServletRequest.remoteUser == null}"-->
     <div>
         <a href="#">
             <center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
@@ -19,7 +19,7 @@
             <div class="cosbasLogin">
                 <div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Please sign in</div>
                 <br/>
-                <form th:action="@{/login.do}" method="post">
+                <form th:action="@{/login}" method="post">
                     <fieldset>
                         <div class="form-group">
                             <p class="text-left">EMPLID</p>
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-</div>
+<!--/div>
 <div th:if="${#httpServletRequest.remoteUser != null}">
     <div>
         <a href="#">
@@ -49,6 +49,6 @@
     <h1 class="text-center">COSBAS Service</h1>
     <div class="col-lg-9">Show calander here</div>
     <div class="col-lg-3">Show selected day's appointments and requested appointments</div>
-</div>
+</div-->
 </body>
 </html>

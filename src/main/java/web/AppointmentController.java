@@ -24,7 +24,7 @@ public class AppointmentController {
   * Route function to go to index.html - Homepage for the user after login
   * @return index.html page
   */
-  @RequestMapping(value = "/index", method = RequestMethod.POST)
+  @RequestMapping(value = "/index", method = RequestMethod.GET)
   public String index()
   {
     return "index";
@@ -47,15 +47,16 @@ public class AppointmentController {
   * @return login.html page
   */
   @RequestMapping(value = "/login", method = RequestMethod.GET)
-  public String login()
+  public String login(Principal principal)
   {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if(!(auth instanceof AnonymousAuthenticationToken)){
       return "index";//new ModelAndView("forward:/index");
     } else { 
       return "login";
-    }
+    }*/
+    return principal == null ? "login" : "redirect:/index";
   }
 
   /**
