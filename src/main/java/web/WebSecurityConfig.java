@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/makeAppointment").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/cancel").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/index").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

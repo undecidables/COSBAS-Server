@@ -38,7 +38,7 @@ public class AppointmentController {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String root(Principal principal)
   {
-    return principal == null ? "makeAppointment" : "index";
+    return principal == null ? "redirect:/makeAppointment" : "index";
     //return "index";
   }
 

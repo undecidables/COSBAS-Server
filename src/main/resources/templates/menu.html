@@ -59,12 +59,14 @@
                             </a>
                         </li-->
 					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-					</ul>
+					<form th:action="@{/logout}" method="post" name="logoutForm">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#" onclick="document.logoutForm.submit(); return false;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+						</ul>
+					</form>
 
 				</div>
-				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser == null}" id="myNavbar">
+				<div class="collapse navbar-collapse" th:action="@{/logout}" th:if="${#httpServletRequest.remoteUser == null}" id="myNavbar">
 					<ul class="nav navbar-nav" >
 						<!--li>
                             <a href="/">
@@ -101,7 +103,7 @@
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+						<li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 					</ul>
 				</div>
 			</div>
