@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class CodeValidator extends AccessValidator {
 
     @Override
-    protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
+    protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException {
         if(!Arrays.equals(request.getData(), dbItem.getData()))
             return false;
 
@@ -36,12 +36,12 @@ public class CodeValidator extends AccessValidator {
     }
 
     @Override
-    public boolean validate(BiometricData request) throws BiometricTypeException {
+    public String validate(BiometricData request, String action) throws BiometricTypeException, UserNotFoundException {
         if (request.getType() != BiometricTypes.CODE) throw new BiometricTypeException("invalid validator for " + request.getType());
         byte[] code = request.getData();
         //Lookup in db
         //Validate
-        return true;
+        return "u00000000";
     }
 
     /**

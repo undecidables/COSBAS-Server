@@ -11,15 +11,7 @@ import org.springframework.stereotype.Component;
 public class FingerprintValidator extends AccessValidator {
 
     @Override
-    protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
-        return false;
-    }
-
-    @Override
-    public boolean validate(BiometricData request) {
-        byte[] data = request.getData();
-        //Lookup in db
-        //Validate
-        return true;
+    protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException {
+        return "u00000000";
     }
 }

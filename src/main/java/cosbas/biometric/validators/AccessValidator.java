@@ -28,9 +28,7 @@ public abstract class AccessValidator {
      * @param action In/Out
      * @return
      */
-    abstract protected boolean matches(BiometricData request, BiometricData dbItem, String action);
-
-
+    abstract protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException;
 
     /**
      * Validate whether the given data allows a user access,
@@ -39,15 +37,19 @@ public abstract class AccessValidator {
      * @param action 'in' or 'out'
      * @return True for valid - access allowed.
      */
-    public boolean validate(BiometricData requestData, String action) throws BiometricTypeException {
+    public String validate(BiometricData requestData, String action) throws BiometricTypeException, UserNotFoundException {
 
         List<BiometricData> items = repository.findByType(requestData.getType());
         for (BiometricData item : items) {
-            if (matches(requestData, item, action)) {
-                return true;
+            try {
+                return matches(requestData, item, action);
+
+            } catch (UserNotFoundException e) {
+                /** Silently continue with validating next item */
+                continue;
             }
         }
-        return false;
+        throw new UserNotFoundException();
     }
 
 }

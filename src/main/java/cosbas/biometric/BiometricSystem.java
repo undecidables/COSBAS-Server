@@ -1,20 +1,23 @@
 package cosbas.biometric;
 
+import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.request.AccessRecordDAO;
-import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.data.BiometricUser;
+import cosbas.biometric.request.AccessRecordDAO;
 import cosbas.biometric.request.AccessRequest;
+import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.validators.AccessValidator;
+import cosbas.biometric.validators.BiometricTypeException;
+import cosbas.biometric.validators.UserNotFoundException;
 import cosbas.biometric.validators.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.validation.Validator;
+import java.util.List;
 
 /**
  * @author Renette
- * Modules handles core biometric functions.
+ *         Modules handles core biometric functions.
  */
 @Service
 public class BiometricSystem {
@@ -31,8 +34,13 @@ public class BiometricSystem {
     @Autowired
     private ValidatorFactory factory;
 
+    public void setFactory(ValidatorFactory factory) {
+        this.factory = factory;
+    }
+
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
+     *
      * @param repository The repository to be injected.
      */
     public void setAccessRecordRepository(AccessRecordDAO repository) {
@@ -44,13 +52,25 @@ public class BiometricSystem {
     }
 
 
-   public AccessResponse requestAccess(AccessRequest req) {
+    public AccessResponse requestAccess(AccessRequest req) {
         //Create correct type of access validator from request
         //Read from config file or something?
         //Validate
-       //AccessValidator validator = factory.getValidator(req.type);
+        try {
+        Boolean response = true;
+        List<BiometricData> datas = req.getData();
+        for (BiometricData data : datas) {
+            AccessValidator validator = factory.getValidator(data.getType());
 
-        return new AccessResponse(req, false, "This has not been implemented yet.");
+            response = response && validator.validate(data, req.getAction());
+        }
+        } catch (BiometricTypeException e){
+            return AccessResponse.getFailureResponse(req, e.getMessage());
+        } catch (UserNotFoundException e) {
+            return AccessResponse.getFailureResponse(req, e.getMessage());
+        }
+        //TODO : make sure to get  userId from validator
+        return  AccessResponse.getSuccessResponse(req, "Welcome", "u00000000");
     }
 
     public Boolean addUser(BiometricUser user) {

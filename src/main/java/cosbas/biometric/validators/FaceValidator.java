@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class FaceValidator extends AccessValidator {
 
     @Override
-    protected boolean matches(BiometricData request, BiometricData dbItem, String action) {
-        return false;
+    protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException {
+        return "u00000000";
     }
 }
