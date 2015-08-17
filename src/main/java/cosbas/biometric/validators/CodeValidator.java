@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 /**
  * @author Renette
- * Validates temporary access code
+ * Validates permanent and temporary access codes
  */
 @Component
 public class CodeValidator extends AccessValidator {
@@ -21,11 +21,11 @@ public class CodeValidator extends AccessValidator {
     @Override
     protected String matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
         if(!Arrays.equals(request.getData(), dbItem.getData()))
-            throw new UserNotFoundException();
+            throw new AccessCodeException();
 
         AccessCode dbAC = (AccessCode) dbItem;
+        dbAC.use(); //Set used variable for db cleanup.
         LocalDateTime now = LocalDateTime.now();
-
         LocalDateTime start = dbAC.getValidFrom();
         LocalDateTime end = dbAC.getValidTo();
 
@@ -44,8 +44,7 @@ public class CodeValidator extends AccessValidator {
     @Override
     public String validate(BiometricData request, String action) throws ValidationException {
         if (request.getType() != BiometricTypes.CODE) throw new BiometricTypeException("invalid validator for " + request.getType());
-        byte[] code = request.getData();
-        BiometricData dbItem = repository.findByData(code);
+        BiometricData dbItem = repository.findByData(request.getData());
 
         if (dbItem == null) throw new AccessCodeException();
 
@@ -56,9 +55,18 @@ public class CodeValidator extends AccessValidator {
      * Check if an access code already exists in the database
      * @param newCode The new access code
      * @return true if the code already exists in the database, false otherwise
+     * This function will delete expired access codes that have never been used from the database
      */
     public boolean isDuplicate(byte[] newCode) {
-        return  false;
+        AccessCode dbItem = (AccessCode) repository.findByData(newCode);
+        if (dbItem == null) return false;
+
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(dbItem.getValidTo()) && !dbItem.getUsed()) {
+            repository.delete(dbItem);
+            return false;
+        }
+        return true;
     }
 
 }

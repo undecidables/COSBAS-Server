@@ -31,8 +31,16 @@ public class AccessCode extends BiometricData {
         super(BiometricTypes.CODE, code);
     }
 
+    public void use() {
+        used = true;
+    }
+
+    public boolean getUsed() {
+        return used;
+    }
 
 
     private LocalDateTime validFrom;
     private LocalDateTime validTo;
+    private boolean used = false;
 }
