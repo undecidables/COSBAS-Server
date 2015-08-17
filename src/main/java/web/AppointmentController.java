@@ -6,6 +6,10 @@
 
 package web;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.*;
+import org.springframework.security.authentication.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +21,22 @@ import java.security.Principal;
 public class AppointmentController {
 
   /**
-  * Route function to go to index.html - Homepage for the user
+  * Route function to go to index.html - Homepage for the user after login
   * @return index.html page
   */
+  @RequestMapping(value = "/index", method = RequestMethod.POST)
+  public String index()
+  {
+    return "index";
+    //return "index";
+  }
+
+  /**
+  * Route function to go to index.html - Homepage for the user or makeAppointment.html depending on if user is logged in or not
+  * @return index.html page - if logged in or makeAppointment.html - if not logged in
+  */
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public String index(Principal principal)
+  public String root(Principal principal)
   {
     return principal == null ? "makeAppointment" : "index";
     //return "index";
@@ -34,7 +49,13 @@ public class AppointmentController {
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public String login()
   {
-    return "login";
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+    if(!(auth instanceof AnonymousAuthenticationToken)){
+      return "index";//new ModelAndView("forward:/index");
+    } else { 
+      return "login";
+    }
   }
 
   /**

@@ -124,10 +124,17 @@ h1 {
 {
     color: #14161b;
 }
+
 #Dropdown:link
 {
     color: #14161b;
 }
+
+.dropdown-toggle:hover
+{
+    color: white;
+}
+
 .vertical-center {
     margin-top: -5%;
 }
