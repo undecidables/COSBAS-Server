@@ -17,7 +17,7 @@ public class CodeValidator extends AccessValidator {
     @Override
     protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException {
         if(!Arrays.equals(request.getData(), dbItem.getData()))
-            return false;
+            return "";
 
         AccessCode dbAC = (AccessCode) dbItem;
         LocalDateTime now = LocalDateTime.now();
@@ -26,13 +26,13 @@ public class CodeValidator extends AccessValidator {
         LocalDateTime end = dbAC.getValidTo();
 
         if (start != null && !start.isBefore(now))
-            return false;
+            return "";
 
         if(end != null && !end.isAfter(now)) {
-            return false;
+            return "";
         }
 
-        return true;
+        return "";
     }
 
     @Override
