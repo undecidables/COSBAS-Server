@@ -6,6 +6,7 @@ import cosbas.biometric.validators.exceptions.AccessCodeException;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.UserNotFoundException;
 import cosbas.biometric.validators.exceptions.ValidationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -68,5 +69,9 @@ public class CodeValidator extends AccessValidator {
         }
         return true;
     }
+
+    @Scheduled
+    public void cleanup() {}
+
 
 }
