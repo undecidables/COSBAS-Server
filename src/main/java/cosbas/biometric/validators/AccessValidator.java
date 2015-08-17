@@ -2,6 +2,9 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.biometric.validators.exceptions.UserNotFoundException;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +31,7 @@ public abstract class AccessValidator {
      * @param action In/Out
      * @return
      */
-    abstract protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException;
+    abstract protected String matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException;
 
     /**
      * Validate whether the given data allows a user access,
@@ -37,12 +40,12 @@ public abstract class AccessValidator {
      * @param action 'in' or 'out'
      * @return True for valid - access allowed.
      */
-    public String validate(BiometricData requestData, String action) throws BiometricTypeException, UserNotFoundException {
+    public String validate(BiometricData request, String action) throws ValidationException {
 
-        List<BiometricData> items = repository.findByType(requestData.getType());
+        List<BiometricData> items = repository.findByType(request.getType());
         for (BiometricData item : items) {
             try {
-                return matches(requestData, item, action);
+                return matches(request, item, action);
 
             } catch (UserNotFoundException e) {
                 /** Silently continue with validating next item */

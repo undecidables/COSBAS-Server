@@ -2,6 +2,10 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.exceptions.AccessCodeException;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.biometric.validators.exceptions.UserNotFoundException;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,9 +19,9 @@ import java.util.Arrays;
 public class CodeValidator extends AccessValidator {
 
     @Override
-    protected String matches(BiometricData request, BiometricData dbItem, String action) throws UserNotFoundException {
+    protected String matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
         if(!Arrays.equals(request.getData(), dbItem.getData()))
-            return "";
+            throw new UserNotFoundException();
 
         AccessCode dbAC = (AccessCode) dbItem;
         LocalDateTime now = LocalDateTime.now();
@@ -25,23 +29,27 @@ public class CodeValidator extends AccessValidator {
         LocalDateTime start = dbAC.getValidFrom();
         LocalDateTime end = dbAC.getValidTo();
 
-        if (start != null && !start.isBefore(now))
-            return "";
-
-        if(end != null && !end.isAfter(now)) {
-            return "";
+        if (start != null && now.isBefore(start)) {
+            throw new AccessCodeException();
         }
 
-        return "";
+        if(end != null && now.isAfter(end)) {
+            repository.delete(dbItem);
+            if (action.equals("in")) throw new AccessCodeException();
+        }
+
+        return dbItem.getPersonID();
     }
 
     @Override
-    public String validate(BiometricData request, String action) throws BiometricTypeException, UserNotFoundException {
+    public String validate(BiometricData request, String action) throws ValidationException {
         if (request.getType() != BiometricTypes.CODE) throw new BiometricTypeException("invalid validator for " + request.getType());
         byte[] code = request.getData();
-        //Lookup in db
-        //Validate
-        return "u00000000";
+        BiometricData dbItem = repository.findByData(code);
+
+        if (dbItem == null) throw new AccessCodeException();
+
+        return matches(request, dbItem, action);
     }
 
     /**
