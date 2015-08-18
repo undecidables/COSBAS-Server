@@ -1,7 +1,6 @@
 package cosbas.biometric.validators;
 
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.validators.exceptions.UserNotFoundException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,11 @@ import org.springframework.stereotype.Component;
 public class FaceValidator extends AccessValidator {
 
     @Override
-    protected String matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
-        return "u00000000";
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
+        return ValidationResponse.successfulValidation("u00000000");
+    }
+
+    protected Boolean checkValidationType(BiometricTypes type) {
+        return type == BiometricTypes.FACE;
     }
 }

@@ -2,9 +2,7 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.validators.exceptions.AccessCodeException;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
-import cosbas.biometric.validators.exceptions.UserNotFoundException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,15 +12,15 @@ import java.util.Arrays;
 
 /**
  * @author Renette
- * Validates permanent and temporary access codes
+ *         Validates permanent and temporary access codes
  */
 @Component
 public class CodeValidator extends AccessValidator {
 
     @Override
-    protected String matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
-        if(!Arrays.equals(request.getData(), dbItem.getData()))
-            throw new AccessCodeException();
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, String action) {
+        if (!Arrays.equals(request.getData(), dbItem.getData()))
+            return ValidationResponse.failedValidation("Code not found");
 
         AccessCode dbAC = (AccessCode) dbItem;
         dbAC.use(); //Set used variable for db cleanup.
@@ -31,29 +29,37 @@ public class CodeValidator extends AccessValidator {
         LocalDateTime end = dbAC.getValidTo();
 
         if (start != null && now.isBefore(start)) {
-            throw new AccessCodeException();
-        }
-
-        if(end != null && now.isAfter(end)) {
+            return ValidationResponse.failedValidation("Code not valid yet.");
+        } else if (end != null && now.isAfter(end)) {
             repository.delete(dbItem);
-            if (action.equals("in")) throw new AccessCodeException();
+            if (action.equals("in"))
+                return ValidationResponse.failedValidation("Code expired.");
         }
 
-        return dbItem.getPersonID();
+
+        return ValidationResponse.successfulValidation(dbItem.getPersonID());
     }
 
     @Override
-    public String validate(BiometricData request, String action) throws ValidationException {
-        if (request.getType() != BiometricTypes.CODE) throw new BiometricTypeException("invalid validator for " + request.getType());
+    public ValidationResponse validate(BiometricData request, String action) throws ValidationException {
+        if (!checkValidationType(request.getType()))
+            throw new BiometricTypeException("Invalid validator type for " + request.getType());
+
         BiometricData dbItem = repository.findByData(request.getData());
 
-        if (dbItem == null) throw new AccessCodeException();
+        if (dbItem == null) return ValidationResponse.failedValidation("Code not found");
 
         return matches(request, dbItem, action);
     }
 
+    @Override
+    protected Boolean checkValidationType(BiometricTypes type) {
+        return type == BiometricTypes.CODE;
+    }
+
     /**
      * Check if an access code already exists in the database
+     *
      * @param newCode The new access code
      * @return true if the code already exists in the database, false otherwise
      * This function will delete expired access codes that have never been used from the database
@@ -71,7 +77,8 @@ public class CodeValidator extends AccessValidator {
     }
 
     @Scheduled
-    public void cleanup() {}
+    public void cleanup() {
+    }
 
 
 }

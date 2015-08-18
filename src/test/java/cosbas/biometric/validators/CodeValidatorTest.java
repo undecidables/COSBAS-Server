@@ -1,20 +1,14 @@
 package cosbas.biometric.validators;
 
 import cosbas.biometric.data.AccessCode;
-import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.validators.exceptions.AccessCodeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -70,8 +64,8 @@ public class CodeValidatorTest {
         //when(repository.findByData(code1)).thenReturn(valid1)
 
         /* Permanent Access Code valid1 */
-        assertEquals(testee.matches(req1, valid1, "in"), valid1.getPersonID());
-        assertEquals(testee.matches(req1, valid1, "out"), valid1.getPersonID());
+        assertEquals(testee.matches(req1, valid1, "in").data, valid1.getPersonID());
+        assertEquals(testee.matches(req1, valid1, "out").data, valid1.getPersonID());
 
         /* Test if exception is thrown when code is invalid */
         try {

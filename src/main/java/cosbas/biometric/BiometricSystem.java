@@ -7,8 +7,6 @@ import cosbas.biometric.request.AccessRecordDAO;
 import cosbas.biometric.request.AccessRequest;
 import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.validators.AccessValidator;
-import cosbas.biometric.validators.exceptions.BiometricTypeException;
-import cosbas.biometric.validators.exceptions.UserNotFoundException;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
