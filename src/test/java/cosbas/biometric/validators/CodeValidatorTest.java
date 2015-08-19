@@ -51,53 +51,53 @@ public class CodeValidatorTest {
 
     @Test
     public void testMatches() throws Exception {
-        AccessCode valid = new AccessCode("user", code1);
-
-        AccessCode valid1 = new AccessCode("u0000000", code1);
+        String user1 = "user";
+        AccessCode valid1 = new AccessCode(user1, code1);
         AccessCode req1 = new AccessCode(code1);
-        AccessCode req2 = new AccessCode(code2);
 
-        AccessCode valid2 = new AccessCode("tempUser", code2, before1, after1);
+        String user2 = "tempUser";
+        AccessCode req2 = new AccessCode(code2);
+        AccessCode valid2 = new AccessCode(user2, code2, before1, after1);
         //when(repository.findByData(code1)).thenReturn(valid1)
 
+
+
         /* Permanent Access Code valid1 */
-        assertEquals(testee.matches(req1, valid1, "in").data, valid1.getPersonID());
-        assertEquals(testee.matches(req1, valid1, "out").data, valid1.getPersonID());
-
-        /* Permanent Access Code valid */
-        assertEquals("Permanent Access Code in", testee.matches(req1, valid, "in"), valid.getPersonID());
-        assertEquals("Permanent Access Code out", testee.matches(req1, valid, "out"), valid.getPersonID());
+        AccessValidator.ValidationResponse expected = AccessValidator.ValidationResponse.successfulValidation(user1);
+        assertEquals("Permanent Access Code in", testee.matches(req1, valid1, "in"), expected);
+        assertEquals("Permanent Access Code out", testee.matches(req1, valid1, "out"), expected);
 
 
-        /* Test if exception is thrown when code is invalid */
+        /* Test if response is false when invalid code */
      /*   try {
-            testee.matches(req2, valid, "in");
+            testee.matches(req2, valid1, "in");
             fail("Wrong Code, in: Exception not thrown");
         } catch (ValidationException ignored) {}
         try {
-            testee.matches(req2, valid, "out");
+            testee.matches(req2, valid1, "out");
             fail("Wrong Code, out: Exception not thrown");
         } catch (ValidationException ignored) {}
 */
-        /* Testing Temporary access code valid */
-        valid = new AccessCode("user", code1, before1, after1);
-        assertEquals("In: Temporary access code valid", testee.matches(req1, valid, "in"),  valid.getPersonID());
-        assertEquals("Out: Temporary access code valid", testee.matches(req1, valid, "out"), valid.getPersonID());
+        /* Testing Temporary access code valid1 */
+        valid1 = new AccessCode(user1, code1, before1, after1);
+        expected = AccessValidator.ValidationResponse.successfulValidation(user1);
+        assertEquals("In: Temporary access code valid", testee.matches(req1, valid1, "in"), expected);
+        assertEquals("Out: Temporary access code valid", testee.matches(req1, valid1, "out"), expected);
 
-        valid = new AccessCode("user", code1, before2, before1);
+        valid1 = new AccessCode(user1, code1, before2, before1);
   /*      try {
-            testee.matches(req1, valid, "in");
+            testee.matches(req1, valid1, "in");
             fail("Code Entrance Expired: Exception not thrown");
         } catch (ValidationException ignored) {}
-        assertEquals("Code", testee.matches(req1, valid, "out"), valid.getPersonID());
+        assertEquals("Code", testee.matches(req1, valid1, "out"), valid1.getPersonID());
 
-        valid = new AccessCode("user", code1, after1, after2);
+        valid1 = new AccessCode("user", code1, after1, after2);
         try {
-            testee.matches(req1, valid, "in");
+            testee.matches(req1, valid1, "in");
             fail("Future Code, in: Exception not thrown");
         } catch (ValidationException ignored) {}
         try {
-            testee.matches(req1, valid, "out");
+            testee.matches(req1, valid1, "out");
             fail("Future Code, out: Exception not thrown");
         } catch (ValidationException ignored) {}
         */
