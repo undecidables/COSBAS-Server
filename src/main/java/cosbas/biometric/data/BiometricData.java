@@ -5,7 +5,7 @@ import cosbas.biometric.validators.BiometricTypes;
 import org.springframework.data.annotation.Id;
 
 /**
- * @author  Renette on 2015-06-26.
+ * @author  Renette
  * AccessRecord Request created from http request.
  */
 public class BiometricData {
@@ -13,7 +13,6 @@ public class BiometricData {
      * Database ID
      */
     private @Id String id;
-
 
     /**
      * The user with which the biometric data is associated.

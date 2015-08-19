@@ -21,8 +21,8 @@ public abstract class AccessValidator {
 
     /**
      * Checks whether this validator can validate the specific request
-     * @param type The biometric type to check against validator type
-     * @return
+     * @param type The biometric type that needs to be validate
+     * @return A boolean indicating whether this validator can validate @param{type}
      */
     protected abstract Boolean checkValidationType(BiometricTypes type);
 
@@ -33,47 +33,50 @@ public abstract class AccessValidator {
 
 
     /**
-     *
-     * @param request
-     * @param dbItem
+     * A method used by @method{validate} to compare two BiometricData objects.
+     * @param request The data received from the Client App.
+     * @param dbItem Item fetched from database to validate @param{request} against.
      * @param action  "in"/"Out"
-     * @return A validation response with: if recognized, success = true and data is the UserID identified"
+     * @return A validation response with: if approved, success = true and data is the UserID identified"
      * If failure, success = false and the data is the failure message.
      */
-    abstract protected ValidationResponse matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException;
+    abstract protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) throws ValidationException;
 
     /**
-     * Validate whether the given data allows a user access,
-     * Template method that can be overridden in special cases such as access codes
+     * Validate whether the given data allows a user access, by fetching items from the databse and using
+     * the @method{matches} to compare them.
+     * Template method that can be overridden in special cases such as access codes.
      *
      * @param request The biometric data that needs to be validated.
-     * @param action  'in' or 'out'
-     * @return True for valid - access allowed.
+     * @param action  Describes the role of the client that sends the request eg. The user is entering or exiting.
+     * @return A validation response with: if approved, success = true and data is the UserID identified"
+     * If failure, success = false and the data is the failure message.
+     * @throws ValidationException When the @param{request}'s biometric type cannot be validted by this class
      */
-    public ValidationResponse validate(BiometricData request, String action) throws ValidationException {
+    public ValidationResponse validate(BiometricData request, DoorActions action) throws ValidationException {
         if (!checkValidationType(request.getType())) throw new BiometricTypeException("Invalid Type validator");
         List<BiometricData> items = repository.findByType(request.getType());
 
         for (BiometricData item : items) {
             ValidationResponse response = matches(request, item, action);
-            if (response.recognized) return response;
+            if (response.approved) return response;
 
         }
         return ValidationResponse.failedValidation("No Match found");
     }
 
     protected static class ValidationResponse {
-        public final boolean recognized;
+        public final boolean approved;
 
         /**
-         * For example, a userid or message.
+         * A user id or message.
          */
         public final String data;
 
-        public ValidationResponse(boolean recognized, String data) {
+        public ValidationResponse(boolean approved, String data) {
 
             this.data = data;
-            this.recognized = recognized;
+            this.approved = approved;
         }
 
         public static ValidationResponse successfulValidation(String user) {
@@ -88,7 +91,7 @@ public abstract class AccessValidator {
         public boolean equals(Object other) {
             try {
                 ValidationResponse otherResponse = (ValidationResponse) other;
-                return recognized == otherResponse.recognized && Objects.equals(data, otherResponse.data);
+                return approved == otherResponse.approved && Objects.equals(data, otherResponse.data);
             } catch (Exception e) {
                 return false;
             }

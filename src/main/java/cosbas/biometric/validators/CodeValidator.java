@@ -18,30 +18,36 @@ import java.util.Arrays;
 public class CodeValidator extends AccessValidator {
 
     @Override
-    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, String action) {
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
         if (!Arrays.equals(request.getData(), dbItem.getData()))
-            return ValidationResponse.failedValidation("Code not found");
+            return ValidationResponse.failedValidation("Invalid Code.");
 
         AccessCode dbAC = (AccessCode) dbItem;
-        dbAC.use(); //Set used variable for db cleanup.
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = dbAC.getValidFrom();
         LocalDateTime end = dbAC.getValidTo();
 
         if (start != null && now.isBefore(start)) {
-            return ValidationResponse.failedValidation("Code not valid yet.");
+            return ValidationResponse.failedValidation("Future code not yet valid.");
         } else if (end != null && now.isAfter(end)) {
             repository.delete(dbItem);
-            if (action.equals("in"))
-                return ValidationResponse.failedValidation("Code expired.");
+            if (action == DoorActions.IN) return ValidationResponse.failedValidation("Code expired.");
         }
 
 
         return ValidationResponse.successfulValidation(dbItem.getPersonID());
     }
 
+    /**
+     * Validates a request and changes the last action associated with the AccessCode Object.
+     * @param request The biometric data that needs to be validated.
+     * @param action  'in' or 'out'
+     * @return A ValidationResponse object containing
+     * @throws ValidationException
+     */
     @Override
-    public ValidationResponse validate(BiometricData request, String action) throws ValidationException {
+    public ValidationResponse validate(BiometricData request, DoorActions action) throws ValidationException {
         if (!checkValidationType(request.getType()))
             throw new BiometricTypeException("Invalid validator type for " + request.getType());
 
@@ -49,7 +55,15 @@ public class CodeValidator extends AccessValidator {
 
         if (dbItem == null) return ValidationResponse.failedValidation("Code not found");
 
-        return matches(request, dbItem, action);
+        ValidationResponse resp = matches(request, dbItem, action);
+
+        if (resp.approved) {
+            AccessCode code = (AccessCode) dbItem;
+            code.use(action);
+            repository.save(code);
+        }
+
+        return resp;
     }
 
     @Override
@@ -69,7 +83,12 @@ public class CodeValidator extends AccessValidator {
         if (dbItem == null) return false;
 
         LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(dbItem.getValidTo()) && !dbItem.getUsed()) {
+        DoorActions lastAction = dbItem.getLastAction();
+
+        /**
+         * If duplicate code has expired and last action was either exit or it was unused, it should be deleted from the databse.
+         */
+        if (now.isAfter(dbItem.getValidTo()) && (lastAction == DoorActions.OUT || lastAction == null) ) {
             repository.delete(dbItem);
             return false;
         }
@@ -78,6 +97,7 @@ public class CodeValidator extends AccessValidator {
 
     @Scheduled
     public void cleanup() {
+        //TODO Implement and schedule....
     }
 
 

@@ -1,5 +1,8 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.validators.AccessValidator;
+import cosbas.biometric.validators.BiometricTypes;
+
 /**
  * @author Renette
  * This factory class provides the template for creating an access validator from the BiometricType

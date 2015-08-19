@@ -20,8 +20,7 @@ public enum BiometricTypes {
      * @param value The value to be converted to a Biometric Type
      * @return Biometric Type for the string
      */
-    public static BiometricTypes getValue(String value) {
+    public static BiometricTypes fromString(String value) {
         return BiometricTypes.valueOf(value.toUpperCase());
     }
-
 }

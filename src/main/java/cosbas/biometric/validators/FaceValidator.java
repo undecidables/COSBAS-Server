@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class FaceValidator extends AccessValidator {
 
     @Override
-    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, String action) throws ValidationException {
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) throws ValidationException {
         return ValidationResponse.successfulValidation("u00000000");
     }
 

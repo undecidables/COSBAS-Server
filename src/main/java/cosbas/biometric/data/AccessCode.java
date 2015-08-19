@@ -1,6 +1,7 @@
 package cosbas.biometric.data;
 
 import cosbas.biometric.validators.BiometricTypes;
+import cosbas.biometric.validators.DoorActions;
 
 import java.time.LocalDateTime;
 
@@ -31,16 +32,16 @@ public class AccessCode extends BiometricData {
         super(BiometricTypes.CODE, code);
     }
 
-    public void use() {
-        used = true;
+    public void use(DoorActions action) {
+        lastAction = action;
     }
 
-    public boolean getUsed() {
-        return used;
+    public DoorActions getLastAction() {
+        return lastAction;
     }
 
 
-    private LocalDateTime validFrom;
-    private LocalDateTime validTo;
-    private boolean used = false;
+    private LocalDateTime validFrom = null;
+    private LocalDateTime validTo = null;
+    private DoorActions lastAction = null;
 }

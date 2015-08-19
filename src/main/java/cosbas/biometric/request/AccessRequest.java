@@ -1,17 +1,18 @@
 package cosbas.biometric.request;
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.DoorActions;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @Author Renette on 2015-06-27.
+ * @author Renette
  * AccessRecord Request.
  * Contains: DoorID as sent by client, current time of the server.
  */
 public class AccessRequest {
-    public AccessRequest(String doorID, String action, List<BiometricData> data) {
+    public AccessRequest(String doorID, DoorActions action, List<BiometricData> data) {
         this.doorID = doorID;
         this.data = data;
         this.action = action;
@@ -29,7 +30,7 @@ public class AccessRequest {
         return data;
     }
 
-    public String getAction()
+    public DoorActions getAction()
     {
         return action;
     }
@@ -37,7 +38,7 @@ public class AccessRequest {
     /**
      * Action(eg. exit or entrance) sent from client
      */
-    private final String action;
+    private final DoorActions action;
 
     /**
      * ID from client Request.
