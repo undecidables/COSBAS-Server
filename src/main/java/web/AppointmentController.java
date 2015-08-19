@@ -6,10 +6,11 @@
 
 package web;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.*;
-import org.springframework.security.authentication.*;
-import org.springframework.web.servlet.ModelAndView;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.*;
+//import org.springframework.security.authentication.*;
+//import org.springframework.web.servlet.ModelAndView;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,6 @@ public class AppointmentController {
   public String index()
   {
     return "index";
-    //return "index";
   }
 
   /**
@@ -56,7 +56,7 @@ public class AppointmentController {
     } else { 
       return "login";
     }*/
-    return principal == null ? "login" : "redirect:/index";
+    return principal == null ? "login" : "index";
   }
 
   /**
@@ -70,7 +70,7 @@ public class AppointmentController {
   }
 
   /**
-  * Route function to go to logout.html - confirmation page to ensure user wants to logout
+  * Route function to go to logout.html - the user is then logged out
   * @return logout.html page
   */
   @RequestMapping(value = "/logout", method = RequestMethod.GET)

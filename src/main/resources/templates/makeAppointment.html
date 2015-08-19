@@ -18,31 +18,31 @@
 				<div class="cosbasLogin">
 					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Request an appointment</div>
 					<br/>
-					<form action="" method="post">
+					<form method="post">
 						<fieldset>
 							<div class="form-group">
 								<p class="text-left">Appointment with:</p>
-								<select class="form-control" name="appointmentWith">
+								<select class="form-control" id="appointmentWith" name="appointmentWith">
 									<option>
 										Staff member
 									</option>
 								</select>
 							</div>
 							<div class="form-group">
-								<p class="text-left">Date of the meeting:</p>
-								<input class="form-control" type="date" name="requestedDate"/><!--Can use datetime-local-->
+								<p class="text-left">Date and Time of the meeting:</p>
+								<input class="form-control" type="datetime-local" id="requestedDateTime" name="requestedDateTime"/><!--Can use datetime-local-->
 							</div>
-							<div class="form-group">
+							<!--div class="form-group">
 								<p class="text-left">Time of the meeting: </p>
 								<input class="form-control" type="time" name="requestedTime"/>
-							</div>
+							</div-->
 							<div class="form-group">
 								<p class="text-left">Appointment made by (your name): </p>
-								<input class="form-control" type="text" name="appointmentBy"/>
+								<input class="form-control" type="text" id="appointmentBy" name="appointmentBy"/>
 							</div>
 							<br/>
 							<div>
-								<button type="submit" class="btn btn-sm btn-success">Request Appointment</button>
+								<button type="submit" class="btn btn-sm btn-success" id="makeAppointmentRequest">Request Appointment</button>
 							</div>
 						</fieldset>
 					</form>
