@@ -3,6 +3,7 @@ package cosbas.biometric.data;
 
 import cosbas.biometric.validators.BiometricTypes;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 /**
  * @author  Renette
@@ -35,8 +36,9 @@ public class BiometricData {
         this.data = data;
     }
 
-    public BiometricData(String personId, BiometricTypes type, byte[] data) {
-        this.personID = personId;
+    @PersistenceConstructor
+    public BiometricData(String personID, BiometricTypes type, byte[] data) {
+        this.personID = personID;
         this.type = type;
         this.data = data;
     }

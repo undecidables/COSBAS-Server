@@ -2,6 +2,7 @@ package cosbas.biometric.data;
 
 import cosbas.biometric.validators.BiometricTypes;
 import cosbas.biometric.validators.DoorActions;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.time.LocalDateTime;
 
@@ -18,10 +19,11 @@ public class AccessCode extends BiometricData {
         return validTo;
     }
 
-    public AccessCode (String person, byte[] code, LocalDateTime from, LocalDateTime to) {
-       super(person, BiometricTypes.CODE, code);
-        validFrom = from;
-        validTo = to;
+    @PersistenceConstructor
+    public AccessCode (String personID, byte[] data, LocalDateTime validFrom, LocalDateTime validTo) {
+       super(personID, BiometricTypes.CODE, data);
+        this.validFrom = validFrom;
+        this.validTo = validTo;
     }
 
     public AccessCode (String person, byte[] code) {
@@ -39,7 +41,6 @@ public class AccessCode extends BiometricData {
     public DoorActions getLastAction() {
         return lastAction;
     }
-
 
     private LocalDateTime validFrom = null;
     private LocalDateTime validTo = null;
