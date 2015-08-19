@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Renette
@@ -63,39 +62,6 @@ public abstract class AccessValidator {
 
         }
         return ValidationResponse.failedValidation("No Match found");
-    }
-
-    protected static class ValidationResponse {
-        public final boolean approved;
-
-        /**
-         * A user id or message.
-         */
-        public final String data;
-
-        public ValidationResponse(boolean approved, String data) {
-
-            this.data = data;
-            this.approved = approved;
-        }
-
-        public static ValidationResponse successfulValidation(String user) {
-            return new ValidationResponse(true, user);
-        }
-
-        public static ValidationResponse failedValidation(String message) {
-            return new ValidationResponse(false, message);
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            try {
-                ValidationResponse otherResponse = (ValidationResponse) other;
-                return approved == otherResponse.approved && Objects.equals(data, otherResponse.data);
-            } catch (Exception e) {
-                return false;
-            }
-        }
     }
 
 }

@@ -12,7 +12,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 import static org.junit.Assert.*;
@@ -55,7 +54,7 @@ public class CodeValidatorTest {
     @Test
     public void testMatches() throws Exception {
 
-        AccessValidator.ValidationResponse expected = AccessValidator.ValidationResponse.successfulValidation(user1);
+        ValidationResponse expected = ValidationResponse.successfulValidation(user1);
 
         /** Permanent Access Code valid */
         AccessCode valid1 = new AccessCode(user1, code1);
@@ -102,12 +101,12 @@ public class CodeValidatorTest {
         /**
          * Mock matches method to return positive
          */
-        AccessValidator.ValidationResponse matches = AccessValidator.ValidationResponse.successfulValidation(user1);
+        ValidationResponse matches = ValidationResponse.successfulValidation(user1);
 
         doReturn(matches).when(testee).matches(any(BiometricData.class), any(BiometricData.class), any(DoorActions.class));
 
         for (DoorActions testAction : DoorActions.values()) {
-            AccessValidator.ValidationResponse resp = testee.validate(req1, testAction);
+            ValidationResponse resp = testee.validate(req1, testAction);
             assertEquals(resp, matches);
             assertEquals("Last action changed when validation succeeds. " , dbCode.getLastAction(), testAction);
         }
@@ -116,13 +115,13 @@ public class CodeValidatorTest {
          * Mock matches method to return negative
          */
 
-        matches = AccessValidator.ValidationResponse.failedValidation("Failure");
+        matches = ValidationResponse.failedValidation("Failure");
         doReturn(matches).when(testee).matches(any(BiometricData.class), any(BiometricData.class), any(DoorActions.class));
 
 
         for (DoorActions testAction : DoorActions.values()) {
             DoorActions prevAction = dbCode.getLastAction();
-            AccessValidator.ValidationResponse resp = testee.validate(req1, testAction);
+            ValidationResponse resp = testee.validate(req1, testAction);
             assertEquals(resp, matches);
             assertTrue("Last action unchanged when validation failed. ", dbCode.getLastAction() == prevAction);
         }
