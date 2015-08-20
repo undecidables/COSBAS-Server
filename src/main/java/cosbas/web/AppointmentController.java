@@ -4,7 +4,7 @@
  * This conmtroller serves Thymeleaf HTML templates - so Mostly for GET Requests
  */
 
-package web;
+package cosbas.web;
 
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.*;

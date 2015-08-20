@@ -1,6 +1,6 @@
-package web;
+package cosbas.web;
 
-import authentication.LDAPSettings;
+import cosbas.authentication.LDAPSettings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -43,9 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cancel").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/index").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
-                
-                //Ant matchers to allow the calling of java functions
-                .antMatchers("/requestAppointment").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 
                 .anyRequest().authenticated()
                 .and()
