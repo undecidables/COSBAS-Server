@@ -6,15 +6,34 @@
 	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		<h1 class="text-center">Cancel an appointment</h1>
-		<form class="col-lg-offset-4">
-			<label>Appointment ID: </label>
-			<input type="string" name="appointmentID"/>
-			<br/>
-			<label>Appointment cancelled by(Your name): </label>
-			<input type="text" name="appointmentBy"/>
-			<br/>
-			<input type="submit" value="Cancel Appointment"/>
-		</form>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Cancel an appointment</div>
+					<br/>
+					<form th:action="@{/login}" method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="text-left">Appointment ID:</p>
+								<input class="form-control" type="string" name="appointmentID"/>
+							</div>
+							<div class="form-group">
+								<p class="text-left">Appointment cancelled by (your name):</p>
+								<input class="form-control" type="string" name="appointmentBy"/>
+							</div>
+							<br/>
+							<div>
+								<input type="submit" value ="Cancel Appointment" class="btn btn-sm btn-success"/>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

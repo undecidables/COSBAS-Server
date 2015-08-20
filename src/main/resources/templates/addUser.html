@@ -6,23 +6,43 @@
 	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		<h1 class="text-center">Add user to the system</h1>
-		<form class="col-lg-offset-4">
-			<label>Name:</label>
-			<input type="text" name="FirstName"/>
-			<br/>
-			<label>Surname:</label>
-			<input type="text" name="Surname"/>
-			<br/>
-			<label>finger print:</label>
-			<input type="file" name="fingerPrint"/>
-			<br/>
-			<label>Facial recognition:</label>
-			<input type="file" name="facialRecognition"/>
-			<br/>
-			all other information as needed in the DB
-			<br/>
-			<input type="submit" value="Add user"/>
-		</form>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Add user to the system</div>
+					<br/>
+					<form th:action="@{/login}" method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="text-left">Name:</p>
+								<input class="form-control" type="string" name="FirstName"/>
+							</div>
+							<div class="form-group">
+								<p class="text-left">Surname:</p>
+								<input class="form-control" type="string" name="Surname"/>
+							</div>
+							<!--div class="form-group">
+								<p class="text-left">Finger Print:</p>
+								<input class="form-control" type="file" name="fingerPrint"/>
+							</div>
+							<div class="form-group">
+								<p class="text-left">Facial Recognition:</p>
+								<input type="file" class="form-control" name="facialRecognition"/>
+							</div-->
+							<br/>
+							<div>
+								<input type="submit" value ="Add User" class="btn btn-sm btn-success"/>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
