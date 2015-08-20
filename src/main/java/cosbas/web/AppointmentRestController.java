@@ -27,13 +27,16 @@ public class AppointmentRestController {
   private final Appointments appointments;
   private final Availability availability;
   /**
-   * An Example route, can be removed once we have something definite
-   * @param name Name to greet
-   * @return greeting JSON object
+   * 
+   * @param 
+   * @return 
    */
-  @RequestMapping(method= RequestMethod.POST, value="/greeting")
-  public String index(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
-    return "{greeting: \"Hello " + name + "\"}";
+  @RequestMapping(method= RequestMethod.POST, value="/requestAppointment")
+  public String requestAppointment(@RequestParam(value = "appointmentWith", required = true) String appointmentWith,
+  								   @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
+  								   @RequestParam(value = "appointmentBy", required = true) String appointmentBy) {
+  	System.out.println(appointmentWith + " " + appointmentDateTime + " " + appointmentBy);
+    return "{greeting: \"Hello " + appointmentWith + "\"}";
   }
 
 }
