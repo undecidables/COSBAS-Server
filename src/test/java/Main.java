@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import authentication.Authenticator;
+import cosbas.authentication.Authenticator;
 
 /**
  * This class is the unit tested for the authentication package. It contains unit tests to make sure successful/unsuccessful authentication happens at the correct places.

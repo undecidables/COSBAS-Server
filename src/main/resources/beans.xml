@@ -8,12 +8,7 @@
         http://www.springframework.org/schema/data/mongo
         http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-    <bean id="serializer" class="biometric.serialize.JSONSerializer" />
-    <bean id="authSystem" class="biometric.BiometricSystem" />
-    <bean id="appointments" class="appointment.Appointments" />
-    <bean id="availability" class="appointment.Availability" />
-
-    <mongo:repositories base-package="db.repositories" />
+    <mongo:repositories base-package="cosbas.db.repositories" />
 
     <mongo:mongo port="${mongo.port}" host="${mongo.address}"/>
 
@@ -28,5 +23,4 @@
         <constructor-arg name="databaseName" value="${mongo.database}" />
         <constructor-arg name="userCredentials" ref="mongoCredentials" />
     </bean>
-
 </beans>

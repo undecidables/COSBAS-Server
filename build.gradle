@@ -45,6 +45,8 @@ repositories {
 
 
 dependencies {
+
+    compile  "org.springframework.boot:spring-boot-starter-jetty"
     compile  "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile  "org.springframework:spring-context:4.1.6.RELEASE"
     compile  "org.springframework.security:spring-security-web:4.0.1.RELEASE"
@@ -52,8 +54,12 @@ dependencies {
     compile  "org.springframework.session:spring-session:1.0.1.RELEASE"
     compile  "org.thymeleaf:thymeleaf:2.0.5"
 
-    compile  "com.google.apis:google-api-services-calendar:v3-rev126-1.20.0"
-    compile  "com.google.code.gson:gson:2.3.1"
+    compile "com.google.api-client:google-api-client:1.20.0"
+    compile "com.google.oauth-client:google-oauth-client-jetty:1.20.0"
+    //compile "org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE"
+    //compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
+    compile "com.google.apis:google-api-services-calendar:v3-rev126-1.20.0"
+    compile "com.google.code.gson:gson:2.3.1"
 
     compile  "org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE"
     compile "org.springframework:spring-tx"
@@ -70,8 +76,10 @@ dependencies {
 
     //spring security
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-web"
-
+    compile ("org.springframework.boot:spring-boot-starter-web"){
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile "org.springframework.boot:spring-boot-starter-actuator"
 
 
     compile "org.springframework.security:spring-security-ldap"
@@ -100,5 +108,5 @@ configurations.jasperreports {
 classes.dependsOn compileJasperJava
 */
 springBoot {
-    mainClass = 'web.Application'
+    mainClass = 'cosbas.web.Application'
 }
