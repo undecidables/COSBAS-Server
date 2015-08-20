@@ -2,7 +2,9 @@ package cosbas.biometric.serialize;
 
 import cosbas.biometric.request.AccessRequest;
 import cosbas.biometric.request.AccessResponse;
-import cosbas.biometric.request.BiometricData;
+import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.BiometricTypes;
+import cosbas.biometric.validators.DoorActions;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,13 +34,13 @@ public abstract class BiometricSerializer {
      * @return Parsed request object
      * TODO: I dont think String is correct input type... What data does http request use?
      */
-    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException {
+    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException {
 
         List<Part> parts = (List<Part>) request.getParts();
-        List<BiometricData> biometricDatas = new ArrayList<BiometricData>();
+        List<BiometricData> biometricDatas = new ArrayList<>();
 
         String id = request.getParameter("ID");
-        String action = request.getParameter("Action");
+        DoorActions action = DoorActions.fromString(request.getParameter("Action"));
 
         if(parts != null)
         {
@@ -46,11 +48,7 @@ public abstract class BiometricSerializer {
             {
                 String name = part.getName().toLowerCase();
 
-                if(name.contains("id") || name.contains("action"))
-                {
-                }
-                else
-                {
+                if (!name.contains("id") && !name.contains("action")) {
                     byte[] file = null;
                     InputStream partInputStream=part.getInputStream();
                     ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
@@ -59,13 +57,12 @@ public abstract class BiometricSerializer {
                     while ((amountRead=partInputStream.read(chunk)) != -1) {
                         outputStream.write(chunk,0,amountRead);
                     }
-                    if (outputStream.size() == 0) {
-                    }
-                    else
-                    {
+                    if (outputStream.size() != 0) {
                         file = outputStream.toByteArray();
                     }
-                    BiometricData data = new BiometricData(part.getName(),file);
+
+                    BiometricTypes type = BiometricTypes.fromString(part.getName());
+                    BiometricData data = new BiometricData(type,file);
                     biometricDatas.add(data);
                 }
             }
@@ -74,4 +71,5 @@ public abstract class BiometricSerializer {
         }
         throw new NullPointerException("Parts null, unable to parse http request ");
     }
+
 }

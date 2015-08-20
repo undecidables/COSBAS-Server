@@ -28,7 +28,7 @@ public class AccessResponse {
     }
 
     /**
-     * Should the person be allowed in.
+     * Should the data be allowed in.
      * (True = allowed, false = rejected)
      */
     private final Boolean result;
@@ -58,7 +58,7 @@ public class AccessResponse {
      */
     private final LocalDateTime responseTime = LocalDateTime.now();
 
-    public AccessResponse(AccessRequest request, Boolean result, String message, String userID) {
+    protected AccessResponse(AccessRequest request, Boolean result, String message, String userID) {
         this.result = result;
         this.message = message;
         this.doorID = request.getDoorID();
@@ -66,11 +66,20 @@ public class AccessResponse {
         this.userID = userID;
     }
 
-    public AccessResponse(AccessRequest request, Boolean result, String message) {
+    protected AccessResponse(AccessRequest request, Boolean result, String message) {
         this.result = result;
         this.message = message;
         this.doorID = request.getDoorID();
         this.requestTime = request.getTime();
         this.userID = null;
+    }
+
+    public static AccessResponse getSuccessResponse(AccessRequest re, String message, String user) {
+        return new AccessResponse(re, true, message, user);
+    }
+
+
+    public static AccessResponse getFailureResponse(AccessRequest re, String message) {
+        return new AccessResponse(re, false, message);
     }
 }

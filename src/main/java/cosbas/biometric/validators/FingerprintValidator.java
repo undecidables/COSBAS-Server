@@ -1,18 +1,23 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.request.BiometricData;
+import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.exceptions.ValidationException;
+import org.springframework.stereotype.Component;
 
 /**
- * Created by Renette on 2015-06-26.
- * Validates temporary access code
+ * @author Renette
+ * Validates fingerprint
  */
-public class FingerprintValidator implements AccessValidator {
+@Component
+public class FingerprintValidator extends AccessValidator {
 
     @Override
-    public boolean validate(BiometricData request) {
-        byte[] data = request.getData();
-        //Lookup in db
-        //Validate
-        return true;
+    protected Boolean checkValidationType(BiometricTypes type) {
+        return type == BiometricTypes.FINGER;
+    }
+
+    @Override
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) throws ValidationException {
+        return ValidationResponse.successfulValidation("u00000000");
     }
 }

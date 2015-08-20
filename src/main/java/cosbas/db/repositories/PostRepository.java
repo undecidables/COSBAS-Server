@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * Should not be implemented, Spring handles implementation.
  *
  * For more functions research the MongoRepository Interface.
- * Query Functions are defined in the AccessDBAdapter interface.
+ * Query Functions are defined in the AccessRecordDAO interface.
  */
 public interface PostRepository  extends MongoRepository<Post, String>, PostDBAdapter {
 }
