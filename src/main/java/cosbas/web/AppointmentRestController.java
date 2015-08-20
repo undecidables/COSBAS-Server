@@ -6,6 +6,8 @@
 
 package cosbas.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import cosbas.appointment.Appointments;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AppointmentRestController {
+
+      /**
+     * The database adapter/repository to use.
+     */
+    @Autowired
+    private Appointments appointment;
 
   /**
    * 
@@ -26,7 +34,7 @@ public class AppointmentRestController {
                      @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
                      @RequestParam(value = "appointmentBy", required = true) String appointmentBy) {
     System.out.println(appointmentWith + " " + appointmentDateTime + " " + appointmentBy);
-    return "{greeting: \"Hello " + appointmentWith + "\"}";
+    return appointment.temp();
   }
 
 }

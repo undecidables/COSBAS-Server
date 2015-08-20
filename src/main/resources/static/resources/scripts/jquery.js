@@ -9,7 +9,7 @@ $(document).ready(function() {
              "appointmentBy" : $('#appointmentBy').val()},
       url: "http://localhost:8080/requestAppointment"
     }).then(function(jsonReturned) {
-      //console.log(jsonReturned);
+      console.log(jsonReturned);
     });
   });
 });
