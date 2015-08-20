@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import appointments.Appointments;
+import cosbas.appointment.Appointments;
 
 /**
  * This class is the unit tested for the authentication package. It contains unit tests to make sure successful/unsuccessful authentication happens at the correct places.
@@ -20,7 +20,7 @@ public class AppointmentTests {
     //Mock Calendar
     //Mock availability
 
-    private final Appointments appointments;
+   // private final Appointments appointments;
 
     /**
      * This method is used to select the calander to be used as well as the available times for appointments
