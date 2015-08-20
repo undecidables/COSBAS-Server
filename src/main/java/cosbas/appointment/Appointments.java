@@ -1,6 +1,7 @@
 package cosbas.appointment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.lang.System;
  * Appointments class used to Request, cancel, check the status, accept/deny appointments. 
  * @author Elzahn Botha
  */
-
+@Service
 public class Appointments 
 {
     /**

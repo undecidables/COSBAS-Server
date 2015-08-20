@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AppointmentRestController {
-
-      /**
-     * The database adapter/repository to use.
-     */
+    
     @Autowired
     private Appointments appointment;
 
