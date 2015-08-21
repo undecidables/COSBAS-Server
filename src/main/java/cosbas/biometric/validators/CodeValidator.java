@@ -47,18 +47,18 @@ public class CodeValidator extends AccessValidator {
      * @throws ValidationException
      */
     @Override
-    public ValidationResponse validate(BiometricData request, DoorActions action) throws ValidationException {
+    public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
         if (!checkValidationType(request.getType()))
             throw new BiometricTypeException("Invalid validator type for " + request.getType());
 
-        BiometricData dbItem = repository.findByData(request.getData());
+        BiometricData dbCode = repository.findByData(request.getData());
 
-        if (dbItem == null) return ValidationResponse.failedValidation("Code not found");
+        if (dbCode == null) return ValidationResponse.failedValidation("Code not found");
 
-        ValidationResponse resp = matches(request, dbItem, action);
+        ValidationResponse resp = matches(request, dbCode, action);
 
         if (resp.approved) {
-            AccessCode code = (AccessCode) dbItem;
+            AccessCode code = (AccessCode) dbCode;
             code.use(action);
             repository.save(code);
         }

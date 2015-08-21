@@ -46,6 +46,11 @@ public class BiometricSystem {
     }
 
 
+    /**
+     * Validates an access request and identifies the person.
+     * @param req Access Request as parsed from HTTP request.
+     * @return An access reponse object with details
+     */
     public AccessResponse requestAccess(AccessRequest req) {
         try {
             List<BiometricData> dataList = req.getData();
