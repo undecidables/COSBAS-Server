@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * @author Renette
- *         Validates a specific biometric type.
+ * {@author Renette Ros}
+ * Validates a specific biometric type.
  */
 @Component
 public abstract class AccessValidator {

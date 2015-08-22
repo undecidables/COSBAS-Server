@@ -1,7 +1,7 @@
 package cosbas.biometric.data;
 import org.springframework.data.annotation.Id;
 /**
- * @author Renette
+ * {@author Renette Ros}
  * A user with a user id and biometric data to be registered on ths system.
  */
 public abstract class BiometricUser {

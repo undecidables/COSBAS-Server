@@ -19,7 +19,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * This is the basic navigation/security configuration. Currently, it's setup so that all links which have login, or nav, or root do not need to authenticate to navigate. Any other request

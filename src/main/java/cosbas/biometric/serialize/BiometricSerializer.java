@@ -16,9 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Renette
- * Abstract class for serializing AccessResponses to text
- * and parsing AccessRequests from HttpServletRequests.
+ * {@author Renette Ros}
+ * Abstract strategy for serializing AccessResponses to text and parsing AccessRequests from an {@link HttpServletRequest}.
  */
 public abstract class BiometricSerializer {
     /**
@@ -29,12 +28,17 @@ public abstract class BiometricSerializer {
     public abstract String serializeResponse(AccessResponse response);
 
     /**
-     * Parses a string? into a AccessRequest object.
+     * Parses an {@link HttpServletRequest} into an {@link AccessRequest} object.
      * @param request Data to be parsed into request object
      * @return Parsed request object
-     * TODO: I dont think String is correct input type... What data does http request use?
+     * @throws IOException When request.getParts fails.
+     * @throws ServletException When request.getParts fails.
+     * @throws IllegalArgumentException When the request action or a biometric type Invalid.
+     * @throws NullPointerException When the request parts is null.
+     * @see BiometricTypes
+     * @see DoorActions
      */
-    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException {
+    public AccessRequest parseRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException, NullPointerException {
 
         List<Part> parts = (List<Part>) request.getParts();
         List<BiometricData> biometricDatas = new ArrayList<>();
@@ -61,8 +65,7 @@ public abstract class BiometricSerializer {
                         file = outputStream.toByteArray();
                     }
 
-                    BiometricTypes type = BiometricTypes.fromString(part.getName());
-                    BiometricData data = new BiometricData(type,file);
+                    BiometricData data = new BiometricData(BiometricTypes.fromString(part.getName()),file);
                     biometricDatas.add(data);
                 }
             }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  *         Validates permanent and temporary access codes
  */
 @Component

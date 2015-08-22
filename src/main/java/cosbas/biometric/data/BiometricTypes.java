@@ -5,7 +5,7 @@ import cosbas.biometric.validators.FaceValidator;
 import cosbas.biometric.validators.FingerprintValidator;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  * This class is a container for the biometric typt string constants.
  *
  */

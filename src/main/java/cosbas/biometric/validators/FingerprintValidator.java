@@ -7,7 +7,7 @@ import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  * Validates fingerprint
  */
 @Component

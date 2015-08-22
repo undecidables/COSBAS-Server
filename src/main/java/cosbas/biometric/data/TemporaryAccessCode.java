@@ -3,7 +3,7 @@ package cosbas.biometric.data;
 import java.time.LocalDateTime;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  */
 public class TemporaryAccessCode extends AccessCode {
     private LocalDateTime validFrom = null;

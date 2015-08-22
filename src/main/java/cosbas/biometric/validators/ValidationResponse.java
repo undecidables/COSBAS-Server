@@ -1,9 +1,12 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.request.AccessRequest;
+
 import java.util.Objects;
 
 /**
- * Created by Renette on 2015-08-19.
+ * {@author Renette Ros}
+ * ValidationResponses are created by the {@link AccessValidator}s for each data object in an {@link AccessRequest}
  */
 public class ValidationResponse {
     public final boolean approved;

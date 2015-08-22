@@ -3,7 +3,7 @@ package cosbas.biometric.data;
 import cosbas.biometric.request.DoorActions;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  */
 public class AccessCode extends BiometricData {
 
@@ -27,6 +27,6 @@ public class AccessCode extends BiometricData {
         return temporary;
     }
 
-    protected boolean temporary = true;
+    protected boolean temporary = false;
     private DoorActions lastAction;
 }

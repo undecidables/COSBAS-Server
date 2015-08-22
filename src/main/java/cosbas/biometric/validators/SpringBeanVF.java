@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
+ * This factory uses a SpringDI BeanFactory to create the validator beans.
  */
 
 @Service

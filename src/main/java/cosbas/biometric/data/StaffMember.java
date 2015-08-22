@@ -1,7 +1,7 @@
 package cosbas.biometric.data;
 
 /**
- * @author  Vivian Venter
+ * {@author  Vivian Venter}
  */
 public class StaffMember extends BiometricUser{
 

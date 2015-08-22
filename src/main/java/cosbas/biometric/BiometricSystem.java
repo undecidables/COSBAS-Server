@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author Renette
- *         Modules handles core biometric functions.
+ * {@author Renette Ros}
+ *  Service that handles core biometric functions.
  */
 @Service
 public class BiometricSystem {

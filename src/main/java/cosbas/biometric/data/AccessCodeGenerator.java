@@ -1,18 +1,15 @@
 package cosbas.biometric.data;
 
 import cosbas.appointment.Appointment;
-import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.biometric.validators.CodeValidator;
-import cosbas.db.repositories.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  * The abstract class implementing template methods for genrating temporary and permanent access codes.
  */
 public abstract class AccessCodeGenerator {
