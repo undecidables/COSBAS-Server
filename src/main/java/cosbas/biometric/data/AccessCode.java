@@ -1,28 +1,11 @@
 package cosbas.biometric.data;
 
-import cosbas.biometric.validators.BiometricTypes;
-import cosbas.biometric.validators.DoorActions;
-
-import java.time.LocalDateTime;
+import cosbas.biometric.request.DoorActions;
 
 /**
  * @author Renette
  */
 public class AccessCode extends BiometricData {
-
-    public LocalDateTime getValidFrom() {
-        return validFrom;
-    }
-
-    public LocalDateTime getValidTo() {
-        return validTo;
-    }
-
-    public AccessCode (String person, byte[] code, LocalDateTime from, LocalDateTime to) {
-       super(person, BiometricTypes.CODE, code);
-        validFrom = from;
-        validTo = to;
-    }
 
     public AccessCode (String person, byte[] code) {
         super(person, BiometricTypes.CODE, code);
@@ -40,8 +23,10 @@ public class AccessCode extends BiometricData {
         return lastAction;
     }
 
+    public boolean isTemporary() {
+        return temporary;
+    }
 
-    private LocalDateTime validFrom = null;
-    private LocalDateTime validTo = null;
-    private DoorActions lastAction = null;
+    protected boolean temporary = true;
+    private DoorActions lastAction;
 }

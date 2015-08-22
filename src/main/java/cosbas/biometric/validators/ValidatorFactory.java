@@ -1,7 +1,6 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.validators.AccessValidator;
-import cosbas.biometric.validators.BiometricTypes;
+import cosbas.biometric.data.BiometricTypes;
 
 /**
  * @author Renette

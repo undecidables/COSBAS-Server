@@ -3,8 +3,8 @@ package cosbas.biometric.serialize;
 import cosbas.biometric.request.AccessRequest;
 import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.validators.BiometricTypes;
-import cosbas.biometric.validators.DoorActions;
+import cosbas.biometric.data.BiometricTypes;
+import cosbas.biometric.request.DoorActions;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

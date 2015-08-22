@@ -1,4 +1,8 @@
-package cosbas.biometric.validators;
+package cosbas.biometric.data;
+
+import cosbas.biometric.validators.CodeValidator;
+import cosbas.biometric.validators.FaceValidator;
+import cosbas.biometric.validators.FingerprintValidator;
 
 /**
  * @author Renette

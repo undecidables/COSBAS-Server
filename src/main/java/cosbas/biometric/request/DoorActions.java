@@ -1,4 +1,4 @@
-package cosbas.biometric.validators;
+package cosbas.biometric.request;
 
 /**
  * @author Renette

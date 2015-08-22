@@ -1,11 +1,10 @@
 package cosbas.biometric.data;
 
 
-import cosbas.biometric.validators.BiometricTypes;
 import org.springframework.data.annotation.Id;
 
 /**
- * @author  Renette
+ * {@author  Renette Ros}
  * AccessRecord Request created from http request.
  */
 public class BiometricData {

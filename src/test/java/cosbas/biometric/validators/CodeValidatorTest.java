@@ -1,8 +1,7 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.data.AccessCode;
-import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.data.*;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,10 +52,6 @@ public class CodeValidatorTest {
     @Test
     public void testMatches() throws Exception {
 
-        ValidationResponse expected = ValidationResponse.successfulValidation(user1);
-
-
-        DoorActions prevAction;
         ValidationResponse resp;
         AccessCode dbItem1 = new AccessCode(user1, code1);
         for (DoorActions testAction : DoorActions.values()) {
@@ -65,12 +60,11 @@ public class CodeValidatorTest {
             assertMatchesSuccess(resp, dbItem1, "Matches: Valid permanent access code.");
 
             /** Test if response is false when invalid code */
-            prevAction = dbItem1.getLastAction();
             resp = testee.matches(req2, dbItem1, testAction);
             assertMatchesFailure(resp, dbItem1, "Matches: Invalid code");
         }
 
-        dbItem1 = new AccessCode(user1, code1, before1, after1);
+        dbItem1 = new TemporaryAccessCode(user1, code1, before1, after1, "0");
         for (DoorActions testAction : DoorActions.values()) {
 
             /** Testing Temporary access code valid in correct time*/
@@ -78,26 +72,23 @@ public class CodeValidatorTest {
             assertMatchesSuccess(resp, dbItem1,  "Matches: Temporary access code valid");
 
             /** Test if response is false when invalid & comparing against temporary code */
-            prevAction = dbItem1.getLastAction();
             resp = testee.matches(req2, dbItem1, testAction);
             assertMatchesFailure(resp, dbItem1,  "Matches: Invalid code & time correct");
         }
 
-        dbItem1 = new AccessCode(user1, code1, after1, after2);
+        dbItem1 = new TemporaryAccessCode(user1, code1, after1, after2, "0");
         for (DoorActions testAction : DoorActions.values()) {
             /** Future code should not allow user to enter or exit */
-            prevAction = dbItem1.getLastAction();
-            resp = testee.matches(req1, dbItem1, DoorActions.IN);
+            resp = testee.matches(req1, dbItem1, testAction);
             assertMatchesFailure(resp, dbItem1,  "Matches: Future Code");
         }
 
         /** Test expired code */
-        dbItem1 = new AccessCode(user1, code1, before2, before1);
-        prevAction = dbItem1.getLastAction();
+        dbItem1 = new TemporaryAccessCode(user1, code1, before2, before1, "0");
+
         assertMatchesFailure(testee.matches(req1, dbItem1, DoorActions.IN), dbItem1, "Matches: Entrance when code expired.");
         /** Expired code should allow user to exit */
         assertMatchesSuccess(testee.matches(req1, dbItem1, DoorActions.OUT), dbItem1,  "Matches: Exit when code expired");
-
 
     }
 
@@ -105,12 +96,12 @@ public class CodeValidatorTest {
     @Test
     public void testValidate() throws Exception {
         testee = spy(testee);
-        AccessCode dbCode = spy(new AccessCode("user", code1));
+        AccessCode accessCode = new AccessCode(user1, code1);
 
 
         ArrayList<BiometricTypes> invalidTypes = new ArrayList<>(Arrays.asList(BiometricTypes.values()));
         invalidTypes.remove(BiometricTypes.CODE);
-        when(repository.findByData(code1)).thenReturn(dbCode);
+        when(repository.findByData(code1)).thenReturn(accessCode);
         when(repository.findByData(code2)).thenReturn(null);
 
 
@@ -128,15 +119,18 @@ public class CodeValidatorTest {
         for (DoorActions testAction : DoorActions.values()) {
 
             /** Permanent access codes */
-            doReturn(null).when(dbCode).getValidFrom();
-            doReturn(null).when(dbCode).getValidTo();
 
             resp = testee.validate(req1, testAction);
-            assertValidateSuccess(resp, dbCode, testAction, "Permanent code correct");
+            assertValidateSuccess(resp, accessCode, testAction, "Permanent code correct");
+        }
 
+        TemporaryAccessCode dbCode = spy(new TemporaryAccessCode(user1, code1, after1, after2, "appointment"));
+        when(repository.findByData(code1)).thenReturn(dbCode);
+        for (DoorActions testAction : DoorActions.values())       {
             /**
              * Too Early
              */
+
             doReturn(after1).when(dbCode).getValidFrom();
             doReturn(after2).when(dbCode).getValidTo();
             prevAction = dbCode.getLastAction();
@@ -172,7 +166,7 @@ public class CodeValidatorTest {
          */
         doReturn(before1).when(dbCode).getValidTo();
         doReturn(before2).when(dbCode).getValidFrom();
-        prevAction = dbCode.getLastAction();
+        prevAction = accessCode.getLastAction();
         resp = testee.validate(req1, DoorActions.IN);
         assertValidateFailure(resp, dbCode, prevAction, "Validate: Enter with Expired code.");
 
@@ -200,7 +194,7 @@ public class CodeValidatorTest {
 
     private void assertMatchesFailure(ValidationResponse resp, AccessCode dbCode, String message) {
         assertFalse(message, resp.approved);
-    };
+    }
 
 
     @Test

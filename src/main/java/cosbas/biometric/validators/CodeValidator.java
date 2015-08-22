@@ -2,8 +2,10 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.data.BiometricTypes;
+import cosbas.biometric.data.TemporaryAccessCode;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
-import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,15 +26,18 @@ public class CodeValidator extends AccessValidator {
 
         AccessCode dbAC = (AccessCode) dbItem;
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime start = dbAC.getValidFrom();
-        LocalDateTime end = dbAC.getValidTo();
+        if (dbAC.isTemporary()) {
+            TemporaryAccessCode tAC = (TemporaryAccessCode) dbAC;
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime start = tAC.getValidFrom();
+            LocalDateTime end = tAC.getValidTo();
 
-        if (start != null && now.isBefore(start)) {
-            return ValidationResponse.failedValidation("Future code not yet valid.");
-        } else if (end != null && now.isAfter(end)) {
-            repository.delete(dbItem);
-            if (action == DoorActions.IN) return ValidationResponse.failedValidation("Code expired.");
+            if (now.isBefore(start)) {
+                return ValidationResponse.failedValidation("Future code not yet valid.");
+            } else if (now.isAfter(end)) {
+                repository.delete(dbItem);
+                if (action == DoorActions.IN) return ValidationResponse.failedValidation("Code expired.");
+            }
         }
 
 
@@ -42,9 +47,9 @@ public class CodeValidator extends AccessValidator {
     /**
      * Validates a request and changes the last action associated with the AccessCode Object.
      * @param request The biometric data that needs to be validated.
-     * @param action  'in' or 'out'
+     * @param action  Whether the user is entering or leaving.
      * @return A ValidationResponse object containing
-     * @throws ValidationException
+     * @throws BiometricTypeException When @param{request}'s type is not BiometricTypes.CODE
      */
     @Override
     public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
@@ -82,15 +87,18 @@ public class CodeValidator extends AccessValidator {
         AccessCode dbItem = (AccessCode) repository.findByData(newCode);
         if (dbItem == null) return false;
 
-        LocalDateTime now = LocalDateTime.now();
-        DoorActions lastAction = dbItem.getLastAction();
+        if (dbItem.isTemporary()) {
+            TemporaryAccessCode tAC = (TemporaryAccessCode) dbItem;
+            LocalDateTime now = LocalDateTime.now();
+            DoorActions lastAction = dbItem.getLastAction();
+            /**
+             * If duplicate code has expired and last action was either exit or it was unused, it should be deleted from the databse.
+             */
 
-        /**
-         * If duplicate code has expired and last action was either exit or it was unused, it should be deleted from the databse.
-         */
-        if (now.isAfter(dbItem.getValidTo()) && (lastAction == DoorActions.OUT || lastAction == null) ) {
-            repository.delete(dbItem);
-            return false;
+            if (now.isAfter(tAC.getValidTo()) && (lastAction == DoorActions.OUT || lastAction == null)) {
+                repository.delete(dbItem);
+                return false;
+            }
         }
         return true;
     }
