@@ -69,6 +69,15 @@ dependencies {
     //compile  "net.sf.jasperreports:jasperreports:6.1.0"
 
 
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework:spring-aop:4.2.0.RELEASE"
+    compile "org.aspectj:aspectjtools:1.8.6"
+    compile "org.aspectj:aspectjrt:1.8.6"
+    compile "org.aspectj:aspectjweaver:1.8.6"
+    compile 'log4j:log4j:1.2.17'
+
+
+
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile 'org.springframework.data:spring-data-mongodb:1.7.1.RELEASE'
 
@@ -78,7 +87,6 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web"){
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile "org.springframework.boot:spring-boot-starter-actuator"
 
 
 
