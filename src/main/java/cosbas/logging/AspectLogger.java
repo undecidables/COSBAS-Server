@@ -1,9 +1,8 @@
 package cosbas.logging;
 
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -16,9 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AspectLogger {
 
-    static final Logger activityLogger = Logger.getLogger("activityLogger");
-    static final Logger debugLogger = Logger.getLogger("debugLogger");
-
+    static final Logger errorLogger = LogManager.getRootLogger();
+    //static final Logger infoLogger = LogManager.getLogger("infoLogLogger");
 
     @Pointcut("execution(* cosbas..*(..))")
     public void selectAll()
@@ -29,9 +27,9 @@ public class AspectLogger {
     @Before(value = "selectAll()")
     public void beforeLogger(JoinPoint joinPoint)
     {
-        //System.out.println("This is the before of method: " + joinPoint.getSignature().toShortString());
-        activityLogger.debug("This is the before of method: " + joinPoint.getSignature().toShortString());
-
+        errorLogger.error("uhm????");
+        errorLogger.info("uhm info......");
+        //infoLogger.trace("tracing");
     }
     /**
      * TODO
@@ -42,5 +40,11 @@ public class AspectLogger {
      * Make it create above mentioned files and write to them.
      * Refine the interceptors, shouldnt/doesnt have to intercept everytihng.
      *
+     * Pointcut on the following:
+     * controllers
+     *
+     * talk to Renette
      */
+
+
 }
