@@ -1,8 +1,8 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.data.BiometricTypes;
 import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;

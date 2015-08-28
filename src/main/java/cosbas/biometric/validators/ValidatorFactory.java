@@ -1,6 +1,6 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.data.BiometricTypes;
+import cosbas.biometric.BiometricTypes;
 
 /**
  * {@author Renette Ros}
@@ -14,8 +14,8 @@ public abstract class ValidatorFactory {
      * @param bioType The type of the data that needs to be validated.
      * @return The correct {@link AccessValidator}
      */
-    public AccessValidator getValidator(BiometricTypes bioType) {
+    public AccessValidator  getValidator(BiometricTypes bioType) {
         return getBean(bioType.validatorClass);
     }
-    protected abstract AccessValidator getBean(Class c);
+    protected abstract <T extends AccessValidator> AccessValidator getBean(Class<T> c);
 }

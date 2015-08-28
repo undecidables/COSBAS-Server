@@ -1,5 +1,6 @@
-package cosbas.biometric.data;
+package cosbas.biometric;
 
+import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.CodeValidator;
 import cosbas.biometric.validators.FaceValidator;
 import cosbas.biometric.validators.FingerprintValidator;
@@ -15,7 +16,7 @@ public enum BiometricTypes {
     FINGER (FingerprintValidator.class);
 
     public final Class validatorClass;
-    BiometricTypes(Class validatorClass) {
+    <T extends AccessValidator> BiometricTypes(Class<T> validatorClass) {
         this.validatorClass = validatorClass;
     }
 

@@ -1,5 +1,6 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.*;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;

@@ -14,8 +14,8 @@ public class SpringBeanVF extends ValidatorFactory {
     @Autowired
     private BeanFactory beanFactory;
 
-    protected AccessValidator getBean(Class bioType) {
-        return (AccessValidator) beanFactory.getBean (bioType);
+    protected <T extends AccessValidator> AccessValidator getBean(Class<T> type) {
+        return beanFactory.getBean (type);
     }
 
 }

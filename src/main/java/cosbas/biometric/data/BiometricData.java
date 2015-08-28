@@ -1,6 +1,7 @@
 package cosbas.biometric.data;
 
 
+import cosbas.biometric.BiometricTypes;
 import org.springframework.data.annotation.Id;
 
 /**

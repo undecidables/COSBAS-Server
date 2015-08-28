@@ -1,8 +1,8 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.data.BiometricTypes;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+//TODO I suggest we rename this to a more descriptive name. Eventually.
 
 /**
  * {@author Renette Ros}

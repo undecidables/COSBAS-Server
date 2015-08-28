@@ -1,5 +1,6 @@
 package cosbas.biometric.data;
 
+import cosbas.biometric.BiometricTypes;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
