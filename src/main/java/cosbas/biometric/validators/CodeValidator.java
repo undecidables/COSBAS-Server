@@ -6,6 +6,7 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,14 @@ import java.util.Arrays;
 @Component
 public class CodeValidator extends AccessValidator {
 
-    @Override
+    /**
+         * A method used by @method{validate} to compare two BiometricData objects.
+         * @param request The data received from the Client App.
+         * @param dbItem Item fetched from database to validate @param{request} against.
+         * @param action  "in"/"Out"
+         * @return A validation response with: if approved, success = true and data is the UserID identified"
+         * If failure, success = false and the data is the failure message.
+         */
     protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
         if (!Arrays.equals(request.getData(), dbItem.getData()))
             return ValidationResponse.failedValidation("Invalid Code.");
@@ -44,17 +52,7 @@ public class CodeValidator extends AccessValidator {
         return ValidationResponse.successfulValidation(dbItem.getPersonID());
     }
 
-    /**
-     * Validates a request and changes the last action associated with the AccessCode Object.
-     * @param request The biometric data that needs to be validated.
-     * @param action  Whether the user is entering or leaving.
-     * @return A ValidationResponse object containing
-     * @throws BiometricTypeException When @param{request}'s type is not BiometricTypes.CODE
-     */
-    @Override
-    public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
-        if (!checkValidationType(request.getType()))
-            throw new BiometricTypeException("Invalid validator type for " + request.getType());
+    public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
 
         BiometricData dbCode = repository.findByData(request.getData());
 
