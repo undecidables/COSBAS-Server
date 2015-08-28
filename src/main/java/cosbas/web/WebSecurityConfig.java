@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 
                 //Ant matchers to allow the calling of java functions
                 .antMatchers("/requestAppointment").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/cancelAppointment").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 
                 .anyRequest().authenticated()
                 .and()

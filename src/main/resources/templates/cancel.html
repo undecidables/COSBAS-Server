@@ -16,19 +16,19 @@
 				<div class="cosbasLogin">
 					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Cancel an appointment</div>
 					<br/>
-					<form th:action="@{/login}" method="post">
+					<form>
 						<fieldset>
-							<div class="form-group">
+							<div class="form-group" id="appointmentCancel">
 								<p class="text-left">Appointment ID:</p>
-								<input class="form-control" type="string" name="appointmentID"/>
+								<input class="form-control" type="string" name="appointmentID" id="appointmentID"/>
 							</div>
-							<div class="form-group">
+							<div class="form-group" id="appointmentCancellee">
 								<p class="text-left">Appointment cancelled by (your name):</p>
-								<input class="form-control" type="string" name="appointmentBy"/>
+								<input class="form-control" type="string" name="cancelBy" id="cancelBy"/>
 							</div>
 							<br/>
 							<div>
-								<input type="submit" value ="Cancel Appointment" class="btn btn-sm btn-success"/>
+								<input type="submit" id="cancelAppointment" value ="Cancel Appointment" class="btn btn-sm btn-success"/>
 							</div>
 						</fieldset>
 					</form>

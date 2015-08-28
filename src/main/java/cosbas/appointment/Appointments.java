@@ -21,7 +21,6 @@ public class Appointments
     @Autowired
     private AppointmentDBAdapter repository;
 
-    public String temp(){return "d";}
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
      * @param repository The repository to be injected.
@@ -41,17 +40,16 @@ public class Appointments
      */
     public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes){
         //check is staffmemeber exists
-        //check if time is available
-        Appointment a = new Appointment(staffID, visitorIDs,dateTime, durationInMinutes, reason);
+        //check if time is available - if not send error with suggested time
+        Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
 
         repository.save(a);
 
         //save to calendar
         //notify staff memeber
-        System.out.println("Appointment ID: " + a.getId()); //Works
-        return a.getId();
+        return "Appointment " + a.getId() + " has been saved.";
 
-        //else throws Exception
+        //else throws Exception/return error message string
     }
     
      /**
@@ -59,8 +57,9 @@ public class Appointments
      * @param cancelleeID - Identifier of the person wanting to cancel the appointment. Must be a participant of the appointment
      * @param appointmentID - The appointmen's unique identifier 
      */
-    public void cancelAppointment(String cancelleeID, String appointmentID){        
+    public String cancelAppointment(String cancelleeID, String appointmentID){        
         //find appointment with ID
+       
         Appointment tempAppointment = repository.findById(appointmentID);
 
         if(tempAppointment != null) {
@@ -80,11 +79,11 @@ public class Appointments
                     //delete from calendar
                     //Notify participants 
                     //revoke access
-                    return;
+                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
                 } else if (tempAppointment.getStatus().equals("Cancelled"))
                 {
                     //throw an excetion
-                    System.out.println("Already cancelled");  //Works
+                    return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
                 }
              }  
 
@@ -96,18 +95,18 @@ public class Appointments
 
                     //delete from calendar
                     //Notify participants 
-                    return;
+                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
                 //throw an excetion
-                System.out.println("Already cancelled");  //Works
+                return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
              }
 
-             System.out.println("You are not authorised");  //Works
+             return "You are not authorised to cancel appointment " + tempAppointment.getId();
              //else throws Exception not authorised
         }     
              //else throws Exception Appointment doesn't exist
-         System.out.println("No such appointment");     //Works
+         return "Appointment " + appointmentID + " does not exist.";
     }
 
     /**
