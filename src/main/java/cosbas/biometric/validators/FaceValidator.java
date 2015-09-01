@@ -16,13 +16,12 @@ import java.util.List;
 @Component
 public class FaceValidator extends AccessValidator {
 
+    protected Boolean checkValidationType(BiometricTypes type) {
+        return type == BiometricTypes.FACE;
+    }
 
     protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
         return ValidationResponse.successfulValidation("u00000000");
-    }
-
-    protected Boolean checkValidationType(BiometricTypes type) {
-        return type == BiometricTypes.FACE;
     }
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {

@@ -17,6 +17,11 @@ public class BiometricSystemTest {
 
     @Test
     public void testRequestAccess() throws Exception {
+        /***
+         * One denied: No Access
+         * Different users: No Access
+         * All approved & same u: Access
+         */
 
     }
 

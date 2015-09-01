@@ -5,17 +5,16 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.biometric.validators.exceptions.NoUserException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-//TODO I suggest we rename this to a more descriptive name. Eventually.
-
 /**
  * {@author Renette Ros}
- * Validates a specific biometric type.
+ * Abstract class to validate {@link BiometricData} of a specific type.
  */
 @Component
 public abstract class AccessValidator {
@@ -33,15 +32,15 @@ public abstract class AccessValidator {
     }
 
     /**
-     * Template method to validate BiometricData from an AccessRequest. It uses the abstract
-     * identifyUser and checkValidationType functions.
+     * Template method to check validator type and validate BiometricData from an AccessRequest.
+     * It uses the abstract {@link #identifyUser} and {@link #checkValidationType} functions.
      *
      * @param request The biometric data that needs to be validated.
      * @param action  Describes the role of the client that sends the request eg. The user is entering or exiting.
-     * @return A validation response with: if approved, success = true and data is the UserID identified"
-     * If failure, success = false and the data is the failure message.
-     * @throws BiometricTypeException When the @param{request}'s biometric type cannot be validated by this class as
-     *  determined  by the checkValidationType function.
+     * @return A validation response with: If approved, success = true and data is the UserID identified
+     *  If failure, success = false and the data is the failure message.
+     *
+     * @throws BiometricTypeException When the @param{request}'s biometric type cannot be validated by this class.
      */
     public final ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
         if (!checkValidationType(request.getType()))
@@ -49,11 +48,11 @@ public abstract class AccessValidator {
         return identifyUser(request, action);
     }
 
-
     /**
      * Checks whether this validator can validate the specific request.
      * @param type The biometric type that needs to be validate
-     * @return A boolean indicating whether this validator can validate @param{type}
+     * @return A boolean indicating whether this validator can validate @param{type}.
+     *  (True => Can validate, False => Can not validate).
      */
     protected abstract Boolean checkValidationType(BiometricTypes type);
 
@@ -67,4 +66,23 @@ public abstract class AccessValidator {
      */
     public abstract ValidationResponse identifyUser(BiometricData request, DoorActions action);
 
+    /**
+     * A function to perform extra actions necessary when registering a user. It handles saving to the database and
+     * error checking and can be overridden in base classes.
+     * @param request A biometricData
+     * @return The saved requests database ID
+     * @throws BiometricTypeException when the bioemtric type cannot be validated by this validator.
+     * @throws NoUserException When the request object does not contain a personID.
+     */
+    public String registerUser(BiometricData request) throws BiometricTypeException, NoUserException {
+        if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
+        if (request.getPersonID() == null) throw new NoUserException("Cannot register data without a personID");
+        repository.save(request);
+        return request.getId();
+    }
+
+    public String registerUser(BiometricData request, String personID) throws BiometricTypeException, NoUserException {
+       request.setPersonID(personID);
+        return registerUser(request);
+    }
 }

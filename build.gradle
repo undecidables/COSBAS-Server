@@ -63,8 +63,7 @@ dependencies {
     compile  "org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE"
     compile "org.springframework:spring-tx"
 
-
-    compile  "nu.pattern:opencv:2.4.9-7"
+    compile "org.bytedeco:javacv:0.9"
 
     //compile  "net.sf.jasperreports:jasperreports:6.1.0"
 

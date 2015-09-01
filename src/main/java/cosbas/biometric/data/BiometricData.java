@@ -14,6 +14,10 @@ public class BiometricData {
      */
     private @Id String id;
 
+    public void setPersonID(String personID) {
+        this.personID = personID;
+    }
+
     /**
      * The user with which the biometric data is associated.
      * Does not need to be set for request data but is stored in the database
@@ -29,8 +33,8 @@ public class BiometricData {
     private final byte[] data;
 
 
-
     public BiometricData(BiometricTypes type, byte[] data) {
+        this.personID = null;
         this.type = type;
         this.data = data;
     }
