@@ -5,9 +5,21 @@
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="ACCEPT" />
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+
+            </Filters>
 
         </File>
         <File name="infoLogFile" fileName="logs/info.log">
+
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT" />
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+
+
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -15,9 +27,10 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef level="error" ref="errorLogFile" />
-            <AppenderRef level="info" ref="infoLogFile" />
+        <Root level="TRACE">
+            <AppenderRef level="INFO" ref="infoLogFile" />
+            <AppenderRef level="ERROR" ref="errorLogFile" />
+
         </Root>
     </Loggers>
 </Configuration>
