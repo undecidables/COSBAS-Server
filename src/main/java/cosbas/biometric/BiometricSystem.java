@@ -2,8 +2,6 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.data.BiometricUser;
-import cosbas.biometric.request.AccessRecordDAO;
 import cosbas.biometric.request.AccessRequest;
 import cosbas.biometric.request.AccessResponse;
 import cosbas.biometric.validators.ValidationResponse;
@@ -21,14 +19,8 @@ import java.util.List;
 @Service
 public class BiometricSystem {
 
-    /**
-     * The database adapter/repository to use.
-     */
     @Autowired
-    private AccessRecordDAO accessRecordRepository;
-
-    @Autowired
-    private BiometricDataDAO PersonRepository;
+    private BiometricDataDAO biometricDataRepository;
 
     @Autowired
     private ValidatorFactory factory;
@@ -37,12 +29,8 @@ public class BiometricSystem {
         this.factory = factory;
     }
 
-    public void setAccessRecordRepository(AccessRecordDAO repository) {
-        this.accessRecordRepository = repository;
-    }
-
-    public void setPersonRepository(BiometricDataDAO repository) {
-        this.PersonRepository = repository;
+    public void setBiometricDataRepository(BiometricDataDAO repository) {
+        this.biometricDataRepository = repository;
     }
 
 
@@ -85,12 +73,22 @@ public class BiometricSystem {
         return factory.getValidator(data.getType()).validate(data, req.getAction());
     }
 
-    public Boolean addUser(BiometricUser user) {
+    public Boolean addUser(String userID, List<BiometricData> data) {
+        /**
+         * Save all info in a temporary collection
+         */
         //Add info to db
         return false;
     }
 
     public Boolean approveUser(String userID) {
+        /**
+         * Fetch al data from DB
+         * Generate and save AccessCode
+         * Fore each BiometricData item
+         *      Get correct validator
+         *      Call validator.register to save & do additional stuff
+         */
         return false;
     }
 

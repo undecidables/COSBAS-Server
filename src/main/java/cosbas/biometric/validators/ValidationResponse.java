@@ -22,11 +22,11 @@ public class ValidationResponse {
         this.approved = approved;
     }
 
-    static ValidationResponse successfulValidation(String user) {
+    public static ValidationResponse successfulValidation(String user) {
         return new ValidationResponse(true, user);
     }
 
-    static ValidationResponse failedValidation(String message) {
+    public static ValidationResponse failedValidation(String message) {
         return new ValidationResponse(false, message);
     }
 

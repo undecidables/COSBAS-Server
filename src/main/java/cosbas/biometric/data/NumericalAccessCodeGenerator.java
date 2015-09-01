@@ -28,16 +28,16 @@ public class NumericalAccessCodeGenerator extends AccessCodeGenerator {
     }
 
     protected byte[] getCode() {
-        byte[] code = generate();
+        byte[] code = generate(CODE_LENGTH);
         while(validator.isDuplicate(code)) {
-            code = generate();
+            code = generate(CODE_LENGTH);
         }
         return code;
     }
 
-    private byte[] generate() {
-        byte[] code = new byte[CODE_LENGTH];
-        for (int i=0; i<CODE_LENGTH; ++i) {
+    private byte[] generate(int codeLength) {
+        byte[] code = new byte[codeLength];
+        for (int i=0; i< codeLength; ++i) {
             code[i] = (byte) (Math.random() * 10);
         }
         return code;

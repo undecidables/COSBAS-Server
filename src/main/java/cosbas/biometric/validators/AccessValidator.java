@@ -42,7 +42,7 @@ public abstract class AccessValidator {
      *
      * @throws BiometricTypeException When the @param{request}'s biometric type cannot be validated by this class.
      */
-    public final ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
+    public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
         if (!checkValidationType(request.getType()))
             throw new BiometricTypeException(this.getClass() + " cannot validate " + request.getType());
         return identifyUser(request, action);
