@@ -1,7 +1,8 @@
-package cosbas.biometric.validators;
+package cosbas.biometric.request;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
+ * This enum contains the actions associated with the clients: Entrance and Exit
  */
 public enum DoorActions  {
     IN, OUT;

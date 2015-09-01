@@ -3,57 +3,57 @@ package cosbas.biometric.request;
 import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
+/**
+ * This class stores the times when specific user was authenticated  by the Biometric System.
+ * It exists for reporting and logging purposes.
+ */
 public class AccessRecord {
-	
-	@Id
-	private String id;
 
-	private String DoorID;
-	
-	private LocalDateTime dateTime;
-	private String Action;
-	private String PersonID;
-	
-	public AccessRecord(String DoorID, LocalDateTime dateTime, String Action, String PersonID) {
-		this.DoorID = DoorID;
-		this.dateTime = dateTime;
-		this.Action = Action;
-		this.PersonID = PersonID;
-	}
+    @Id
+    private String id;
 
+    private String doorID;
 
-	/**
-	 * Getter and Setter Functions
-	 */
-	public String getDoorID() {
-		return DoorID;
-	}
+    private LocalDateTime dateTime;
+    private DoorActions action;
+    private String personID;
 
-	public void setDoorID(String doorID) {
-		DoorID = doorID;
-	}
+    public AccessRecord(String DoorID, LocalDateTime dateTime, DoorActions Action, String PersonID) {
+        this.doorID = DoorID;
+        this.dateTime = dateTime;
+        this.action = Action;
+        this.personID = PersonID;
+    }
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
+    public String getDoorID() {
+        return doorID;
+    }
 
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
+    public void setDoorID(String doorID) {
+        this.doorID = doorID;
+    }
 
-	public String getAction() {
-		return Action;
-	}
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 
-	public void setAction(String action) {
-		Action = action;
-	}
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	public String getPersonID() {
-		return PersonID;
-	}
+    public DoorActions getAction() {
+        return action;
+    }
 
-	public void setPersonID(String personID) {
-		PersonID = personID;
-	}
+    public void setAction(DoorActions action) {
+        this.action = action;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
+
+    public void setPersonID(String personID) {
+        this.personID = personID;
+    }
 }
