@@ -11,11 +11,15 @@ package cosbas.web;
 //import org.springframework.security.authentication.*;
 //import org.springframework.web.servlet.ModelAndView;
 
+import cosbas.calendar_services.GoogleAuthorization;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -129,4 +133,12 @@ public class AppointmentController {
   {
     return "error";
   }
+
+
+    @RequestMapping(value = "/redirect", method = RequestMethod.GET)
+    public ModelAndView method() {
+        GoogleAuthorization Auth = new GoogleAuthorization();
+        return new ModelAndView("redirect:" + Auth.buildLoginUrl());
+
+    }
 }
