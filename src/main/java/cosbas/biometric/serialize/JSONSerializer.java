@@ -6,9 +6,8 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @author Renette
- * Handles JSON conversion for Biometric System.
- * Could be replaced by another serializer if something other than JSON is preferred.
+ * {@author Renette Ros}
+ * Concrete strategy to serialize response objects to JSON
  */
 
 @Component

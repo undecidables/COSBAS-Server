@@ -3,7 +3,7 @@ package cosbas.biometric.request;
 import java.time.LocalDateTime;
 
 /**
- * Created by Renette on 2015-06-27.
+ * {@author Renette Ros}
  * Response to AccessRequest.
  */
 public class AccessResponse {

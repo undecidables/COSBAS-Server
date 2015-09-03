@@ -1,7 +1,12 @@
-package cosbas.biometric.validators;
+package cosbas.biometric;
+
+import cosbas.biometric.validators.AccessValidator;
+import cosbas.biometric.validators.CodeValidator;
+import cosbas.biometric.validators.FaceValidator;
+import cosbas.biometric.validators.FingerprintValidator;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  * This class is a container for the biometric typt string constants.
  *
  */
@@ -11,7 +16,7 @@ public enum BiometricTypes {
     FINGER (FingerprintValidator.class);
 
     public final Class validatorClass;
-    BiometricTypes(Class validatorClass) {
+    <T extends AccessValidator> BiometricTypes(Class<T> validatorClass) {
         this.validatorClass = validatorClass;
     }
 
