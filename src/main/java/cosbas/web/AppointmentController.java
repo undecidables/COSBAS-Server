@@ -24,7 +24,6 @@ import java.security.Principal;
 
 @Controller
 public class AppointmentController {
-
   /**
   * Route function to go to index.html - Homepage for the user after login
   * @return index.html page
@@ -139,6 +138,5 @@ public class AppointmentController {
     public ModelAndView method() {
         GoogleAuthorization Auth = new GoogleAuthorization();
         return new ModelAndView("redirect:" + Auth.buildLoginUrl());
-
     }
 }
