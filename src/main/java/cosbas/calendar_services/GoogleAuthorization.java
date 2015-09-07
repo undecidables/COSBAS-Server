@@ -25,7 +25,7 @@ import java.util.Collection;
 public class GoogleAuthorization {
     private static final String clientID = "211837377506-qrmd6oco0rsakeelsisd1r4gm8gc5a57.apps.googleusercontent.com";
     private static final String clientSecret = "TH6t1loSooacdV24ZD3bNhFk";
-    private static final String callbackURI = "http://localhost:8080/"; /**TODO Change the return.**/
+    private static final String callbackURI = "http://localhost:8080/callback"; /**TODO Change the return.**/
 
     private static final Collection<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email".split(";"));
     private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";

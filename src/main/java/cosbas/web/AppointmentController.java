@@ -13,7 +13,6 @@ package cosbas.web;
 
 import cosbas.calendar_services.GoogleAuthorization;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +23,8 @@ import java.security.Principal;
 
 @Controller
 public class AppointmentController {
+
+    GoogleAuthorization Auth;
   /**
   * Route function to go to index.html - Homepage for the user after login
   * @return index.html page
@@ -136,7 +137,20 @@ public class AppointmentController {
 
     @RequestMapping(value = "/redirect", method = RequestMethod.GET)
     public ModelAndView method() {
-        GoogleAuthorization Auth = new GoogleAuthorization();
+        Auth = new GoogleAuthorization();
         return new ModelAndView("redirect:" + Auth.buildLoginUrl());
+    }
+
+    @RequestMapping(value = "/callback", method = RequestMethod.GET)
+    public String saveCode(@RequestParam(value = "code", required = false, defaultValue = "") String code){
+        System.out.println(code);
+        try {
+            Auth.getUserInfoJson(code);
+        }
+        catch (IOException error){
+            System.out.println("Error getting JSON objects");
+            return "login";
+        }
+        return "index";
     }
 }
