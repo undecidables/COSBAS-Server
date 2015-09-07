@@ -33,6 +33,7 @@ public class GoogleAuthorization {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 
     private String stateToken;
+    private Credential cred;
 
     private final GoogleAuthorizationCodeFlow codeFlow;
 
@@ -57,7 +58,7 @@ public class GoogleAuthorization {
 
     public String getUserInfoJson(final String authCode) throws IOException{
         final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
-        final Credential cred = codeFlow.createAndStoreCredential(resp, null);
+        cred = codeFlow.createAndStoreCredential(resp, null);
         final HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(cred);
         final GenericUrl url = new GenericUrl(USER_INFO_URL);
         final HttpRequest request = requestFactory.buildGetRequest(url);
@@ -65,5 +66,9 @@ public class GoogleAuthorization {
         final String jsonIdentity = request.execute().parseAsString();
 
         return jsonIdentity;
+    }
+
+    public Credential getCred(){
+        return cred;
     }
 }
