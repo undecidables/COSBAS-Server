@@ -16,6 +16,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -37,6 +38,13 @@ public class GoogleAuthorization {
 
     private final GoogleAuthorizationCodeFlow codeFlow;
 
+    @Autowired
+    private CalendarDBAdapter repository;
+
+    public void setRepository(CalendarDBAdapter repo){
+        this.repository = repo;
+    }
+
     public GoogleAuthorization(){
         codeFlow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientID, clientSecret, SCOPE).build();
         generateStateToken();
@@ -56,6 +64,19 @@ public class GoogleAuthorization {
         return stateToken;
     }
 
+    public boolean storeCredential(final String emplid, final String authCode){
+        try {
+            final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
+            cred = codeFlow.createAndStoreCredential(resp, null);
+            CredentialWrapper obj = new GCredWrapper(emplid, cred, CalendarType.GOOGLE);
+            repository.save(obj);
+            return true;
+        }
+        catch (IOException error){
+            return false;
+        }
+    }
+
     public String getUserInfoJson(final String authCode) throws IOException{
         final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
         cred = codeFlow.createAndStoreCredential(resp, null);
@@ -66,9 +87,5 @@ public class GoogleAuthorization {
         final String jsonIdentity = request.execute().parseAsString();
 
         return jsonIdentity;
-    }
-
-    public Credential getCred(){
-        return cred;
     }
 }

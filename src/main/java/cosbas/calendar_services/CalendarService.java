@@ -6,12 +6,11 @@ import java.util.List;
 /**
  * @author Jason Richard Evans
  */
-public interface CalendarService {
+public abstract class CalendarService {
     final String SUMMARY = "COSBAS BOOKING: ";
-    public Object credential = null;
-    public boolean authorize(String emplid);
-    public List<String> getWeeksAppointments(String emplid);
-    public String makeAppointment(String emplid, LocalDateTime start, int Duration, String clientName, String clientEmail);
-    public boolean removeAppointment(String emplid, String clientEmail);
-    public List<String> getTodaysAppointments(String emplid);
+    public abstract boolean authorize(String emplid);
+    public abstract List<String> getWeeksAppointments(String emplid);
+    public abstract String makeAppointment(String emplid, LocalDateTime start, int Duration, String clientName, String clientEmail);
+    public abstract boolean removeAppointment(String emplid, String clientEmail);
+    public abstract List<String> getTodaysAppointments(String emplid);
 }

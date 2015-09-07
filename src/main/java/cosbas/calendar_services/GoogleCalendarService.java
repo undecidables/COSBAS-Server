@@ -21,7 +21,8 @@ import java.util.List;
 /**
  * @author Jason Richard Evans
  */
-public class GoogleCalendarService implements CalendarService {
+public class GoogleCalendarService extends CalendarService {
+    public static Object credential = null;
     private static final String APPLICATION_NAME = "COSBAS Calendar Integration Service";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport HTTP_TRANSPORT;

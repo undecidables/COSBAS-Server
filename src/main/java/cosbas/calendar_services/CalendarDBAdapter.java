@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * @author Jason Richard Evans
  */
-public interface CalendarDBAdapter extends CrudRepository<CalendarService, String> {
-    List<CalendarService> findByStaffID(String staffID);
-    CalendarService findById(String id);
+public interface CalendarDBAdapter extends CrudRepository<CredentialWrapper, String> {
+    CredentialWrapper findByStaffID(String staffID);
 }
