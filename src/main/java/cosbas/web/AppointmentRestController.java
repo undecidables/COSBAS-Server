@@ -26,11 +26,11 @@ public class AppointmentRestController {
 
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
-   * @param appointmentWith - Staff memeber ID as gotten from the html dropdown on the html page
-   * @param requestedDateTime - Requested date time for the appointment as inputted into the html form
-   * @param appointmentBy - List of members in the group that is making the appointment as inputted on the htm form
-   * @param appoitnmentDuration - Duration of the appointment in minutes as inputted on the html form
-   * @param appointmentReason - Reason for the appointment being made as indicated on the html form
+   * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
+   * @param requestedDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
+   * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
+   * @param appoitnmentDuration - Integer duration of the appointment in minutes as inputted on the html form
+   * @param appointmentReason - String reason for the appointment being made as indicated on the html form
    * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
    */
 
@@ -47,10 +47,10 @@ public class AppointmentRestController {
   }
 
   /**
-   * 
-   * @param 
-   * @param 
-   * @return 
+   * Function used to cancel an appointment via the form on the cancel.html page
+   * @param cancellee - String of the name of the person who wants to cancel the appointment. 
+   * @param appoitnmentID - String appointmentID, the appointment ID of the appointment that is being cancelled. 
+   * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
    */
 
   @RequestMapping(method= RequestMethod.POST, value="/cancelAppointment")
@@ -59,4 +59,33 @@ public class AppointmentRestController {
                      @RequestParam(value = "appointmentID", required = true) String appointmentID) {
     return appointment.cancelAppointment(cancellee, appointmentID);
   }
+
+  /**
+   * Function to check the status of the appointment entered on the status.html form
+   * @param requester - String name of the person requesting the status of the appointment
+   * @param appointmentID - String appoitnment ID of the appointment that you want to check
+   * @return Returns the status and information of the appointment or an appropriate string describing the error
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/status")
+  public String checkStatus(
+                     @RequestParam(value = "requester", required = true) String requester,
+                     @RequestParam(value = "appointmentID", required = true) String appointmentID) {
+    return appointment.checkStatus(requester, appointmentID);
+  }
+
+  /**
+   * Login to the COSBAS system
+   * @param username - String username of the person trying to login
+   * @param password - String password connected to the username entered
+   * @return A message saying that you could not be logged in - only shown if authentication failed
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/login")
+  public String login(
+                     @RequestParam(value = "username", required = true) String username,
+                     @RequestParam(value = "password", required = true) String password) {
+    return appointment.checkStatus(username, password);
+  }
+
 }

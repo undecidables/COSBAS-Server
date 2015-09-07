@@ -162,6 +162,8 @@ $(document).ready(function() {
 
     //appointmentWith error checking not yet done
 
+    console.log("Where to does the email go?");
+
     //send data if no errors
     if($noError == true)
     {
@@ -238,4 +240,59 @@ $(document).ready(function() {
   });
 
   /***************************************************************************/
+
+  /******************** Check Appointment Status ***********************************/
+
+  $('#checkStatus').click(function(e) {
+    e.preventDefault(); 
+
+    //Check for errors
+    $noError = true;
+
+    //add errorID
+    if($("#appointmentID").val() != "")
+    {
+      $('#errorID').remove();
+    }
+    else
+    {
+      $noError = false;
+      $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
+      $('#errorID').remove();
+      $('#appointmentStatusRequest').append($element);
+    }
+
+    //add cancellee error
+    if($("#requestedBy").val() != "")
+    {
+      $('#statusError').remove();
+    }
+    else
+    {
+      $noError = false;
+      $element = $('<p class="error" id="statusError">You must enter who it is that wants to check the appointment status. </p>');
+      $('#statusError').remove();
+      $('#statusRequest').append($element);
+    }
+
+    //send data if no errors
+    if($noError == true)
+    {
+      $.ajax({
+        type: "post",
+        data: {"requester" : $('#requestedBy').val(),
+               "appointmentID" : $('#appointmentID').val()},
+        url: "/status"
+      }).then(function(jsonReturned) {
+        $("#signIn").text(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+    } else {
+      $("#signIn").text("Check Appointment Status");
+      window.scrollTo(0, 0);
+    }
+  });
+
+  /***************************************************************************/
+
 });

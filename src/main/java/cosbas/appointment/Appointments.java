@@ -116,8 +116,8 @@ public class Appointments
      */
     //Pre - appointment must exist
     //Pre - enquirer must be envolved with the appointment
-    //Post - Data is displayed/retuurned
-    public void checkStatus(String enquirer, String appointmentID){
+    //Post - Data is displayed/returned
+    public String checkStatus(String enquirer, String appointmentID){
         //get appointment with ID
          Appointment tempAppointment = repository.findById(appointmentID);
 
@@ -130,23 +130,23 @@ public class Appointments
                 //if so
                 if(visitor.equals(enquirer))
                 {
-                    System.out.println("Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus());
+                    return "Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus();
                     //print information/send back not sure yet
-                    return;
+                    //return;
                 }
              } 
 
              //check if enquirer is with whom the appointment is with
              if(enquirer.equals(tempAppointment.getStaffID()))
              {
-                 System.out.println("Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus());
-                    //print information/send back not sure yet
-                    return;
+                return "Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus();
+                //print information/send back not sure yet
+                //return;
              }
             //else throws Exception
-            System.out.println("You are not authorised");
+            return "You are not authorised";
          }
-         System.out.println("No such Appointment");
+        return "No such Appointment";
     }
 
     /**
