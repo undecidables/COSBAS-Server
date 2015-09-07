@@ -19,13 +19,14 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 
 public class GoogleAuthorization {
     private static final String clientID = "211837377506-qrmd6oco0rsakeelsisd1r4gm8gc5a57.apps.googleusercontent.com";
-    private static final String clientSecret = "TH6t1loSooacdV24ZD3bNhFk";
+    private static final String clientSecret = "vGrU3xTREin5pRTlnAdilARX";
     private static final String callbackURI = "http://localhost:8080/callback"; /**TODO Change the return.**/
 
     private static final Collection<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email".split(";"));
@@ -67,12 +68,15 @@ public class GoogleAuthorization {
     public boolean storeCredential(final String emplid, final String authCode){
         try {
             final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
+            System.out.println(resp.toPrettyString());
             cred = codeFlow.createAndStoreCredential(resp, null);
             CredentialWrapper obj = new GCredWrapper(emplid, cred, CalendarType.GOOGLE);
             repository.save(obj);
+            System.out.println("Stored Credential Object");
             return true;
         }
         catch (IOException error){
+            error.printStackTrace();
             return false;
         }
     }

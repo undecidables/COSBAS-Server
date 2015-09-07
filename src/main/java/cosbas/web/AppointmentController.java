@@ -29,7 +29,6 @@ import java.util.Enumeration;
 
 @Controller
 public class AppointmentController {
-
     GoogleAuthorization Auth;
   /**
   * Route function to go to index.html - Homepage for the user after login
@@ -142,18 +141,22 @@ public class AppointmentController {
 
 
     @RequestMapping(value = "/redirect", method = RequestMethod.GET)
-    public ModelAndView method(
-            @RequestParam(value = "type", required = false, defaultValue = "GOOGLE") String type) {
-
-
+    public ModelAndView method(@RequestParam(value = "type", required = false, defaultValue = "GOOGLE") String type) {
+        Auth = new GoogleAuthorization();
         return new ModelAndView("redirect:" + Auth.buildLoginUrl());
     }
 
     @RequestMapping(value = "/callback", method = RequestMethod.GET)
-    public String saveCode(@RequestParam(value = "code", required = false, defaultValue = "") String code){
-        System.out.println(code);
+    public String saveCode(Principal p,
+            @RequestParam(value = "code", required = false, defaultValue = "") String code){
         try {
             Auth.getUserInfoJson(code);
+            if (p == null){
+                System.out.println("Principle is null, could not store code.");
+            }
+            else {
+                Auth.storeCredential(p.getName(), code);
+            }
         }
         catch (IOException error){
             System.out.println("Error getting JSON objects");
