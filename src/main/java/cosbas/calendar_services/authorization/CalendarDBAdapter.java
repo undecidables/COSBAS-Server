@@ -1,8 +1,6 @@
-package cosbas.calendar_services;
+package cosbas.calendar_services.authorization;
 
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
 
 /**
  * @author Jason Richard Evans

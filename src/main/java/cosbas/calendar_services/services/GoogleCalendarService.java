@@ -1,4 +1,4 @@
-package cosbas.calendar_services;
+package cosbas.calendar_services.services;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -11,22 +11,24 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
- * @author Jason Richard Evans
+ * {@author Jason Richard Evans}
  */
+@Service
 public class GoogleCalendarService extends CalendarService {
     public static Object credential = null;
     private static final String APPLICATION_NAME = "COSBAS Calendar Integration Service";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport HTTP_TRANSPORT;
     private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR);
+    final String SUMMARY = "COSBAS BOOKING: ";
     private final String CALENDAR_ID = "primary";
     private com.google.api.services.calendar.Calendar service;
 
@@ -40,19 +42,13 @@ public class GoogleCalendarService extends CalendarService {
     }
 
     @Override
-    public boolean authorize(String emplid) {
-        GoogleAuthorization auth = new GoogleAuthorization();
-        return false;
-    }
-
-    @Override
     public List<String> getWeeksAppointments(String emplid) {
         return null;
     }
 
     @Override
     public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, String clientName, String clientEmail) {
-        //TO DO get the service object
+
         Event event = new Event()
                 .setSummary(SUMMARY + " " + clientEmail)
                 .setDescription(clientName + " has an appointment with " + emplid + " at " + startTime.toString());

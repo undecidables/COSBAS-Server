@@ -1,7 +1,7 @@
 package cosbas.db.repositories;
 
-import cosbas.calendar_services.CalendarDBAdapter;
-import cosbas.calendar_services.CredentialWrapper;
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.CredentialWrapper;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
