@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class GoogleAuthorization {
-    private static final String clientID = "211837377506-qrmd6oco0rsakeelsisd1r4gm8gc5a57.apps.googleusercontent.com";
-    private static final String clientSecret = "vGrU3xTREin5pRTlnAdilARX";
+    private static final String clientID = "914281078442-m8d9oi3bullig50oe13jufl0hc308lhf.apps.googleusercontent.com";
+    private static final String clientSecret = "wtRGgiEgie96PdjWItD5OWp2";
     private static final String callbackURI = "http://localhost:8080/callback"; /**TODO Change the return.**/
 
     private static final Collection<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email".split(";"));
@@ -47,7 +47,7 @@ public class GoogleAuthorization {
     }
 
     public GoogleAuthorization(){
-        codeFlow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientID, clientSecret, SCOPE).build();
+        codeFlow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientID, clientSecret, SCOPE).setAccessType("offline").setApprovalPrompt("force").build();
         generateStateToken();
     }
 

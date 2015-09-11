@@ -149,19 +149,21 @@ public class AppointmentController {
     @RequestMapping(value = "/callback", method = RequestMethod.GET)
     public String saveCode(Principal p,
             @RequestParam(value = "code", required = false, defaultValue = "") String code){
-        try {
-            Auth.getUserInfoJson(code);
+      //  try {
+            System.out.println(code);
+            //System.out.println(Auth.getUserInfoJson(code));
             if (p == null){
                 System.out.println("Principle is null, could not store code.");
+                return "login";
             }
             else {
                 Auth.storeCredential(p.getName(), code);
             }
-        }
+       /* }
         catch (IOException error){
             System.out.println("Error getting JSON objects");
             return "login";
-        }
+        }*/
         return "index";
     }
 }
