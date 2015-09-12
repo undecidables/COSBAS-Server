@@ -1,5 +1,6 @@
 package cosbas.calendar_services.authorization;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.HttpTransport;
@@ -32,6 +33,11 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
     private static String clientID = "914281078442-m8d9oi3bullig50oe13jufl0hc308lhf.apps.googleusercontent.com";
     @Value("${google.clientSecret}")
     private static String clientSecret = "wtRGgiEgie96PdjWItD5OWp2";
+    @Value("${google.redirectURI}")
+    private String callbackURI  = "http://localhost:8080/callback";
+
+    @Transient
+    private static GoogleAuthorizationCodeFlow codeFlow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientID, clientSecret, SCOPE).setAccessType("offline").setApprovalPrompt("force").build();
 
     @Transient
     private GoogleCredential credentials;
@@ -58,5 +64,29 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
     public String getAccessToken() throws IOException {
         credentials.refreshToken();
         return credentials.getAccessToken();
+    }
+
+    public GoogleCredential makeCredential(String refreshToken){
+        credentials = new GoogleCredential.Builder()
+                .setClientSecrets(clientID, clientSecret)
+                .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
+                .setRefreshToken(refreshToken);
+        try {
+            credentials.refreshToken();
+            String authCode = credentials.getAccessToken();
+
+            final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
+            GoogleCredential cred = new GoogleCredential.Builder().setTransport(HTTP_TRANSPORT)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setClientSecrets(clientID, clientSecret)
+                    .build()
+                    .setFromTokenResponse(resp);
+            return cred;
+        }
+        catch (IOException error){
+            error.printStackTrace();
+        }
+
+        return null;
     }
 }
