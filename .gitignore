@@ -29,3 +29,6 @@ Thumbs.db
 #Temp Files
 *~
 
+#Ingore generated log files
+*.log
+
