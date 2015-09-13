@@ -2,10 +2,9 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.request.AccessRecordDAO;
-import cosbas.biometric.request.AccessRequest;
-import cosbas.biometric.request.AccessResponse;
-import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.request.access.AccessRequest;
+import cosbas.biometric.request.access.AccessResponse;
+import cosbas.biometric.request.access.DoorActions;
 import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

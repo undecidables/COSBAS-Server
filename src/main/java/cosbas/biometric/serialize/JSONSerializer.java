@@ -1,7 +1,8 @@
 package cosbas.biometric.serialize;
 
-import cosbas.biometric.request.AccessResponse;
 import com.google.gson.Gson;
+import cosbas.biometric.request.access.AccessResponse;
+import cosbas.biometric.request.registration.RegisterResponse;
 import org.springframework.stereotype.Component;
 
 
@@ -20,6 +21,13 @@ public class JSONSerializer extends BiometricSerializer {
         Gson gson = new Gson();
         //TODO: Fine Tune, everything does not need to be serialized.
          return gson.toJson(response);
+    }
+
+    @Override
+    public String serializeResponse(RegisterResponse response) {
+        Gson gson = new Gson();
+        //TODO: Fine Tune, everything does not need to be serialized.
+        return gson.toJson(response);
     }
 
 }

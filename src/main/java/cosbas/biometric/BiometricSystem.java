@@ -2,8 +2,8 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.request.AccessRequest;
-import cosbas.biometric.request.AccessResponse;
+import cosbas.biometric.request.access.AccessRequest;
+import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.ValidationException;

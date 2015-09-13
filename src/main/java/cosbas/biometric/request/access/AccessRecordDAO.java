@@ -1,4 +1,4 @@
-package cosbas.biometric.request;
+package cosbas.biometric.request.access;
 
 import org.springframework.data.repository.CrudRepository;
 

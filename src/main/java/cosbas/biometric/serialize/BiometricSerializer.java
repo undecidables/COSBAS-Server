@@ -1,10 +1,12 @@
 package cosbas.biometric.serialize;
 
-import cosbas.biometric.request.AccessRequest;
-import cosbas.biometric.request.AccessResponse;
+import cosbas.biometric.request.access.AccessRequest;
+import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.BiometricTypes;
-import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.request.access.DoorActions;
+import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.biometric.request.registration.RegisterResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,7 @@ public abstract class BiometricSerializer {
      * @return Serialized response object.
      */
     public abstract String serializeResponse(AccessResponse response);
+    public abstract String serializeResponse(RegisterResponse response);
 
     /**
      * Parses an {@link HttpServletRequest} into an {@link AccessRequest} object.
@@ -71,6 +74,45 @@ public abstract class BiometricSerializer {
             }
 
             return new AccessRequest(id, action, biometricDatas);
+        }
+        throw new NullPointerException("Parts null, unable to parse http request ");
+    }
+
+    public RegisterRequest parseRegisterRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException, NullPointerException {
+
+        List<Part> parts = (List<Part>) request.getParts();
+        List<BiometricData> biometricDatas = new ArrayList<>();
+
+        String id = request.getParameter("personID");
+        //DoorActions action = DoorActions.fromString(request.getParameter("Action"));
+        String email = request.getParameter("email");
+
+        if(parts != null)
+        {
+            for(Part part : parts)
+            {
+                String name = part.getName().toLowerCase();
+                System.out.println(name);
+
+                if (!name.contains("email") && !name.contains("personid")) {
+                    byte[] file = null;
+                    InputStream partInputStream=part.getInputStream();
+                    ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
+                    byte[] chunk=new byte[4096];
+                    int amountRead;
+                    while ((amountRead=partInputStream.read(chunk)) != -1) {
+                        outputStream.write(chunk,0,amountRead);
+                    }
+                    if (outputStream.size() != 0) {
+                        file = outputStream.toByteArray();
+                    }
+
+                    BiometricData data = new BiometricData(BiometricTypes.fromString(part.getName()),file);
+                    biometricDatas.add(data);
+                }
+            }
+
+            return new RegisterRequest(email, id, biometricDatas);
         }
         throw new NullPointerException("Parts null, unable to parse http request ");
     }

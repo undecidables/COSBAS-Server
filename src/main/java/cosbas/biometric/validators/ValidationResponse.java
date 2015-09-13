@@ -1,6 +1,6 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.request.AccessRequest;
+import cosbas.biometric.request.access.AccessRequest;
 
 import java.util.Objects;
 
