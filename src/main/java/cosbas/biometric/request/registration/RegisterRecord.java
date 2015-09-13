@@ -13,6 +13,13 @@ public class RegisterRecord {
     private String personID;
     private BiometricData data;
 
+    /**
+     * Defines a Java Object which stores the user's data as parsed from the POST request
+     *
+     * @param Email    The user's e-mail address
+     * @param PersonID The user's EMPLID
+     * @param data     The actual biometric data to persist on the database
+     */
     public RegisterRecord(String Email, String PersonID, BiometricData data) {
         this.email = Email;
         this.personID = PersonID;

@@ -1,9 +1,9 @@
 package cosbas.biometric.serialize;
 
+import cosbas.biometric.BiometricTypes;
+import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
-import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.request.access.DoorActions;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterResponse;
@@ -78,6 +78,12 @@ public abstract class BiometricSerializer {
         throw new NullPointerException("Parts null, unable to parse http request ");
     }
 
+    /**
+     * Parses the POST request's data into a Java Object
+     *
+     * @param request The user's e-mail address
+     * @return A RegisterRequest Java Object with the POST request's data
+     */
     public RegisterRequest parseRegisterRequest(HttpServletRequest request) throws IOException, ServletException, IllegalArgumentException, NullPointerException {
 
         List<Part> parts = (List<Part>) request.getParts();
@@ -92,8 +98,6 @@ public abstract class BiometricSerializer {
             for(Part part : parts)
             {
                 String name = part.getName().toLowerCase();
-                System.out.println(name);
-
                 if (!name.contains("email") && !name.contains("personid")) {
                     byte[] file = null;
                     InputStream partInputStream=part.getInputStream();

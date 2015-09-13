@@ -25,6 +25,13 @@ public class RegisterRequest extends AccessRequest {
 
     private final String personID;
 
+    /**
+     * Defines a Java Object which stores the user's data as parsed from the POST request
+     *
+     * @param email    The user's e-mail address
+     * @param personID The user's EMPLID
+     * @param data     The actual biometric data to persist on the database
+     */
     public RegisterRequest(String email, String personID, List<BiometricData> data) {
         super(null,null, data);
         this.email = email;
