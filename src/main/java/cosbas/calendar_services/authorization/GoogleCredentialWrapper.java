@@ -66,7 +66,7 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
         return credentials.getAccessToken();
     }
 
-    public GoogleCredential makeCredential(String refreshToken){
+    public GoogleCredential makeCredential(){
         credentials = new GoogleCredential.Builder()
                 .setClientSecrets(clientID, clientSecret)
                 .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
