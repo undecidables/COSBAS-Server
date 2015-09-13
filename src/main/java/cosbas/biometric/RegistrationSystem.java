@@ -20,6 +20,7 @@ import java.util.List;
 @Service
 public class RegistrationSystem {
 
+    final String TempDBName = "PENDING";
         @Autowired
         MongoTemplate tempCollection;
 
@@ -99,10 +100,10 @@ public class RegistrationSystem {
              * Save all info in a temporary collection
              */
             //Add info to db
-            if(!tempCollection.collectionExists("PENDING"))
-                tempCollection.createCollection("PENDING");
+            if (!tempCollection.collectionExists(TempDBName))
+                tempCollection.createCollection(TempDBName);
             RegisterRecord tmpRecord = new RegisterRecord(email, userID, data);
-            tempCollection.save(tmpRecord, "PENDING");
+            tempCollection.save(tmpRecord, TempDBName);
             return true;
         }
 
