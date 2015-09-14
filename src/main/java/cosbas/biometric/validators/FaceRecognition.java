@@ -31,6 +31,7 @@ package cosbas.biometric.validators;/*
  * along with JavaCV.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Pointer;
 import java.io.BufferedReader;
@@ -77,6 +78,9 @@ public class FaceRecognition {
   /** Constructs a new FaceRecognition instance. */
   public FaceRecognition() {
   }
+    public IplImage createIPL(byte[] b) {
+        return cvDecodeImage(cvMat(1, b.length, CV_8UC1, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
+    }
 
   /** Trains from the data in the given training text index file, and store the trained data into the file 'data/facedata.xml'.
    *
@@ -298,7 +302,7 @@ public class FaceRecognition {
         // load the face image
         faceImgArr[iFace] = cvLoadImage(
                 imgFilename, // filename
-                CV_LOAD_IMAGE_GRAYSCALE); // isColor
+                CV_LOAD_IMAGE_GRAYSCALE); // isColor//
 
         if (faceImgArr[iFace] == null) {
           throw new RuntimeException("Can't load image from " + imgFilename);
