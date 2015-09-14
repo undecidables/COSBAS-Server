@@ -295,4 +295,47 @@ $(document).ready(function() {
 
   /***************************************************************************/
 
+  /*****************************Approve/Deny**********************************/
+  if(document.title == "Approve/Deny Appointment"){
+     $.ajax({
+        type: "post",
+        url: "/getApproveOrDeny"
+      }).then(function(jsonReturned) {
+        $("#fieldset").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
+
+  //Click accept
+  $('.accept').onClick(function(e) {
+    e.preventDefault(); 
+     /* $.ajax({
+        type: "post",
+        data: {"appointmentID" : $('#appointmentID').val()},//also send staffID
+        url: "/accept"
+      }).then(function(jsonReturned) {
+        console.log(jsonReturned);
+        //TODO: IF true reload page else show error?
+      });
+      window.scrollTo(0, 0);
+    }*/
+    console.log("Accpting");
+  });
+
+  //Click deny
+  $('.deny').click(function(e) {
+    e.preventDefault(); 
+      /*$.ajax({
+        type: "post",
+        data: {"appointmentID" : $('#appointmentID').val()},//also send staffID
+        url: "/accept"
+      }).then(function(jsonReturned) {
+        console.log(jsonReturned);
+        //TODO: IF true reload page else show error?
+      });
+      window.scrollTo(0, 0);
+    }*/
+    console.log("Denying");
+  });
+  /***************************************************************************/
 });

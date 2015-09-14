@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Iterator;
 import java.lang.System;
+import java.io.*;
 
 /**
  * Appointments class used to Request, cancel, check the status, accept/deny appointments. 
@@ -130,7 +131,10 @@ public class Appointments
                 //if so
                 if(visitor.equals(enquirer))
                 {
-                    return "Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus();
+                    String[] parts = tempAppointment.getDateTime().toString().split("T");
+                    String tempDateTime = parts[0] + " at " + parts[1];
+
+                    return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
                     //print information/send back not sure yet
                     //return;
                 }
@@ -139,14 +143,17 @@ public class Appointments
              //check if enquirer is with whom the appointment is with
              if(enquirer.equals(tempAppointment.getStaffID()))
              {
-                return "Appointment " + tempAppointment.getId() + "'s status is: " + tempAppointment.getStatus();
+                String[] parts = tempAppointment.getDateTime().toString().split("T");
+                String tempDateTime = parts[0] + " at " + parts[1];
+
+                return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
                 //print information/send back not sure yet
                 //return;
              }
             //else throws Exception
-            return "You are not authorised";
+            return "You are not authorised to view this appointment";
          }
-        return "No such Appointment";
+        return "No such Appointment exists";
     }
 
     /**

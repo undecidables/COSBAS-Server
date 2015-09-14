@@ -7,7 +7,7 @@
 package cosbas.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import cosbas.appointment.Appointments;
+import cosbas.appointment.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.time.LocalDateTime;
+import com.google.common.base.Joiner;
 
 @RestController
 public class AppointmentRestController {
@@ -23,6 +24,18 @@ public class AppointmentRestController {
     //Private variable used to call the appointment class fuctions of the appointment class
     @Autowired
     private Appointments appointment;
+
+    //The database adapter/repository to use.
+    @Autowired
+    private AppointmentDBAdapter repository;
+
+    /**
+     * Setter based dependency injection since mongo automatically creates the bean.
+     * @param repository The repository to be injected.
+     */
+    public void setRepository(AppointmentDBAdapter repository) {
+        this.repository = repository;
+    }
 
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
@@ -75,17 +88,28 @@ public class AppointmentRestController {
   }
 
   /**
-   * Login to the COSBAS system
-   * @param username - String username of the person trying to login
-   * @param password - String password connected to the username entered
-   * @return A message saying that you could not be logged in - only shown if authentication failed
+   * 
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/login")
-  public String login(
-                     @RequestParam(value = "username", required = true) String username,
-                     @RequestParam(value = "password", required = true) String password) {
-    return appointment.checkStatus(username, password);
-  }
+  @RequestMapping(method= RequestMethod.POST, value="/getApproveOrDeny")
+  public String getApproveOrDeny() {
+    List<Appointment> appointments = repository.findByStatusLike("requested");
+    String staffMember = "Staff member";
+    String returnPage = "";
 
+    for(int i = 0; i < appointments.size(); i++)
+    {
+      String[] parts = appointments.get(i).getDateTime().toString().split("T");
+      String tempDateTime = parts[0] + " at " + parts[1];
+
+      if(appointments.get(i).getStaffID().equals(staffMember)){
+        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + " on " + tempDateTime + " for " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Accept'/><input class='form-control deny' type='submit' value='Deny'/></div>";
+        //returnPage += "<input type='text' value='" + + "' hidden/><input type='text' value='" + + "' hidden/>"
+        //check in other IMY project for code
+        //add <br/>
+      }
+    }
+        
+    return returnPage;
+  }
 }
