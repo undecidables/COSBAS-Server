@@ -160,7 +160,7 @@ public class Appointments
      * Function used by staff members to approve a requested appointment
      * @param appointmentID - The appointmen's unique identifier
      */
-    public void approveAppointment(String appointmentID, String staffID){
+    public String approveAppointment(String appointmentID, String staffID){
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
         
@@ -171,15 +171,16 @@ public class Appointments
             tempAppointment.setStatus("Approved");
             repository.save(tempAppointment);
             //send confirmation email with the code
+            return "Appointment approved";
         } else if(tempAppointment == null){
             //throw exception
-            System.out.println("No such Appointment");
+            return "No such Appointment exists";
         } else if(!staffID.equals(tempAppointment.getStaffID())) {
              //throw exception
-             System.out.println("Not authorised");
+             return "You are not authorised to accept this appointment";
         } else {
             //throw exception
-             System.out.println("Appointment was already " + tempAppointment.getStatus());
+             return "Appointment was already " + tempAppointment.getStatus();
         }
     }
 
@@ -187,7 +188,7 @@ public class Appointments
      * Function used by staff members to deny a requested appointment
      * @param appointmentID - The appointmen's unique identifier
      */
-    public void denyAppointment(String appointmentID, String staffID){
+    public String denyAppointment(String appointmentID, String staffID){
         //check is perspon is authorised to approve appointment
 
         //find the appointment in the db
@@ -201,15 +202,16 @@ public class Appointments
             repository.save(tempAppointment);
             //remove from calendar
             //notify participants
+            return "Appointment denied";
         } else if(tempAppointment == null){
             //throw exception
-            System.out.println("No such Appointment");
+            return "No such Appointment exists";
         } else if(!staffID.equals(tempAppointment.getStaffID())) {
              //throw exception
-             System.out.println("Not authorised");
+            return "You are not authorised to cancel this appointment";
         } else {
             //throw exception
-             System.out.println("Appointment was already " + tempAppointment.getStatus());
+             return "Appointment was already " + tempAppointment.getStatus();
         }
     }
 }

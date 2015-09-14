@@ -70,6 +70,7 @@ public class AppointmentRestController {
   public String cancelAppointment(
                      @RequestParam(value = "cancellee", required = true) String cancellee,
                      @RequestParam(value = "appointmentID", required = true) String appointmentID) {
+
     return appointment.cancelAppointment(cancellee, appointmentID);
   }
 
@@ -84,11 +85,13 @@ public class AppointmentRestController {
   public String checkStatus(
                      @RequestParam(value = "requester", required = true) String requester,
                      @RequestParam(value = "appointmentID", required = true) String appointmentID) {
+
     return appointment.checkStatus(requester, appointmentID);
   }
 
   /**
-   * 
+   * Function used to set up the requested appointments that need to be approved or denied. It is called as soon as the page is loaded
+   * @return Returns the approve or deny options of each relevant appointment
    */
 
   @RequestMapping(method= RequestMethod.POST, value="/getApproveOrDeny")
@@ -103,13 +106,42 @@ public class AppointmentRestController {
       String tempDateTime = parts[0] + " at " + parts[1];
 
       if(appointments.get(i).getStaffID().equals(staffMember)){
-        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + " on " + tempDateTime + " for " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Accept'/><input class='form-control deny' type='submit' value='Deny'/></div>";
-        //returnPage += "<input type='text' value='" + + "' hidden/><input type='text' value='" + + "' hidden/>"
-        //check in other IMY project for code
-        //add <br/>
+        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + " on " + tempDateTime + " for " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
+        returnPage += "<input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/>";
+        returnPage += "</div>";
       }
     }
-        
+      
+    if(appointments.size() == 0){
+      returnPage += "<p>No appointments pending</p>";
+    }
+
     return returnPage;
   }
+
+  /**
+   * Function to approve a pending appointment
+   * @param appointmentID - String appoitnment ID of the appointment that you want to approve
+   * @param staffMember - StaffID of the staff member who is approving the appointment. Used to check that it is your appointmnet that you are approving
+   * @return Returns the message detailing what happened when trying to approve the appointment as gotten from the approveAppointment method
+   */
+  @RequestMapping(method= RequestMethod.POST, value="/approve")
+   public String approve( @RequestParam(value = "appointmentID", required = true) String appointmentID,
+                          @RequestParam(value = "staffMember", required = true) String staffMember) {
+
+      return appointment.approveAppointment(appointmentID, staffMember);
+   }
+
+   /**
+   * Function to deny a pending appointment
+   * @param appointmentID - String appoitnment ID of the appointment that you want to deny
+   * @param staffMember - StaffID of the staff member who is denying the appointment. Used to check that it is your appointmnet that you are denying
+   * @return Returns the message detailing what happened when trying to deny the appointment as gotten from the denyAppointment method
+   */
+  @RequestMapping(method= RequestMethod.POST, value="/deny")
+   public String deny( @RequestParam(value = "appointmentID", required = true) String appointmentID,
+                          @RequestParam(value = "staffMember", required = true) String staffMember) {
+
+      return appointment.denyAppointment(appointmentID, staffMember);
+   }
 }

@@ -307,35 +307,49 @@ $(document).ready(function() {
   }
 
   //Click accept
-  $('.accept').onClick(function(e) {
-    e.preventDefault(); 
-     /* $.ajax({
+  $(document).on('click', '.accept', (function(e) {
+    e.preventDefault();
+    var tempThis = $(this);
+      $.ajax({
         type: "post",
-        data: {"appointmentID" : $('#appointmentID').val()},//also send staffID
-        url: "/accept"
+        data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
+                "staffMember" : $(this).siblings('.staffID').val()},
+        url: "/approve"
       }).then(function(jsonReturned) {
-        console.log(jsonReturned);
-        //TODO: IF true reload page else show error?
-      });
-      window.scrollTo(0, 0);
-    }*/
-    console.log("Accpting");
-  });
+        if(jsonReturned != "Appointment approved"){
+          window.scrollTo(0, 0);
+          $("#signIn").text(jsonReturned);
+        } else {
+          tempThis.parent().remove();
+          $("#signIn").text("Approve or Deny Appointments");
+          if(tempThis.parent().parent().children().length == 0){
+            $("#fieldset").append("<p>No appointments pending</p>");
+          }
+        }
+      }); 
+    }));
 
   //Click deny
-  $('.deny').click(function(e) {
-    e.preventDefault(); 
-      /*$.ajax({
+  $(document).on('click', '.deny', (function(e) {
+    e.preventDefault();
+    var tempThis = $(this);
+      $.ajax({
         type: "post",
-        data: {"appointmentID" : $('#appointmentID').val()},//also send staffID
-        url: "/accept"
+        data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
+                "staffMember" : $(this).siblings('.staffID').val()},
+        url: "/deny"
       }).then(function(jsonReturned) {
-        console.log(jsonReturned);
-        //TODO: IF true reload page else show error?
-      });
-      window.scrollTo(0, 0);
-    }*/
-    console.log("Denying");
-  });
+        if(jsonReturned != "Appointment denied"){
+          window.scrollTo(0, 0);
+          $("#signIn").text(jsonReturned);
+        } else {
+          tempThis.parent().remove();
+          $("#signIn").text("Approve or Deny Appointments");
+          if(tempThis.parent().parent().children().length == 0){
+            $("#fieldset").append("<p>No appointments pending</p>");
+          }
+        }
+      }); 
+  }));
   /***************************************************************************/
 });
