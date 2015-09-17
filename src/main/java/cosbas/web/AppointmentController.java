@@ -11,6 +11,7 @@ import cosbas.calendar_services.*;
 import cosbas.calendar_services.authorization.Authorizer;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,9 @@ public class AppointmentController {
 
     private CalendarDBAdapter credentialRepository;
     private CalendarFactory calendarServiceFactory;
+
+    @Autowired
+    private GoogleCalendarService test;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
@@ -176,6 +180,9 @@ public class AppointmentController {
             session.removeAttribute("authorizer");
             CredentialWrapper credential = auth.getCredential(p.getName(), code);
             credentialRepository.save(credential);
+
+
+            test.getWeeksAppointments("BCrawley");
         }
 
         return "index";

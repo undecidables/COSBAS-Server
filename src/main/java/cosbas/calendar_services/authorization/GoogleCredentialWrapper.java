@@ -49,6 +49,7 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
                 .setClientSecrets(clientID, clientSecret)
                 .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
                 .setRefreshToken(refreshToken);
+
     }
 
     @PersistenceConstructor
@@ -67,21 +68,10 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
     }
 
     public GoogleCredential makeCredential(){
-        credentials = new GoogleCredential.Builder()
-                .setClientSecrets(clientID, clientSecret)
-                .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
-                .setRefreshToken(refreshToken);
         try {
             credentials.refreshToken();
-            String authCode = credentials.getAccessToken();
 
-            final GoogleTokenResponse resp = codeFlow.newTokenRequest(authCode).setRedirectUri(callbackURI).execute();
-            GoogleCredential cred = new GoogleCredential.Builder().setTransport(HTTP_TRANSPORT)
-                    .setJsonFactory(JSON_FACTORY)
-                    .setClientSecrets(clientID, clientSecret)
-                    .build()
-                    .setFromTokenResponse(resp);
-            return cred;
+            return credentials;
         }
         catch (IOException error){
             error.printStackTrace();
