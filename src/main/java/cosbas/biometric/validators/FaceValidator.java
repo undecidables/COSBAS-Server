@@ -2,9 +2,7 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.request.DoorActions;
-import cosbas.biometric.validators.exceptions.BiometricTypeException;
-import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.biometric.request.access.DoorActions;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

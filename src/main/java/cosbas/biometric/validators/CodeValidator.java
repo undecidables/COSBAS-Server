@@ -4,9 +4,7 @@ import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.TemporaryAccessCode;
-import cosbas.biometric.request.DoorActions;
-import cosbas.biometric.validators.exceptions.BiometricTypeException;
-import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.biometric.request.access.DoorActions;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

@@ -6,12 +6,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
@@ -35,16 +33,16 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/biometrics/access").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/nav/*").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/").permitAll()
-                .antMatchers("/makeAppointment").permitAll()
-                .antMatchers("/cancel").permitAll()
-                .antMatchers("/status").permitAll()
-                .antMatchers("/index").permitAll()
-                
+                .antMatchers("/resources/**").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/nav/*").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/login").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/makeAppointment").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/cancel").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/index").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/biometrics/registration").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
