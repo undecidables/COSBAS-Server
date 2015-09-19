@@ -1,5 +1,5 @@
 /**
- * @author Renette
+ * {@author Renette}
  * MVC COntroller for biometric system
  * Responds with plain text to requests
  */
@@ -7,7 +7,6 @@
 package cosbas.web;
 
 import cosbas.biometric.BiometricSystem;
-import cosbas.biometric.RegistrationSystem;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.registration.RegisterRequest;
@@ -22,19 +21,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-
 @RestController
 public class BiometricController {
 
     final BiometricSerializer serializer;
     final BiometricSystem authSystem;
-    final RegistrationSystem registrationSystem;
 
     @Autowired
-    public BiometricController(BiometricSerializer serializer, BiometricSystem authSystem, RegistrationSystem registrationSystem) {
+    public BiometricController(BiometricSerializer serializer, BiometricSystem authSystem) {
         this.serializer = serializer;
         this.authSystem = authSystem;
-        this.registrationSystem = registrationSystem;
+
     }
 
     @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access", method= RequestMethod.POST)
@@ -49,7 +46,7 @@ public class BiometricController {
     public String registration(HttpServletRequest request) throws IOException, ServletException {
         System.out.println("GOT HERE!");
         RegisterRequest aRequest = serializer.parseRegisterRequest(request);
-        RegisterResponse response = registrationSystem.tryRegister(aRequest);
+        RegisterResponse response = authSystem.tryRegister(aRequest);
         return serializer.serializeResponse(response);
     }
 
