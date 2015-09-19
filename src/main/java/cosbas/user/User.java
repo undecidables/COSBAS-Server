@@ -12,9 +12,9 @@ public class User {
 
     @Id
     private final String userID;
-    private final List<ContactDetails> contact;
+    private final List<ContactDetail> contact;
 
-    public User(String userID, List<ContactDetails> contact) {
+    public User(String userID, List<ContactDetail> contact) {
         this.userID = userID;
         this.contact = contact;
     }
@@ -24,11 +24,11 @@ public class User {
         this.contact = new LinkedList<>();
     }
 
-    public List<ContactDetails> getContact() {
+    public List<ContactDetail> getContact() {
         return contact;
     }
 
-    private boolean addContactDetail(ContactDetails c) {
+    private boolean addContactDetail(ContactDetail c) {
         return this.contact.add(c);
     }
 }

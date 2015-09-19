@@ -1,5 +1,6 @@
 package cosbas.biometric.request.access;
 
+import cosbas.biometric.request.DoorActions;
 import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 

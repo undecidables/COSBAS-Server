@@ -1,6 +1,6 @@
 package cosbas.biometric.data;
 
-import cosbas.biometric.request.access.DoorActions;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.BiometricTypes;
 
 /**

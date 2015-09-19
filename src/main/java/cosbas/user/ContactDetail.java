@@ -3,13 +3,16 @@ package cosbas.user;
 /**
  * {@author Renette}
  */
-abstract class ContactDetails {
+public class ContactDetail {
+    /**
+     * The actual contact info (detail address, phone number etc)
+     */
     protected final String details;
     private final ContactTypes type;
 
-    protected ContactDetails(ContactTypes type, String email) {
+    public ContactDetail(ContactTypes type, String detail) {
         this.type = type;
-        this.details = email;
+        this.details = detail;
     }
 
     public String getDetails() {

@@ -12,6 +12,7 @@ import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.RegistrationException;
 import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.user.ContactDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -85,15 +86,7 @@ public class BiometricSystem {
         return factory.getValidator(data.getType()).validate(data, req.getAction());
     }
 
-    public Boolean addUser(String userID, List<BiometricData> data) {
-        /**
-         * Save all info in a temporary collection
-         */
-        //Add info to db
-        return false;
-    }
-
-    public Boolean approveUser(String userID) {
+   public Boolean approveUser(String userID) {
         /**
          * Fetch al data from DB
          * Generate and save AccessCode
@@ -116,29 +109,15 @@ public class BiometricSystem {
      * @return A register response object
      */
     public RegisterResponse tryRegister(RegisterRequest req) {
+        /**
+         *
+         */
+
         try {
             List<BiometricData> dataList = req.getData();
-            RegistrationResponse response = register(req, dataList.get(0));
+            RegistrationResponse response = register(req, dataList);
 
-            if (!response.approved) {
-                return RegisterResponse.getFailureResponse(req, response.data);
-            }
-
-            String user = response.data;
-            List<BiometricData> subList = dataList.subList(1, dataList.size());
-
-            for (BiometricData data : subList) {
-                response = register(req, data);
-                if (!response.approved) {
-                    return RegisterResponse.getFailureResponse(req, response.data);
-                }
-
-                if (!user.equals(response.data)) {
-                    return RegisterResponse.getFailureResponse(req, "Error: Multiple users identified.");
-                }
-            }
-
-            return RegisterResponse.getSuccessResponse(req, "Welcome", user);
+            return RegisterResponse.getSuccessResponse(req, "Your request is Pending. An administrator wll approve it soon.", req.getPersonID());
 
         } catch (RegistrationException e) {
             return RegisterResponse.getFailureResponse(req, e.getMessage());
@@ -152,14 +131,12 @@ public class BiometricSystem {
      * @param data The actual biometric data to persist on the database
      * @return A RegistrationResponse response object
      */
-    private RegistrationResponse register(RegisterRequest req, BiometricData data) throws RegistrationException {
+    private RegistrationResponse register(RegisterRequest req, List<BiometricData> data) throws RegistrationException {
 
-        //return factory.getValidator(data.getType()).validate(data, req.getAction());
-        System.out.println(req.getPersonID());
         BiometricData personInfo = biometricDataRepository.findById(req.getPersonID());
 
         if (personInfo == null && data != null) {
-            addUser(req.getEmail(), req.getPersonID(), data);
+            addUser(req.getContactDetails(), req.getPersonID(), data);
             return RegistrationResponse.successfulRegistration(true, req.getPersonID());
         }
         if (data == null) {
@@ -172,17 +149,17 @@ public class BiometricSystem {
     }
 
     /**
-     * Registers a user in a temporary collection on the database
+     * Registers a new user in a temporary collection on the database
      *
-     * @param email  The user's e-mail address
+     * @param details  The user's contact details
      * @param userID The user's EMPLID
      * @param data   The actual biometric data to persist on the database
      * @return True
      */
-    public Boolean addUser(String email, String userID, BiometricData data) {
+    public Boolean addUser(List<ContactDetail> details, String userID, List<BiometricData> data) {
         if (!tempCollection.collectionExists(PENDING_COLLECTION))
             tempCollection.createCollection(PENDING_COLLECTION);
-        RegisterRecord tmpRecord = new RegisterRecord(email, userID, data);
+        RegisterRequest tmpRecord = new RegisterRequest(details, userID, data);
         tempCollection.save(tmpRecord, PENDING_COLLECTION);
         return true;
     }

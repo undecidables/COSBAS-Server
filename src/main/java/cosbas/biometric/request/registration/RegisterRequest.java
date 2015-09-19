@@ -2,18 +2,24 @@ package cosbas.biometric.request.registration;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.access.AccessRequest;
+import cosbas.user.ContactDetail;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Created by Tienie on 13/09/2015.
+ * {@author  Tienie}
  */
 public class RegisterRequest extends AccessRequest {
+
+    @Id
+    private String id;
+
     /**
      * E-mail for the registered person.
      */
-    private final String email;
+    private final List<ContactDetail> contactDetails;
     /**
      * Time request object created on server..
      */
@@ -28,19 +34,19 @@ public class RegisterRequest extends AccessRequest {
     /**
      * Defines a Java Object which stores the user's data as parsed from the POST request
      *
-     * @param email    The user's e-mail address
+     * @param details    The user's contact details
      * @param personID The user's EMPLID
      * @param data     The actual biometric data to persist on the database
      */
-    public RegisterRequest(String email, String personID, List<BiometricData> data) {
+    public RegisterRequest(List<ContactDetail> details, String personID, List<BiometricData> data) {
         super(null,null, data);
-        this.email = email;
+        this.contactDetails = details;
         this.data = data;
         this.personID = personID;
     }
 
-    public String getEmail() {
-        return this.email;
+    public List<ContactDetail> getContactDetails() {
+        return contactDetails;
     }
 
     public LocalDateTime getTime() {
@@ -53,4 +59,7 @@ public class RegisterRequest extends AccessRequest {
 
     public String getPersonID() {return personID;}
 
+    public String getId() {
+        return id;
+    }
 }
