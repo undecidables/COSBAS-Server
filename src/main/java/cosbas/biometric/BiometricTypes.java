@@ -7,7 +7,7 @@ import cosbas.biometric.validators.FingerprintValidator;
 
 /**
  * {@author Renette Ros}
- * This class is a container for the biometric typt string constants.
+ * This enum defines the biometric types recognized by the server.
  *
  */
 public enum BiometricTypes {
