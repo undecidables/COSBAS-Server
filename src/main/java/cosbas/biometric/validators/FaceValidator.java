@@ -1,22 +1,35 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.biometric.request.access.DoorActions;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
- * @author Renette
+ * {@author Renette Ros}
  * Validates temporary or permanent access code
  */
 @Component
 public class FaceValidator extends AccessValidator {
 
-    @Override
-    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) throws ValidationException {
+    protected Boolean checkValidationType(BiometricTypes type) {
+        return type == BiometricTypes.FACE;
+    }
+
+    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
         return ValidationResponse.successfulValidation("u00000000");
     }
 
-    protected Boolean checkValidationType(BiometricTypes type) {
-        return type == BiometricTypes.FACE;
+    public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
+        List<BiometricData> items = repository.findByType(request.getType());
+
+        for (BiometricData item : items) {
+            ValidationResponse response = matches(request, item, action);
+            if (response.approved) return response;
+
+        }
+        return ValidationResponse.failedValidation("No Match found");
     }
 }

@@ -1,9 +1,12 @@
 package cosbas.biometric.validators;
 
+import cosbas.biometric.request.access.AccessRequest;
+
 import java.util.Objects;
 
 /**
- * Created by Renette on 2015-08-19.
+ * {@author Renette Ros}
+ * ValidationResponses are created by the {@link AccessValidator}s for each data object in an {@link AccessRequest}
  */
 public class ValidationResponse {
     public final boolean approved;
@@ -19,11 +22,11 @@ public class ValidationResponse {
         this.approved = approved;
     }
 
-    static ValidationResponse successfulValidation(String user) {
+    public static ValidationResponse successfulValidation(String user) {
         return new ValidationResponse(true, user);
     }
 
-    static ValidationResponse failedValidation(String message) {
+    public static ValidationResponse failedValidation(String message) {
         return new ValidationResponse(false, message);
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- *  @author Renette
+ *  {@author Renette Ros}
  *
  *  This interface exists for the sake of making the type of database pluggable.
  *  Extra Functions follow the query style of MongoRepositories.

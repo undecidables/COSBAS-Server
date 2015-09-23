@@ -1,7 +1,7 @@
 package cosbas.db.repositories;
 
-import cosbas.biometric.request.AccessRecordDAO;
-import cosbas.biometric.request.AccessRecord;
+import cosbas.biometric.request.access.AccessRecordDAO;
+import cosbas.biometric.request.access.AccessRecord;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

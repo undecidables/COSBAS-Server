@@ -20,7 +20,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * This is the basic navigation/security configuration. Currently, it's setup so that all links which have login, or nav, or root do not need to authenticate to navigate. Any other request
@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cancel").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/index").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+
                 .antMatchers("/biometrics/access").permitAll()
                 
                 //Ant matchers to allow the calling of java functions
@@ -52,6 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/approve").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/deny").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 
+                .antMatchers("/biometrics/registration").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

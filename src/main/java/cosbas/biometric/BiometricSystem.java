@@ -2,11 +2,9 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.data.BiometricUser;
-import cosbas.biometric.request.AccessRecordDAO;
-import cosbas.biometric.request.AccessRequest;
-import cosbas.biometric.request.AccessResponse;
-import cosbas.biometric.validators.AccessValidator;
+import cosbas.biometric.request.access.AccessRequest;
+import cosbas.biometric.request.access.AccessResponse;
+import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +13,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author Renette
- *         Modules handles core biometric functions.
+ * {@author Renette Ros}
+ *  Service that handles core biometric functions.
  */
 @Service
 public class BiometricSystem {
 
-    /**
-     * The database adapter/repository to use.
-     */
     @Autowired
-    private AccessRecordDAO accessRecordRepository;
-
-    @Autowired
-    private BiometricDataDAO PersonRepository;
+    private BiometricDataDAO biometricDataRepository;
 
     @Autowired
     private ValidatorFactory factory;
@@ -37,41 +29,66 @@ public class BiometricSystem {
         this.factory = factory;
     }
 
+    public void setBiometricDataRepository(BiometricDataDAO repository) {
+        this.biometricDataRepository = repository;
+    }
+
+
     /**
-     * Setter based dependency injection since mongo automatically creates the bean.
-     *
-     * @param repository The repository to be injected.
+     * Validates an access request and identifies the person.
+     * @param req Access Request as parsed from HTTP request.
+     * @return An access response object with either the identified user or a failure message.
      */
-    public void setAccessRecordRepository(AccessRecordDAO repository) {
-        this.accessRecordRepository = repository;
-    }
-
-    public void setPersonRepository(BiometricDataDAO repository) {
-        this.PersonRepository = repository;
-    }
-
-
     public AccessResponse requestAccess(AccessRequest req) {
-        //Create correct type of access validator from request
-        //Read from config file or something?
-        //Validate
         try {
-        Boolean response = true;
-        List<BiometricData> datas = req.getData();
-        for (BiometricData data : datas) {
-            AccessValidator validator = factory.getValidator(data.getType());
+            List<BiometricData> dataList = req.getData();
+            ValidationResponse response = validate(req, dataList.get(0));
 
-            validator.validate(data, req.getAction());
-        }
+            if (!response.approved) {
+                return AccessResponse.getFailureResponse(req, response.data);
+            }
+
+            String user = response.data;
+            List<BiometricData> subList = dataList.subList(1, dataList.size());
+
+            for (BiometricData data : subList) {
+                response = validate(req, data);
+                if (!response.approved) {
+                    return AccessResponse.getFailureResponse(req, response.data);
+                }
+
+                if (!user.equals(response.data)) {
+                    return AccessResponse.getFailureResponse(req, "Error: Multiple users identified.");
+                }
+            }
+
+            return AccessResponse.getSuccessResponse(req, "Welcome", user);
+
         } catch (ValidationException e) {
             return AccessResponse.getFailureResponse(req, e.getMessage());
         }
-        //TODO : make sure to get  userId from validator
-        return  AccessResponse.getSuccessResponse(req, "Welcome", "u00000000");
     }
 
-    public Boolean addUser(BiometricUser user) {
+    private ValidationResponse validate(AccessRequest req, BiometricData data) throws ValidationException {
+        return factory.getValidator(data.getType()).validate(data, req.getAction());
+    }
+
+    public Boolean addUser(String userID, List<BiometricData> data) {
+        /**
+         * Save all info in a temporary collection
+         */
         //Add info to db
+        return false;
+    }
+
+    public Boolean approveUser(String userID) {
+        /**
+         * Fetch al data from DB
+         * Generate and save AccessCode
+         * Fore each BiometricData item
+         *      Get correct validator
+         *      Call validator.register to save & do additional stuff
+         */
         return false;
     }
 

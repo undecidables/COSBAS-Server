@@ -1,12 +1,12 @@
 package cosbas.biometric.data;
 
 
-import cosbas.biometric.validators.BiometricTypes;
+import cosbas.biometric.BiometricTypes;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 /**
- * @author  Renette
+ * {@author  Renette Ros}
  * AccessRecord Request created from http request.
  */
 public class BiometricData {
@@ -14,6 +14,10 @@ public class BiometricData {
      * Database ID
      */
     private @Id String id;
+
+    public void setPersonID(String personID) {
+        this.personID = personID;
+    }
 
     /**
      * The user with which the biometric data is associated.
@@ -30,8 +34,8 @@ public class BiometricData {
     private final byte[] data;
 
 
-
     public BiometricData(BiometricTypes type, byte[] data) {
+        this.personID = null;
         this.type = type;
         this.data = data;
     }

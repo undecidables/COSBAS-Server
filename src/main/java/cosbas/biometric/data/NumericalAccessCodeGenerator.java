@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Renette
+ * {@author Renette Ros}
  *
  * This class is a concrete strategy generates a unique Numerical AccessCode.
- * Uniquness is verified using a @Class{CodeValidator}.
+ * Uniquness is verified using a {@link CodeValidator}.
  */
 @Service
-public class NumericalAccessCodeGenerator implements AccessCodeGenerator {
+public class NumericalAccessCodeGenerator extends AccessCodeGenerator {
 
     /**
-     * The length of a new code. It has a default value if 'codes.newlength' is not specified in the application properties.
+     * The length of a new code. It has a default value of {@value} if 'codes.newlength' is not specified in the application properties.
      */
-    @Value("${codes.newlength}")
-    private int CODE_LENGTH = 5;
+    @Value("${codes.newlength : 5}")
+    protected int CODE_LENGTH = 5;
 
     @Autowired
     private CodeValidator validator;
@@ -27,18 +27,17 @@ public class NumericalAccessCodeGenerator implements AccessCodeGenerator {
         this.validator = validator;
     }
 
-    @Override
-    public byte[] newAccessCode() {
-        byte[] code = generateCode();
+    protected byte[] getCode() {
+        byte[] code = generate(CODE_LENGTH);
         while(validator.isDuplicate(code)) {
-            code = generateCode();
+            code = generate(CODE_LENGTH);
         }
         return code;
     }
 
-    protected byte[] generateCode() {
-        byte[] code = new byte[CODE_LENGTH];
-        for (int i=0; i<CODE_LENGTH; ++i) {
+    private byte[] generate(int codeLength) {
+        byte[] code = new byte[codeLength];
+        for (int i=0; i< codeLength; ++i) {
             code[i] = (byte) (Math.random() * 10);
         }
         return code;

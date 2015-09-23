@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   /******************** Request Appointment ***********************************/
 
   $("#appointmentDuration").change(function(){
