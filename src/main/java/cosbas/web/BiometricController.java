@@ -48,7 +48,7 @@ public class BiometricController {
     public String registration(HttpServletRequest request) throws IOException, ServletException, BiometricTypeException {
         System.out.println("GOT HERE!");
         RegisterRequest aRequest = serializer.parseRegisterRequest(request);
-        RegisterResponse response = authSystem.tryRegister(aRequest);
+        RegisterResponse response = authSystem.register(aRequest);
         return serializer.serializeResponse(response);
     }
 

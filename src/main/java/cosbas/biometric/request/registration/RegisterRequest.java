@@ -5,7 +5,10 @@ import cosbas.user.ContactDetail;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * {@author  Tienie}
@@ -13,9 +16,9 @@ import java.util.List;
 public class RegisterRequest {
 
     /**
-     * E-mail for the registered person.
+     * Contact details registered person. Set ensures uniqueness.
      */
-    private final List<ContactDetail> contactDetails;
+    private final Set<ContactDetail> contactDetails;
     /**
      * Time request object created on server..
      */
@@ -35,13 +38,14 @@ public class RegisterRequest {
      * @param userID The user's EMPLID
      * @param data     The actual biometric data to persist on the database
      */
-    public RegisterRequest(List<ContactDetail> details, String userID, List<BiometricData> data) {
-        this.contactDetails = details;
+    public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data) {
+        this.contactDetails = new HashSet<>();
+        this.contactDetails.addAll(details);
         this.data = data;
         this.userID = userID;
     }
 
-    public List<ContactDetail> getContactDetails() {
+    public Set<ContactDetail> getContactDetails() {
         return contactDetails;
     }
 

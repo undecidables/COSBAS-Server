@@ -97,7 +97,7 @@ public class BiometricSystem {
     }
 
     public Boolean removeUser(String id) {
-        //Remove info from db
+        //Remove user info + biometric data from db
         return false;
     }
 
@@ -107,13 +107,12 @@ public class BiometricSystem {
      * @param req Registration Request as parsed from HTTP request.
      * @return A register response object
      */
-    public RegisterResponse tryRegister(RegisterRequest req) {
+    public RegisterResponse register(RegisterRequest req) {
 
         try {
             List<BiometricData> dataList = req.getData();
-            RegisterResponse response = register(req, dataList);
 
-            return response;
+            return addUser(req, dataList);
 
         } catch (RegistrationException e) {
             return RegisterResponse.getFailureResponse(req, e.getMessage());
@@ -121,13 +120,13 @@ public class BiometricSystem {
     }
 
     /**
-     * Registers Biometric data on either the main collection or a temporary collection (first time registration)
+     * Registers Biometric data on a temporary collection.
      *
      * @param req  Registration Request as parsed from HTTP request.
      * @param data The actual biometric data to persist on the database
      * @return A RegistrationResponse response object
      */
-    private RegisterResponse register(RegisterRequest req, List<BiometricData> data) throws RegistrationException, NullArgumentException {
+    private RegisterResponse addUser(RegisterRequest req, List<BiometricData> data) throws RegistrationException, NullArgumentException {
         String userID = req.getUserID();
         RegisterRequest existingUser = registerRepository.findByUserID(userID);
         RegisterRequest newUser = new RegisterRequest(req.getContactDetails(), userID, data);
