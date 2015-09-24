@@ -1,4 +1,4 @@
-package cosbas.biometric.request;
+package cosbas.biometric.request.access;
 
 /**
  * {@author Renette Ros}

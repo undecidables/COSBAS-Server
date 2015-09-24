@@ -26,19 +26,34 @@
 									<option>
 										Staff member
 									</option>
+									<option>
+										Prof. Goodman
+									</option>
 								</select>
 							</div>
-							<div class="form-group">
+							<div class="form-group" id="appointmentDate">
 								<p class="text-left">Date and Time of the meeting:</p>
-								<input class="form-control" type="datetime-local" id="requestedDateTime" name="requestedDateTime"/><!--Can use datetime-local-->
+								<input class="form-control" type="datetime-local" id="requestedDateTime" name="requestedDateTime" step="60"/>
 							</div>
-							<!--div class="form-group">
-								<p class="text-left">Time of the meeting: </p>
-								<input class="form-control" type="time" name="requestedTime"/>
-							</div-->
-							<div class="form-group">
-								<p class="text-left">Appointment made by (your name): </p>
-								<input class="form-control" type="text" id="appointmentBy" name="appointmentBy"/>
+							<div class="form-group" id="membersNum">
+								<p class="text-left">Number of members making the appointment: </p>
+								<input type="number" min="1" value="1" id="numMembers" name="numMembers"/>
+							</div>
+							<div class="form-group" id="appointmentMadeBy">
+								<p class="text-left">Appointment made by (your name/team members' names): </p>
+								<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>
+							</div>
+							<div class="form-group" id="reason">
+								<p class="text-left">Reason for appointment: </p>
+								<input class="form-control" type="text" id="appointmentReason" name="appointmentReason"/>
+							</div>
+							<div class="form-group" id="duration">
+								<p class="text-left">Duration of appointment: </p>
+								<input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
+							</div>
+							<div class="form-group" id="appoitmentEmail">
+								<p class="text-left">Your email:</p>
+								<input class="form-control" type="email" id="email" name="email"/>
 							</div>
 							<br/>
 							<div>
