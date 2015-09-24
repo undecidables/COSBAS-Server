@@ -4,7 +4,7 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
-import cosbas.biometric.request.access.DoorActions;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;

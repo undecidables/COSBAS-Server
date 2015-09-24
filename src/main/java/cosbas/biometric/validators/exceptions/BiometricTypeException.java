@@ -8,3 +8,4 @@ public class BiometricTypeException extends ValidationException {
         super(m);
     }
 }
+
