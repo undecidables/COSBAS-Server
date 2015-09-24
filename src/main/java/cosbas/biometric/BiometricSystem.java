@@ -5,8 +5,8 @@ import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.registration.RegisterRequest;
-import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.request.registration.RegisterRequestDAO;
+import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.RegistrationException;
@@ -128,8 +128,8 @@ public class BiometricSystem {
      * @return A RegistrationResponse response object
      */
     private RegisterResponse register(RegisterRequest req, List<BiometricData> data) throws RegistrationException, NullArgumentException {
-        String userID = req.getPersonID();
-        RegisterRequest existingUser = registerRepository.findByPersonID(userID);
+        String userID = req.getUserID();
+        RegisterRequest existingUser = registerRepository.findByUserID(userID);
         RegisterRequest newUser = new RegisterRequest(req.getContactDetails(), userID, data);
         if (existingUser != null) {
             existingUser.merge(newUser);

@@ -13,8 +13,7 @@ import java.util.List;
  */
 public interface BiometricDataDAO extends CrudRepository<BiometricData, String> {
 
-    List<BiometricData> findByPersonID(String PersonID);
-    BiometricData findById(String id);
+    List<BiometricData> findByUserID(String userID);
     List<BiometricData> findByType (BiometricTypes type);
     BiometricData findByData (byte[] data);
 

@@ -1,8 +1,5 @@
 package cosbas.biometric.request.registration;
 
-import cosbas.biometric.request.access.AccessRequest;
-import cosbas.biometric.request.access.AccessResponse;
-
 import java.time.LocalDateTime;
 
 /**

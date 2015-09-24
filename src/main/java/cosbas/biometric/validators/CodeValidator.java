@@ -47,7 +47,7 @@ public class CodeValidator extends AccessValidator {
         }
 
 
-        return ValidationResponse.successfulValidation(dbItem.getPersonID());
+        return ValidationResponse.successfulValidation(dbItem.getUserID());
     }
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {

@@ -17,13 +17,13 @@ public class AccessRecord {
 
     private LocalDateTime dateTime;
     private DoorActions action;
-    private String personID;
+    private String userID;
 
-    public AccessRecord(String DoorID, LocalDateTime dateTime, DoorActions Action, String PersonID) {
+    public AccessRecord(String DoorID, LocalDateTime dateTime, DoorActions Action, String userID) {
         this.doorID = DoorID;
         this.dateTime = dateTime;
         this.action = Action;
-        this.personID = PersonID;
+        this.userID = userID;
     }
 
     public String getDoorID() {
@@ -50,11 +50,11 @@ public class AccessRecord {
         this.action = action;
     }
 
-    public String getPersonID() {
-        return personID;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setPersonID(String personID) {
-        this.personID = personID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

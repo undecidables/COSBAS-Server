@@ -2,9 +2,9 @@ package cosbas.biometric.serialize;
 
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
-import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
@@ -78,7 +78,7 @@ public abstract class BiometricSerializer {
         Collection<Part> parts = request.getParts();
         List<BiometricData> biometricDatas = new ArrayList<>();
 
-        String id = request.getParameter("ID");
+        String doorID = request.getParameter("ID");
         DoorActions action = DoorActions.fromString(request.getParameter("Action"));
 
         if(parts != null)
@@ -89,7 +89,7 @@ public abstract class BiometricSerializer {
                 checkBiometricData(part, name, biometricDatas);
             }
 
-            return new AccessRequest(id, action, biometricDatas);
+            return new AccessRequest(doorID, action, biometricDatas);
         }
         throw new NullPointerException("Parts null, unable to parse http request ");
     }
@@ -122,7 +122,7 @@ public abstract class BiometricSerializer {
         List<BiometricData> biometricData = new LinkedList<>();
         List<ContactDetail> contactDetails = new LinkedList<>();
 
-        String id = request.getParameter("personID");
+        String id = request.getParameter("userID");
 
         if(parts != null)
         {
