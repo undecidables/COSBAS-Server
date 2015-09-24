@@ -4,17 +4,15 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
-import cosbas.biometric.request.registration.RegisterRecord;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterResponse;
-import cosbas.biometric.validators.RegistrationResponse;
+import cosbas.biometric.request.registration.RegisterRequestDAO;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.RegistrationException;
 import cosbas.biometric.validators.exceptions.ValidationException;
-import cosbas.user.ContactDetail;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,14 +24,14 @@ import java.util.List;
 @Service
 public class BiometricSystem {
 
-    static final String PENDING_COLLECTION = "PENDING";
-    private MongoTemplate tempCollection;
+
+    private RegisterRequestDAO registerRepository;
     private BiometricDataDAO biometricDataRepository;
     private ValidatorFactory factory;
 
     @Autowired
-    public void setTempCollection(MongoTemplate tempCollection) {
-        this.tempCollection = tempCollection;
+    public void setRegisterRepository(RegisterRequestDAO registerRepository) {
+        this.registerRepository = registerRepository;
     }
 
     @Autowired
@@ -94,6 +92,7 @@ public class BiometricSystem {
          *      Get correct validator
          *      Call validator.register to save & do additional stuff
          */
+
         return false;
     }
 
@@ -109,15 +108,12 @@ public class BiometricSystem {
      * @return A register response object
      */
     public RegisterResponse tryRegister(RegisterRequest req) {
-        /**
-         *
-         */
 
         try {
             List<BiometricData> dataList = req.getData();
-            RegistrationResponse response = register(req, dataList);
+            RegisterResponse response = register(req, dataList);
 
-            return RegisterResponse.getSuccessResponse(req, "Your request is Pending. An administrator wll approve it soon.", req.getPersonID());
+            return response;
 
         } catch (RegistrationException e) {
             return RegisterResponse.getFailureResponse(req, e.getMessage());
@@ -131,37 +127,18 @@ public class BiometricSystem {
      * @param data The actual biometric data to persist on the database
      * @return A RegistrationResponse response object
      */
-    private RegistrationResponse register(RegisterRequest req, List<BiometricData> data) throws RegistrationException {
-
-        BiometricData personInfo = biometricDataRepository.findById(req.getPersonID());
-
-        if (personInfo == null && data != null) {
-            addUser(req.getContactDetails(), req.getPersonID(), data);
-            return RegistrationResponse.successfulRegistration(true, req.getPersonID());
+    private RegisterResponse register(RegisterRequest req, List<BiometricData> data) throws RegistrationException, NullArgumentException {
+        String userID = req.getPersonID();
+        RegisterRequest existingUser = registerRepository.findByPersonID(userID);
+        RegisterRequest newUser = new RegisterRequest(req.getContactDetails(), userID, data);
+        if (existingUser != null) {
+            existingUser.merge(newUser);
+            registerRepository.save(existingUser);
+            return RegisterResponse.getSuccessResponse(newUser, "Request merged with existing pending request.");
+        } else {
+            registerRepository.save(newUser);
+            return RegisterResponse.getSuccessResponse(newUser, "Request pending admin Approval.");
         }
-        if (data == null) {
-            System.out.println("Data null");
-            return null;
-        }
-        biometricDataRepository.save(data);
-        return null;
-
-    }
-
-    /**
-     * Registers a new user in a temporary collection on the database
-     *
-     * @param details  The user's contact details
-     * @param userID The user's EMPLID
-     * @param data   The actual biometric data to persist on the database
-     * @return True
-     */
-    public Boolean addUser(List<ContactDetail> details, String userID, List<BiometricData> data) {
-        if (!tempCollection.collectionExists(PENDING_COLLECTION))
-            tempCollection.createCollection(PENDING_COLLECTION);
-        RegisterRequest tmpRecord = new RegisterRequest(details, userID, data);
-        tempCollection.save(tmpRecord, PENDING_COLLECTION);
-        return true;
     }
 
 

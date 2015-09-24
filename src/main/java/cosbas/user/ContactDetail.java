@@ -22,5 +22,14 @@ public class ContactDetail {
     public ContactTypes getType() {
         return type;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        final ContactDetail other = (ContactDetail) object;
+        return details.equals(other.details) && type.equals(other.type);
+    }
 }
 

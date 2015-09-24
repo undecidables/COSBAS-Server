@@ -1,6 +1,7 @@
 package cosbas.biometric.request.registration;
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.user.ContactDetail;
 import org.springframework.data.annotation.Id;
@@ -11,10 +12,7 @@ import java.util.List;
 /**
  * {@author  Tienie}
  */
-public class RegisterRequest extends AccessRequest {
-
-    @Id
-    private String id;
+public class RegisterRequest {
 
     /**
      * E-mail for the registered person.
@@ -29,6 +27,7 @@ public class RegisterRequest extends AccessRequest {
      */
     private final List<BiometricData> data;
 
+    @Id
     private final String personID;
 
     /**
@@ -39,7 +38,6 @@ public class RegisterRequest extends AccessRequest {
      * @param data     The actual biometric data to persist on the database
      */
     public RegisterRequest(List<ContactDetail> details, String personID, List<BiometricData> data) {
-        super(null,null, data);
         this.contactDetails = details;
         this.data = data;
         this.personID = personID;
@@ -59,7 +57,8 @@ public class RegisterRequest extends AccessRequest {
 
     public String getPersonID() {return personID;}
 
-    public String getId() {
-        return id;
+    public void merge(RegisterRequest newUser) {
+        contactDetails.addAll(newUser.getContactDetails());
+        data.addAll(newUser.getData());
     }
 }
