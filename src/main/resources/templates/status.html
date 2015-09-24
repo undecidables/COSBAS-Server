@@ -18,17 +18,17 @@
 					<br/>
 					<form th:action="@{/login}" method="post">
 						<fieldset>
-							<div class="form-group">
+							<div class="form-group" id="appointmentStatusRequest">
 								<p class="text-left">Appointment ID:</p>
-								<input class="form-control" type="string" name="appointmentID"/>
+								<input class="form-control" type="string" id="appointmentID" name="appointmentID"/>
 							</div>
-							<div class="form-group">
+							<div class="form-group" id="statusRequest">
 								<p class="text-left">Appointment made by (your name):</p>
-								<input class="form-control" type="string" name="appointmentBy"/>
+								<input class="form-control" type="string" id="requestedBy" name="appointmentBy"/>
 							</div>
 							<br/>
 							<div>
-								<input type="submit" value ="Check Appointment Status" class="btn btn-sm btn-success"/>
+								<input type="submit" value ="Check Appointment Status" id="checkStatus" class="btn btn-sm btn-success"/>
 							</div>
 						</fieldset>
 					</form>
