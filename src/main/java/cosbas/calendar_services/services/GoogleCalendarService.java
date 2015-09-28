@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +39,8 @@ public class GoogleCalendarService extends CalendarService {
     private com.google.api.services.calendar.Calendar service;
 
 
-
+    //Q: Maybe rather return list of events (OR custom class) instead of string? Easier to display prettily....
+    //Custom class is probs better for privacy and all that. And more pluggable.
     @Override
     public List<String> getWeeksAppointments(String emplid) {
         try {
@@ -50,8 +52,11 @@ public class GoogleCalendarService extends CalendarService {
                         .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
                         .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1))).execute();
                 List<Event> items = events.getItems();
+                if (eventList == null)
+                    eventList = new ArrayList<>(items.size());
+
                 for (Event event: items){
-                    System.out.println(event.getSummary());
+                    //System.out.println(event.getSummary());
                     eventList.add(event.getSummary() + " @ "  + event.getStart().toString());
                 }
                 pageToken = events.getNextPageToken();
@@ -62,7 +67,7 @@ public class GoogleCalendarService extends CalendarService {
         catch(IOException error){
             error.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
