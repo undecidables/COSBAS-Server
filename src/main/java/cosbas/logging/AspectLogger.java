@@ -33,7 +33,6 @@ public class AspectLogger {
 
     @AfterThrowing(value = "selectAll()", throwing = "error")
     public void logAfterThrow(JoinPoint joinPoint, Throwable error) {
-        System.out.println("here is an error");
         logger.error("Accessing: " + joinPoint.toShortString() + " got error: " + error.toString());
     }
     /**
