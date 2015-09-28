@@ -1,15 +1,12 @@
 package cosbas.calendar_services.services;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
+import cosbas.calendar_services.authorization.GoogleVariables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,23 +33,11 @@ public class GoogleCalendarService extends CalendarService {
         this.calendarServiceFactory = calendarServiceFactory;
     }*/
 
-    //public static Object credential = null;
-    private static final String APPLICATION_NAME = "COSBAS Calendar Integration Service";
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static HttpTransport HTTP_TRANSPORT;
-    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR);
     final String SUMMARY = "COSBAS BOOKING: ";
     private final String CALENDAR_ID = "primary";
     private com.google.api.services.calendar.Calendar service;
 
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
-        }
-    }
+
 
     @Override
     public List<String> getWeeksAppointments(String emplid) {
@@ -62,7 +47,7 @@ public class GoogleCalendarService extends CalendarService {
             List<String> eventList = null;
             do {
                 Events events = service.events().list("primary").setPageToken(pageToken)
-                        .setMaxResults(25).setOrderBy("startTime").setTimeMin(toDateTime(LocalDateTime.now()))
+                        .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
                         .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1))).execute();
                 List<Event> items = events.getItems();
                 for (Event event: items){
@@ -145,15 +130,14 @@ public class GoogleCalendarService extends CalendarService {
     private DateTime toDateTime(LocalDateTime time){
         String sDateTime = time.toString();
         sDateTime += "+02:00";
-        DateTime newTime = new DateTime(sDateTime);
-        return newTime;
+        return new DateTime(sDateTime);
     }
 
     public com.google.api.services.calendar.Calendar getCalendarService(String emplid) throws IOException {
         GoogleCredentialWrapper user = (GoogleCredentialWrapper)credentialRepository.findByStaffID(emplid);
-        GoogleCredential creds = user.makeCredential();
-        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, creds)
-                .setApplicationName(APPLICATION_NAME)
+        Credential creds = user.getCredential();
+        return new com.google.api.services.calendar.Calendar.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, creds)
+                .setApplicationName(GoogleVariables.APPLICATION_NAME)
                 .build();
     }
 }
