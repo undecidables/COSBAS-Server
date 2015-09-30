@@ -56,7 +56,6 @@ public class GoogleCalendarService extends CalendarService {
                     eventList = new ArrayList<>(items.size());
 
                 for (Event event: items){
-                    //System.out.println(event.getSummary());
                     eventList.add(event.getSummary() + " @ "  + event.getStart().toString());
                 }
                 pageToken = events.getNextPageToken();
@@ -72,7 +71,6 @@ public class GoogleCalendarService extends CalendarService {
 
     @Override
     public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, String clientName, String clientEmail) {
-
         Event event = new Event()
                 .setSummary(SUMMARY + " " + clientEmail)
                 .setDescription(clientName + " has an appointment with " + emplid + " at " + startTime.toString());
@@ -109,7 +107,7 @@ public class GoogleCalendarService extends CalendarService {
             return event.getHtmlLink();
         }
         catch(IOException e){
-            System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service");
+            System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service.");
         }
         return null;
     }
@@ -118,7 +116,7 @@ public class GoogleCalendarService extends CalendarService {
     public boolean removeAppointment(String emplid, String clientEmail) {
         try{
             service = getCalendarService(emplid);
-            service.events().delete(CALENDAR_ID, SUMMARY + " " + clientEmail).execute();
+            //service.events().delete(CALENDAR_ID, SUMMARY + " " + clientEmail).execute();
             return true;
         }
         catch(IOException e){
@@ -129,7 +127,30 @@ public class GoogleCalendarService extends CalendarService {
 
     @Override
     public List<String> getTodaysAppointments(String emplid) {
-        return null;
+        try {
+            service = getCalendarService(emplid);
+            String pageToken = null;
+            List<String> eventList = null;
+            do {
+                Events events = service.events().list("primary").setPageToken(pageToken)
+                        .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
+                        .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).execute();
+                List<Event> items = events.getItems();
+                if (eventList == null)
+                    eventList = new ArrayList<>(items.size());
+
+                for (Event event: items){
+                    eventList.add(event.getSummary() + " @ "  + event.getStart().toString());
+                }
+                pageToken = events.getNextPageToken();
+            }
+            while (pageToken != null);
+            return eventList;
+        }
+        catch(IOException error){
+            error.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     private DateTime toDateTime(LocalDateTime time){
