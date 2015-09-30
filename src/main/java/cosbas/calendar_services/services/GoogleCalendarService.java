@@ -38,15 +38,12 @@ public class GoogleCalendarService extends CalendarService {
     private final String CALENDAR_ID = "primary";
     private com.google.api.services.calendar.Calendar service;
 
-
-    //Q: Maybe rather return list of events (OR custom class) instead of string? Easier to display prettily....
-    //Custom class is probs better for privacy and all that. And more pluggable.
     @Override
-    public List<String> getWeeksAppointments(String emplid) {
+    public List<CosbasEvent> getWeeksAppointments(String emplid) {
         try {
             service = getCalendarService(emplid);
             String pageToken = null;
-            List<String> eventList = null;
+            List<CosbasEvent> eventList = null;
             do {
                 Events events = service.events().list("primary").setPageToken(pageToken)
                         .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
@@ -56,7 +53,10 @@ public class GoogleCalendarService extends CalendarService {
                     eventList = new ArrayList<>(items.size());
 
                 for (Event event: items){
-                    eventList.add(event.getSummary() + " @ "  + event.getStart().toString());
+                    LocalDateTime start = toLocalDateTime(event.getStart());
+                    LocalDateTime end = toLocalDateTime(event.getEnd());
+                    CosbasEvent anEvent = new CosbasEvent(event.getId(), event.getAttendees().get(1).toString(), event.getAttendees().get(0).getEmail(), start, end);
+                    eventList.add(anEvent);
                 }
                 pageToken = events.getNextPageToken();
             }
@@ -108,6 +108,7 @@ public class GoogleCalendarService extends CalendarService {
         }
         catch(IOException e){
             System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service.");
+            e.printStackTrace();
         }
         return null;
     }
@@ -157,6 +158,12 @@ public class GoogleCalendarService extends CalendarService {
         String sDateTime = time.toString();
         sDateTime += "+02:00";
         return new DateTime(sDateTime);
+    }
+
+    private LocalDateTime toLocalDateTime(EventDateTime time){
+        String sDateTime = time.getDateTime().toString();
+        sDateTime = sDateTime.substring(0, sDateTime.length()-6);
+        return LocalDateTime.parse(sDateTime);
     }
 
     public com.google.api.services.calendar.Calendar getCalendarService(String emplid) throws IOException {

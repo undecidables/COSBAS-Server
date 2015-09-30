@@ -21,7 +21,7 @@ public abstract class CalendarService {
 
     protected CalendarDBAdapter repository;
 
-    public abstract List<String> getWeeksAppointments(String emplid);
+    public abstract List<CosbasEvent> getWeeksAppointments(String emplid);
     public abstract String makeAppointment(String emplid, LocalDateTime start, int Duration, String clientName, String clientEmail);
     public abstract boolean removeAppointment(String emplid, String clientEmail);
     public abstract List<String> getTodaysAppointments(String emplid);

@@ -11,6 +11,7 @@ import cosbas.calendar_services.*;
 import cosbas.calendar_services.authorization.Authorizer;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.calendar_services.services.CosbasEvent;
 import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -186,10 +187,10 @@ public class AppointmentController {
             /**
              * Testing getting of appointments...
              */
-            List<String> values = test.getWeeksAppointments("BCrawley");
+            List<CosbasEvent> values = test.getWeeksAppointments("BCrawley");
             System.out.println("Number of appointments for the week: " + values.size());
             for (int i = 0; i < values.size(); i++){
-                System.out.println(" \t" + values.get(i));
+                System.out.println(" \t" + values.get(i).getEventID() + " " + values.get(i).getClient());
             }
 
             /**
@@ -205,10 +206,10 @@ public class AppointmentController {
             /**
              * Testing getting of todays' appointments
              */
-            values = test.getTodaysAppointments("BCrawley");
+            /*values = test.getTodaysAppointments("BCrawley");
             for (int i = 0; i < values.size(); i++){
                 System.out.println(" \t" + values.get(i));
-            }
+            }*/
 
             /**
              * Testing appointment removal...
