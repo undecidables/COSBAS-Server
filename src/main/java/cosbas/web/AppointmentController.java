@@ -7,11 +7,11 @@
 package cosbas.web;
 
 
+import cosbas.appointment.Appointment;
 import cosbas.calendar_services.*;
 import cosbas.calendar_services.authorization.Authorizer;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
-import cosbas.calendar_services.services.CosbasEvent;
 import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -187,21 +186,24 @@ public class AppointmentController {
             /**
              * Testing getting of appointments...
              */
-            List<CosbasEvent> values = test.getWeeksAppointments("BCrawley");
+            List<Appointment> values = test.getWeeksAppointments("BCrawley");
             System.out.println("Number of appointments for the week: " + values.size());
             for (int i = 0; i < values.size(); i++){
-                System.out.println(" \t" + values.get(i).getEventID() + " " + values.get(i).getClient());
+                System.out.println(" \t" + values.get(i).getSummary() + " \t" + values.get(i).getVisitorIDs().get(0));
+                for (String contact: values.get(i).getVisitorIDs()){
+                    System.out.println("Attendee Email: " + contact);
+                }
             }
 
             /**
              * Testing appointment creations...
              */
-            String emplid = "BCrawley";
-            LocalDateTime start = LocalDateTime.now().plusHours(3);
+            /*String emplid = "BCrawley";
+            LocalDateTime start = LocalDateTime.now().plusHours(1);
             int duration = 30;
             String clientName = "Jason Richard Evans";
             String clientEmail = "jasonevans@tuks.co.za";
-            System.out.println(test.makeAppointment(emplid, start, duration, clientName, clientEmail));
+            System.out.println(test.makeAppointment(emplid, start, duration, clientName, clientEmail));*/
 
             /**
              * Testing getting of todays' appointments

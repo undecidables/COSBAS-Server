@@ -1,9 +1,9 @@
 package cosbas.calendar_services.services;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.*;
+import cosbas.appointment.Appointment;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
@@ -39,11 +39,11 @@ public class GoogleCalendarService extends CalendarService {
     private com.google.api.services.calendar.Calendar service;
 
     @Override
-    public List<CosbasEvent> getWeeksAppointments(String emplid) {
+    public List<Appointment> getWeeksAppointments(String emplid) {
         try {
             service = getCalendarService(emplid);
             String pageToken = null;
-            List<CosbasEvent> eventList = null;
+            List<Appointment> eventList = null;
             do {
                 Events events = service.events().list("primary").setPageToken(pageToken)
                         .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
@@ -53,9 +53,7 @@ public class GoogleCalendarService extends CalendarService {
                     eventList = new ArrayList<>(items.size());
 
                 for (Event event: items){
-                    LocalDateTime start = toLocalDateTime(event.getStart());
-                    LocalDateTime end = toLocalDateTime(event.getEnd());
-                    CosbasEvent anEvent = new CosbasEvent(event.getId(), event.getAttendees().get(1).toString(), event.getAttendees().get(0).getEmail(), start, end);
+                    Appointment anEvent = toAppointmentObj(event, emplid);
                     eventList.add(anEvent);
                 }
                 pageToken = events.getNextPageToken();
@@ -172,5 +170,24 @@ public class GoogleCalendarService extends CalendarService {
         return new com.google.api.services.calendar.Calendar.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, creds)
                 .setApplicationName(GoogleVariables.APPLICATION_NAME)
                 .build();
+    }
+
+    private Appointment toAppointmentObj(Event event, String emplid){
+        LocalDateTime start = toLocalDateTime(event.getStart());
+        LocalDateTime end = toLocalDateTime(event.getEnd());
+
+        //Calculating duration
+        int duration = (int)java.time.Duration.between(start, end).toMinutes();
+
+        //Some conversion needed
+        List<String> attending = new ArrayList<String>();
+        for (EventAttendee attendee: event.getAttendees()){
+            attending.add(attendee.getEmail());
+        }
+
+        Appointment anEvent = new Appointment(emplid, attending, start, duration, event.getDescription());
+        anEvent.setEventID(event.getId());
+        anEvent.setSummary(event.getSummary());
+        return anEvent;
     }
 }
