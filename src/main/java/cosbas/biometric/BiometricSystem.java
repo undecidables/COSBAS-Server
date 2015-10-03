@@ -2,6 +2,7 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.registration.RegisterRequest;
@@ -53,26 +54,34 @@ public class BiometricSystem {
     public AccessResponse requestAccess(AccessRequest req) {
         try {
             List<BiometricData> dataList = req.getData();
-            ValidationResponse response = validate(req, dataList.get(0));
+            DoorActions requestAction = req.getAction();
+
+            if (dataList == null || dataList.size() == 0) {
+                throw new ValidationException("No data received.");
+            }
+
+            ValidationResponse response = validate(requestAction, dataList.get(0));
 
             if (!response.approved) {
                 return AccessResponse.getFailureResponse(req, response.data);
             }
 
             String user = response.data;
-            List<BiometricData> subList = dataList.subList(1, dataList.size());
 
-            for (BiometricData data : subList) {
-                response = validate(req, data);
-                if (!response.approved) {
-                    return AccessResponse.getFailureResponse(req, response.data);
-                }
+            if (dataList.size() > 1) {
+                List<BiometricData> subList = dataList.subList(1, dataList.size());
 
-                if (!user.equals(response.data)) {
-                    return AccessResponse.getFailureResponse(req, "Error: Multiple users identified.");
+                for (BiometricData data : subList) {
+                    response = validate(requestAction, data);
+                    if (!response.approved) {
+                        return AccessResponse.getFailureResponse(req, response.data);
+                    }
+
+                    if (!user.equals(response.data)) {
+                        return AccessResponse.getFailureResponse(req, "Error: Multiple users identified.");
+                    }
                 }
             }
-
             return AccessResponse.getSuccessResponse(req, "Welcome", user);
 
         } catch (ValidationException e) {
@@ -80,8 +89,8 @@ public class BiometricSystem {
         }
     }
 
-    private ValidationResponse validate(AccessRequest req, BiometricData data) throws ValidationException {
-        return factory.getValidator(data.getType()).validate(data, req.getAction());
+    private ValidationResponse validate(DoorActions requestAction, BiometricData data) throws ValidationException {
+        return factory.getValidator(data.getType()).validate(data, requestAction);
     }
 
    public Boolean approveUser(String userID) {
