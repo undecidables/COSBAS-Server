@@ -53,6 +53,10 @@ public class BiometricSystem {
     public AccessResponse requestAccess(AccessRequest req) {
         try {
             List<BiometricData> dataList = req.getData();
+            if (dataList == null || dataList.size() == 0) {
+                throw new ValidationException("No data received.");
+            }
+
             ValidationResponse response = validate(req, dataList.get(0));
 
             if (!response.approved) {
@@ -60,19 +64,20 @@ public class BiometricSystem {
             }
 
             String user = response.data;
-            List<BiometricData> subList = dataList.subList(1, dataList.size());
+            if (dataList.size() > 1) {
+                List<BiometricData> subList = dataList.subList(1, dataList.size());
 
-            for (BiometricData data : subList) {
-                response = validate(req, data);
-                if (!response.approved) {
-                    return AccessResponse.getFailureResponse(req, response.data);
-                }
+                for (BiometricData data : subList) {
+                    response = validate(req, data);
+                    if (!response.approved) {
+                        return AccessResponse.getFailureResponse(req, response.data);
+                    }
 
-                if (!user.equals(response.data)) {
-                    return AccessResponse.getFailureResponse(req, "Error: Multiple users identified.");
+                    if (!user.equals(response.data)) {
+                        return AccessResponse.getFailureResponse(req, "Error: Multiple users identified.");
+                    }
                 }
             }
-
             return AccessResponse.getSuccessResponse(req, "Welcome", user);
 
         } catch (ValidationException e) {
