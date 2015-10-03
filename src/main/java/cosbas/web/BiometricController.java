@@ -1,12 +1,13 @@
 /**
  * {@author Renette}
- * MVC COntroller for biometric system
+ * MVC Controller for biometric system
  * Responds with plain text to requests
  */
 
 package cosbas.web;
 
 import cosbas.biometric.BiometricSystem;
+import cosbas.biometric.parser.BiometricParser;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.registration.RegisterRequest;
@@ -25,13 +26,14 @@ import java.io.IOException;
 @RestController
 public class BiometricController {
 
-
     final BiometricSerializer serializer;
+    final BiometricParser parser;
     final BiometricSystem authSystem;
 
     @Autowired
-    public BiometricController(BiometricSerializer serializer, BiometricSystem authSystem) {
+    public BiometricController(BiometricSerializer serializer, BiometricParser parser ,BiometricSystem authSystem) {
         this.serializer = serializer;
+        this.parser = parser;
         this.authSystem = authSystem;
 
     }
@@ -39,7 +41,7 @@ public class BiometricController {
     @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access", method= RequestMethod.POST)
     public String access(HttpServletRequest request) throws IOException, ServletException, BiometricTypeException {
 
-        AccessRequest aRequest = serializer.parseRequest(request);
+        AccessRequest aRequest = parser.parseRequest(request);
         AccessResponse response = authSystem.requestAccess(aRequest);
         return serializer.serializeResponse(response);
     }
@@ -47,7 +49,7 @@ public class BiometricController {
     @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/registration", method= RequestMethod.POST)
     public String registration(HttpServletRequest request) throws IOException, ServletException, BiometricTypeException {
         System.out.println("GOT HERE!");
-        RegisterRequest aRequest = serializer.parseRegisterRequest(request);
+        RegisterRequest aRequest = parser.parseRegisterRequest(request);
         RegisterResponse response = authSystem.register(aRequest);
         return serializer.serializeResponse(response);
     }
