@@ -1,5 +1,7 @@
 package cosbas.appointment;
 
+import cosbas.notifications.Email;
+import cosbas.notifications.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.io.*;
 @Service
 public class Appointments 
 {
+    Notifications notifyEmail;
+
     /**
      * The database adapter/repository to use.
      */
@@ -32,22 +36,26 @@ public class Appointments
     
      /**
      * Function used to request an appointment with a staff member using the system
-     * @param visitorID - The identified of who the visitor is that wants to make an appointment
+     * @param visitorIDs - The identified of who the visitor is that wants to make an appointment
      * @param staffID - The identifier of who the appointment is with, the staff member
-     * @param dateTime - The date and time of the requested apointment
+     * @param dateTime - The date and time of the requested appointment
      * @param reason - The reson for the requested appointment
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
     public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes){
-        //check is staffmemeber exists
+        //check is staffmember exists
         //check if time is available - if not send error with suggested time
         Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
-
+        System.out.println("HERE");
         repository.save(a);
 
         //save to calendar
-        //notify staff memeber
+        //Okay so I need the email address of the visitor as well as their name and surname same goes for the staff member
+        notifyEmail = new Notifications(); // dalk kan ons die skuif na 'n constructor can appointments of iets
+        notifyEmail.setEmail(new Email()); // selfde as bo dalk kan ons dit skuif?
+        notifyEmail.sendNotifications();
+
         return "Appointment " + a.getId() + " has been saved.";
 
         //else throws Exception/return error message string

@@ -29,12 +29,21 @@
 
     <!-- Bean to send our emails through the gmail smtp server -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="protocol" value="smtps"/>
         <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="465"/>
+        <property name="username" value="cosbasup@gmail.com"/>
+        <property name="password" value="bioPass123" />
     </bean>
 
     <bean id="visitorTemplateMessage" class="org.springframework.mail.SimpleMailMessage">
         <property name="from" value="cosbasup@gmail.com"/>
         <property name="subject" value="Appointment Notification"/>
+    </bean>
+
+    <bean id="visitorEmailManager" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="visitorTemplateMessage" ref="visitorTemplateMessage"/>
     </bean>
 
 </beans>

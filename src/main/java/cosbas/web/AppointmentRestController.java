@@ -40,10 +40,10 @@ public class AppointmentRestController {
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
    * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
-   * @param requestedDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
+   * @param appointmentDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
    * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
-   * @param appointmentDuration - Integer duration of the appointment in minutes as inputted on the html form
-   * @param appointmentReason - String reason for the appointment being made as indicated on the html form
+   * @param duration - Integer duration of the appointment in minutes as inputted on the html form
+   * @param reason - String reason for the appointment being made as indicated on the html form
    * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
    */
 
