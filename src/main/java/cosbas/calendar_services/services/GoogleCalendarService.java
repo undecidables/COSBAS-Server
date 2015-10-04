@@ -4,6 +4,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.*;
 import cosbas.appointment.Appointment;
+import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
@@ -22,11 +23,17 @@ import java.util.List;
 @Service
 public class GoogleCalendarService extends CalendarService {
     private CalendarDBAdapter credentialRepository;
+    private AppointmentDBAdapter appointmentRepository;
     //private CalendarFactory calendarServiceFactory;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
+    }
+
+    @Autowired
+    public void setAppointmentRepository(AppointmentDBAdapter appointmentRepository){
+        this.appointmentRepository = appointmentRepository;
     }
 
     /*@Autowired
@@ -102,6 +109,14 @@ public class GoogleCalendarService extends CalendarService {
         try{
             service = getCalendarService(emplid);
             event = service.events().insert(CALENDAR_ID, event).execute();
+
+            List<String> attendants = new ArrayList<>();
+            attendants.add(clientEmail);
+            attendants.add(emplid + "@cs.up.ac.za");
+            Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
+            newEvent.setEventID(event.getId());
+            newEvent.setSummary(event.getSummary());
+            appointmentRepository.save(newEvent);
             return event.getHtmlLink();
         }
         catch(IOException e){

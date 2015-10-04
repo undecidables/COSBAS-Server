@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -198,12 +199,12 @@ public class AppointmentController {
             /**
              * Testing appointment creations...
              */
-            /*String emplid = "BCrawley";
+            String emplid = "BCrawley";
             LocalDateTime start = LocalDateTime.now().plusHours(1);
             int duration = 30;
             String clientName = "Jason Richard Evans";
             String clientEmail = "jasonevans@tuks.co.za";
-            System.out.println(test.makeAppointment(emplid, start, duration, clientName, clientEmail));*/
+            System.out.println(test.makeAppointment(emplid, start, duration, clientName, clientEmail));
 
             /**
              * Testing getting of todays' appointments
