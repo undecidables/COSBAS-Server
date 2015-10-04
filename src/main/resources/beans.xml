@@ -20,12 +20,21 @@
         <constructor-arg name="password" value="${mongo.password}" />
     </bean>
 
-    <!-- MongoTemplate for connecting and quering the documents in the database -->
+    <!-- MongoTemplate for connecting and querying the documents in the database -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongo" ref="mongo" />
         <constructor-arg name="databaseName" value="${mongo.database}" />
         <constructor-arg name="userCredentials" ref="mongoCredentials" />
     </bean>
 
+    <!-- Bean to send our emails through the gmail smtp server -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+    </bean>
+
+    <bean id="visitorTemplateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="Appointment Notification"/>
+    </bean>
 
 </beans>
