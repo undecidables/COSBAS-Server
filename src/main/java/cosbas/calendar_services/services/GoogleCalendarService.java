@@ -140,11 +140,11 @@ public class GoogleCalendarService extends CalendarService {
     }
 
     @Override
-    public List<String> getTodaysAppointments(String emplid) {
+    public List<Appointment> getTodaysAppointments(String emplid) {
         try {
             service = getCalendarService(emplid);
             String pageToken = null;
-            List<String> eventList = null;
+            List<Appointment> eventList = null;
             do {
                 Events events = service.events().list("primary").setPageToken(pageToken)
                         .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
@@ -154,7 +154,8 @@ public class GoogleCalendarService extends CalendarService {
                     eventList = new ArrayList<>(items.size());
 
                 for (Event event: items){
-                    eventList.add(event.getSummary() + " @ "  + event.getStart().toString());
+                    Appointment anEvent = toAppointmentObj(event, emplid);
+                    eventList.add(anEvent);
                 }
                 pageToken = events.getNextPageToken();
             }
