@@ -44,8 +44,9 @@ public class Email implements NotificationsStrategy  {
 
         //We can still add the necessary info here
         notification.setText(
-                "Dear User <br>" +
-                "An appointment has been scheduled by you."
+                "Dear User\n" +
+                "An appointment has been scheduled by you.\n\n" +
+                "Regards,\nCOSBAS System"
         );
 
         try {
