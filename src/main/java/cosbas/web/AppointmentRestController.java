@@ -21,7 +21,7 @@ import com.google.common.base.Joiner;
 @RestController
 public class AppointmentRestController {
     
-    //Private variable used to call the appointment class fuctions of the appointment class
+    //Private variable used to call the appointment class functions of the appointment class
     @Autowired
     private Appointments appointment;
 
@@ -42,7 +42,7 @@ public class AppointmentRestController {
    * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
    * @param requestedDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
    * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
-   * @param appoitnmentDuration - Integer duration of the appointment in minutes as inputted on the html form
+   * @param appointmentDuration - Integer duration of the appointment in minutes as inputted on the html form
    * @param appointmentReason - String reason for the appointment being made as indicated on the html form
    * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
    */
@@ -62,7 +62,7 @@ public class AppointmentRestController {
   /**
    * Function used to cancel an appointment via the form on the cancel.html page
    * @param cancellee - String of the name of the person who wants to cancel the appointment. 
-   * @param appoitnmentID - String appointmentID, the appointment ID of the appointment that is being cancelled. 
+   * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
    * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
    */
 
