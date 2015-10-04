@@ -27,7 +27,7 @@ public class Email implements NotificationsStrategy  {
     private static SimpleMailMessage visitorTemplateMessage;
 
     /**
-     * The template method as specified in the Strategy class
+     * The template method as specified in the Strategy Interface
      * Function that will send the email to the appropriate visitor
      * @param to - The email address of the visitor to which the email will be send to
      */
