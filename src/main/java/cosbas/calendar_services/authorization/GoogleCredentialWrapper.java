@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author Jason Richard Evans
  */
-public class GoogleCredentialWrapper extends CredentialWrapper {
+public class GoogleCredentialWrapper extends CredentialWrapper <Credential>{
 
     String refreshToken;
     String accessToken;
@@ -46,6 +46,7 @@ public class GoogleCredentialWrapper extends CredentialWrapper {
         return credential.getAccessToken();
     }
 
+    @Override
     public Credential getCredential(){
         try {
             credential.refreshToken();
