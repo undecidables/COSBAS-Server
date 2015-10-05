@@ -48,9 +48,10 @@ public class Appointments
 
         //save to calendar
         //notify staff memeber
+
         return "Appointment " + a.getId() + " has been saved.";
 
-        //else throws Exception/return error message string
+        //else return "Could not save appointment.";
     }
     
      /**
@@ -80,11 +81,11 @@ public class Appointments
                     //delete from calendar
                     //Notify participants 
                     //revoke access
-                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
+                    return "Appointment has been cancelled.";
                 } else if (tempAppointment.getStatus().equals("Cancelled"))
                 {
                     //throw an excetion
-                    return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
+                    return "Appointment has already been cancelled.";
                 }
              }  
 
@@ -96,18 +97,18 @@ public class Appointments
 
                     //delete from calendar
                     //Notify participants 
-                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
+                    return "Appointment has been cancelled.";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
                 //throw an excetion
-                return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
+                return "Appointment has already been cancelled.";
              }
 
-             return "You are not authorised to cancel appointment " + tempAppointment.getId();
+             return "You are not authorised to cancel this appointment";
              //else throws Exception not authorised
         }     
              //else throws Exception Appointment doesn't exist
-         return "Appointment " + appointmentID + " does not exist.";
+         return "Appointment does not exist.";
     }
 
     /**
@@ -134,7 +135,7 @@ public class Appointments
                     String[] parts = tempAppointment.getDateTime().toString().split("T");
                     String tempDateTime = parts[0] + " at " + parts[1];
 
-                    return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
+                    return "Appointment: " + tempAppointment.getId() + "\nWith: " + tempAppointment.getStaffID() + "\nOn: " + tempDateTime + "\nStatus: " + tempAppointment.getStatus();
                     //print information/send back not sure yet
                     //return;
                 }
@@ -146,7 +147,7 @@ public class Appointments
                 String[] parts = tempAppointment.getDateTime().toString().split("T");
                 String tempDateTime = parts[0] + " at " + parts[1];
 
-                return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
+                return "Appointment: " + tempAppointment.getId() + "\nWith: " + tempAppointment.getStaffID() + "\nOn: " + tempDateTime + "\nStatus: " + tempAppointment.getStatus();
                 //print information/send back not sure yet
                 //return;
              }
@@ -208,7 +209,7 @@ public class Appointments
             return "No such Appointment exists";
         } else if(!staffID.equals(tempAppointment.getStaffID())) {
              //throw exception
-            return "You are not authorised to cancel this appointment";
+            return "You are not authorised to deny this appointment";
         } else {
             //throw exception
              return "Appointment was already " + tempAppointment.getStatus();

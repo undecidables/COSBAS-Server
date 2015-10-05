@@ -15,26 +15,34 @@ $(document).ready(function() {
     }
   });
 
-  var currentdate = new Date(); 
-  var datetime = currentdate.getFullYear() + "-";
-  if((currentdate.getMonth()+1).toString().length == 1)
-  {
-    datetime += "0";
-  }
-  datetime += currentdate.getMonth()+1 + "-";
+  setTimeAndDateDefault();
 
-  if(currentdate.getDate().toString().length == 1)
-  {
-    datetime += "0";
-  }
-  datetime += currentdate.getDate() + "T" + currentdate.getHours() + ":" + currentdate.getMinutes();
+  var datetimeVar;
 
-  $("#requestedDateTime").val(datetime);
+  function setTimeAndDateDefault(){
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear() + "-";
+
+    if((currentdate.getMonth()+1).toString().length == 1)
+    {
+      datetime += "0";
+    }
+    datetime += currentdate.getMonth()+1 + "-";
+
+    if(currentdate.getDate().toString().length == 1)
+    {
+      datetime += "0";
+    }
+    datetime += currentdate.getDate() + "T" + currentdate.getHours() + ":" + currentdate.getMinutes();
+
+    $("#requestedDateTime").val(datetime);
+    datetimeVar = datetime;
+  }
 
   $("#requestedDateTime").change(function(){
-    if($("#requestedDateTime").val() < datetime)
+    if($("#requestedDateTime").val() < datetimeVar)
     {
-      $("#requestedDateTime").val(datetime);
+      $("#requestedDateTime").val(datetimeVar);
       $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
       $('#dateError').remove();
       $('#appointmentDate').append($element);
@@ -49,13 +57,14 @@ $(document).ready(function() {
     
     if($("#numMembers").val() >= 1)
     {
-      $prevInputs = $('.appointmentBy').length;
+      $prevInputs = $('.appointmentDetails').length;
 
       if($prevInputs < $("#numMembers").val())
       {
         for($i = $prevInputs; $i < $("#numMembers").val(); $i++)
         {
-          var element = $('<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>');
+          var element = $('<div class="appointmentDetails"><p class="text-left">Appointment made by (your name/team members names): </p><input class="form-control appointmentBy" type="text" name="appointmentBy[]"/><p class="text-left">Your/team members email:</p><input class="form-control email" type="email" id="email" name="email"/></div>');
+          //var element = $('<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>');
           $('#appointmentMadeBy').append(element);
         }
       } 
@@ -63,19 +72,20 @@ $(document).ready(function() {
       {
         for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
         {
-          $($(".appointmentBy")[$i-1]).remove();
+          $($(".appointmentDetails")[$i-1]).remove();
         }
       }
 
       $('#errorNumbers').remove();
+      $('#madeByError').remove();
     }
     else 
     {
-      $prevInputs = $('.appointmentBy').length;
+      $prevInputs = $('.appointmentDetails').length;
       $("#numMembers").val(1);
       for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
       {
-        $($(".appointmentBy")[$i-1]).remove();
+        $($(".appointmentDetails")[$i-1]).remove();
       }
       $element = $('<p class="error" id="errorNumbers">The minimum of people making an appointment is one. </p>');
       $('#errorNumbers').remove();
@@ -95,9 +105,9 @@ $(document).ready(function() {
     $noError = true;
 
     //check date
-    if($("#requestedDateTime").val() < datetime)
+    if($("#requestedDateTime").val() < datetimeVar)
     {
-      $("#requestedDateTime").val(datetime);
+      $("#requestedDateTime").val(datetimeVar);
       $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
       $('#dateError').remove();
       $('#appointmentDate').append($element);
@@ -147,6 +157,32 @@ $(document).ready(function() {
     }
     $temp = $temp.join(", ");
     
+    //check emails
+    $allEmailsFilledIn = true;
+
+    $inputs = $(".email");
+    $tempEmail = [];
+    for($i = 0; $i < $inputs.length; $i++){
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
+      {
+        $element = $("<p class='error' id='emailError'>All members' emails must be entered. </p>");
+        $("#emailError").remove();
+        $('#appointmentMadeBy').append($element);
+        $allEmailsFilledIn = false;
+        $noError = false;
+      }
+      else 
+      {
+        if($i == $inputs.length-1 && $allEmailsFilledIn == true)
+        {
+          $("#emailError").remove();
+        }
+        $tempEmail[$i] = $($inputs[$i]).val();
+      }
+    }
+    $tempEmail = $tempEmail.join(", ");
+
     //check reason
     if($("#appointmentReason").val() == "")
     {
@@ -161,8 +197,6 @@ $(document).ready(function() {
 
     //appointmentWith error checking not yet done
 
-    console.log("Where to does the email go?");
-
     //send data if no errors
     if($noError == true)
     {
@@ -172,13 +206,24 @@ $(document).ready(function() {
                "requestedDateTime" : $('#requestedDateTime').val(),
                "appointmentBy" : $temp,
                "appointmentDuration" : $('#appointmentDuration').val(),
-               "appointmentReason" : $('#appointmentReason').val()},
+               "appointmentReason" : $('#appointmentReason').val(),
+               "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
-        //console.log(jsonReturned);
         $("#signIn").text(jsonReturned);
+          //cleanup user input on successfull appointment request
+          $( ":text" ).val("");
+          $( "input[type=email]" ).val("");
+          setTimeAndDateDefault();
+          for($i = $("#numMembers").val(); $i > 1; $i--)
+          {
+            $($(".appointmentDetails")[$i-1]).remove();
+          }
+          $("#numMembers").val(1);
+          $("#appointmentDuration").val(15);
       });
       window.scrollTo(0, 0);
+     
     } else {
       $("#signIn").text("Request an appointment");
       window.scrollTo(0, 0);
@@ -230,6 +275,8 @@ $(document).ready(function() {
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $("#signIn").text(jsonReturned);
+        $("#appointmentID").val("");
+        $("#cancelBy").val("");
       });
       window.scrollTo(0, 0);
     } else {
@@ -284,6 +331,8 @@ $(document).ready(function() {
         url: "/status"
       }).then(function(jsonReturned) {
         $("#signIn").text(jsonReturned);
+        $("#appointmentID").val("");
+        $("#requestedBy").val("");
       });
       window.scrollTo(0, 0);
     } else {

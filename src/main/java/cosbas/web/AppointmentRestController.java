@@ -53,7 +53,8 @@ public class AppointmentRestController {
                      @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
                      @RequestParam(value = "appointmentBy", required = true) List<String> appointmentBy,
                      @RequestParam(value = "appointmentDuration", required = true) int duration,
-                     @RequestParam(value = "appointmentReason", required = true) String reason) {
+                     @RequestParam(value = "appointmentReason", required = true) String reason,
+                     @RequestParam(value = "appointmentEmails", required = true) List<String> emails) {
 
     LocalDateTime dateTime = LocalDateTime.parse(appointmentDateTime);
     return appointment.requestAppointment(appointmentBy, appointmentWith, dateTime, reason, duration);

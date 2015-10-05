@@ -17,148 +17,132 @@ import cosbas.appointment.Appointments;
 @RunWith(MockitoJUnitRunner.class)
 public class AppointmentTests {
 
-    //Mock Calendar
-    //Mock availability
-
-   // private final Appointments appointments;
+    private final Appointments mockAppointments;
+    private final AppointmentDBAdapter mockRepository;
+    private final String appointmentID;
+    private final String tempAppointment;
 
     /**
      * This method is used to select the calander to be used as well as the available times for appointments
      */
     @Before
-    public void setUpCalendarAvaliabiltiy() {
-        
+    public void setUp() throws Exception {
+        mockAppointments = new Appointments();
+        mockRepository = mock(AppointmentDBAdapter.class);
+        mockAppointments.setRepository(mockRepository);
     }
 
     /*
     Tests to do
     requestAppointment
-        one username
-        multiple users
+        savable appointment
+        unsavable appointment
         multiple users requesting same time
-        staff member
     */
 
     /**
      * This method tests a single user requesting an appointment
-     *              what does it do and return and when sucessfull?
+     * Should not return "Could not save appointment." - the unit test will fail otherwise.
      */
     @Test
-    public void testOneUserAppointment() throws IOException
+    public void testSavedAppointment() throws IOException
     {
-       
+        List<String> visitors = new List<String>();
+        visitors.add("Person1");
+        LocalDateTime date = new LocalDateTime();
+        String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
+        appointmentID = result.subStrin(13, (result.length - 16));
+        TestCase.assertNotEqual()(result, new String("Could not save appointment."));
     }
 
      /**
-     * This method tests multiple user requesting an appointment
-     *              what does it do and return and when sucessfull?
-     */
+     * This method tests appointment with errors
+     * It tests that no two appointments can be made on the same date
+     * Should return "Could not save appointment." - the unit test will fail otherwise.
+     *
     @Test
-    public void testMultipleUsersAppointment() throws IOException
+    public void testUnSavableAppointment() throws IOException
     {
-       
+        List<String> visitors = new List<String>();
+        visitors.add("Person1");
+        LocalDateTime date = new LocalDateTime();
+        mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
+        String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
+        TestCase.assertEquals(result, new String("Could not save appointment."));
     }
+    */
 
      /**
      * This method tests multiple user requesting the same appointment time
-     *              what does it do and return and when sucessfull?
-     */
+     * Should return "Could not save appointment." - the unit test will fail otherwise.
+     *
     @Test
     public void testMultipleUsersSameTimeAppointment() throws IOException
     {
-       
-    }
+        List<String> visitors = new List<String>();
+        visitors.add("Person1");
+        LocalDateTime date = new LocalDateTime();
+        String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
 
-    /**
-     * This method tests a staff member requesting an Appointment
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testStaffMemberAppointment() throws IOException
-    {
-       
+        TestCase.assertEquals(result, new String("Could not save appointment."));
     }
-    
+    */
     /*
     Tests to do
     cancelAppointment
-        single member wrong appointments
-        single member wrong person
-        single member right person 
-        other in the list member right person
-        staff member right appointment 
-        staff member wrong person
-        already cancelled appointment
+        non existent appointment
+        unauthorized appointment
+        cancelling appointment
+        already cancelled
     */
 
     /**
      * This method tests cancelling an non-existing appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "Appointment does not exist.6" - the unit test will fail otherwise.
      */
     @Test
     public void testCancellingNonExistingAppointment() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person1", "123456789");
+
+        TestCase.assertEquals(result, new String("Appointment does not exist."));
     }
 
     /**
      * This method tests a unauthorized user cancelling an appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "You are not authorised to cancel this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testUnaurtherizedUserCancelling() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person2", appointmentID);
+
+        TestCase.assertEquals(result, new String("You are not authorised to cancel this appointment"));
     }
 
     /**
      * This method tests cancelling an appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "Appointment has been cancelled." - the unit test will fail otherwise.
      */
     @Test
     public void testUserCancelling() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person1", appointmentID);
+
+        TestCase.assertEquals(result, new String("Appointment has been cancelled."));
     }
 
-    /**
-     * This method tests a user part of a group cancelling an appointment
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testUserInAListCancelling() throws IOException
-    {
-       
-    }
-
-    /**
-     * This method tests an unauthorized staff member cancelling an Appointment
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testUnauthorizedStaffMemberCancelling() throws IOException
-    {
-       
-    }
-
-    /**
-     * This method tests a staff member cancelling an Appointment
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testStaffMemberCancelling() throws IOException
-    {
-       
-    }
 
     /**
      * This method tests cancelling an appointment that was already cancelled
-     *              what does it do and return and when sucessfull?
+     * Should return "Appointment has already been cancelled." - the unit test will fail otherwise.
      */
     @Test
     public void testCancellingAlreadyCancelledAppointment() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person1", appointmentID);
+
+        TestCase.assertEquals(result, new String("Appointment has already been cancelled."));
     }
 
     /*
@@ -167,69 +151,42 @@ public class AppointmentTests {
         single member wrong appointments
         single member wrong person
         single member right person 
-        other in the list member right person
-        staff member right appointment 
-        staff member wrong person
     */
 
     /**
      * This method tests checking an appointment's status for a non-existing appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "No such Appointment exists" - the unit test will fail otherwise.
      */
     @Test
     public void testCheckStatusNonExistingAppointment() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person1", "123456789");
+
+        TestCase.assertEquals(result, new String("No such Appointment exists"));
     }
 
     /**
      * This method tests checking an appointment's status by an unauthorized user
-     *              what does it do and return and when sucessfull?
+     * Should return "You are not authorised to view this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testCheckStatusUnauthorizedUser() throws IOException
     {
-       
+        String result = mockAppointments.cancelAppointment("Person2", appointmentID);
+
+        TestCase.assertEquals(result, new String("You are not authorised to view this appointment"));
     }
 
     /**
      * This method tests checking an appointment's status
-     *              what does it do and return and when sucessfull?
+     * Should not return "You are not authorised to view this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testCheckStatus() throws IOException
     {
-       
-    }
+        String result = mockAppointments.cancelAppointment("Person1", appointmentID);
 
-    /**
-     *  This method tests checking an appointment's status by a user part of a group
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testCheckStatusUserInAList() throws IOException
-    {
-       
-    }
-
-    /**
-     * This method tests checking an appointment's status by an unauthorized staff member
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testCheckStatusStaffMemberUnauthorizedUser() throws IOException
-    {
-       
-    }
-
-    /**
-     * This method tests checking an appointment's status by an authorized staff member
-     *              what does it do and return and when sucessfull?
-     */
-    @Test
-    public void testCheckStatusStaffMember() throws IOException
-    {
-       
+        TestCase.assertNotEqual(result, new String("You are not authorised to view this appointment"));
     }
 
     /*
@@ -242,42 +199,56 @@ public class AppointmentTests {
 
     /**
      * This method tests the approval of an appointment by an unathorized user
-     *              what does it do and return and when sucessfull?
+     * Should return "You are not authorised to accept this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testApproveAppointmentUnauthorizedUser() throws IOException
     {
-       
+        String result = mockAppointments.approveAppointment(appointmentID, "Person1");
+
+        TestCase.assertEqual(result, new String("You are not authorised to accept this appointment"));
     }
 
     /**
      * This method tests the approval of an appointment that's status isn't "requested"
-     *              what does it do and return and when sucessfull?
+     * Should not return "You are not authorised to accept this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testApproveAppointmentAppointmentNotRequested() throws IOException
     {
-       
+        String result = mockAppointments.approveAppointment(appointmentID, "Proff Goodman");
+
+        TestCase.assertNotEqual(result, new String("You are not authorised to accept this appointment"));
     }
 
     /**
      * This method tests the approval of an appointment
-     *              what does it do and return and when sucessfull?
+     * Should not return "Appointment approved" - the unit test will fail otherwise.
      */
     @Test
     public void testApproveAppointment() throws IOException
     {
-       
+        List<String> visitors = new List<String>();
+        visitors.add("Person3");
+        LocalDateTime date = new LocalDateTime();
+        String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
+        tempAppointment = result.subStrin(13, (result.length - 16));
+
+        String result = mockAppointments.approveAppointment(tempAppointment, "Proff Goodman");
+
+        TestCase.assertNotEqual(result, new String("Appointment approved"));
     }
 
     /**
      * This method tests the approval of an non-existing appointment
-     *              what does it do and return and when sucessfull?
+     * Should not return "No such Appointment exists" - the unit test will fail otherwise.
      */
     @Test
     public void testApproveAppointmentNonExisting() throws IOException
     {
-       
+        String result = mockAppointments.approveAppointment("123456789", "Proff Goodman");
+
+        TestCase.assertNotEqual(result, new String("No such Appointment exists"));
     }
 
     /*
@@ -290,44 +261,56 @@ public class AppointmentTests {
 
     /**
      * This method tests the denial of an appointment by an unathorized user
-     *              what does it do and return and when sucessfull?
+     * Should return "You are not authorised to cancel this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testDenyAppointmentUnauthorizedUser() throws IOException
     {
-       
+        String result = mockAppointments.denyAppointment(appointmentID, "Person1");
+
+        TestCase.assertEqual(result, new String("You are not authorised to cancel this appointment"));
     }
 
     /**
      * This method tests the denial of an appointment that that's status isn't "requested"
-     *              what does it do and return and when sucessfull?
+     * Should not return "You are not authorised to deny this appointment" - the unit test will fail otherwise.
      */
     @Test
     public void testDenyAppointmentAppointmentNotRequested() throws IOException
     {
-       
+        String result = mockAppointments.denyAppointment(appointmentID, "Person1");
+
+        TestCase.assertNotEqual(result, new String("You are not authorised to deny this appointment"));
     }
 
     /**
      * This method tests the denial of an appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "Appointment denied" - the unit test will fail otherwise.
      */
     @Test
     public void testDenyAppointment() throws IOException
     {
-       
+        List<String> visitors = new List<String>();
+        visitors.add("Person4");
+        LocalDateTime date = new LocalDateTime();
+        String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
+        tempAppointment = result.subStrin(13, (result.length - 16));
+
+        String result = mockAppointments.denyAppointment(tempAppointment, "Person1");
+
+        TestCase.assertEqual(result, new String("Appointment denied"));
     }
 
     /**
      * This method tests the denial of an non-existing appointment
-     *              what does it do and return and when sucessfull?
+     * Should return "No such Appointment exists" - the unit test will fail otherwise.
      */
     @Test
     public void testDenyAppointmentNonExisting() throws IOException
     {
-       
-    }
+        String result = mockAppointments.denyAppointment("123456789", "Person1");
 
-    //Add aditional tests for calendar and availability testing
+        TestCase.assertEqual(result, new String("No such Appointment exists"));
+    }
     
 }
