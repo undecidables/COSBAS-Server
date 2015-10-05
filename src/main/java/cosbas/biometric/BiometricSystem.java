@@ -10,9 +10,7 @@ import cosbas.biometric.request.registration.RegisterRequestDAO;
 import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
-import cosbas.biometric.validators.exceptions.RegistrationException;
 import cosbas.biometric.validators.exceptions.ValidationException;
-import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,41 +111,19 @@ public class BiometricSystem {
     /**
      * Validates a registration request and identifies the person.
      *
-     * @param req Registration Request as parsed from HTTP request.
+     * @param request Registration Request as parsed from HTTP request.
      * @return A register response object
      */
-    public RegisterResponse register(RegisterRequest req) {
-
-        try {
-            List<BiometricData> dataList = req.getData();
-
-            return addUser(req, dataList);
-
-        } catch (RegistrationException e) {
-            return RegisterResponse.getFailureResponse(req, e.getMessage());
-        }
-    }
-
-    /**
-     * Registers Biometric data on a temporary collection.
-     *
-     * @param req  Registration Request as parsed from HTTP request.
-     * @param data The actual biometric data to persist on the database
-     * @return A RegistrationResponse response object
-     */
-    private RegisterResponse addUser(RegisterRequest req, List<BiometricData> data) throws RegistrationException, NullArgumentException {
-        String userID = req.getUserID();
+    public RegisterResponse register(RegisterRequest request) {
+        String userID = request.getUserID();
         RegisterRequest existingUser = registerRepository.findByUserID(userID);
-        RegisterRequest newUser = new RegisterRequest(req.getContactDetails(), userID, data);
         if (existingUser != null) {
-            existingUser.merge(newUser);
+            existingUser.merge(request);
             registerRepository.save(existingUser);
-            return RegisterResponse.getSuccessResponse(newUser, "Request merged with existing pending request.");
+            return RegisterResponse.getSuccessResponse(request, "Request merged with existing pending request.");
         } else {
-            registerRepository.save(newUser);
-            return RegisterResponse.getSuccessResponse(newUser, "Request pending admin Approval.");
+            registerRepository.save(request);
+            return RegisterResponse.getSuccessResponse(request, "Request pending admin Approval.");
         }
     }
-
-
 }
