@@ -5,19 +5,25 @@ import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.biometric.request.registration.RegisterRequestDAO;
+import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Renette
@@ -25,29 +31,34 @@ import static org.mockito.Mockito.when;
 public class BiometricSystemTest {
 
     private BiometricSystem testee;
-    private ValidatorFactory factoryMock;
-    private BiometricDataDAO personRepoMock;
     private AccessValidator validator;
-    private BiometricData data1;
-    private BiometricData data2;
-    private ValidationResponse successU1;
-    private ValidationResponse successU2;
-    private ValidationResponse fail;
+    private static BiometricData data1;
+    private static BiometricData data2;
+    private static ValidationResponse successU1;
+    private static ValidationResponse successU2;
+    private static ValidationResponse fail;
 
-    @Before
-    public void setUp() throws Exception {
-        testee = new BiometricSystem();
-        factoryMock = mock(ValidatorFactory.class);
-        personRepoMock = mock(BiometricDataDAO.class);
-        testee.setFactory(factoryMock);
-        testee.setBiometricDataRepository(personRepoMock);
-        validator = mock(AccessValidator.class);
-        when(factoryMock.getValidator(any(BiometricTypes.class))).thenReturn(validator);
+    @BeforeClass
+    public static void globalSetUp() {
         data1 = new BiometricData(BiometricTypes.CODE, new byte[]{1, 2, 3});
         data2 = new BiometricData(BiometricTypes.FACE, new byte[]{1, 2, 3});
         successU1 = ValidationResponse.successfulValidation("user1");
         successU2 = ValidationResponse.successfulValidation("user2");
         fail = ValidationResponse.failedValidation("Fail.");
+    }
+
+    @Before
+    public void setUp() throws Exception {
+
+        BiometricDataDAO personRepoMock = mock(BiometricDataDAO.class);
+        ValidatorFactory factoryMock = mock(ValidatorFactory.class);
+
+        validator = mock(AccessValidator.class);
+        when(factoryMock.getValidator(any(BiometricTypes.class))).thenReturn(validator);
+
+        testee = new BiometricSystem();
+        testee.setFactory(factoryMock);
+        testee.setBiometricDataRepository(personRepoMock);
     }
 
     @Test
@@ -121,10 +132,7 @@ public class BiometricSystemTest {
         assertFalse(resp.getResult());
     }
 
-    @Test
-    public void testAddUser() throws Exception {
 
-    }
 
     @Test
     public void testApproveUser() throws Exception {
@@ -133,6 +141,35 @@ public class BiometricSystemTest {
 
     @Test
     public void testRemoveUser() throws Exception {
+
+    }
+
+    @Test
+    public void testRegister() throws Exception {
+        /**
+         * Not testing that merge is called
+         * Test save is called
+         * test null/empty failure and not saved.
+         */
+        RegisterRequestDAO repo = mock(RegisterRequestDAO.class);
+        testee.setRegisterRepository(repo);
+
+        RegisterRequest req = null;
+        RegisterResponse resp = testee.register(req);
+        assertFalse(resp.getResult());
+
+        req = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        resp = testee.register(req);
+        assertFalse(resp.getResult());
+        verify(repo, never()).save(req);
+
+        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[] {1, 2, 3, 4, 5})));
+        RegisterRequest repoUser = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        when(repo.findByUserID(anyString())).thenReturn(repoUser);
+        resp = testee.register(req);
+        verify(repo, atLeastOnce()).save(any(RegisterRequest.class));
+
+        assertTrue(resp.getResult());
 
     }
 }

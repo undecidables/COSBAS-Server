@@ -6,10 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@author  Tienie}
@@ -33,7 +30,7 @@ public class RegisterRequest {
     private final String userID;
 
     @PersistenceConstructor
-    public RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID) {
+    protected RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID) {
         this.contactDetails = contactDetails;
         this.time = time;
         this.data = data;
@@ -50,7 +47,10 @@ public class RegisterRequest {
     public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data) {
         this.contactDetails = new HashSet<>();
         this.contactDetails.addAll(details);
-        this.data = data;
+        if (data == null)
+            this.data = new LinkedList<>();
+        else
+            this.data = data;
         this.userID = userID;
         this.time = LocalDateTime.now();
     }
@@ -69,8 +69,17 @@ public class RegisterRequest {
 
     public String getUserID() {return userID;}
 
+    /**
+     * Merges the contact details and biometricData from another RegisterRequest into this one.
+     *  - Unique contact details are added to this object.
+     *  - All data is added to this object.
+     * The username and modification time remains unchanged.
+     * @param newUser The user to be merged into this one. It will remain unchanged.
+     */
     public void merge(RegisterRequest newUser) {
-        contactDetails.addAll(newUser.getContactDetails());
-        data.addAll(newUser.getData());
+        if (newUser != this) {
+            contactDetails.addAll(newUser.getContactDetails());
+            data.addAll(newUser.getData());
+        }
     }
 }

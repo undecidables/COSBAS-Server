@@ -11,9 +11,11 @@ import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.ValidationException;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -109,12 +111,20 @@ public class BiometricSystem {
     }
 
     /**
-     * Validates a registration request and identifies the person.
+     * Saves the record to the database.
+     * @pre The request should contain data or contact details
+     * @post If a record for that user already exist it should be merged
+     * @post  The request should be saved to the database
      *
      * @param request Registration Request as parsed from HTTP request.
      * @return A register response object
      */
     public RegisterResponse register(RegisterRequest request) {
+        if (request == null
+                || ( CollectionUtils.isEmpty(request.getData())
+                && CollectionUtils.isEmpty(request.getContactDetails()) ))
+           return RegisterResponse.getFailureResponse(request, "No data or contact details in registration request.");
+
         String userID = request.getUserID();
         RegisterRequest existingUser = registerRepository.findByUserID(userID);
         if (existingUser != null) {
