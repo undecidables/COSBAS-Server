@@ -68,6 +68,7 @@ dependencies {
 
     //compile  "net.sf.jasperreports:jasperreports:6.1.0"
 
+    compile "org.apache.commons:commons-lang3:3.0"
 
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework:spring-aop:4.2.0.RELEASE"
