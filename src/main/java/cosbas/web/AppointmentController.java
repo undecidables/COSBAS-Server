@@ -7,7 +7,6 @@
 package cosbas.web;
 
 
-import cosbas.appointment.Appointment;
 import cosbas.calendar_services.*;
 import cosbas.calendar_services.authorization.Authorizer;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
@@ -22,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 public class AppointmentController {
@@ -183,43 +180,6 @@ public class AppointmentController {
             session.removeAttribute("authorizer");
             CredentialWrapper credential = auth.getCredential(p.getName(), code);
             credentialRepository.save(credential);
-
-            /**
-             * Testing getting of appointments...
-             */
-            List<Appointment> values = test.getWeeksAppointments("BCrawley");
-            System.out.println("Number of appointments for the week: " + values.size());
-            for (int i = 0; i < values.size(); i++){
-                System.out.println(" \t" + values.get(i).getSummary() + " \t" + values.get(i).getVisitorIDs().get(0));
-                for (String contact: values.get(i).getVisitorIDs()){
-                    System.out.println("Attendee Email: " + contact);
-                }
-            }
-
-            /**
-             * Testing appointment creations...
-             */
-            String emplid = "BCrawley";
-            LocalDateTime start = LocalDateTime.now().plusHours(1);
-            int duration = 30;
-            String clientName = "Jason Richard Evans";
-            String clientEmail = "jasonevans@tuks.co.za";
-            System.out.println(test.makeAppointment(emplid, start, duration, clientName, clientEmail));
-
-            /**
-             * Testing getting of todays' appointments
-             */
-            /*values = test.getTodaysAppointments("BCrawley");
-            for (int i = 0; i < values.size(); i++){
-                System.out.println(" \t" + values.get(i));
-            }*/
-
-            /**
-             * Testing appointment removal...
-             */
-            /*if (test.removeAppointment(emplid, clientEmail)){
-                System.out.println("Successfully removed appointment with " + clientName);
-            }*/
         }
 
         return "index";

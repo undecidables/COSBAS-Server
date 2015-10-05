@@ -45,6 +45,12 @@ public class GoogleCalendarService extends CalendarService {
     private final String CALENDAR_ID = "primary";
     private com.google.api.services.calendar.Calendar service;
 
+    /**
+     * Functionality to get the current week's appointments directly from
+     * the connected google account.
+     * @param emplid The employee id of the Employee we are getting the appointments for.
+     * @return a List of appointment objects containing the information of events.
+     */
     @Override
     public List<Appointment> getWeeksAppointments(String emplid) {
         try {
@@ -74,6 +80,15 @@ public class GoogleCalendarService extends CalendarService {
         return new ArrayList<>();
     }
 
+    /**
+     * Functionality to create a new event in the connected Google calendar.
+     * @param emplid The employee id of the employee we are creating the event for.
+     * @param startTime A LocalDateTime object of the exact starting time for the event.
+     * @param Duration An integer value stating the duration of the event.
+     * @param clientName The name of the client creating/requesting the event.
+     * @param clientEmail The email address of the client creating the event for direct communication of event changes.
+     * @return A string of the html link to the event in their calendar.
+     */
     @Override
     public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, String clientName, String clientEmail) {
         Event event = new Event()
@@ -126,11 +141,21 @@ public class GoogleCalendarService extends CalendarService {
         return null;
     }
 
+    /**
+     * Functionality to remove an event (when being denied or simply cancelled).
+     * @param emplid The employee id of the employee with whom the event was scheduled.
+     * @param id The id of the event (as saved in mongodb and given to client as event identifier).
+     * @return Returns true when the event was successfully removed from both mongodb and the connected calendar and
+     * false otherwise.
+     */
     @Override
-    public boolean removeAppointment(String emplid, String clientEmail) {
+    public boolean removeAppointment(String emplid, String id) {
         try{
             service = getCalendarService(emplid);
-            //service.events().delete(CALENDAR_ID, SUMMARY + " " + clientEmail).execute();
+            Appointment event = appointmentRepository.findById(id);
+            appointmentRepository.delete(event);
+
+            service.events().delete("primary", event.getEventID()).setSendNotifications(true).execute();
             return true;
         }
         catch(IOException e){
@@ -139,6 +164,11 @@ public class GoogleCalendarService extends CalendarService {
         return false;
     }
 
+    /**
+     * Functionality to retrieve the current day's appointments (pending and approved).
+     * @param emplid The employee id of the employee for whom we are retrieving events for.
+     * @return A list of appointment objects that contain the event information.
+     */
     @Override
     public List<Appointment> getTodaysAppointments(String emplid) {
         try {
@@ -168,18 +198,36 @@ public class GoogleCalendarService extends CalendarService {
         return new ArrayList<>();
     }
 
+    /**
+     * A simple helper function to convert date and time information into the appropriate format that the third-party
+     * api service expects.
+     * @param time The date and time information that needs to be converted.
+     * @return Converted date and time information in the correct format.
+     */
     private DateTime toDateTime(LocalDateTime time){
         String sDateTime = time.toString();
         sDateTime += "+02:00";
         return new DateTime(sDateTime);
     }
 
+    /**
+     * A simple helper function to convert date and time information from third-party api service to our local
+     * server date and time format.
+     * @param time The third-party date and time information to convert.
+     * @return A converted LocalDateTime (Java) object.
+     */
     private LocalDateTime toLocalDateTime(EventDateTime time){
         String sDateTime = time.getDateTime().toString();
         sDateTime = sDateTime.substring(0, sDateTime.length()-6);
         return LocalDateTime.parse(sDateTime);
     }
 
+    /**
+     * A function that retrives the authenticated service object on which third-party api services can be called.
+     * @param emplid The employee id for which we want to preform a calendar connected service for.
+     * @return An authenticated third-party calendar service.
+     * @throws IOException Some kind of exception.
+     */
     public com.google.api.services.calendar.Calendar getCalendarService(String emplid) throws IOException {
         GoogleCredentialWrapper user = (GoogleCredentialWrapper)credentialRepository.findByStaffID(emplid);
         Credential creds = user.getCredential();
@@ -188,6 +236,13 @@ public class GoogleCalendarService extends CalendarService {
                 .build();
     }
 
+    /**
+     * A simple helper function that converts third-party calendar Event objects to locally understood Appointment
+     * objects.
+     * @param event The event to be converted.
+     * @param emplid The employee id of the employee we are performing the action for.
+     * @return An Appointment object with event information.
+     */
     private Appointment toAppointmentObj(Event event, String emplid){
         LocalDateTime start = toLocalDateTime(event.getStart());
         LocalDateTime end = toLocalDateTime(event.getEnd());
