@@ -3,6 +3,7 @@ package cosbas.biometric.request.registration;
 import cosbas.biometric.data.BiometricData;
 import cosbas.user.ContactDetail;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -22,7 +23,7 @@ public class RegisterRequest {
     /**
      * Time request object created on server..
      */
-    private final LocalDateTime time = LocalDateTime.now();
+    private final LocalDateTime time;
     /**
      * Array of biometric data from request.
      */
@@ -30,6 +31,14 @@ public class RegisterRequest {
 
     @Id
     private final String userID;
+
+    @PersistenceConstructor
+    public RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID) {
+        this.contactDetails = contactDetails;
+        this.time = time;
+        this.data = data;
+        this.userID = userID;
+    }
 
     /**
      * Defines a Java Object which stores the user's data as parsed from the POST request
@@ -43,6 +52,7 @@ public class RegisterRequest {
         this.contactDetails.addAll(details);
         this.data = data;
         this.userID = userID;
+        this.time = LocalDateTime.now();
     }
 
     public Set<ContactDetail> getContactDetails() {

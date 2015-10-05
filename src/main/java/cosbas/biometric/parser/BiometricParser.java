@@ -130,7 +130,7 @@ public class BiometricParser {
         {
             for(Part part : parts)
             {
-                String name = part.getName().toLowerCase();
+                String name = part.getName();
                 if (!checkBiometricData(part, name, biometricData))
                     checkContactDetails(request, name, contactDetails);
             }
