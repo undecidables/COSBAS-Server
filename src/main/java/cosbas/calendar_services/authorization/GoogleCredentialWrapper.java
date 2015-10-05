@@ -35,7 +35,7 @@ public class GoogleCredentialWrapper extends CredentialWrapper <Credential>{
         this.refreshToken  = refreshToken;
         this.accessToken = accessToken;
         credential = new GoogleCredential.Builder()
-                .setClientSecrets(GoogleVariables.clientID, GoogleVariables.clientSecret)
+                .setClientSecrets(GoogleVariables.getClientID(), GoogleVariables.getClientSecret())
                 .setJsonFactory(GoogleVariables.JSON_FACTORY).setTransport(GoogleVariables.HTTP_TRANSPORT).build()
                 .setAccessToken(accessToken)
                 .setRefreshToken(refreshToken);

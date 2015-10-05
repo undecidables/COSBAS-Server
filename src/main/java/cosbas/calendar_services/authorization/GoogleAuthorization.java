@@ -25,7 +25,7 @@ public class GoogleAuthorization implements Authorizer {
 
       @Override
       public void startFlow() {
-          codeFlow = new GoogleAuthorizationCodeFlow.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, GoogleVariables.clientID, GoogleVariables.clientSecret, GoogleVariables.SCOPE).setAccessType("offline").setApprovalPrompt("force").build();
+          codeFlow = new GoogleAuthorizationCodeFlow.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, GoogleVariables.getClientID(), GoogleVariables.getClientSecret(), GoogleVariables.SCOPE).setAccessType("offline").setApprovalPrompt("force").build();
           generateStateToken();
       }
 

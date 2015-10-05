@@ -24,7 +24,10 @@ import java.util.List;
 public class GoogleCalendarService extends CalendarService {
     private CalendarDBAdapter credentialRepository;
     private AppointmentDBAdapter appointmentRepository;
-    //private CalendarFactory calendarServiceFactory;
+
+    @Autowired
+    private GoogleVariables variables;
+
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
