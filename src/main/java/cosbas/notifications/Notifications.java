@@ -23,7 +23,10 @@ public class Notifications {
     public void sendNotifications() {
 
         //Here we should get the email address and send all the appropriate info to be send
-        email.sendNotification("u13238435@tuks.co.za");
+        String[] to = {"vivianventer.venter@gmail.com","renette@roshuis.co.za"};
+        String[] to1 = {"vivianventer.venter@gmail.com"};
+        email.sendVisitorNotification(to1);
+        email.sendStaffNotification("u13238435@tuks.co.za");
     }
 
     /**
