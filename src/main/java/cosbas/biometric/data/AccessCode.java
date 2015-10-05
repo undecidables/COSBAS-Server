@@ -1,6 +1,6 @@
 package cosbas.biometric.data;
 
-import cosbas.biometric.request.access.DoorActions;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.BiometricTypes;
 
 /**
@@ -8,8 +8,8 @@ import cosbas.biometric.BiometricTypes;
  */
 public class AccessCode extends BiometricData {
 
-    public AccessCode (String person, byte[] code) {
-        super(person, BiometricTypes.CODE, code);
+    public AccessCode (String user, byte[] code) {
+        super(user, BiometricTypes.CODE, code);
     }
 
     public AccessCode(byte[] code) {

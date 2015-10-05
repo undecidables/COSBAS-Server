@@ -1,19 +1,24 @@
 package cosbas.biometric.request.registration;
 
 import cosbas.biometric.data.BiometricData;
-import cosbas.biometric.request.access.AccessRequest;
+import cosbas.user.ContactDetail;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by Tienie on 13/09/2015.
+ * {@author  Tienie}
  */
-public class RegisterRequest extends AccessRequest {
+public class RegisterRequest {
+
     /**
-     * E-mail for the registered person.
+     * Contact details registered person. Set ensures uniqueness.
      */
-    private final String email;
+    private final Set<ContactDetail> contactDetails;
     /**
      * Time request object created on server..
      */
@@ -23,24 +28,25 @@ public class RegisterRequest extends AccessRequest {
      */
     private final List<BiometricData> data;
 
-    private final String personID;
+    @Id
+    private final String userID;
 
     /**
      * Defines a Java Object which stores the user's data as parsed from the POST request
      *
-     * @param email    The user's e-mail address
-     * @param personID The user's EMPLID
+     * @param details    The user's contact details
+     * @param userID The user's EMPLID
      * @param data     The actual biometric data to persist on the database
      */
-    public RegisterRequest(String email, String personID, List<BiometricData> data) {
-        super(null,null, data);
-        this.email = email;
+    public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data) {
+        this.contactDetails = new HashSet<>();
+        this.contactDetails.addAll(details);
         this.data = data;
-        this.personID = personID;
+        this.userID = userID;
     }
 
-    public String getEmail() {
-        return this.email;
+    public Set<ContactDetail> getContactDetails() {
+        return contactDetails;
     }
 
     public LocalDateTime getTime() {
@@ -51,6 +57,10 @@ public class RegisterRequest extends AccessRequest {
         return data;
     }
 
-    public String getPersonID() {return personID;}
+    public String getUserID() {return userID;}
 
+    public void merge(RegisterRequest newUser) {
+        contactDetails.addAll(newUser.getContactDetails());
+        data.addAll(newUser.getData());
+    }
 }

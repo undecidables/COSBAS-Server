@@ -4,10 +4,11 @@ import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.CodeValidator;
 import cosbas.biometric.validators.FaceValidator;
 import cosbas.biometric.validators.FingerprintValidator;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
 
 /**
  * {@author Renette Ros}
- * This class is a container for the biometric typt string constants.
+ * This enum defines the biometric types recognized by the server.
  *
  */
 public enum BiometricTypes {
@@ -25,7 +26,11 @@ public enum BiometricTypes {
      * @param value The value to be converted to a Biometric Type
      * @return Biometric Type for the string
      */
-    public static BiometricTypes fromString(String value) {
-        return BiometricTypes.valueOf(value.toUpperCase());
+    public static BiometricTypes fromString(String value) throws BiometricTypeException {
+        try {
+            return valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BiometricTypeException("Unknown biometric type " + value);
+        }
     }
 }

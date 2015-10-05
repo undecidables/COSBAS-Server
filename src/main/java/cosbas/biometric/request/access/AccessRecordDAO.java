@@ -14,7 +14,7 @@ public interface AccessRecordDAO extends CrudRepository<AccessRecord, String> {
 
     List<AccessRecord> findByDoorID(String DoorID);
     List<AccessRecord> findByAction(String Action);
-    List<AccessRecord> findByPersonID(String PersonID);
+    List<AccessRecord> findByUserID(String userID);
 
     AccessRecord findById(String id);
 	

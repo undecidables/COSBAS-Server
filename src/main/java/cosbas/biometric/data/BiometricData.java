@@ -11,20 +11,6 @@ import org.springframework.data.annotation.PersistenceConstructor;
  */
 public class BiometricData {
     /**
-     * Database ID
-     */
-    private @Id String id;
-
-    public void setPersonID(String personID) {
-        this.personID = personID;
-    }
-
-    /**
-     * The user with which the biometric data is associated.
-     * Does not need to be set for request data but is stored in the database
-     */
-    private String personID;
-    /**
      * Identifies type of biometric data.
      */
     private final BiometricTypes type;
@@ -32,17 +18,24 @@ public class BiometricData {
      * Actual biometric data. This can be an image/access code etc.
      */
     private final byte[] data;
-
+    /**
+     * Database ID
+     */
+    private @Id String id;
+    /**
+     * The user with which the biometric data is associated.
+     * Does not need to be set for request data but is stored in the database
+     */
+    private String userID;
 
     public BiometricData(BiometricTypes type, byte[] data) {
-        this.personID = null;
-        this.type = type;
-        this.data = data;
+        this(null, type, data);
     }
 
+
     @PersistenceConstructor
-    public BiometricData(String personID, BiometricTypes type, byte[] data) {
-        this.personID = personID;
+    public BiometricData(String userID, BiometricTypes type, byte[] data) {
+        this.userID = userID;
         this.type = type;
         this.data = data;
     }
@@ -51,8 +44,12 @@ public class BiometricData {
         return id;
     }
 
-    public String getPersonID() {
-        return personID;
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public byte[] getData() {

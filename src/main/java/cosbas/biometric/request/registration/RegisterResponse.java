@@ -1,38 +1,36 @@
 package cosbas.biometric.request.registration;
 
-import cosbas.biometric.request.access.AccessRequest;
-import cosbas.biometric.request.access.AccessResponse;
+import java.time.LocalDateTime;
 
 /**
- * Created by Tienie on 13/09/2015.
+ * {@author Tienie}
  */
-public class RegisterResponse extends AccessResponse {
-    public String getEmail() {
-        return email;
-    }
+public class RegisterResponse {
 
-    private final String email;
+    /**
+     * Time request was sent - for logging purposes.
+     */
+    private final LocalDateTime requestTime;
+    /**
+     * Time response object created - for logging purposes.
+     */
+    private final LocalDateTime responseTime = LocalDateTime.now();
+    private final Boolean result;
+    private final String message;
 
-    protected RegisterResponse(RegisterRequest request, Boolean result, String message, String userID) {
-        super(request, result, message, userID);
 
-
-        this.email = request.getEmail();
-    }
-
-    protected RegisterResponse(AccessRequest request, Boolean result, String message) {
-        super(request, result, message);
-
-        this.email = request.getDoorID();
-
-    }
-
-    public static RegisterResponse getSuccessResponse(RegisterRequest re, String message, String user) {
-        return new RegisterResponse(re, true, message, user);
+    protected RegisterResponse(RegisterRequest request, Boolean result, String message) {
+       this.requestTime = request.getTime();
+       this.result = result;
+       this.message = message;
     }
 
 
-    public static RegisterResponse getFailureResponse(AccessRequest re, String message) {
+    public static RegisterResponse getSuccessResponse(RegisterRequest re, String message ){
+        return new RegisterResponse(re, true, message);
+    }
+
+    public static RegisterResponse getFailureResponse(RegisterRequest re, String message) {
         return new RegisterResponse(re, false, message);
     }
 }
