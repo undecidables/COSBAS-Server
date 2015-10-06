@@ -1,8 +1,6 @@
 package cosbas.biometric.validators;
 
-import cosbas.biometric.request.AccessRequest;
-
-import java.util.Objects;
+import cosbas.biometric.request.access.AccessRequest;
 
 /**
  * {@author Renette Ros}
@@ -17,7 +15,6 @@ public class ValidationResponse {
     public final String data;
 
     ValidationResponse(boolean approved, String data) {
-
         this.data = data;
         this.approved = approved;
     }
@@ -28,15 +25,5 @@ public class ValidationResponse {
 
     public static ValidationResponse failedValidation(String message) {
         return new ValidationResponse(false, message);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        try {
-            ValidationResponse otherResponse = (ValidationResponse) other;
-            return approved == otherResponse.approved && Objects.equals(data, otherResponse.data);
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

@@ -17,7 +17,7 @@ public class NumericalAccessCodeGenerator extends AccessCodeGenerator {
     /**
      * The length of a new code. It has a default value of {@value} if 'codes.newlength' is not specified in the application properties.
      */
-    @Value("${codes.newlength : 5}")
+    @Value("${codes.newlength:5}")
     protected int CODE_LENGTH = 5;
 
     @Autowired

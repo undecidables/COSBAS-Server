@@ -8,8 +8,8 @@ import cosbas.biometric.BiometricTypes;
  */
 public class AccessCode extends BiometricData {
 
-    public AccessCode (String person, byte[] code) {
-        super(person, BiometricTypes.CODE, code);
+    public AccessCode (String user, byte[] code) {
+        super(user, BiometricTypes.CODE, code);
     }
 
     public AccessCode(byte[] code) {

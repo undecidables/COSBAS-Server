@@ -27,8 +27,9 @@ Thumbs.db
 *jb_bak___
 
 #Temp Files
+
 *~
 
 #Ingore generated log files
-*.log
+logs/
 

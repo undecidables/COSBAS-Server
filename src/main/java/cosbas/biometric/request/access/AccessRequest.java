@@ -1,6 +1,7 @@
-package cosbas.biometric.request;
+package cosbas.biometric.request.access;
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.request.DoorActions;
 
 import java.time.LocalDateTime;
 import java.util.List;

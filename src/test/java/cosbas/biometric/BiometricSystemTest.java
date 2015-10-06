@@ -2,24 +2,28 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.request.AccessRecordDAO;
-import cosbas.biometric.request.AccessRequest;
-import cosbas.biometric.request.AccessResponse;
+import cosbas.biometric.request.access.AccessRequest;
+import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.biometric.request.registration.RegisterRequestDAO;
+import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Renette
@@ -27,14 +31,32 @@ import static org.mockito.Mockito.when;
 public class BiometricSystemTest {
 
     private BiometricSystem testee;
-    private ValidatorFactory factoryMock;
-    private BiometricDataDAO personRepoMock;
+    private AccessValidator validator;
+    private static BiometricData data1;
+    private static BiometricData data2;
+    private static ValidationResponse successU1;
+    private static ValidationResponse successU2;
+    private static ValidationResponse fail;
+
+    @BeforeClass
+    public static void globalSetUp() {
+        data1 = new BiometricData(BiometricTypes.CODE, new byte[]{1, 2, 3});
+        data2 = new BiometricData(BiometricTypes.FACE, new byte[]{1, 2, 3});
+        successU1 = ValidationResponse.successfulValidation("user1");
+        successU2 = ValidationResponse.successfulValidation("user2");
+        fail = ValidationResponse.failedValidation("Fail.");
+    }
 
     @Before
     public void setUp() throws Exception {
+
+        BiometricDataDAO personRepoMock = mock(BiometricDataDAO.class);
+        ValidatorFactory factoryMock = mock(ValidatorFactory.class);
+
+        validator = mock(AccessValidator.class);
+        when(factoryMock.getValidator(any(BiometricTypes.class))).thenReturn(validator);
+
         testee = new BiometricSystem();
-        factoryMock = mock(ValidatorFactory.class);
-        personRepoMock = mock(BiometricDataDAO.class);
         testee.setFactory(factoryMock);
         testee.setBiometricDataRepository(personRepoMock);
     }
@@ -42,46 +64,75 @@ public class BiometricSystemTest {
     @Test
     public void testRequestAccess() throws Exception {
 
-        AccessValidator validator = mock(AccessValidator.class);
-        when(factoryMock.getValidator(any(BiometricTypes.class))).thenReturn(validator);
-        ArrayList<BiometricData> l = new ArrayList<>(2);
-        l.add(new BiometricData(BiometricTypes.CODE, new byte[] {1,2,3}));
-        l.add(new BiometricData(BiometricTypes.FACE, new byte[] {1,2,3}));
+        ArrayList<BiometricData> l = new ArrayList<>();
+        AccessRequest requestIn = new AccessRequest("1", DoorActions.IN,l);
+        AccessRequest requestOut = new AccessRequest("2", DoorActions.OUT,l);
+        testAccessEmptyRequest(requestIn);
+        testAccessEmptyRequest(requestOut);
 
 
-        ValidationResponse successU1 = ValidationResponse.successfulValidation("user1");
-        ValidationResponse successU2 = ValidationResponse.successfulValidation("user2");
-        ValidationResponse fail = ValidationResponse.failedValidation("Failure");
+        l.add(data1);
+        testAccessOneItemList(requestIn);
+        testAccessOneItemList(requestOut);
+
+        l.add(data2);
+        testAccessMultipleItemList(requestIn);
+        testAccessMultipleItemList(requestOut);
 
 
+    }
+    /***
+     * Test AccessRequest with two items in list
+     * One denied: No Access
+     * Different users: No Access
+     * All approved & same u: Access
+     */
+    private void testAccessMultipleItemList(AccessRequest request) throws BiometricTypeException {
+        DoorActions action = request.getAction();
 
-        /***
-         * One denied: No Access
-         * Different users: No Access
-         * All approved & same u: Access
-         */
-        AccessRequest request = new AccessRequest("1", DoorActions.IN,l);
-
-
-        when(validator.validate(l.get(0), DoorActions.IN)).thenReturn(successU1);
-        when(validator.validate(l.get(1), DoorActions.IN)).thenReturn(successU2);
+        when(validator.validate(data1, action)).thenReturn(successU1);
+        when(validator.validate(data2, action)).thenReturn(successU2);
         AccessResponse resp = testee.requestAccess(request);
         assertFalse(resp.getResult());
 
-        when(validator.validate(l.get(1), DoorActions.IN)).thenReturn(fail);
+        when(validator.validate(data2, action)).thenReturn(fail);
         resp = testee.requestAccess(request);
         assertFalse(resp.getResult());
 
-        when(validator.validate(l.get(1), DoorActions.IN)).thenReturn(successU1);
+        when(validator.validate(data2, action)).thenReturn(successU1);
         resp = testee.requestAccess(request);
         assertTrue(resp.getResult());
-
     }
 
-    @Test
-    public void testAddUser() throws Exception {
+    /**
+     * Test AccessRequest with only one item in list
+     * Denied: no access
+     * Approved: Access
+     */
+    private void testAccessOneItemList(AccessRequest request) throws BiometricTypeException {
 
+        ValidationResponse successU1 = ValidationResponse.successfulValidation("user1");
+        ValidationResponse fail = ValidationResponse.failedValidation("Failure");
+
+
+        when(validator.validate(data1, request.getAction())).thenReturn(successU1);
+        AccessResponse resp = testee.requestAccess(request);
+        assertTrue(resp.getResult());
+
+        when(validator.validate(data1, request.getAction())).thenReturn(fail);
+        resp = testee.requestAccess(request);
+        assertFalse(resp.getResult());
     }
+
+    /**
+     * Test AccessRequest with empty list -- denied.
+     */
+    private void testAccessEmptyRequest(AccessRequest request) {
+        AccessResponse resp = testee.requestAccess(request);
+        assertFalse(resp.getResult());
+    }
+
+
 
     @Test
     public void testApproveUser() throws Exception {
@@ -90,6 +141,35 @@ public class BiometricSystemTest {
 
     @Test
     public void testRemoveUser() throws Exception {
+
+    }
+
+    @Test
+    public void testRegister() throws Exception {
+        /**
+         * Not testing that merge is called
+         * Test save is called
+         * test null/empty failure and not saved.
+         */
+        RegisterRequestDAO repo = mock(RegisterRequestDAO.class);
+        testee.setRegisterRepository(repo);
+
+        RegisterRequest req = null;
+        RegisterResponse resp = testee.register(req);
+        assertFalse(resp.getResult());
+
+        req = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        resp = testee.register(req);
+        assertFalse(resp.getResult());
+        verify(repo, never()).save(req);
+
+        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[] {1, 2, 3, 4, 5})));
+        RegisterRequest repoUser = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        when(repo.findByUserID(anyString())).thenReturn(repoUser);
+        resp = testee.register(req);
+        verify(repo, atLeastOnce()).save(any(RegisterRequest.class));
+
+        assertTrue(resp.getResult());
 
     }
 }

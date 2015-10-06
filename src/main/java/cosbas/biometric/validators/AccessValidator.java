@@ -6,11 +6,8 @@ import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.NoUserException;
-import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * {@author Renette Ros}
@@ -72,17 +69,17 @@ public abstract class AccessValidator {
      * @param request A biometricData
      * @return The saved requests database ID
      * @throws BiometricTypeException when the bioemtric type cannot be validated by this validator.
-     * @throws NoUserException When the request object does not contain a personID.
+     * @throws NoUserException When the request object does not contain a userID.
      */
     public String registerUser(BiometricData request) throws BiometricTypeException, NoUserException {
         if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
-        if (request.getPersonID() == null) throw new NoUserException("Cannot register data without a personID");
+        if (request.getUserID() == null) throw new NoUserException("Cannot register data without a userID");
         repository.save(request);
         return request.getId();
     }
 
-    public String registerUser(BiometricData request, String personID) throws BiometricTypeException, NoUserException {
-       request.setPersonID(personID);
+    public String registerUser(BiometricData request, String userID) throws BiometricTypeException, NoUserException {
+       request.setUserID(userID);
         return registerUser(request);
     }
 }
