@@ -18,7 +18,7 @@ public class AspectLogger {
 
     static final Logger logger = LogManager.getRootLogger();
     //static final Logger infoLogger = LogManager.getLogger("infoLogLogger");
-
+/*
     @Pointcut("execution(* cosbas..*(..))")
     public void selectAll() {
 
