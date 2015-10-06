@@ -18,8 +18,8 @@ public class AspectLogger {
 
     static final Logger logger = LogManager.getRootLogger();
     //static final Logger infoLogger = LogManager.getLogger("infoLogLogger");
-/*
-    @Pointcut("execution(* cosbas..*(..))")
+
+    @Pointcut("execution(* cosbas..*(..)) && !within(cosbas.calendar_services.authorization.*) && !within(cosbas.calendar_services.*) && !within(cosbas.calendar_services.services.*) ")
     public void selectAll() {
 
     }
