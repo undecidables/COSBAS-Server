@@ -45,8 +45,8 @@ public class GoogleVariables {
         return instance;
     }
 
-    private GoogleVariables() {
-        instance = this;
+    protected GoogleVariables() {
+        if (instance == null) instance = this;
     }
 
     /*@PostConstruct
