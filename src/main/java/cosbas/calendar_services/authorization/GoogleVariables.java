@@ -16,8 +16,6 @@ import java.util.Collection;
  * {@author Renette }
  *
  * This class manages the Variables needed by various classes in the Google Calendar Workflow.
- *
- * It is only guranteed to
  */
 @Component
 public class GoogleVariables {
@@ -47,10 +45,14 @@ public class GoogleVariables {
         return instance;
     }
 
-    @Autowired
     private GoogleVariables() {
         instance = this;
     }
+
+    /*@PostConstruct
+    private void test() {
+        System.out.println();
+    }*/
 
     static {
         try {
