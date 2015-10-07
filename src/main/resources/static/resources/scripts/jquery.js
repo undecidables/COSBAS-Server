@@ -2,90 +2,65 @@ $(document).ready(function() {
 // initialize input widgets first
         $('#appointmentDate .time').timepicker({
             'showDuration': false,
-            'timeFormat': 'g:ia',
-            'minTime' : '07:30 am',
-            'maxTime' : '16:00 pm',
+            'timeFormat': 'H:i',
+            'minTime' : '07:30',
+            'maxTime' : '16:00',
             'step' : 30,
             'forceRoundTime': true,
             'disableTimeRanges': [
-              ['00:00 am', '06:00'],
-              ['17:00 pm', '23:59 pm']
+              ['00:00', '06:00'],
+              ['17:00', '23:59']
             ],
             'scrollDefault': 'now'
         });
 
         $('#appointmentDate .end').timepicker({
           'showDuration': true,
+            'timeFormat': 'H:i',
+            'minTime' : '07:30',
+            'maxTime' : '16:00',
+            'step' : 30,
+            'forceRoundTime': true,
+            'disableTimeRanges': [
+              ['00:00', '06:00'],
+              ['17:00', '23:59']
+            ],
+            'scrollDefault': 'now'
         });
 
         $('#appointmentDate .date').datepicker({
-            'format': 'm/d/yyyy',
-            'autoclose': true
+            'format': 'mm/dd/yyyy',
+            'autoclose': true,
+            'minDate': 0
         });
 
-       /* $('#appointmentDate').on('rangeSelected', function(){
-            $('#appointmentError').text('');
-        }).on('rangeIncomplete', function(){
-            $('#appointmentError').text('Please fill in all boxes');
-        }).on('rangeError', function(){
-            $('#appointmentError').text('Date/time not available');
-        });
-*/
         // initialize datepair
         $('#appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
-  $("#appointmentDuration").change(function(){
-    if($("#appointmentDuration").val() < 15)
-    {
-      $("#appointmentDuration").val(15);
-      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes. </p>');
-      $('#errorDuration').remove();
-      $('#duration').append($element);
-    } 
-    else
-    {
-      $('#errorDuration').remove();
-    }
-  });
+  var timeVar
+  var currentdate = new Date(); 
+  var dateVar = "";
 
-  setTimeAndDateDefault();
-
-  var datetimeVar;
-
-  function setTimeAndDateDefault(){
-    var currentdate = new Date(); 
-    var datetime = currentdate.getFullYear() + "-";
-
-    if((currentdate.getMonth()+1).toString().length == 1)
-    {
-      datetime += "0";
-    }
-    datetime += currentdate.getMonth()+1 + "-";
-
-    if(currentdate.getDate().toString().length == 1)
-    {
-      datetime += "0";
-    }
-    datetime += currentdate.getDate() + "T" + currentdate.getHours() + ":" + currentdate.getMinutes();
-
-    $("#requestedDateTime").val(datetime);
-    datetimeVar = datetime;
+  if((currentdate.getMonth()+1).toString().length == 1)
+  {
+    dateVar += "0";
   }
+  
+  dateVar += currentdate.getMonth()+1 + "/";
 
-  $("#requestedDateTime").change(function(){
-    if($("#requestedDateTime").val() < datetimeVar)
-    {
-      $("#requestedDateTime").val(datetimeVar);
-      $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
-      $('#dateError').remove();
-      $('#appointmentDate').append($element);
-    }
-    else
-    {
-      $('#dateError').remove();
-    }
-  });
+  if(currentdate.getDate().toString().length == 1)
+  {
+    dateVar += "0";
+  }
+  
+  dateVar += currentdate.getDate() + "/";
+  dateVar += currentdate.getFullYear();
+
+  var time = currentdate.getHours() + ":" + currentdate.getMinutes();
+
+  timeVar = time;
+  
 
   $('#numMembers').change(function() {
     
@@ -138,11 +113,23 @@ $(document).ready(function() {
     //Check for errors
     $noError = true;
 
-    //check date
-    if($("#requestedDateTime").val() < datetimeVar)
+    //check time
+    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
-      $("#requestedDateTime").val(datetimeVar);
-      $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
+      $element = $('<p class="error" id="timeError">The appointments must be in the future</p>');
+      $('#timeError').remove();
+      $('#appointmentDate').append($element);
+      $noError = false;
+    }
+    else
+    {
+      $('#timeError').remove();
+    }
+
+    //check date and time
+    if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
+    {
+      $element = $('<p class="error" id="dateError">Please select a date and time</p>');
       $('#dateError').remove();
       $('#appointmentDate').append($element);
       $noError = false;
@@ -150,20 +137,21 @@ $(document).ready(function() {
     else
     {
       $('#dateError').remove();
+      $tempDateTime = new Date($("#requestedDateTime").val() + " " + $("#timeStart").val() + " UTC");
     }
 
     //check duration
-    if($("#appointmentDuration").val() < 15 || $("#appointmentDuration").val() % 5 != 0)
+    if($("#timeEnd").val() == $("#timeStart").val())
     {
-      $("#appointmentDuration").val(15);
-      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes and must be a multiple of 5. </p>');
+      $element = $('<p class="error" id="errorDuration">Your appointment duration must be atleast 30 minutes.</p>');
       $('#errorDuration').remove();
-      $('#duration').append($element);
+      $('#appointmentDate').append($element);
       $noError = false;
     } 
     else
     {
       $('#errorDuration').remove();
+      $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
     }
 
     //check appointmentBy
@@ -237,9 +225,9 @@ $(document).ready(function() {
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
-               "requestedDateTime" : $('#requestedDateTime').val(),
+               "requestedDateTime" : $tempDateTime,
                "appointmentBy" : $temp,
-               "appointmentDuration" : $('#appointmentDuration').val(),
+               "appointmentDuration" : $duration,
                "appointmentReason" : $('#appointmentReason').val(),
                "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
