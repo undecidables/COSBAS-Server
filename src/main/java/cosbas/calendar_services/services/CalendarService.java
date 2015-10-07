@@ -17,12 +17,12 @@ public abstract class CalendarService {
     }
 
     @Autowired
-
     protected CalendarDBAdapter repository;
 
     public abstract List<Appointment> getWeeksAppointments(String emplid);
     public abstract String makeAppointment(String emplid, LocalDateTime start, int Duration, String clientName, String clientEmail);
     public abstract boolean removeAppointment(String emplid, String id);
     public abstract List<Appointment> getTodaysAppointments(String emplid);
+    public abstract boolean isAvailable(String emplid, LocalDateTime start, int Duration);
 
 }
