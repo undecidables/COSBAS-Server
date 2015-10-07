@@ -202,6 +202,43 @@ public class GoogleCalendarService extends CalendarService {
     }
 
     /**
+     * Functionality to check the availability of an employee before making an appointment.
+     * @param emplid The employee id of the employee we are checking the availability of.
+     * @param start The LocalDateTime of the starting time we are checking.
+     * @param Duration The duration of the time we are checking in minutes.
+     * @return True if the employee is available in the specified times and false otherwise.
+     */
+    @Override
+    public boolean isAvailable(String emplid, LocalDateTime start, int Duration){
+        DateTime convStart = toDateTime(start);
+        DateTime convEnd = toDateTime(start.plusMinutes(Duration));
+        try {
+            service = getCalendarService(emplid);
+            String pageToken = null;
+            List<Appointment> eventList = null;
+            do {
+                Events events = service.events().list("primary").setPageToken(pageToken)
+                        .setMaxResults(25).setTimeMin(convStart).setTimeMax(convEnd).execute();
+                List<Event> items = events.getItems();
+                if (items.size() <= 0){
+                    System.out.println("No events at all, " + emplid + " is available");
+                    return true;
+                }
+                else
+                {
+                    System.out.println("There are events found, " + emplid + " is not available");
+                    return false;
+                }
+            }
+            while (pageToken != null);
+        }
+        catch(IOException error){
+            System.out.println("In GoogleCalendarService - isAvailable(): Could not initialize the third-party calendar service.");
+        }
+        return true;
+    }
+
+    /**
      * A simple helper function to convert date and time information into the appropriate format that the third-party
      * api service expects.
      * @param time The date and time information that needs to be converted.
