@@ -31,31 +31,44 @@ $(document).ready(function() {
         $('#appointmentDate .date').datepicker({
             'format': 'mm/dd/yyyy',
             'autoclose': true,
-            'minDate': 0
+            'minDate': 0,
+            dateFormat: 'yy-mm-dd'
         });
 
         // initialize datepair
         $('#appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
+  if(document.title == "Make Appointment"){
+     $.ajax({
+        type: "post",
+        url: "/getActiveUsers"
+      }).then(function(jsonReturned) {
+        $("#appointmentWith").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
+
   var timeVar
   var currentdate = new Date(); 
   var dateVar = "";
+
+  dateVar += currentdate.getFullYear() + "-";
 
   if((currentdate.getMonth()+1).toString().length == 1)
   {
     dateVar += "0";
   }
   
-  dateVar += currentdate.getMonth()+1 + "/";
+  dateVar += currentdate.getMonth()+1 + "-";
 
   if(currentdate.getDate().toString().length == 1)
   {
     dateVar += "0";
   }
   
-  dateVar += currentdate.getDate() + "/";
-  dateVar += currentdate.getFullYear();
+  dateVar += currentdate.getDate();
+  
 
   var time = currentdate.getHours() + ":" + currentdate.getMinutes();
 
@@ -137,7 +150,6 @@ $(document).ready(function() {
     else
     {
       $('#dateError').remove();
-      $tempDateTime = new Date($("#requestedDateTime").val() + " " + $("#timeStart").val() + " UTC");
     }
 
     //check duration
@@ -225,7 +237,7 @@ $(document).ready(function() {
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
-               "requestedDateTime" : $tempDateTime,
+               "requestedDateTime" : ($("#requestedDateTime").val()+"T"+$("#timeStart").val()+":30+02:00"),
                "appointmentBy" : $temp,
                "appointmentDuration" : $duration,
                "appointmentReason" : $('#appointmentReason').val(),
@@ -233,10 +245,12 @@ $(document).ready(function() {
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
         $("#signIn").text(jsonReturned);
+
           //cleanup user input on successfull appointment request
           $( ":text" ).val("");
           $( "input[type=email]" ).val("");
-          setTimeAndDateDefault();
+          $("#appointmentWith").prop('selectedIndex', 0);
+
           for($i = $("#numMembers").val(); $i > 1; $i--)
           {
             $($(".appointmentDetails")[$i-1]).remove();
@@ -352,7 +366,8 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
-        $("#signIn").text(jsonReturned);
+        var obj =  $("#signIn").text(jsonReturned);
+        obj.html(obj.html().replace(/\n/g,'<br/>'));
         $("#appointmentID").val("");
         $("#requestedBy").val("");
       });

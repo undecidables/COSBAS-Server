@@ -17,6 +17,7 @@ body {
 nav .navbar-nav
 {
     font-size: 1em;
+    margin-left: -0.8em;
 }
 
 a {
@@ -71,11 +72,9 @@ h1 {
 }
 
 
-
 #buzzTitle {
     color: #14161b;
 }
-
 
 #brand {
     color: #14161b;
@@ -116,11 +115,6 @@ h1 {
     margin-top: 2%;
     text-align: center;
 
-}
-
-.dropdown
-{
-    margin-left: -0.8em;
 }
 
 #Dropdown:active

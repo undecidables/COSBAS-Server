@@ -53,6 +53,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/approve").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/deny").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/getActiveUsers").permitAll()
                 
                 .antMatchers("/biometrics/registration").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
 

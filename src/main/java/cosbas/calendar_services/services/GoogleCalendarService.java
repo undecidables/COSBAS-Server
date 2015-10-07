@@ -148,8 +148,8 @@ public class GoogleCalendarService extends CalendarService {
             Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
             newEvent.setEventID(event.getId());
             newEvent.setSummary(event.getSummary());
-            appointmentRepository.save(newEvent);
-            return event.getHtmlLink();
+            Appointment a = appointmentRepository.save(newEvent);
+            return (a.getId() + " " + event.getHtmlLink());
         }
         catch(IOException e){
             System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service.");

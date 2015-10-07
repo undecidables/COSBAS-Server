@@ -23,4 +23,8 @@ public abstract class CredentialWrapper<T> {
     public abstract String getAccessToken() throws IOException;
 
     abstract T getCredential();
+
+    public String getStaffID(){
+    	return staffID;
+    }
 }
