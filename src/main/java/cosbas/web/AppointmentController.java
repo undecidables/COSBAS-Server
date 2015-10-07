@@ -75,7 +75,6 @@ public class AppointmentController {
     } else { 
       return "login";
     }*/
-<<<<<<< HEAD
     return principal == null ? "login" : "index";
   }
 

@@ -31,10 +31,21 @@
 									</option>
 								</select>
 							</div>
-							<div class="form-group" id="appointmentDate">
+							<div class="form-group" id="reason">
+								<p class="text-left">Reason for appointment: </p>
+								<input class="form-control" type="text" id="appointmentReason" name="appointmentReason"/>
+							</div>
+							<!--div class="form-group" id="appointmentDate">
 								<p class="text-left">Date and Time of the meeting:</p>
 								<input class="form-control" type="datetime-local" id="requestedDateTime" name="requestedDateTime" step="60"/>
-							</div>
+							</div-->
+							<p class="text-left">Date and Time of the meeting:</p>
+							<p id="appointmentDate">
+								<input type="text" class="date" />
+							    <input type="text" class="time start" /> to 
+							    <input type="text" class="time end" />
+							    <p id="appointmentError"></p>
+							</p>
 							<div class="form-group" id="membersNum">
 								<p class="text-left">Number of members making the appointment: </p>
 								<input type="number" min="1" value="1" id="numMembers" name="numMembers"/>
@@ -47,14 +58,10 @@
 									<input class="form-control email" type="email" id="email" name="email"/>
 								</div>
 							</div>
-							<div class="form-group" id="reason">
-								<p class="text-left">Reason for appointment: </p>
-								<input class="form-control" type="text" id="appointmentReason" name="appointmentReason"/>
-							</div>
-							<div class="form-group" id="duration">
+							<!--div class="form-group" id="duration">
 								<p class="text-left">Duration of appointment: </p>
 								<input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
-							</div>
+							</div-->
 							<br/>
 							<div>
 								<button type="submit" class="btn btn-sm btn-success" id="makeAppointmentRequest">Request Appointment</button>

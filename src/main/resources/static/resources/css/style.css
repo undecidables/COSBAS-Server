@@ -24,7 +24,10 @@ a {
     padding: 0;
 }
 
-
+#appointmentError
+{
+    color: red;
+}
 
 .vertical-center {
     min-height: 80vh; /* These two lines are counted as one :-)       */

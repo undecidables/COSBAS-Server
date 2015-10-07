@@ -1,4 +1,38 @@
 $(document).ready(function() {
+// initialize input widgets first
+        $('#appointmentDate .time').timepicker({
+            'showDuration': false,
+            'timeFormat': 'g:ia',
+            'minTime' : '07:30 am',
+            'maxTime' : '16:00 pm',
+            'step' : 30,
+            'forceRoundTime': true,
+            'disableTimeRanges': [
+              ['00:00 am', '06:00'],
+              ['17:00 pm', '23:59 pm']
+            ],
+            'scrollDefault': 'now'
+        });
+
+        $('#appointmentDate .end').timepicker({
+          'showDuration': true,
+        });
+
+        $('#appointmentDate .date').datepicker({
+            'format': 'm/d/yyyy',
+            'autoclose': true
+        });
+
+       /* $('#appointmentDate').on('rangeSelected', function(){
+            $('#appointmentError').text('');
+        }).on('rangeIncomplete', function(){
+            $('#appointmentError').text('Please fill in all boxes');
+        }).on('rangeError', function(){
+            $('#appointmentError').text('Date/time not available');
+        });
+*/
+        // initialize datepair
+        $('#appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
   $("#appointmentDuration").change(function(){
