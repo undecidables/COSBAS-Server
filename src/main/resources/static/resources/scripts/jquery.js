@@ -119,10 +119,10 @@ $(document).ready(function() {
     }
 
     //check duration
-    if($("#appointmentDuration").val() < 15 || $("#appointmentDuration").val() % 15 != 0)
+    if($("#appointmentDuration").val() < 15 || $("#appointmentDuration").val() % 5 != 0)
     {
       $("#appointmentDuration").val(15);
-      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes and must be a multiple of 15. </p>');
+      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes and must be a multiple of 5. </p>');
       $('#errorDuration').remove();
       $('#duration').append($element);
       $noError = false;

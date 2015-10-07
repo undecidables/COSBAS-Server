@@ -115,9 +115,15 @@ h1 {
 
 }
 
+.dropdown
+{
+    margin-left: -0.8em;
+}
+
 #Dropdown:active
 {
     color: #14161b;
+    padding-bottom: 0.3em;
 }
 
 #Dropdown:visited
