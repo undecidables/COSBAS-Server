@@ -88,15 +88,28 @@ public class GoogleCalendarService extends CalendarService {
      * @param emplid The employee id of the employee we are creating the event for.
      * @param startTime A LocalDateTime object of the exact starting time for the event.
      * @param Duration An integer value stating the duration of the event.
-     * @param clientName The name of the client creating/requesting the event.
-     * @param clientEmail The email address of the client creating the event for direct communication of event changes.
+     * @param clientName The list of names of the clients creating/requesting the event.
+     * @param clientEmail The list of email addresses of the clients creating the event for direct communication of event changes.
      * @return A string of the html link to the event in their calendar.
      */
     @Override
-    public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, String clientName, String clientEmail) {
+    public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, List<String> clientName, List<String> clientEmail) {
+        String summary = SUMMARY + " ";
+        if (clientName.size() > 1){
+            summary += "with " + clientName.get(0) + " and " + (clientName.size() - 1) + " clients";
+        }
+        else{
+            summary += "with " + clientName.get(0);
+        }
+
+        String description = "Appointment with the following clients occur at " + startTime.toString() + ".\r\n";
+        for (String email: clientEmail){
+            description += email + ".\r\n";
+        }
+
         Event event = new Event()
-                .setSummary(SUMMARY + " " + clientEmail)
-                .setDescription(clientName + " has an appointment with " + emplid + " at " + startTime.toString());
+                .setSummary(summary)
+                .setDescription(description);
 
         DateTime startDateTime = toDateTime(startTime);
         EventDateTime start = new EventDateTime()
@@ -110,10 +123,12 @@ public class GoogleCalendarService extends CalendarService {
                 .setTimeZone("Africa/Johannesburg");
         event.setEnd(end);
 
-        EventAttendee[] attendees = new EventAttendee[]{
-                new EventAttendee().setEmail(clientEmail),
-                new EventAttendee().setEmail(emplid + "@cs.up.ac.za"),
-        };
+        //Setting the attendees from list received
+        EventAttendee[] attendees = new EventAttendee[clientName.size() + 1];
+        for (int i = 0; i < clientName.size(); i++){
+            attendees[i] = new EventAttendee().setEmail(clientEmail.get(i));
+        }
+        attendees[clientName.size()] = new EventAttendee().setEmail(emplid + "@cs.up.ac.za");
         event.setAttendees(Arrays.asList(attendees));
 
         EventReminder[] reminderOverride = new EventReminder[]{
@@ -128,8 +143,7 @@ public class GoogleCalendarService extends CalendarService {
             service = getCalendarService(emplid);
             event = service.events().insert(CALENDAR_ID, event).execute();
 
-            List<String> attendants = new ArrayList<>();
-            attendants.add(clientEmail);
+            List<String> attendants = clientEmail;
             attendants.add(emplid + "@cs.up.ac.za");
             Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
             newEvent.setEventID(event.getId());
