@@ -33,6 +33,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http
+
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
@@ -58,7 +59,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage( "/login" )
+                .failureUrl( "/login?error=1" )
                 .permitAll();
     }
 

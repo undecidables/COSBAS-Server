@@ -119,9 +119,8 @@ public class AppointmentController {
     return "approveDenyAppointment";
   }
 
-
  /**
-  * Route function to go to adderror.html - Page showing the user what error occured
+  * Route function to go to error.html - Page showing the user what error occured
   * @return error.html page
   */
   @RequestMapping(value = "/error", method = RequestMethod.GET)
