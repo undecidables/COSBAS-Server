@@ -1,5 +1,7 @@
 package cosbas.appointment;
 
+import cosbas.calendar_services.services.GoogleCalendarService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class Appointments
      */
     @Autowired
     private AppointmentDBAdapter repository;
+    @Autowired
+    private GoogleCalendarService calendar;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -39,19 +43,18 @@ public class Appointments
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
-    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes){
+    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
         //check is staffmemeber exists
-        //check if time is available - if not send error with suggested time
-        Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
+        if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
+            Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
 
-        repository.save(a);
+            repository.save(a);
 
-        //save to calendar
-        //notify staff memeber
+            calendar.makeAppointment(staffID, dateTime, durationInMinutes, visitorIDs, emails);
+            //notify staff memeber
 
-        return "Appointment " + a.getId() + " has been saved.";
-
-        //else return "Could not save appointment.";
+            return "Appointment " + a.getId() + " has been saved.";
+        } else return "Time not available";
     }
     
      /**
@@ -78,7 +81,7 @@ public class Appointments
                     tempAppointment.setStatus("Cancelled");
                     repository.save(tempAppointment);
 
-                    //delete from calendar
+                    calendar.removeAppointment(cancelleeID, appointmentID);
                     //Notify participants 
                     //revoke access
                     return "Appointment has been cancelled.";
@@ -95,7 +98,7 @@ public class Appointments
                  tempAppointment.setStatus("Cancelled");
                     repository.save(tempAppointment);
 
-                    //delete from calendar
+                    calendar.removeAppointment(cancelleeID, appointmentID);
                     //Notify participants 
                     return "Appointment has been cancelled.";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
