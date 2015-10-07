@@ -30,5 +30,6 @@ Thumbs.db
 
 *~
 
+#Ingore generated log files
 logs/
 
