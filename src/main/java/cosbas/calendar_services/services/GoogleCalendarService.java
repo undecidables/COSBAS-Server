@@ -95,7 +95,7 @@ public class GoogleCalendarService extends CalendarService {
      * @return A string of the html link to the event in their calendar.
      */
     @Override
-    public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, List<String> clientName, List<String> clientEmail) {
+    public String makeAppointment(String emplid, LocalDateTime startTime, int Duration, String reason, List<String> clientName, List<String> clientEmail) {
         String summary = SUMMARY + " ";
         if (clientName.size() > 1){
             summary += "with " + clientName.get(0) + " and " + (clientName.size() - 1) + " clients";
@@ -148,7 +148,7 @@ public class GoogleCalendarService extends CalendarService {
 
                 List<String> attendants = clientEmail;
                 attendants.add(emplid + "@cs.up.ac.za");
-                Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
+                Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
                 appointmentRepository.save(newEvent);

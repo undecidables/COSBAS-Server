@@ -20,7 +20,7 @@ public abstract class CalendarService {
     protected CalendarDBAdapter repository;
 
     public abstract List<Appointment> getWeeksAppointments(String emplid);
-    public abstract String makeAppointment(String emplid, LocalDateTime start, int Duration, List<String> clientName, List<String> clientEmail);
+    public abstract String makeAppointment(String emplid, LocalDateTime start, int Duration, String reason, List<String> clientName, List<String> clientEmail);
     public abstract boolean removeAppointment(String emplid, String id);
     public abstract List<Appointment> getTodaysAppointments(String emplid);
     public abstract boolean isAvailable(String emplid, LocalDateTime start, int Duration);
