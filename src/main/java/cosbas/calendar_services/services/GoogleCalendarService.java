@@ -266,7 +266,7 @@ public class GoogleCalendarService extends CalendarService {
      * @param time The date and time information that needs to be converted.
      * @return Converted date and time information in the correct format.
      */
-    public DateTime toDateTime(LocalDateTime time){
+    private DateTime toDateTime(LocalDateTime time){
         String sDateTime = time.toString();
         sDateTime += "+02:00";
         return new DateTime(sDateTime);
@@ -278,7 +278,7 @@ public class GoogleCalendarService extends CalendarService {
      * @param time The third-party date and time information to convert.
      * @return A converted LocalDateTime (Java) object.
      */
-    public LocalDateTime toLocalDateTime(EventDateTime time){
+    private LocalDateTime toLocalDateTime(EventDateTime time){
         String sDateTime = time.getDateTime().toString();
         sDateTime = sDateTime.substring(0, sDateTime.length()-6);
         return LocalDateTime.parse(sDateTime);

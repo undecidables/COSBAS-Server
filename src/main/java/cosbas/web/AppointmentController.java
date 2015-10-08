@@ -21,9 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class AppointmentController {
@@ -51,18 +48,6 @@ public class AppointmentController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        LocalDateTime time = LocalDateTime.now();
-
-        System.out.println("LocalDateTime (Normal): " + time.toString());
-        System.out.println("DateTime (Converted): " + test.toDateTime(time).toString());
-
-        //Creating event to test time mismatch
-        List<String> names = new ArrayList<>();
-        names.add("Jason Richard Evans");
-        List<String> email = new ArrayList<>();
-        email.add("u13032608@gmail.com");
-        System.out.println(test.makeAppointment("BCrawley", time.plusHours(2), 30, "No Reason", names, email));
-
         return "index";
     }
 
