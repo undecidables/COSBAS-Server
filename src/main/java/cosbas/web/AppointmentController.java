@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Controller
 public class AppointmentController {
@@ -48,6 +49,10 @@ public class AppointmentController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
+        LocalDateTime time = LocalDateTime.now();
+
+        System.out.println("LocalDateTime (Normal): " + time.toString());
+        System.out.println("DateTime (Converted): " + test.toDateTime(time).toString());
         return "index";
     }
 

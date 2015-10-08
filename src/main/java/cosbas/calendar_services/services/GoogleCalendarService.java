@@ -58,24 +58,26 @@ public class GoogleCalendarService extends CalendarService {
     public List<Appointment> getWeeksAppointments(String emplid) {
         try {
             service = getCalendarService(emplid);
-            String pageToken = null;
-            List<Appointment> eventList = null;
-            do {
-                Events events = service.events().list("primary").setPageToken(pageToken)
-                        .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
-                        .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1))).execute();
-                List<Event> items = events.getItems();
-                if (eventList == null)
-                    eventList = new ArrayList<>(items.size());
+            if (service != null){
+                String pageToken = null;
+                List<Appointment> eventList = null;
+                do {
+                    Events events = service.events().list("primary").setPageToken(pageToken)
+                            .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
+                            .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1))).execute();
+                    List<Event> items = events.getItems();
+                    if (eventList == null)
+                        eventList = new ArrayList<>(items.size());
 
-                for (Event event: items){
-                    Appointment anEvent = toAppointmentObj(event, emplid);
-                    eventList.add(anEvent);
+                    for (Event event: items){
+                        Appointment anEvent = toAppointmentObj(event, emplid);
+                        eventList.add(anEvent);
+                    }
+                    pageToken = events.getNextPageToken();
                 }
-                pageToken = events.getNextPageToken();
+                while (pageToken != null);
+                return eventList;
             }
-            while (pageToken != null);
-            return eventList;
         }
         catch(IOException error){
             error.printStackTrace();
@@ -141,15 +143,17 @@ public class GoogleCalendarService extends CalendarService {
 
         try{
             service = getCalendarService(emplid);
-            event = service.events().insert(CALENDAR_ID, event).execute();
+            if (service != null) {
+                event = service.events().insert(CALENDAR_ID, event).execute();
 
-            List<String> attendants = clientEmail;
-            attendants.add(emplid + "@cs.up.ac.za");
-            Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
-            newEvent.setEventID(event.getId());
-            newEvent.setSummary(event.getSummary());
-            appointmentRepository.save(newEvent);
-            return event.getHtmlLink();
+                List<String> attendants = clientEmail;
+                attendants.add(emplid + "@cs.up.ac.za");
+                Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, event.getDescription());
+                newEvent.setEventID(event.getId());
+                newEvent.setSummary(event.getSummary());
+                appointmentRepository.save(newEvent);
+                return event.getHtmlLink();
+            }
         }
         catch(IOException e){
             System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service.");
@@ -169,11 +173,13 @@ public class GoogleCalendarService extends CalendarService {
     public boolean removeAppointment(String emplid, String id) {
         try{
             service = getCalendarService(emplid);
-            Appointment event = appointmentRepository.findById(id);
-            appointmentRepository.delete(event);
+            if (service != null) {
+                Appointment event = appointmentRepository.findById(id);
+                appointmentRepository.delete(event);
 
-            service.events().delete("primary", event.getEventID()).setSendNotifications(true).execute();
-            return true;
+                service.events().delete("primary", event.getEventID()).setSendNotifications(true).execute();
+                return true;
+            }
         }
         catch(IOException e){
             System.out.println("COSBAS Calendar: In GoogleCalendarService could not initialize the service");
@@ -190,24 +196,26 @@ public class GoogleCalendarService extends CalendarService {
     public List<Appointment> getTodaysAppointments(String emplid) {
         try {
             service = getCalendarService(emplid);
-            String pageToken = null;
-            List<Appointment> eventList = null;
-            do {
-                Events events = service.events().list("primary").setPageToken(pageToken)
-                        .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
-                        .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).execute();
-                List<Event> items = events.getItems();
-                if (eventList == null)
-                    eventList = new ArrayList<>(items.size());
+            if (service != null) {
+                String pageToken = null;
+                List<Appointment> eventList = null;
+                do {
+                    Events events = service.events().list("primary").setPageToken(pageToken)
+                            .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
+                            .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).execute();
+                    List<Event> items = events.getItems();
+                    if (eventList == null)
+                        eventList = new ArrayList<>(items.size());
 
-                for (Event event: items){
-                    Appointment anEvent = toAppointmentObj(event, emplid);
-                    eventList.add(anEvent);
+                    for (Event event : items) {
+                        Appointment anEvent = toAppointmentObj(event, emplid);
+                        eventList.add(anEvent);
+                    }
+                    pageToken = events.getNextPageToken();
                 }
-                pageToken = events.getNextPageToken();
+                while (pageToken != null);
+                return eventList;
             }
-            while (pageToken != null);
-            return eventList;
         }
         catch(IOException error){
             error.printStackTrace();
@@ -228,28 +236,28 @@ public class GoogleCalendarService extends CalendarService {
         DateTime convEnd = toDateTime(start.plusMinutes(Duration));
         try {
             service = getCalendarService(emplid);
-            String pageToken = null;
-            List<Appointment> eventList = null;
-            do {
-                Events events = service.events().list("primary").setPageToken(pageToken)
-                        .setMaxResults(25).setTimeMin(convStart).setTimeMax(convEnd).execute();
-                List<Event> items = events.getItems();
-                if (items.size() <= 0){
-                    System.out.println("No events at all, " + emplid + " is available");
-                    return true;
+            if (service != null) {
+                String pageToken = null;
+                List<Appointment> eventList = null;
+                do {
+                    Events events = service.events().list("primary").setPageToken(pageToken)
+                            .setMaxResults(25).setTimeMin(convStart).setTimeMax(convEnd).execute();
+                    List<Event> items = events.getItems();
+                    if (items.size() <= 0) {
+                        System.out.println("No events at all, " + emplid + " is available");
+                        return true;
+                    } else {
+                        System.out.println("There are events found, " + emplid + " is not available");
+                        return false;
+                    }
                 }
-                else
-                {
-                    System.out.println("There are events found, " + emplid + " is not available");
-                    return false;
-                }
+                while (pageToken != null);
             }
-            while (pageToken != null);
         }
         catch(IOException error){
             System.out.println("In GoogleCalendarService - isAvailable(): Could not initialize the third-party calendar service.");
         }
-        return true;
+        return false;
     }
 
     /**
@@ -258,7 +266,7 @@ public class GoogleCalendarService extends CalendarService {
      * @param time The date and time information that needs to be converted.
      * @return Converted date and time information in the correct format.
      */
-    private DateTime toDateTime(LocalDateTime time){
+    public DateTime toDateTime(LocalDateTime time){
         String sDateTime = time.toString();
         sDateTime += "+02:00";
         return new DateTime(sDateTime);
@@ -270,7 +278,7 @@ public class GoogleCalendarService extends CalendarService {
      * @param time The third-party date and time information to convert.
      * @return A converted LocalDateTime (Java) object.
      */
-    private LocalDateTime toLocalDateTime(EventDateTime time){
+    public LocalDateTime toLocalDateTime(EventDateTime time){
         String sDateTime = time.getDateTime().toString();
         sDateTime = sDateTime.substring(0, sDateTime.length()-6);
         return LocalDateTime.parse(sDateTime);
@@ -283,11 +291,17 @@ public class GoogleCalendarService extends CalendarService {
      * @throws IOException Some kind of exception.
      */
     public com.google.api.services.calendar.Calendar getCalendarService(String emplid) throws IOException {
-        GoogleCredentialWrapper user = (GoogleCredentialWrapper)credentialRepository.findByStaffID(emplid);
-        Credential creds = user.getCredential();
-        return new com.google.api.services.calendar.Calendar.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, creds)
-                .setApplicationName(GoogleVariables.APPLICATION_NAME)
-                .build();
+        try {
+            GoogleCredentialWrapper user = (GoogleCredentialWrapper) credentialRepository.findByStaffID(emplid);
+            Credential creds = user.getCredential();
+            return new com.google.api.services.calendar.Calendar.Builder(GoogleVariables.HTTP_TRANSPORT, GoogleVariables.JSON_FACTORY, creds)
+                    .setApplicationName(GoogleVariables.APPLICATION_NAME)
+                    .build();
+        }
+        catch(NullPointerException error){
+            System.out.println("In GoogleCalendarService - getCalendarService: Database connection/query error.");
+            return null;
+        }
     }
 
     /**
