@@ -29,10 +29,12 @@ $(document).ready(function() {
         });
 
         $('#appointmentDate .date').datepicker({
+            'beforeShowDay': $.datepicker.noWeekends,
             'format': 'mm/dd/yyyy',
             'autoclose': true,
             'minDate': 0,
-            dateFormat: 'yy-mm-dd'
+            'dateFormat': 'yy-mm-dd',
+
         });
 
         // initialize datepair
