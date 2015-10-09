@@ -10,8 +10,8 @@ public class TemporaryAccessCode extends AccessCode {
     private LocalDateTime validTo = null;
     private String appointmentID = null;
 
-    public TemporaryAccessCode(String person, byte[] code, LocalDateTime from, LocalDateTime to, String appointmentID) {
-        super(person, code);
+    public TemporaryAccessCode(String user, byte[] code, LocalDateTime from, LocalDateTime to, String appointmentID) {
+        super(user, code);
         this.validFrom = from;
         this.validTo = to;
         this.appointmentID = appointmentID;

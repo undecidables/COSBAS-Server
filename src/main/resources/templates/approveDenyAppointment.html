@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Approve/Deny Appointment</title>
+	</head>
+	<body>
+		<nav th:replace="menu :: navigation"></nav>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<br/>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Approve or Deny Appointments</div>
+					<br/>
+					<form>
+						<fieldset id="fieldset">
+							
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

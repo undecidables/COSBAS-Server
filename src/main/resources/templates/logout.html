@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:include="head :: header"></head>
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Logout</title>
+	</head>
 	<body>
 		<nav th:replace="menu :: navigation"></nav>
-		<h2>Are you sure you want to logout?</h2>
-		<form th:action="@{/logout}" method="post">
-		    <input type="submit" value="Log out" />
-		</form>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<br/>
+		<div class="row">
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Are you sure you want to log out?</div>
+					<br/>
+					<form th:action="@{/logout}" method="post">
+						<fieldset>
+							<div>
+								<center><button type="submit" class="btn btn-sm btn-success">Log Out</button></center>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>

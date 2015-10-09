@@ -1,53 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head></head>
 	<body>
-		<nav th:fragment="navigation">
-			<ul th:if="${#httpServletRequest.remoteUser == null}">
-				<li>
-					<a href="/">
-						Home
-					</a>
-				</li>
-				<li>
-					<a href="makeAppointment.html">
-						Make appointment
-					</a>
-				</li>
-				<li>
-					<a href="login.html">
-						Login
-					</a>
-				</li>
-			</ul>
+		<nav class="navbar navbar-inverse container-fluid" th:fragment="navigation">
+			<div>
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="/">
+								Home
+							</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Appointment <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
+								<li><a href="makeAppointment">Request Appointment</a></li>
+								<li><a href="cancel">Cancel Appointment</a></li>
+								<li><a href="status">Check Appointment Status</a></li>
+								<!--li><a href="addUser">Add authorized user</a></li-->
+							</ul>
+						</li>
+						<!--li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Appointments<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="makeAppointment.html">
+                                        Request appointment
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="cancel.html">
+                                        Cancel appointment
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="status.html">
+                                        Check appointment status
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="checkAppointment.html">
+                                        Check appointments
+                                    </a>
+                                </li>
+                            </ul>
+                        </li-->
+						<!--li>
+                            <a href="checkAppointment.html">
+                                Check appointments
+                            </a>
+                        </li-->
+					</ul>
+					<form th:action="@{/logout}" method="post" name="logoutForm">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#" onclick="document.logoutForm.submit(); return false;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+						</ul>
+					</form>
 
-			<ul th:if="${#httpServletRequest.remoteUser != null}">
-				<li>
-					<a href="/">
-						Home
-					</a>
-				</li>
-				<li>
-					<a href="makeAppointment.html">
-						Make appointment
-					</a>
-				</li>
-				<li>
-					<a href="checkAppointment.html">
-						Check appointments
-					</a>
-				</li>
-				<li>
-					<a href="addUser.html">
-						Add authorized user
-					</a>
-				</li>
-				<li>
-					<a href="logout.html">
-						Logout
-					</a>
-				</li>
-			</ul>
+				</div>
+				<div class="collapse navbar-collapse" th:action="@{/logout}" th:if="${#httpServletRequest.remoteUser == null}" id="myNavbar">
+					<ul class="nav navbar-nav" >
+						<!--li>
+                            <a href="/">
+                                Home
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Appointments<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="makeAppointment.html">
+                                        Request appointment
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="cancel.html">
+                                        Cancel appointment
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="status.html">
+                                        Check appointment status
+                                    </a>
+                                </li>
+                            </ul>
+                        </li-->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Appointment <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="makeAppointment">Request Appointment</a></li>
+								<li><a href="cancel">Cancel Appointment</a></li>
+								<li><a href="status">Check Appointment Status</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					</ul>
+				</div>
+			</div>
 		</nav>
 	</body>
 </html>
+
+

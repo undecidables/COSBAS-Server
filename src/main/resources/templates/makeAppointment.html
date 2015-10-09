@@ -1,49 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" />
-		<!-- Include Bootstrap Datepicker -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
-
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+	<head >
+		<object th:include="head :: header" th:remove="tag" />
+		<title>Make Appointment</title>
 	</head>
-
-	<body class="container">
+	<body>
 		<nav th:replace="menu :: navigation"></nav>
+		<br/>
+		<div>
+			<a href="#">
+				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
+			</a>
+		</div>
+		<br/>
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-6">
-				<form th:action="@{/makeAppointment}" method="get">
-					<div class="form-group">
-						<label for="RequestorName">Name:</label>
-						<input id="RequestorName" type="text" name="Requestor" class="form-control" placeholder="Mr COSBAS SNR" />
-					</div>
-					<div class="form-group">
-						<label for="RequestorEmail">Email:</label>
-						<input id="RequestorEmail" type="email" name="Email" class="form-control" placeholder="cosbas@cs.up.ac.za" />
-					</div>
-					<div class="form-group">
-						<div class='input-group date' id='datetimepicker2'>
-							<input type='datetime' class="form-control" placeholder="yyyy/mm/dd HH:mm" />
-                    		<span class="input-group-addon">
-                        		<span class="glyphicon glyphicon-calendar"></span>
-                    		</span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="Duration">Duration Of Appointment: </label>
-						<input id="Duration" type="number" name="Time" class="form-control" placeholder="Duration in minutes" />
-					</div>
-					<div><input type="submit" value="Submit" /></div>
-				</form>
+			<div>
+				<div class="cosbasLogin">
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Request an appointment</div>
+					<br/>
+					<form method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="text-left">Appointment with:</p>
+								<select class="form-control" id="appointmentWith" name="appointmentWith">
+									<option>
+										Staff member
+									</option>
+									<option>
+										Prof. Goodman
+									</option>
+								</select>
+							</div>
+							<div class="form-group" id="appointmentDate">
+								<p class="text-left">Date and Time of the meeting:</p>
+								<input class="form-control" type="datetime-local" id="requestedDateTime" name="requestedDateTime" step="60"/>
+							</div>
+							<div class="form-group" id="membersNum">
+								<p class="text-left">Number of members making the appointment: </p>
+								<input type="number" min="1" value="1" id="numMembers" name="numMembers"/>
+							</div>
+							<div class="form-group" id="appointmentMadeBy">
+								<p class="text-left">Appointment made by (your name/team members' names): </p>
+								<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>
+							</div>
+							<div class="form-group" id="reason">
+								<p class="text-left">Reason for appointment: </p>
+								<input class="form-control" type="text" id="appointmentReason" name="appointmentReason"/>
+							</div>
+							<div class="form-group" id="duration">
+								<p class="text-left">Duration of appointment: </p>
+								<input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
+							</div>
+							<div class="form-group" id="appoitmentEmail">
+								<p class="text-left">Your email:</p>
+								<input class="form-control" type="email" id="email" name="email"/>
+							</div>
+							<br/>
+							<div>
+								<button type="submit" class="btn btn-sm btn-success" id="makeAppointmentRequest">Request Appointment</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
-			<div class="col-md-3"></div>
 		</div>
 	</body>
 </html>

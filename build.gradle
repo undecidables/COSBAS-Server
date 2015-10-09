@@ -45,6 +45,7 @@ repositories {
 
 
 dependencies {
+
     compile  "org.springframework.boot:spring-boot-starter-jetty"
     compile  "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile  "org.springframework:spring-context:4.1.6.RELEASE"
@@ -55,8 +56,6 @@ dependencies {
 
     compile "com.google.api-client:google-api-client:1.20.0"
     compile "com.google.oauth-client:google-oauth-client-jetty:1.20.0"
-    //compile "org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE"
-    //compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
     compile "com.google.apis:google-api-services-calendar:v3-rev126-1.20.0"
     compile "com.google.code.gson:gson:2.3.1"
 
@@ -66,6 +65,18 @@ dependencies {
     compile "org.bytedeco:javacv:0.9"
 
     //compile  "net.sf.jasperreports:jasperreports:6.1.0"
+
+    compile "org.apache.commons:commons-lang3:3.0"
+
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework:spring-aop:4.2.0.RELEASE"
+    compile "org.aspectj:aspectjtools:1.8.6"
+    compile "org.aspectj:aspectjrt:1.8.6"
+    compile "org.aspectj:aspectjweaver:1.8.6"
+    compile 'org.apache.logging.log4j:log4j-core:2.3'
+    compile 'org.apache.logging.log4j:log4j-api:2.3'
+
+
 
 
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
@@ -77,8 +88,6 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web"){
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-
 
 
     compile "org.springframework.security:spring-security-ldap"

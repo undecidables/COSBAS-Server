@@ -14,6 +14,7 @@ public class Appointment {
     @Id
     private String id;
 
+    private String eventID; //Needed for deletion of events.
     private String	staffID;
     private List<String> visitorIDs; //Maybe use email address since its unique?
 
@@ -22,6 +23,7 @@ public class Appointment {
     private LocalDateTime dateTime;
     private int durationMinutes; //Maybe force multiples of 15/30?
 
+    private String summary;
     private String reason;
     private String status; //OR this could be an enum....
 
@@ -33,6 +35,8 @@ public class Appointment {
         this.durationMinutes = durationMinutes;
         this.reason = reason;
         this.status = "requested";
+        this.eventID = null;
+        this.summary = null;
     }
 
     public void setAccessKeys(List<String> accessKeys) {
@@ -72,5 +76,21 @@ public class Appointment {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getSummary() {
+        return summary;
     }
 }
