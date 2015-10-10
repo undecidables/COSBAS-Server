@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-public class BiometricController {
+public class
+
+        BiometricController {
 
     final BiometricSerializer serializer;
     final BiometricParser parser;
@@ -48,10 +50,14 @@ public class BiometricController {
 
     @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/registration", method= RequestMethod.POST)
     public String registration(HttpServletRequest request) throws IOException, ServletException, BiometricTypeException {
-        System.out.println("GOT HERE!");
-        RegisterRequest aRequest = parser.parseRegisterRequest(request);
-        RegisterResponse response = authSystem.register(aRequest);
-        return serializer.serializeResponse(response);
+        RegisterRequest aRequest = null;
+        try {
+            aRequest = parser.parseRegisterRequest(request);
+            RegisterResponse response = authSystem.register(aRequest);
+            return serializer.serializeResponse(response);
+        } catch (Exception e) {
+            return serializer.serializeResponse(RegisterResponse.getFailureResponse(aRequest, e.getMessage()));
+        }
     }
 
 }
