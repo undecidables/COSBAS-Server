@@ -15,8 +15,9 @@
 			<div>
 				<div class="cosbasLogin">
 					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Unfortunately an error has occured on the server. Please try again.</div>
-					<p th:text="${param.q[0]}" th:unless="${param.q == null}">Test</p>
-					<p th:text="${#httpServletRequest.getParameter('q')}" th:unless="${#httpServletRequest.getParameter('q') == null}">Test</p>
+			<p th:text="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')}" th:unless="${#httpServletRequest == null}">Test</p>
+			<p th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}" th:unless="${#httpServletRequest == null}">Test</p>
+   <p th:text="${#httpServletRequest}" th:unless="${#httpServletRequest == null}">Test</p>
 					<br/>
 				</div>
 			</div>
