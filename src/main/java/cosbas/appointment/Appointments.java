@@ -47,7 +47,7 @@ public class Appointments
     public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
         //check is staffmember exists
         if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
-           String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, visitorIDs, emails);
+           String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
 
             String[] tempString = a.split(" ");
             return "Appointment "+ tempString[0] + " has been saved.";

@@ -153,7 +153,7 @@ public class GoogleCalendarService extends CalendarService {
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
                 appointmentRepository.save(newEvent);
-                return event.getHtmlLink();
+                return (newEvent.getId() + " " + event.getHtmlLink());
             }
         }
         catch(IOException e){

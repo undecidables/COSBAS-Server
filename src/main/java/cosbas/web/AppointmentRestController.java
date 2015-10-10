@@ -38,6 +38,9 @@ public class AppointmentRestController {
     @Autowired
     private CalendarDBAdapter credentialRepository;
 
+    @Autowired
+    private GoogleCalendarService calendar;
+
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
     }
@@ -181,4 +184,70 @@ public class AppointmentRestController {
 
       return appointment.denyAppointment(appointmentID, staffMember);
    }
+
+ /**
+   * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
+   * @return Returns the logged in user's week's appointments
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/getWeekAppointments")
+  public String getWeekAppointments(Principal principal) {
+    List<Appointment> appointments = calendar.getWeeksAppointments(principal.getName());
+    System.out.println(principal.getName());
+    System.out.println(appointments.size());
+    String returnPage = "";
+
+    if(appointments != null){
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        List<String> with = appointments.get(i).getVisitorIDs();
+        int duration = appointments.get(i).getDurationMinutes();
+        String reason = appointments.get(i).getReason();
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length()-3);
+
+        returnPage += "<div class='form-group'><p class='text-left'>Date: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+      }
+        
+      if(appointments.size() == 0){
+        returnPage += "<p>You have no appointments for the week</p>";
+      }
+    } else {
+      returnPage = "<p>You have no appointments for the week</p>";
+    }
+    return returnPage;
+  }
+
+  /**
+   * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
+   * @return Returns the logged in user's day's appointments
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/getDayAppointments")
+  public String getDayAppointments(Principal principal) {
+    List<Appointment> appointments = calendar.getTodaysAppointments(principal.getName());
+    
+    String returnPage = "";
+
+    if(appointments != null){
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        List<String> with = appointments.get(i).getVisitorIDs();
+        int duration = appointments.get(i).getDurationMinutes();
+        String reason = appointments.get(i).getReason();
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+
+        returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+      }
+        
+      if(appointments.size() == 0){
+        returnPage += "<p>You have no appointments for today</p>";
+      }
+     } else {
+      returnPage = "<p>You have no appointments for the week</p>";
+    }
+
+    return returnPage;
+  }
 }

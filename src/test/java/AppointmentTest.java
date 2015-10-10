@@ -59,7 +59,7 @@ public class AppointmentTests {
      * This method tests appointment with errors
      * It tests that no two appointments can be made on the same date
      * Should return "Could not save appointment." - the unit test will fail otherwise.
-     *
+     */
     @Test
     public void testUnSavableAppointment() throws IOException
     {
@@ -70,12 +70,12 @@ public class AppointmentTests {
         String result = mockAppointments.requestAppointment(visitors, "Proff Goodman", date, "Meeting", 45);
         TestCase.assertEquals(result, new String("Could not save appointment."));
     }
-    */
+    
 
      /**
      * This method tests multiple user requesting the same appointment time
      * Should return "Could not save appointment." - the unit test will fail otherwise.
-     *
+     */
     @Test
     public void testMultipleUsersSameTimeAppointment() throws IOException
     {
@@ -86,7 +86,7 @@ public class AppointmentTests {
 
         TestCase.assertEquals(result, new String("Could not save appointment."));
     }
-    */
+    
     /*
     Tests to do
     cancelAppointment

@@ -78,16 +78,6 @@ public class AppointmentController {
       return "makeAppointment";
     }
 
-    /**
-    * Route function to go to addUser.html - Page where a new user can be added to the system
-    * @return addUser.html page
-    */
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
-    public String addUser()
-    {
-      return "addUser";
-    }
-
    /**
     * Route function to go to status.html - Page where a user can check the status of their appointments
     * @return status.html page

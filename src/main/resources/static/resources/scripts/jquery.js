@@ -439,4 +439,25 @@ $(document).ready(function() {
       }); 
   }));
   /***************************************************************************/
+  /*****************************Approve/Deny**********************************/
+  if(document.title == "COSBAS Service"){
+     $.ajax({
+        type: "post",
+        url: "/getWeekAppointments"
+      }).then(function(jsonReturned) {
+        $("#weekAppointments").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
+
+  if(document.title == "COSBAS Service"){
+     $.ajax({
+        type: "post",
+        url: "/getDayAppointments"
+      }).then(function(jsonReturned) {
+        $("#dayAppointments").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
+  /***************************************************************************/
 });

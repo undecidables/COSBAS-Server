@@ -358,10 +358,3 @@ td {
 .error{
     color: red;
 }
-
-td
-{
-    width: 150px;
-    text-align: center;
-    height: 150px;
-}
