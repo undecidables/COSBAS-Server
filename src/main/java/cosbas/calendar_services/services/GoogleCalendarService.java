@@ -64,7 +64,8 @@ public class GoogleCalendarService extends CalendarService {
                 do {
                     Events events = service.events().list("primary").setPageToken(pageToken)
                             .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
-                            .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1))).execute();
+                            .setTimeMax(toDateTime((LocalDateTime.now()).plusWeeks(1)))
+                            .setQ("COSBAS").setShowDeleted(false).execute();
                     List<Event> items = events.getItems();
                     if (eventList == null)
                         eventList = new ArrayList<>(items.size());
@@ -143,6 +144,7 @@ public class GoogleCalendarService extends CalendarService {
 
         try{
             service = getCalendarService(emplid);
+
             if (service != null) {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
@@ -152,7 +154,7 @@ public class GoogleCalendarService extends CalendarService {
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
                 appointmentRepository.save(newEvent);
-                return event.getHtmlLink();
+                return (newEvent.getId() + " " + event.getHtmlLink());
             }
         }
         catch(IOException e){
@@ -202,7 +204,7 @@ public class GoogleCalendarService extends CalendarService {
                 do {
                     Events events = service.events().list("primary").setPageToken(pageToken)
                             .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
-                            .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).execute();
+                            .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).setQ("COSBAS").execute();
                     List<Event> items = events.getItems();
                     if (eventList == null)
                         eventList = new ArrayList<>(items.size());

@@ -1,61 +1,94 @@
 $(document).ready(function() {
+// initialize input widgets first
+        $('#appointmentDate .time').timepicker({
+            'showDuration': false,
+            'timeFormat': 'H:i',
+            'minTime' : '07:30',
+            'maxTime' : '16:00',
+            'step' : 30,
+            'forceRoundTime': true,
+            'disableTimeRanges': [
+              ['00:00', '06:00'],
+              ['17:00', '23:59']
+            ],
+            'scrollDefault': 'now'
+        });
+
+        $('#appointmentDate .end').timepicker({
+          'showDuration': true,
+            'timeFormat': 'H:i',
+            'minTime' : '07:30',
+            'maxTime' : '16:00',
+            'step' : 30,
+            'forceRoundTime': true,
+            'disableTimeRanges': [
+              ['00:00', '06:00'],
+              ['17:00', '23:59']
+            ],
+            'scrollDefault': 'now'
+        });
+
+        $('#appointmentDate .date').datepicker({
+            'beforeShowDay': $.datepicker.noWeekends,
+            'format': 'mm/dd/yyyy',
+            'autoclose': true,
+            'minDate': 0,
+            'dateFormat': 'yy-mm-dd',
+
+        });
+
+        // initialize datepair
+        $('#appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
-  $("#appointmentDuration").change(function(){
-    if($("#appointmentDuration").val() < 15)
-    {
-      $("#appointmentDuration").val(15);
-      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes. </p>');
-      $('#errorDuration').remove();
-      $('#duration').append($element);
-    } 
-    else
-    {
-      $('#errorDuration').remove();
-    }
-  });
+  if(document.title == "Make Appointment"){
+     $.ajax({
+        type: "post",
+        url: "/getActiveUsers"
+      }).then(function(jsonReturned) {
+        $("#appointmentWith").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
 
+  var timeVar
   var currentdate = new Date(); 
-  var datetime = currentdate.getFullYear() + "-";
+  var dateVar = "";
+
+  dateVar += currentdate.getFullYear() + "-";
+
   if((currentdate.getMonth()+1).toString().length == 1)
   {
-    datetime += "0";
+    dateVar += "0";
   }
-  datetime += currentdate.getMonth()+1 + "-";
+  
+  dateVar += currentdate.getMonth()+1 + "-";
 
   if(currentdate.getDate().toString().length == 1)
   {
-    datetime += "0";
+    dateVar += "0";
   }
-  datetime += currentdate.getDate() + "T" + currentdate.getHours() + ":" + currentdate.getMinutes();
+  
+  dateVar += currentdate.getDate();
+  
 
-  $("#requestedDateTime").val(datetime);
+  var time = currentdate.getHours() + ":" + currentdate.getMinutes();
 
-  $("#requestedDateTime").change(function(){
-    if($("#requestedDateTime").val() < datetime)
-    {
-      $("#requestedDateTime").val(datetime);
-      $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
-      $('#dateError').remove();
-      $('#appointmentDate').append($element);
-    }
-    else
-    {
-      $('#dateError').remove();
-    }
-  });
+  timeVar = time;
+  
 
   $('#numMembers').change(function() {
     
     if($("#numMembers").val() >= 1)
     {
-      $prevInputs = $('.appointmentBy').length;
+      $prevInputs = $('.appointmentDetails').length;
 
       if($prevInputs < $("#numMembers").val())
       {
         for($i = $prevInputs; $i < $("#numMembers").val(); $i++)
         {
-          var element = $('<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>');
+          var element = $('<div class="appointmentDetails"><p class="text-left">Appointment made by (your name/team members names): </p><input class="form-control appointmentBy" type="text" name="appointmentBy[]"/><p class="text-left">Your/team members email:</p><input class="form-control email" type="email" id="email" name="email"/></div>');
+          //var element = $('<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>');
           $('#appointmentMadeBy').append(element);
         }
       } 
@@ -63,19 +96,20 @@ $(document).ready(function() {
       {
         for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
         {
-          $($(".appointmentBy")[$i-1]).remove();
+          $($(".appointmentDetails")[$i-1]).remove();
         }
       }
 
       $('#errorNumbers').remove();
+      $('#madeByError').remove();
     }
     else 
     {
-      $prevInputs = $('.appointmentBy').length;
+      $prevInputs = $('.appointmentDetails').length;
       $("#numMembers").val(1);
       for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
       {
-        $($(".appointmentBy")[$i-1]).remove();
+        $($(".appointmentDetails")[$i-1]).remove();
       }
       $element = $('<p class="error" id="errorNumbers">The minimum of people making an appointment is one. </p>');
       $('#errorNumbers').remove();
@@ -94,11 +128,23 @@ $(document).ready(function() {
     //Check for errors
     $noError = true;
 
-    //check date
-    if($("#requestedDateTime").val() < datetime)
+    //check time
+    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
-      $("#requestedDateTime").val(datetime);
-      $element = $('<p class="error" id="dateError">The appointment date must be at the earliest today. </p>');
+      $element = $('<p class="error" id="timeError">The appointments must be in the future</p>');
+      $('#timeError').remove();
+      $('#appointmentDate').append($element);
+      $noError = false;
+    }
+    else
+    {
+      $('#timeError').remove();
+    }
+
+    //check date and time
+    if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
+    {
+      $element = $('<p class="error" id="dateError">Please select a date and time</p>');
       $('#dateError').remove();
       $('#appointmentDate').append($element);
       $noError = false;
@@ -109,17 +155,17 @@ $(document).ready(function() {
     }
 
     //check duration
-    if($("#appointmentDuration").val() < 15 || $("#appointmentDuration").val() % 15 != 0)
+    if($("#timeEnd").val() == $("#timeStart").val())
     {
-      $("#appointmentDuration").val(15);
-      $element = $('<p class="error" id="errorDuration">Your appointment duration can not be less than 15 minutes and must be a multiple of 15. </p>');
+      $element = $('<p class="error" id="errorDuration">Your appointment duration must be atleast 30 minutes.</p>');
       $('#errorDuration').remove();
-      $('#duration').append($element);
+      $('#appointmentDate').append($element);
       $noError = false;
     } 
     else
     {
       $('#errorDuration').remove();
+      $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
     }
 
     //check appointmentBy
@@ -147,6 +193,32 @@ $(document).ready(function() {
     }
     $temp = $temp.join(", ");
     
+    //check emails
+    $allEmailsFilledIn = true;
+
+    $inputs = $(".email");
+    $tempEmail = [];
+    for($i = 0; $i < $inputs.length; $i++){
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
+      {
+        $element = $("<p class='error' id='emailError'>All members' emails must be entered. </p>");
+        $("#emailError").remove();
+        $('#appointmentMadeBy').append($element);
+        $allEmailsFilledIn = false;
+        $noError = false;
+      }
+      else 
+      {
+        if($i == $inputs.length-1 && $allEmailsFilledIn == true)
+        {
+          $("#emailError").remove();
+        }
+        $tempEmail[$i] = $($inputs[$i]).val();
+      }
+    }
+    $tempEmail = $tempEmail.join(", ");
+
     //check reason
     if($("#appointmentReason").val() == "")
     {
@@ -161,24 +233,35 @@ $(document).ready(function() {
 
     //appointmentWith error checking not yet done
 
-    console.log("Where to does the email go?");
-
     //send data if no errors
     if($noError == true)
     {
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
-               "requestedDateTime" : $('#requestedDateTime').val(),
+               "requestedDateTime" : ($("#requestedDateTime").val()+"T"+$("#timeStart").val()+":30+02:00"),
                "appointmentBy" : $temp,
-               "appointmentDuration" : $('#appointmentDuration').val(),
-               "appointmentReason" : $('#appointmentReason').val()},
+               "appointmentDuration" : $duration,
+               "appointmentReason" : $('#appointmentReason').val(),
+               "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
-        //console.log(jsonReturned);
         $("#signIn").text(jsonReturned);
+
+          //cleanup user input on successfull appointment request
+          $( ":text" ).val("");
+          $( "input[type=email]" ).val("");
+          $("#appointmentWith").prop('selectedIndex', 0);
+
+          for($i = $("#numMembers").val(); $i > 1; $i--)
+          {
+            $($(".appointmentDetails")[$i-1]).remove();
+          }
+          $("#numMembers").val(1);
+          $("#appointmentDuration").val(15);
       });
       window.scrollTo(0, 0);
+     
     } else {
       $("#signIn").text("Request an appointment");
       window.scrollTo(0, 0);
@@ -230,6 +313,8 @@ $(document).ready(function() {
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $("#signIn").text(jsonReturned);
+        $("#appointmentID").val("");
+        $("#cancelBy").val("");
       });
       window.scrollTo(0, 0);
     } else {
@@ -283,7 +368,10 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
-        $("#signIn").text(jsonReturned);
+        var obj =  $("#signIn").text(jsonReturned);
+        obj.html(obj.html().replace(/\n/g,'<br/>'));
+        $("#appointmentID").val("");
+        $("#requestedBy").val("");
       });
       window.scrollTo(0, 0);
     } else {
@@ -350,5 +438,26 @@ $(document).ready(function() {
         }
       }); 
   }));
+  /***************************************************************************/
+  /*****************************Approve/Deny**********************************/
+  if(document.title == "COSBAS Service"){
+     $.ajax({
+        type: "post",
+        url: "/getWeekAppointments"
+      }).then(function(jsonReturned) {
+        $("#weekAppointments").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
+
+  if(document.title == "COSBAS Service"){
+     $.ajax({
+        type: "post",
+        url: "/getDayAppointments"
+      }).then(function(jsonReturned) {
+        $("#dayAppointments").append(jsonReturned);
+      });
+      window.scrollTo(0, 0);
+  }
   /***************************************************************************/
 });
