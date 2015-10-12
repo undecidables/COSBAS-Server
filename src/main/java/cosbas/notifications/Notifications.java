@@ -1,5 +1,7 @@
 package cosbas.notifications;
 
+import cosbas.user.ContactDetail;
+
 /**
  * The Notifications class that will be used to send various notifications
  * Currently the system only allows for email notifications but numerous other methods such as SMS may be used.
@@ -20,13 +22,11 @@ public class Notifications {
      * The method that will be used to send the notifications
      * Depending on the strategy used it will call the appropriate function
      */
-    public void sendNotifications() {
-
-        //Here we should get the email address and send all the appropriate info to be send
-        String[] to = {"vivianventer.venter@gmail.com","renette@roshuis.co.za"};
-        String[] to1 = {"vivianventer.venter@gmail.com"};
-        email.sendVisitorNotification(to1);
-        email.sendStaffNotification("u13238435@tuks.co.za");
+    public void sendNotifications(ContactDetail contactDetail) {
+        if (contactDetail.getType().fromString(contactDetail.getDetails()).equals("EMAIL")) {
+            email.sendVisitorNotification(contactDetail);
+            email.sendStaffNotification(contactDetail);
+        }
     }
 
     /**

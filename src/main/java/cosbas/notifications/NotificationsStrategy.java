@@ -1,5 +1,7 @@
 package cosbas.notifications;
 
+import cosbas.user.ContactDetail;
+
 /**
  * The NotificationsStrategy interface
  * The Strategy Interface for the Notifications Strategy Pattern
@@ -12,12 +14,12 @@ public interface NotificationsStrategy {
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the visitor to which the email will be send to
     */
-   void sendVisitorNotification(String[] to);
+   void sendVisitorNotification(ContactDetail to);
 
 
    /**
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
     */
-   void sendStaffNotification(String to);
+   void sendStaffNotification(ContactDetail to);
 }

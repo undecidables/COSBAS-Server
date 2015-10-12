@@ -1,5 +1,6 @@
 package cosbas.notifications;
 
+import cosbas.user.ContactDetail;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -38,7 +39,7 @@ public class Email implements NotificationsStrategy  {
      * @param to - The email address of the visitor to which the email will be send to
      */
     @Override
-    public void sendVisitorNotification(String[] to) {
+    public void sendVisitorNotification(ContactDetail to) {
         Properties emailProps = new Properties();
         emailProps.put("mail.smtp.STARTTLS.enable","true");
         emailProps.put("mail.smtp.auth","true");
@@ -46,7 +47,7 @@ public class Email implements NotificationsStrategy  {
 
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessage);
 
-        notification.setTo(to);
+        notification.setTo(to.getDetails());
         System.out.println("HERE2");
 
         //We can still add the necessary info here
@@ -67,14 +68,14 @@ public class Email implements NotificationsStrategy  {
     }
 
     @Override
-    public void sendStaffNotification(String to) {
+    public void sendStaffNotification(ContactDetail to) {
         Properties emailProps = new Properties();
         emailProps.put("mail.smtp.STARTTLS.enable","true");
         emailProps.put("mail.smtp.auth","true");
         System.out.println("HERE11");
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessage);
-        notification.setTo(to);
+        notification.setTo(to.getDetails());
         System.out.println("HERE22");
 
         //We can still add the necessary info here
