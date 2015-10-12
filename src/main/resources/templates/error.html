@@ -14,8 +14,15 @@
 		<div class="row">
 			<div>
 				<div class="cosbasLogin">
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Unfortunately an error has occured on the server. Please try again.</div>
-					<br/>
+					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span>
+						Unfortunately an error has occured on the server.
+						<br/>
+						Status code <span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')}" th:unless="${#httpServletRequest == null}"></span>
+						<br/>
+						<span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}" th:unless="${#httpServletRequest == null}"></span>
+						<!--br/>
+   						Request send to server: <span th:text="${#httpServletRequest}" th:unless="${#httpServletRequest == null}"></span-->
+   					</div>
 				</div>
 			</div>
 		</div>

@@ -20,7 +20,10 @@ public class RegisterResponse {
 
 
     protected RegisterResponse(RegisterRequest request, Boolean result, String message) {
-       this.requestTime = request.getTime();
+        if (request != null)
+            this.requestTime = request.getTime();
+        else
+            this.requestTime = null;
        this.result = result;
        this.message = message;
     }
@@ -32,5 +35,9 @@ public class RegisterResponse {
 
     public static RegisterResponse getFailureResponse(RegisterRequest re, String message) {
         return new RegisterResponse(re, false, message);
+    }
+
+    public Boolean getResult() {
+        return result;
     }
 }

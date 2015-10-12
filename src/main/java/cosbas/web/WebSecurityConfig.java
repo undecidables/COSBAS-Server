@@ -33,6 +33,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http
+
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
@@ -52,13 +53,15 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/status").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/approve").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
                 .antMatchers("/deny").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
+                .antMatchers("/getActiveUsers").permitAll()
                 
                 .antMatchers("/biometrics/registration").permitAll() //This allows us to navigate all pages without having to login. This may need some customization.
 
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage( "/login" )
+                .failureUrl( "/login?error=1" )
                 .permitAll();
     }
 
