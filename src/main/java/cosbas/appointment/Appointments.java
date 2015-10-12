@@ -57,7 +57,8 @@ public class Appointments
         if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
 			String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
 
-			//Need the email address of the visitor(s) as well as their name and surname same goes for the staff member
+            //Notifications
+            //Elzahn -> Need the email address of the visitor(s)(is dit visitorIDs?) same goes for the staff member
 			notifyEmail = new Notifications();
 			notifyEmail.setEmail(new Email());
 
