@@ -4,6 +4,8 @@ import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
 import cosbas.calendar_services.services.GoogleCalendarService;
 
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +64,9 @@ public class Appointments
 			//Okay so I need the email address of the visitor as well as their name and surname same goes for the staff member
 			notifyEmail = new Notifications(); // dalk kan ons die skuif na 'n constructor can appointments of iets
 			notifyEmail.setEmail(new Email()); // selfde as bo dalk kan ons dit skuif?
-			notifyEmail.sendNotifications();
-			
-			
+            ContactDetail contactDetails = new ContactDetail(ContactTypes.EMAIL,"u13238435@tuks.co.za");
+			notifyEmail.sendNotifications(contactDetails);
+
             String[] tempString = a.split(" ");
             return "Appointment "+ tempString[0] + " has been saved.";
         } else return "Time not available";

@@ -1,6 +1,7 @@
 package cosbas.notifications;
 
 import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 
 /**
  * The Notifications class that will be used to send various notifications
@@ -23,7 +24,7 @@ public class Notifications {
      * Depending on the strategy used it will call the appropriate function
      */
     public void sendNotifications(ContactDetail contactDetail) {
-        if (contactDetail.getType().fromString(contactDetail.getDetails()).equals("EMAIL")) {
+        if (contactDetail.getType().equals(ContactTypes.EMAIL)) {
             email.sendVisitorNotification(contactDetail);
             email.sendStaffNotification(contactDetail);
         }
