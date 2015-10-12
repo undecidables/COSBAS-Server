@@ -50,20 +50,14 @@ public class Appointments
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
-    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes){
+    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
         //check is staffmember exists
-        //check if time is available - if not send error with suggested time
-		//send appointment object through to the makeAppointment function
         if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
 			String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
-			Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
-			System.out.println("HERE");
-			repository.save(a);
-			
-			//save to calendar
-			//Okay so I need the email address of the visitor as well as their name and surname same goes for the staff member
-			notifyEmail = new Notifications(); // dalk kan ons die skuif na 'n constructor can appointments of iets
-			notifyEmail.setEmail(new Email()); // selfde as bo dalk kan ons dit skuif?
+
+			//Need the email address of the visitor(s) as well as their name and surname same goes for the staff member
+			notifyEmail = new Notifications();
+			notifyEmail.setEmail(new Email());
             ContactDetail contactDetails = new ContactDetail(ContactTypes.EMAIL,"u13238435@tuks.co.za");
 			notifyEmail.sendNotifications(contactDetails);
 
