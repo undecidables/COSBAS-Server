@@ -5,6 +5,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -36,10 +37,10 @@ public class Email implements NotificationsStrategy  {
     /**
      * The template method as specified in the Strategy Interface
      * Function that will send the email to the appropriate visitor
-     * @param to - The email address of the visitor to which the email will be send to
+     * @param visitors - The email address of the visitor to which the email will be send to
      */
     @Override
-    public void sendVisitorNotification(ContactDetail to) {
+    public void sendVisitorNotification(ArrayList<ContactDetail> visitors) {
         Properties emailProps = new Properties();
         emailProps.put("mail.smtp.STARTTLS.enable","true");
         emailProps.put("mail.smtp.auth","true");
@@ -47,7 +48,15 @@ public class Email implements NotificationsStrategy  {
 
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessage);
 
-        notification.setTo(to.getDetails());
+        String[] to = new String[visitors.size()];
+
+        int i = 0;
+        for (ContactDetail contact: visitors) {
+            to[i] = contact.getDetails();
+            i++;
+        }
+
+        notification.setTo(to);
         System.out.println("HERE2");
 
         //We can still add the necessary info here

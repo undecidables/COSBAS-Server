@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 import java.lang.System;
@@ -58,8 +60,16 @@ public class Appointments
 			//Need the email address of the visitor(s) as well as their name and surname same goes for the staff member
 			notifyEmail = new Notifications();
 			notifyEmail.setEmail(new Email());
-            ContactDetail contactDetails = new ContactDetail(ContactTypes.EMAIL,"u13238435@tuks.co.za");
-			notifyEmail.sendNotifications(contactDetails);
+
+            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+
+            //create ContactDetail objects for visitors
+            for(String s: visitorIDs) {
+                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL,s));
+            }
+
+            ContactDetail contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,staffID); // Elzahn -> is this(staffID) the email address of the staff?
+            notifyEmail.sendNotifications(contactDetailsVisitor,contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT);
 
             String[] tempString = a.split(" ");
             return "Appointment "+ tempString[0] + " has been saved.";
