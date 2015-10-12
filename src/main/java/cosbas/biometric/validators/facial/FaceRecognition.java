@@ -33,6 +33,7 @@ package cosbas.biometric.validators.facial;/*
  */
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.ValidationResponse;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.springframework.stereotype.Component;
@@ -69,7 +70,7 @@ public class FaceRecognition {
 
         final FaceRecognition faceRecognition = new FaceRecognition();
         faceRecognition.learn(null);
-        faceRecognition.recognizeFileList(null);
+        faceRecognition.recognizeFace(null);
     }
 
     @PostConstruct
@@ -133,56 +134,38 @@ public class FaceRecognition {
      * Recognizes the face in each of the test images given, and compares the results with the truth.
      *
      */
-    private void recognizeFileList(List<BiometricData> list) {
-        List<IplImage> testFaceImgArr;
+    ValidationResponse recognizeFace(BiometricData face) {
+        IplImage testFace;
 
-
-        int i;
-        int nTestFaces;
-
-        CvMat trainPersonNumMat;
         float[] projectedTestFace;
 
-        float confidence = 0.0f;
-
-        testFaceImgArr = loadFaceImageList(list);
+        testFace = createIPL(face);
         int nEigens = data.eigenVectors.length;
-        nTestFaces = testFaceImgArr.size();
-
-        // load the saved training data
-        trainPersonNumMat = loadTrainingData();
-        if (trainPersonNumMat == null) {
-            return;
-        }
 
         // project the test images onto the PCA subspace
         projectedTestFace = new float[nEigens];
 
+        int iNearest;
+        int nearest;
 
-        for (i = 0; i < nTestFaces; i++) {
-            int iNearest;
-            int nearest;
-
-
-            // project the test image onto the PCA subspace
-            cvEigenDecomposite(
-                    testFaceImgArr.get(i), // obj
-                    nEigens, // nEigObjs
-                    data.eigenVectors, // eigInput (Pointer)
-                    0, // ioFlags
-                    null, // userData
-                    data.pAvgTrainImg, // avg
-                    projectedTestFace);  // coeffs
+        // project the test image onto the PCA subspace
+        cvEigenDecomposite(
+                testFace, // obj
+                nEigens, // nEigObjs
+                data.eigenVectors, // eigInput (Pointer)
+                0, // ioFlags
+                null, // userData
+                data.pAvgTrainImg, // avg
+                projectedTestFace);  // coeffs
 
 
-            final FloatPointer pConfidence = new FloatPointer(confidence);
-            iNearest = findNearestNeighbor(projectedTestFace, new FloatPointer(pConfidence));
-            confidence = pConfidence.get();
-            nearest = trainPersonNumMat.data_i().get(iNearest);
+        final FloatPointer pConfidence = new FloatPointer();
+        iNearest = findNearestNeighbor(projectedTestFace, pConfidence);
+        double confidence = pConfidence.get();
+        nearest = data.personNumTruthMat.data_i().get(iNearest);
+        String emplid = data.personNames.get(nearest);
 
-        }
-
-
+        return new ValidationResponse(true,  emplid, confidence);
     }
 
     /**
@@ -316,16 +299,6 @@ public class FaceRecognition {
      */
     private void storeTrainingData(TemporaryRecognizerData data) {
         this.data = data.getFinalRecogznizerData();
-    }
-
-    /**
-     * Opens the training data from the file 'data/facedata.xml'.
-     *
-     * @return the person numbers during training, or null if not successful
-     */
-    private CvMat loadTrainingData() {
-
-        return data.personNumTruthMat;
     }
 
 
