@@ -24,4 +24,17 @@ public interface NotificationsStrategy {
     * @param to - The email address of the staff member to which the email will be send to
     */
    void sendStaffNotification_Request(ContactDetail to);
+
+   /**
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address of the visitor to which the email will be send to
+    */
+   void sendVisitorNotification_Approve(ArrayList<ContactDetail> to);
+
+
+   /**
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address of the staff member to which the email will be send to
+    */
+   void sendStaffNotification_Approve(ContactDetail to);
 }

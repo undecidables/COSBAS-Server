@@ -104,6 +104,16 @@ public class Email implements NotificationsStrategy  {
         }
     }
 
+    @Override
+    public void sendVisitorNotification_Approve(ArrayList<ContactDetail> to) {
+
+    }
+
+    @Override
+    public void sendStaffNotification_Approve(ContactDetail to) {
+
+    }
+
     /**
      * Setter function to set the mailSender (Used by beans.xml)
      * @param mailSender - An instance of the mailSender

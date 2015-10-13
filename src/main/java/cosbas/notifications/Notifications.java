@@ -42,7 +42,11 @@ public class Notifications {
                 break;
 
             case APPROVE_APPOINTMENT:
-                                        break;
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) { //Renette is dit reg hoe ek kyk vir die type?
+                    email.sendVisitorNotification_Approve(contactDetailsVisitor);
+                    email.sendStaffNotification_Approve(contactDetailStaff);
+                }
+                break;
 
             case CANCEL_APPOINTMENT:
                                         break;
