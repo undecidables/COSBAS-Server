@@ -36,8 +36,8 @@ public class Notifications {
         switch (type) {
             case REQUEST_APPOINTMENT:
                 if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) { //Renette is dit reg hoe ek kyk vir die type?
-                    email.sendVisitorNotification(contactDetailsVisitor);
-                    email.sendStaffNotification(contactDetailStaff);
+                    email.sendVisitorNotification_Request(contactDetailsVisitor);
+                    email.sendStaffNotification_Request(contactDetailStaff);
                 }
                 break;
 

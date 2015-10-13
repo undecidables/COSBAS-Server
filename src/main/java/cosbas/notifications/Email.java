@@ -40,7 +40,7 @@ public class Email implements NotificationsStrategy  {
      * @param visitors - The email address of the visitor to which the email will be send to
      */
     @Override
-    public void sendVisitorNotification(ArrayList<ContactDetail> visitors) {
+    public void sendVisitorNotification_Request(ArrayList<ContactDetail> visitors) {
         Properties emailProps = new Properties();
         emailProps.put("mail.smtp.STARTTLS.enable","true");
         emailProps.put("mail.smtp.auth","true");
@@ -77,7 +77,7 @@ public class Email implements NotificationsStrategy  {
     }
 
     @Override
-    public void sendStaffNotification(ContactDetail to) {
+    public void sendStaffNotification_Request(ContactDetail to) {
         Properties emailProps = new Properties();
         emailProps.put("mail.smtp.STARTTLS.enable","true");
         emailProps.put("mail.smtp.auth","true");

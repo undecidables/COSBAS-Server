@@ -16,12 +16,12 @@ public interface NotificationsStrategy {
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the visitor to which the email will be send to
     */
-   void sendVisitorNotification(ArrayList<ContactDetail> to);
+   void sendVisitorNotification_Request(ArrayList<ContactDetail> to);
 
 
    /**
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
     */
-   void sendStaffNotification(ContactDetail to);
+   void sendStaffNotification_Request(ContactDetail to);
 }
