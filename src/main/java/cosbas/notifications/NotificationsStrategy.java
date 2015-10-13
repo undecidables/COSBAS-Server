@@ -42,6 +42,34 @@ public interface NotificationsStrategy {
    void sendStaffNotification_Approve(ContactDetail to);
 
    /**
+    * The method to send the appointment cancel notification to the visitor(s)
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address(es) of the visitor(s) to which the email will be send to
+    */
+   void sendVisitorNotification_Cancel(ArrayList<ContactDetail> to);
+
+   /**
+    * The method to send the appointment cancel notification to the staff member
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address of the staff member to which the email will be send to
+    */
+   void sendStaffNotification_Cancel(ContactDetail to);
+
+   /**
+    * The method to send the appointment deny notification to the visitor(s)
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address(es) of the visitor(s) to which the email will be send to
+    */
+   void sendVisitorNotification_Deny(ArrayList<ContactDetail> to);
+
+   /**
+    * The method to send the appointment deny notification to the staff member
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address of the staff member to which the email will be send to
+    */
+   void sendStaffNotification_Deny(ContactDetail to);
+
+   /**
     * The method to send the registration completed notification to the staff member
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to

@@ -56,16 +56,16 @@ public class Notifications {
                 break;
 
             case CANCEL_APPOINTMENT:
-               /* if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Cancel(contactDetailsVisitor);
                     email.sendStaffNotification_Cancel(contactDetailStaff);
-                }*/
+                }
                 break;
             case DENY_APPOINTMENT:
-                /* if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Deny(contactDetailsVisitor);
                     email.sendStaffNotification_Deny(contactDetailStaff);
-                }*/
+                }
                 break;
 
             case REGISTRATION:
