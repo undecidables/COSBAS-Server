@@ -114,6 +114,34 @@ public class Email implements NotificationsStrategy  {
 
     }
 
+    @Override
+    public void sendStaffNotification_Registration(ContactDetail to) {
+        Properties emailProps = new Properties();
+        emailProps.put("mail.smtp.STARTTLS.enable","true");
+        emailProps.put("mail.smtp.auth","true");
+        System.out.println("HERE111");
+
+        SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessage);
+        notification.setTo(to.getDetails());
+        System.out.println("HERE222");
+
+        //We can still add the necessary info here
+        notification.setText(
+                "Dear Staff Member\n" +
+                        "An appointment has been scheduled with you.\n\n" +
+                        "Regards,\nCOSBAS System"
+        );
+
+        try {
+            System.out.println("HERE333");
+            mailSender.send(notification);
+            System.out.println("Email Send!");
+        }
+        catch (MailException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
     /**
      * Setter function to set the mailSender (Used by beans.xml)
      * @param mailSender - An instance of the mailSender
