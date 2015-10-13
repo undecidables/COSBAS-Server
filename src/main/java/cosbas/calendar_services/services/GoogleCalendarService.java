@@ -287,7 +287,7 @@ public class GoogleCalendarService extends CalendarService {
     }
 
     /**
-     * A function that retrives the authenticated service object on which third-party api services can be called.
+     * A function that retrieves the authenticated service object on which third-party api services can be called.
      * @param emplid The employee id for which we want to preform a calendar connected service for.
      * @return An authenticated third-party calendar service.
      * @throws IOException Some kind of exception.

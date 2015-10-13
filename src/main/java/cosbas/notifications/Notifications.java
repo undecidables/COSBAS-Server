@@ -1,9 +1,11 @@
 package cosbas.notifications;
 
+import cosbas.appointment.Appointment;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Notifications class that will be used to send various notifications
@@ -38,33 +40,36 @@ public class Notifications {
      * @param contactDetailsVisitor - the contact details of the visitor(s)
      * @param contactDetailStaff - the contact details of the staff member
      * @param type - the type of notification to send (See NotificationType above)
+     * @param visitorIDs -  the name(s) of the visitor(s)
+     * @param tempAppointment - the appointment object to extract the necessary details
+     * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
      */
-    public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ContactDetail contactDetailStaff, NotificationType type) {
+    public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ContactDetail contactDetailStaff, NotificationType type, List<String> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
         switch (type) {
             case REQUEST_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) { //Renette is dit reg hoe ek kyk vir die type?
-                    email.sendVisitorNotification_Request(contactDetailsVisitor);
-                    email.sendStaffNotification_Request(contactDetailStaff);
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                    email.sendVisitorNotification_Request(contactDetailsVisitor,visitorIDs,tempAppointment);
+                    email.sendStaffNotification_Request(contactDetailStaff,visitorIDs,tempAppointment);
                 }
                 break;
 
             case APPROVE_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) { //Renette is dit reg hoe ek kyk vir die type?
-                    email.sendVisitorNotification_Approve(contactDetailsVisitor);
-                    email.sendStaffNotification_Approve(contactDetailStaff);
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                    email.sendVisitorNotification_Approve(contactDetailsVisitor,tempAppointment);
+                    email.sendStaffNotification_Approve(contactDetailStaff,contactDetailsVisitor,tempAppointment);
                 }
                 break;
 
             case CANCEL_APPOINTMENT:
                 if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Cancel(contactDetailsVisitor);
-                    email.sendStaffNotification_Cancel(contactDetailStaff);
+                    email.sendVisitorNotification_Cancel(contactDetailsVisitor,tempAppointment,staffCancelled);
+                    email.sendStaffNotification_Cancel(contactDetailStaff,contactDetailsVisitor,tempAppointment,staffCancelled);
                 }
                 break;
             case DENY_APPOINTMENT:
                 if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Deny(contactDetailsVisitor);
-                    email.sendStaffNotification_Deny(contactDetailStaff);
+                    email.sendVisitorNotification_Deny(contactDetailsVisitor,tempAppointment);
+                    email.sendStaffNotification_Deny(contactDetailStaff,contactDetailsVisitor,tempAppointment);
                 }
                 break;
 

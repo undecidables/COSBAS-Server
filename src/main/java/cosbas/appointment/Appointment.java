@@ -21,7 +21,7 @@ public class Appointment {
     private List<String> accessKeys;
 
     private LocalDateTime dateTime;
-    private int durationMinutes; //Maybe force multiples of 15/30?
+    private int durationMinutes;
 
     private String summary;
     private String reason;
