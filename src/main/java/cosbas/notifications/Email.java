@@ -69,8 +69,21 @@ public class Email implements NotificationsStrategy  {
         //We can still add the necessary info here
         notification.setText(
                 "Dear User\n" +
-                        "An appointment has been scheduled by you.\n\n" +
-                        "Regards,\nCOSBAS System"
+                        "Your request for an appointment with #staffName has been sent for approval.\n\n" +
+
+                        "Request Review:" +
+                        "Appointment ID: #AppointmentID\n" +
+                        "Apointment with: #staffName\n" +
+                        "Time: #startTime\n" +
+                        "Duration: #Duration\n" +
+                        "Reason: #Reason\n\n" +
+
+                        "Once confirmation of approval has been received, \n" +
+                        "you will receive your access code with which you will gain \n" +
+                        "access to the department where the office of \n" +
+                        "#staffName is located.\n\n" +
+
+                        "Regards,\nCOSBAS"
         );
 
         try {
@@ -97,8 +110,21 @@ public class Email implements NotificationsStrategy  {
         //We can still add the necessary info here
         notification.setText(
                 "Dear Staff Member\n" +
-                        "An appointment has been scheduled with you.\n\n" +
-                        "Regards,\nCOSBAS System"
+                        "A request for an appointment with you has been received for your approval.\n\n" +
+
+                        "Request review:\n" +
+                        "Appointment ID: #AppointmentID\n" +
+                        "Apointment with: #staffName\n" +
+                        "Time: #startTime\n" +
+                        "Duration: #Duration\n" +
+                        "Reason: #Reason\n" +
+                        "Client: #clientEmails[]\n\n" +
+
+                        "Please log into your COSBAS account, go to \n" +
+                        "appointments then choose approve or deny,\n" +
+                        "to approve or deny the request.\n\n" +
+
+                        "Regards,\nCOSBAS"
         );
 
         try {
