@@ -263,6 +263,48 @@ public class GoogleCalendarService extends CalendarService {
     }
 
     /**
+     * Functionality to retrieve all the appointments in the selected month for a specific employee.
+     * @param emplid The employee for whom we are checking calendar for.
+     * @param Month An integer denoting which month we are trying to retrieve events for. Jan = 1 to Dec = 12.
+     * @return
+     */
+    @Override
+    public List<Appointment> getMonthAppointments(String emplid, int Month) {
+        if (Month <= 0 || Month > 12)
+            return new ArrayList<>(); //Month is not valid, so no events can be returned.
+
+        LocalDateTime temp = LocalDateTime.now();
+        LocalDateTime startOfMonth = LocalDateTime.of(temp.getYear(), Month, 1, 1, 1, 1, 1);
+        try {
+            service = getCalendarService(emplid);
+            if (service != null) {
+                String pageToken = null;
+                List<Appointment> eventList = null;
+                do {
+                    Events events = service.events().list("primary").setPageToken(pageToken)
+                            .setMaxResults(31).setTimeMin(toDateTime(startOfMonth))
+                            .setTimeMax(toDateTime(startOfMonth.plusMonths(1))).setQ("COSBAS").execute();
+                    List<Event> items = events.getItems();
+                    if (eventList == null)
+                        eventList = new ArrayList<>(items.size());
+
+                    for (Event event : items) {
+                        Appointment anEvent = toAppointmentObj(event, emplid);
+                        eventList.add(anEvent);
+                    }
+                    pageToken = events.getNextPageToken();
+                }
+                while (pageToken != null);
+                return eventList;
+            }
+        }
+        catch(IOException error){
+            error.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    /**
      * A simple helper function to convert date and time information into the appropriate format that the third-party
      * api service expects.
      * @param time The date and time information that needs to be converted.
