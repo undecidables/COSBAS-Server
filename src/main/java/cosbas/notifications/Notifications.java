@@ -20,6 +20,10 @@ public class Notifications {
      */
     NotificationsStrategy email = null;
 
+
+    /**
+     * Enumeration type to specify which type of notification has to be send
+     */
     public enum NotificationType {
         REQUEST_APPOINTMENT,
         APPROVE_APPOINTMENT,
@@ -30,7 +34,10 @@ public class Notifications {
 
     /**
      * The method that will be used to send the notifications
-     * Depending on the strategy used it will call the appropriate function
+     * Depending on the strategy used it will call the appropriate notification function
+     * @param contactDetailsVisitor - the contact details of the visitor(s)
+     * @param contactDetailStaff - the contact details of the staff member
+     * @param type - the type of notification to send (See NotificationType above)
      */
     public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ContactDetail contactDetailStaff, NotificationType type) {
         switch (type) {
@@ -49,13 +56,23 @@ public class Notifications {
                 break;
 
             case CANCEL_APPOINTMENT:
-                                        break;
-
+               /* if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                    email.sendVisitorNotification_Cancel(contactDetailsVisitor);
+                    email.sendStaffNotification_Cancel(contactDetailStaff);
+                }*/
+                break;
             case DENY_APPOINTMENT:
-                                        break;
+                /* if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                    email.sendVisitorNotification_Deny(contactDetailsVisitor);
+                    email.sendStaffNotification_Deny(contactDetailStaff);
+                }*/
+                break;
 
             case REGISTRATION:
-                                        break;
+                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
+                    email.sendStaffNotification_Registration(contactDetailStaff);
+                }
+                break;
         }
 
 

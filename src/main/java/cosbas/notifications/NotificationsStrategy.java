@@ -13,28 +13,38 @@ import java.util.ArrayList;
 
 public interface NotificationsStrategy {
    /**
+    * The method to send the appointment request notification to the visitor(s)
     * The template method to be overridden by the Concrete Classes
-    * @param to - The email address of the visitor to which the email will be send to
+    * @param to - The email address(es) of the visitor(s) to which the email will be send to
     */
    void sendVisitorNotification_Request(ArrayList<ContactDetail> to);
 
-
    /**
+    * The method to send the appointment request notification to the staff member
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
     */
    void sendStaffNotification_Request(ContactDetail to);
 
    /**
+    * The method to send the appointment approve notification to the visitor(s)
     * The template method to be overridden by the Concrete Classes
-    * @param to - The email address of the visitor to which the email will be send to
+    * @param to - The email address(es) of the visitor(s) to which the email will be send to
     */
    void sendVisitorNotification_Approve(ArrayList<ContactDetail> to);
 
 
    /**
+    * The method to send the appointment approve notification to the staff member
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
     */
    void sendStaffNotification_Approve(ContactDetail to);
+
+   /**
+    * The method to send the registration completed notification to the staff member
+    * The template method to be overridden by the Concrete Classes
+    * @param to - The email address of the staff member to which the email will be send to
+    */
+   void sendStaffNotification_Registration(ContactDetail to);
 }
