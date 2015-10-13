@@ -39,12 +39,12 @@
     <!-- Template Email for the visitor -->
     <bean id="visitorTemplateMessage" class="org.springframework.mail.SimpleMailMessage">
         <property name="from" value="cosbasup@gmail.com"/>
-        <property name="subject" value="Appointment Notification"/>
+        <property name="subject" value="COSBAS Appointment Requested"/>
     </bean>
 
     <bean id="staffTemplateMessage" class="org.springframework.mail.SimpleMailMessage">
         <property name="from" value="cosbasup@gmail.com"/>
-        <property name="subject" value="Appointment Requested Notification"/>
+        <property name="subject" value="COSBAS Appointment Requested"/>
     </bean>
 
     <bean id="emailManager" class="cosbas.notifications.Email">
