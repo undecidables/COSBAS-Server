@@ -26,13 +26,20 @@ public class Email implements NotificationsStrategy  {
      * The instance of the SimpleMailMessage that uses the visitor template specified in the beans.xml document
      * This template is only for the email to the visitors
      */
-    private static SimpleMailMessage visitorTemplateMessage;
+    private static SimpleMailMessage visitorTemplateMessageRequest;
+    private static SimpleMailMessage visitorTemplateMessageApprove;
+    private static SimpleMailMessage visitorTemplateMessageCancel;
+    private static SimpleMailMessage visitorTemplateMessageDeny;
 
     /**
      * The instance of the SimpleMailMessage that uses the staff template specified in the beans.xml document
      * This template is only for the email to the staff
      */
-    private static SimpleMailMessage staffTemplateMessage;
+    private static SimpleMailMessage staffTemplateMessageRequest;
+    private static SimpleMailMessage staffTemplateMessageApprove;
+    private static SimpleMailMessage staffTemplateMessageCancel;
+    private static SimpleMailMessage staffTemplateMessageDeny;
+    private static SimpleMailMessage staffTemplateMessageReg;
 
     /**
      * The template method as specified in the Strategy Interface
@@ -46,7 +53,7 @@ public class Email implements NotificationsStrategy  {
         emailProps.put("mail.smtp.auth","true");
         System.out.println("HERE1");
 
-        SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessage);
+        SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageRequest);
 
         String[] to = new String[visitors.size()];
 
@@ -83,7 +90,7 @@ public class Email implements NotificationsStrategy  {
         emailProps.put("mail.smtp.auth","true");
         System.out.println("HERE11");
 
-        SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessage);
+        SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageRequest);
         notification.setTo(to.getDetails());
         System.out.println("HERE22");
 
@@ -115,31 +122,28 @@ public class Email implements NotificationsStrategy  {
     }
 
     @Override
+    public void sendVisitorNotification_Cancel(ArrayList<ContactDetail> to) {
+
+    }
+
+    @Override
+    public void sendStaffNotification_Cancel(ContactDetail to) {
+
+    }
+
+    @Override
+    public void sendVisitorNotification_Deny(ArrayList<ContactDetail> to) {
+
+    }
+
+    @Override
+    public void sendStaffNotification_Deny(ContactDetail to) {
+
+    }
+
+    @Override
     public void sendStaffNotification_Registration(ContactDetail to) {
-        Properties emailProps = new Properties();
-        emailProps.put("mail.smtp.STARTTLS.enable","true");
-        emailProps.put("mail.smtp.auth","true");
-        System.out.println("HERE111");
 
-        SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessage);
-        notification.setTo(to.getDetails());
-        System.out.println("HERE222");
-
-        //We can still add the necessary info here
-        notification.setText(
-                "Dear Staff Member\n" +
-                        "An appointment has been scheduled with you.\n\n" +
-                        "Regards,\nCOSBAS System"
-        );
-
-        try {
-            System.out.println("HERE333");
-            mailSender.send(notification);
-            System.out.println("Email Send!");
-        }
-        catch (MailException ex) {
-            System.err.println(ex.getMessage());
-        }
     }
 
     /**
@@ -154,16 +158,43 @@ public class Email implements NotificationsStrategy  {
      * Setter function to set the visitorTemplateMessage (Used by beans.xml)
      * @param visitorTemplateMessage - An instance of the visitorTemplateMessage
      */
-    public void setVisitorTemplateMessage(SimpleMailMessage visitorTemplateMessage) {
-        this.visitorTemplateMessage = visitorTemplateMessage;
+    public void setVisitorTemplateMessageRequest(SimpleMailMessage visitorTemplateMessage) {
+        this.visitorTemplateMessageRequest = visitorTemplateMessage;
     }
 
     /**
      * Setter function to set the staffTemplateMessage (Used by beans.xml)
      * @param staffTemplateMessage - An instance of the staffTemplateMessage
      */
-    public void setStaffTemplateMessage(SimpleMailMessage staffTemplateMessage) {
-        this.staffTemplateMessage = staffTemplateMessage;
+    public void setStaffTemplateMessageRequest(SimpleMailMessage staffTemplateMessage) {
+        this.staffTemplateMessageRequest = staffTemplateMessage;
     }
 
+    public void setStaffTemplateMessageApprove(SimpleMailMessage staffTemplateMessageApprove) {
+        this.staffTemplateMessageApprove = staffTemplateMessageApprove;
+    }
+
+    public void setVisitorTemplateMessageApprove(SimpleMailMessage visitorTemplateMessageApprove) {
+        this.visitorTemplateMessageApprove = visitorTemplateMessageApprove;
+    }
+
+    public void setVisitorTemplateMessageCancel(SimpleMailMessage visitorTemplateMessageCancel) {
+        this.visitorTemplateMessageCancel = visitorTemplateMessageCancel;
+    }
+
+    public void setStaffTemplateMessageCancel(SimpleMailMessage staffTemplateMessageCancel) {
+        this.staffTemplateMessageCancel = staffTemplateMessageCancel;
+    }
+
+    public void setVisitorTemplateMessageDeny(SimpleMailMessage visitorTemplateMessageDeny) {
+        this.visitorTemplateMessageDeny = visitorTemplateMessageDeny;
+    }
+
+    public void setStaffTemplateMessageDeny(SimpleMailMessage staffTemplateMessageDeny) {
+        this.staffTemplateMessageDeny = staffTemplateMessageDeny;
+    }
+
+    public void setStaffTemplateMessageReg(SimpleMailMessage staffTemplateMessageReg) {
+        this.staffTemplateMessageReg = staffTemplateMessageReg;
+    }
 }
