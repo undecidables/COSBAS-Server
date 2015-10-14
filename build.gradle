@@ -77,8 +77,6 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.3'
 
 
-
-
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile 'org.springframework.data:spring-data-mongodb:1.7.1.RELEASE'
 
@@ -95,6 +93,9 @@ dependencies {
 
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core:1.+"
+
+    compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
+    compile "com.sun.mail:javax.mail"
 }
 
 task wrapper(type: Wrapper) {
