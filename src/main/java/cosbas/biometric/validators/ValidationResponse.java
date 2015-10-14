@@ -13,10 +13,17 @@ public class ValidationResponse {
      * A user id or message.
      */
     public final String data;
+    /* A number between 0 and 1 */
+    public final double certainty;
 
-    ValidationResponse(boolean approved, String data) {
+    ValidationResponse(boolean approved, String data, int certainty) {
         this.data = data;
         this.approved = approved;
+        this.certainty = certainty;
+    }
+
+    ValidationResponse(boolean approved, String data, int certaintyPercent) {
+     this(approved, data, 1.0)
     }
 
     public static ValidationResponse successfulValidation(String user) {
