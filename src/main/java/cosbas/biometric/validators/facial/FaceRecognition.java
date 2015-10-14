@@ -33,6 +33,7 @@ package cosbas.biometric.validators.facial;/*
  */
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.springframework.stereotype.Component;
@@ -58,7 +59,8 @@ public class FaceRecognition {
 
     private volatile RecognizerData data;
 
-    private FaceRecognition() {}
+    private FaceRecognition() {
+    }
 
     /**
      * Executes this application.
@@ -67,13 +69,14 @@ public class FaceRecognition {
      */
     public static void main(final String[] args) {
 
-        final FaceRecognition faceRecognition = new FaceRecognition();
+       /* final FaceRecognition faceRecognition = new FaceRecognition();
         faceRecognition.learn(null);
-        faceRecognition.recognizeFileList(null);
+        faceRecognition.recognizeFileList(null);*/
     }
 
     @PostConstruct
-    private void setup() {}
+    private void setup() {
+    }
 
     private IplImage createIPL(BiometricData d) {
         byte[] b = d.getData();
@@ -131,35 +134,30 @@ public class FaceRecognition {
 
     /**
      * Recognizes the face in each of the test images given, and compares the results with the truth.
-     *
      */
-    private void recognizeFileList(List<BiometricData> list) {
-        List<IplImage> testFaceImgArr;
+    private void recognizeFileList(List<BiometricData> list) throws ValidationException {
 
-
-        int i;
-        int nTestFaces;
 
         CvMat trainPersonNumMat;
         float[] projectedTestFace;
 
         float confidence = 0.0f;
 
-        testFaceImgArr = loadFaceImageList(list);
+        List<IplImage> testFaceImgArr = loadFaceImageList(list);
         int nEigens = data.eigenVectors.length;
-        nTestFaces = testFaceImgArr.size();
+        int nTestFaces = testFaceImgArr.size();
 
         // load the saved training data
         trainPersonNumMat = loadTrainingData();
         if (trainPersonNumMat == null) {
-            return;
+            throw new ValidationException("No trained data in DB");
         }
 
         // project the test images onto the PCA subspace
         projectedTestFace = new float[nEigens];
 
 
-        for (i = 0; i < nTestFaces; i++) {
+        for (int i = 0; i < nTestFaces; i++) {
             int iNearest;
             int nearest;
 
@@ -179,21 +177,30 @@ public class FaceRecognition {
             iNearest = findNearestNeighbor(projectedTestFace, new FloatPointer(pConfidence));
             confidence = pConfidence.get();
             nearest = trainPersonNumMat.data_i().get(iNearest);
-
+            String name = data.personNames.get(nearest);
+            
         }
 
 
     }
 
     /**
-     * Loads Biometric Face Data from the database into the recognizer.
-     * @param dataList List of biometric data objects fetched from database.
+     * Loads Biometric Face Data as from the database into the recognizer.
+     *
+     * @param dataList List of biometric data objects
      * @return List of IPL images to process with JavaCV
      */
     private List<IplImage> loadFaceImageList(List<BiometricData> dataList) {
         return loadFaceImageList(dataList, null);
     }
 
+    /**
+     * Loads Biometric Face Data as from the database into the recognizer.
+     *
+     * @param dataList List of biometric data objects
+     * @param data Data object to store Person Names, Training Faces and person number matrix in. If this argument is null it is ignored.
+     * @return List of IPL images to process with JavaCV
+     */
     private List<IplImage> loadFaceImageList(List<BiometricData> dataList, TemporaryRecognizerData data) {
         HashMap<String, Integer> personNumMap = new HashMap<>();
         List<String> personNames = new ArrayList<>();
@@ -328,36 +335,6 @@ public class FaceRecognition {
         return data.personNumTruthMat;
     }
 
-
-    /**
-     * Converts the given float image to an unsigned character image.
-     *
-     * @param srcImg the given float image
-     * @return the unsigned character image
-     */
-    private IplImage convertFloatImageToUcharImage(IplImage srcImg) {
-        IplImage dstImg;
-        if ((srcImg != null) && (srcImg.width() > 0 && srcImg.height() > 0)) {
-            // Spread the 32bit floating point pixels to fit within 8bit pixel range.
-            double[] minVal = new double[1];
-            double[] maxVal = new double[1];
-            cvMinMaxLoc(srcImg, minVal, maxVal);
-            // Deal with NaN and extreme values, since the DFT seems to give some NaN results.
-            if (minVal[0] < -1e30) {
-                minVal[0] = -1e30;
-            }
-            if (maxVal[0] > 1e30) {
-                maxVal[0] = 1e30;
-            }
-            if (maxVal[0] - minVal[0] == 0.0f) {
-                maxVal[0] = minVal[0] + 0.001;  // remove potential divide by zero errors.
-            }                        // Convert the format
-            dstImg = cvCreateImage(cvSize(srcImg.width(), srcImg.height()), 8, 1);
-            cvConvertScale(srcImg, dstImg, 255.0 / (maxVal[0] - minVal[0]), -minVal[0] * 255.0 / (maxVal[0] - minVal[0]));
-            return dstImg;
-        }
-        return null;
-    }
 
     /**
      * Find the most likely person based on a detection. Returns the index, and stores the confidence value into pConfidence.
