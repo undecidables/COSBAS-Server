@@ -18,22 +18,28 @@
 								<p class="text-left">Appointment with:</p>
 								<select class="form_control" id="appointmentWith" name="appointmentWith"></select>
 								<i class="fa fa-user"></i>
-								</div>
+                            </div>
 							<div class="controls" id="reason">
-								<p class="text-left">Reason for appointment: </p>
+                                <p class="text-left">Reason for Appointment:</p>
 								<input class="contact_input" type="text" id="appointmentReason"
 									   name="appointmentReason"/>
 								<i class="fa fa-question"></i>
 							</div>
-							<p class="text-left">Date and Time of the meeting:</p>
-
-							<p id="appointmentDate">
-								<input type="text" class="date date_input" id="requestedDateTime"/>
-								<input type="text" class="time start date_input" id="timeStart"/> to
-								<input type="text" class="time end date_input" id="timeEnd"/>
-								<i class="fa fa-calendar"></i>
-							</p>
-
+                            <div class="controls" id="appointmentDate">
+                                <p class="text-left">Date: </p>
+                                <input type="text" class="contact_input date" id="requestedDateTime"/>
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="controls">
+                                <p class="text-left">Starting Time: </p>
+                                <input type="text" class="contact_input time start" id="timeStart"/>
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="controls">
+                                <p class="text-left">Ending Time: </p>
+                                <input type="text" class="contact_input time end" id="timeEnd"/>
+                                <i class="fa fa-calendar"></i>
+                            </div>
 							<div class="controls" id="membersNum">
 								<p class="text-left">Number of members making the appointment: </p>
 								<input class="contact_input" type="number" min="1" value="1" id="numMembers"
@@ -45,28 +51,27 @@
 									<p class="text-left">Appointment made by (your name/team members' names): </p>
 									<input class="contact_input appointmentBy" type="text" name="appointmentBy[]"/>
 									<i class="fa fa-user"></i>
-
-									<p class="text-left">Your/team members' email:</p>
-									<input class="contact_input email" type="email" id="email" name="email"/>
-									<i class="fa fa-envelope"></i>
-								</div>
-							</div>
+                                </div>
+                            </div>
+                            <div class="controls">
+                                <p class="text-left">Your/team members' email:</p>
+                                <input class="contact_input email" type="email" id="email" name="email"/>
+                                <i class="fa fa-envelope"></i>
+                            </div>
 							<!--div class="form-group" id="duration">
                                 <p class="text-left">Duration of appointment: </p>
                                 <input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
                             </div-->
-							<br/>
-
-							<div>
-								<button type="submit" class="btn btn-sm btn-success" id="makeAppointmentRequest">Request
-									Appointment
-								</button>
+                            <div class="wow fadeInUp" data-wow-delay="0.5s">
+                                <button type="submit" id="makeAppointmentRequest" class="btn btn-common">Request
+                                    Appointment
+                                </button>
 							</div>
 						</form>
 					</div>
 				</div>
-				</div>
-			</div>
+            </div>
+        </div>
 	</section>
 
 	<footer id="footer">
@@ -91,11 +96,8 @@
 	<script src="resources/assets/js/jquery.mixitup.js"></script>
 	<!-- ScrollTop -->
 	<script src="resources/assets/js/lightbox.min.js"></script>
-	<!-- Lightbox -->
-	<script src="resources/assets/js/scroll-top.js"></script>
-	<!-- Smooth Scroll -->
-	<script src="resources/assets/js/smooth-scroll.js"></script>
-	<!-- preset js -->
+
+    <!-- preset js -->
 	<script src="resources/assets/js/style.changer.js"></script>
 	<!-- Modernizr js -->
 	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>

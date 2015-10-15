@@ -1,8 +1,12 @@
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
 
+}
+#header .main-navigation
+{
+    background: #003366;
 }
 
 #footer
@@ -29,7 +33,7 @@ footer {
 }
 
 #header .nav li a {
-	color: #003366;
+	color: #fff;
 }
 
 #header .nav li.active a:after, #header .nav li.active a, #header .nav li a:hover::after, #header .nav li a:hover, #header .nav li a:focus
@@ -65,8 +69,13 @@ footer {
 
 .section-title {
     color: #003366;
-    padding: 90px 20px;
-    padding-bottom: 48px;
+    padding: 64px 20px;
+    padding-bottom: 10px;
+}
+
+.controls
+{
+    padding-bottom: 0px;
 }
 
 .btn-success {
@@ -96,4 +105,8 @@ background: #cccc99;
     padding: 12px;
     text-align: center;
     border: 1px solid #003366;
+}
+#contact .contact-form .btn
+{
+    width:92%;
 }
