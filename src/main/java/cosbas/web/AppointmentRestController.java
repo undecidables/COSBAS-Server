@@ -200,6 +200,7 @@ public class AppointmentRestController {
     int month = localDate.getMonthValue();
 
     List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
+
     String returnPage = "";
 
       for(int i = 0; i < appointments.size(); i++)
@@ -214,6 +215,7 @@ public class AppointmentRestController {
           returnPage = "{title:'Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) +"', start: '" + startDate + "'},";
         }
       }
+      System.out.println("Appointment size:" + appointments.size());
    return returnPage;
   }
 

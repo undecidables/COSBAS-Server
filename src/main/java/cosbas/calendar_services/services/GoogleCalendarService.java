@@ -295,6 +295,7 @@ public class GoogleCalendarService extends CalendarService {
                     pageToken = events.getNextPageToken();
                 }
                 while (pageToken != null);
+                System.out.println(eventList.size());
                 return eventList;
             }
         }

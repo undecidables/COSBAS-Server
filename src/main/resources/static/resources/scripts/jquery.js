@@ -494,4 +494,9 @@ $(document).ready(function() {
       window.scrollTo(0, 0);
   }
   /***************************************************************************/
+
+  $(document).on('click', '#DenyAll', (function(e) {
+    $('.deny').click();
+    $("#fieldset").html("<p>No appointments pending</p>");
+  }));
 });
