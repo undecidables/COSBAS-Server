@@ -215,7 +215,6 @@ public class AppointmentRestController {
           returnPage = "{title:'Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) +"', start: '" + startDate + "'},";
         }
       }
-      System.out.println("Appointment size:" + appointments.size());
    return returnPage;
   }
 

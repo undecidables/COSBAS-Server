@@ -497,6 +497,7 @@ $(document).ready(function() {
 
   $(document).on('click', '#DenyAll', (function(e) {
     $('.deny').click();
-    $("#fieldset").html("<p>No appointments pending</p>");
+    $("#fieldset").empty();
+    $("#fieldset").append("<p>No appointments pending</p>");
   }));
 });
