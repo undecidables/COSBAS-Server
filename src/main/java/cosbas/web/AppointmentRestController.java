@@ -23,6 +23,9 @@ import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.CredentialWrapper;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @RestController
 public class AppointmentRestController {
@@ -187,35 +190,32 @@ public class AppointmentRestController {
 
  /**
    * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
-   * @return Returns the logged in user's week's appointments
+   * @return Returns the logged in user's month's appointments
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/getWeekAppointments")
-  public String getWeekAppointments(Principal principal) {
-    List<Appointment> appointments = calendar.getWeeksAppointments(principal.getName());
-    System.out.println(principal.getName());
-    System.out.println(appointments.size());
-    String returnPage = "";
+  @RequestMapping(method= RequestMethod.POST, value="/getMonthAppointments")
+  public String getMonthAppointments(Principal principal) {
+    Date date = new Date();
+    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    int month = localDate.getMonthValue();
 
-    if(appointments != null){
+    List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
+
+    String returnPage = "[";
+
       for(int i = 0; i < appointments.size(); i++)
       {
-        List<String> with = appointments.get(i).getVisitorIDs();
-        int duration = appointments.get(i).getDurationMinutes();
-        String reason = appointments.get(i).getReason();
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
-        String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length()-3);
+        int duration = appointments.get(i).getDurationMinutes();
+        String startDate = appointments.get(i).getDateTime().toString();
 
-        returnPage += "<div class='form-group'><p class='text-left'>Date: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+        if(i != appointments.size()-1){
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
+        } else {
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
+        }
       }
-        
-      if(appointments.size() == 0){
-        returnPage += "<p>You have no appointments for the week</p>";
-      }
-    } else {
-      returnPage = "<p>You have no appointments for the week</p>";
-    }
-    return returnPage;
+   return (returnPage + "]");
   }
 
   /**

@@ -358,3 +358,9 @@ td {
 .error{
     color: red;
 }
+
+#calendar 
+{
+    max-width: 650px;
+    margin: 0 auto;
+}
