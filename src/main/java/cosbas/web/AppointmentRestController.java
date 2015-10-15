@@ -201,7 +201,7 @@ public class AppointmentRestController {
 
     List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
 
-    String returnPage = "";
+    String returnPage = "[";
 
       for(int i = 0; i < appointments.size(); i++)
       {
@@ -210,12 +210,12 @@ public class AppointmentRestController {
         String startDate = appointments.get(i).getDateTime().toString();
 
         if(i != appointments.size()-1){
-          returnPage = "{title:'Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) +"', start: '" + startDate + "'}";
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
         } else {
-          returnPage = "{title:'Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) +"', start: '" + startDate + "'},";
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
         }
       }
-   return returnPage;
+   return (returnPage + "]");
   }
 
   /**

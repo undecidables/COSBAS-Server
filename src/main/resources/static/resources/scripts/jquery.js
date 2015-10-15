@@ -441,46 +441,31 @@ $(document).ready(function() {
   /***************************************************************************/
   /*****************************Home page**********************************/
   if(document.title == "COSBAS Service"){
+    var returned;
+    $date = moment().format('YYYY-MM-DD');
      $.ajax({
         type: "post",
         url: "/getMonthAppointments"
       }).then(function(jsonReturned) {
+
+       returned =  jQuery.parseJSON(jsonReturned);
+    
         /****************Callendar**************************/
-
-        $date = moment().format('YYYY-MM-DD');
-
-        if(jsonReturned != ""){
         $('#calendar').fullCalendar({
             defaultDate: $date,
             editable: false,
             draggable: false,
             eventLimit: true, // allow "more" link when too many events
-            events: [
-              jsonReturned
-            ],
+            events: returned,
             viewRender: function(currentView){
               $(".fc-prev-button").hide();    
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
             }
           });
-      } else {
-        $('#calendar').fullCalendar({
-            defaultDate: $date,
-            editable: false,
-            draggable: false,
-            eventLimit: true, // allow "more" link when too many events
-            events: [
-              
-            ],
-            viewRender: function(currentView){
-              $(".fc-prev-button").hide();    
-              $(".fc-next-button").hide();
-              $(".fc-today-button").hide();
-            }
-          });
-      }
       });
+
+       
       window.scrollTo(0, 0);
   }
 
