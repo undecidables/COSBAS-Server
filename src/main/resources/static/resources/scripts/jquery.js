@@ -439,13 +439,47 @@ $(document).ready(function() {
       }); 
   }));
   /***************************************************************************/
-  /*****************************Approve/Deny**********************************/
+  /*****************************Home page**********************************/
   if(document.title == "COSBAS Service"){
      $.ajax({
         type: "post",
-        url: "/getWeekAppointments"
+        url: "/getMonthAppointments"
       }).then(function(jsonReturned) {
-        $("#weekAppointments").append(jsonReturned);
+        /****************Callendar**************************/
+
+        $date = moment().format('YYYY-MM-DD');
+
+        if(jsonReturned != ""){
+        $('#calendar').fullCalendar({
+            defaultDate: $date,
+            editable: false,
+            draggable: false,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+              jsonReturned
+            ],
+            viewRender: function(currentView){
+              $(".fc-prev-button").hide();    
+              $(".fc-next-button").hide();
+              $(".fc-today-button").hide();
+            }
+          });
+      } else {
+        $('#calendar').fullCalendar({
+            defaultDate: $date,
+            editable: false,
+            draggable: false,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+              
+            ],
+            viewRender: function(currentView){
+              $(".fc-prev-button").hide();    
+              $(".fc-next-button").hide();
+              $(".fc-today-button").hide();
+            }
+          });
+      }
       });
       window.scrollTo(0, 0);
   }
