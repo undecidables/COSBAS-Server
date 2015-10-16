@@ -1,6 +1,7 @@
 package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
+import cosbas.biometric.data.AccessCode;
 import cosbas.user.ContactDetail;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -156,6 +157,8 @@ public class Email implements NotificationsStrategy  {
         notification.setTo(to);
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
+        List<AccessCode> codes = tempAppointment.getAccessKeys();
+
         notification.setText(
                 "Dear User\n\n" +
                         "We have good news for you! The request for an \n" +
@@ -163,7 +166,7 @@ public class Email implements NotificationsStrategy  {
 
                         "Your access code to the department is: \n" +
                         "\t\t" +
-                        "TBA" + "\n\n" +
+                        codes.toString() + "\n\n" +
 
                         "Appointment Review:\n" +
                         "Appointment ID: " + tempAppointment.getId() + "\n" +
