@@ -28,6 +28,16 @@ public class AccessCode extends BiometricData {
         return temporary;
     }
 
+    @Override
+    public String toString() {
+        byte[] code = this.getData();
+        StringBuilder codeString = new StringBuilder(code.length);
+        for (int i = 0; i < code.length; i++) {
+            codeString.append(code[i]);
+        }
+        return String.valueOf(codeString);
+    }
+
     protected boolean temporary = false;
     private DoorActions lastAction;
 }
