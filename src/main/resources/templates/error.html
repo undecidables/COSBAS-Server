@@ -14,7 +14,8 @@
 		<div class="row">
 			<div>
 				<div class="cosbasLogin">
-					<div th:if="${#httpServletRequest.remoteUser == null}"><script>window.location.href = "/login?error=1"</script></div>
+					<!--Can take this out and login error don't work or leave it in and it works>
+					<div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code') == 500}"><script>window.location.href = "/login?error=1"</script></div-->
 					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span>
 						Unfortunately an error has occured on the server.
 						<br/>
