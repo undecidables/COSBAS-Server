@@ -7,6 +7,7 @@ import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.biometric.validators.facial.FaceRecognition;
 import org.bytedeco.javacpp.opencv_contrib;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class FaceValidator extends AccessValidator {
     @Autowired
     FaceRecognition recognizer;
 
+    @Value ("$(faces.certaintyThreshold : 70}")
+    double certaintyThreshold;
+
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
@@ -33,6 +37,10 @@ public class FaceValidator extends AccessValidator {
     }
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) throws ValidationException {
-       return recognizer.recognizeFace(request);
+       ValidationResponse tmp = recognizer.recognizeFace(request);
+        if (tmp.certainty > certaintyThreshold && tmp.approved)
+            return tmp;
+        else
+            return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 }

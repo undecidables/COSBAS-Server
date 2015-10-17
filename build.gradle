@@ -88,10 +88,12 @@ dependencies {
 
 
     compile "org.springframework.security:spring-security-ldap"
+
     compile "org.apache.directory.server:apacheds-server-jndi:1.5.5"
 
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core:1.+"
+    testCompile 'org.springframework:spring-test'
 }
 
 task wrapper(type: Wrapper) {

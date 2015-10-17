@@ -43,7 +43,11 @@ public abstract class AccessValidator {
     public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
         if (!checkValidationType(request.getType()))
             throw new BiometricTypeException(this.getClass() + " cannot validate " + request.getType());
-        return identifyUser(request, action);
+        try {
+            return identifyUser(request, action);
+        } catch (ValidationException e) {
+           return ValidationResponse.failedValidation(e.getMessage());
+        }
     }
 
     /**

@@ -53,7 +53,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -83,7 +82,7 @@ public class FaceRecognition {
     private BiometricDataDAO biometricsRepository;
 
     @Autowired
-    private FaceRecognition(RecognizerDAO dataRepository, BiometricDataDAO biometricsRepository) {
+    public FaceRecognition(RecognizerDAO dataRepository, BiometricDataDAO biometricsRepository) {
         this.dataRepository = dataRepository;
         this.biometricsRepository = biometricsRepository;
     }
@@ -96,12 +95,12 @@ public class FaceRecognition {
         }
     }
 
-    private void trainFromDB() {
-        List<BiometricData> byType = biometricsRepository.findByType(BiometricTypes.FACE);
-        if (byType != null && !byType.isEmpty()) {
-            RecognizerData tempData = learn(byType);
-            storeTrainingData(tempData);
+    public RecognizerData trainFromDB() {
+        List<BiometricData> datalist = biometricsRepository.findByType(BiometricTypes.FACE);
+        if (datalist != null && !datalist.isEmpty()) {
+            return learn(datalist);
         }
+        return null;
     }
 
     private IplImage createIPL(BiometricData d) {
@@ -155,7 +154,7 @@ public class FaceRecognition {
         }
         data.setProjectedTrainFace(projectedTrainFace);
 
-        return data.getFinalRecogznizerData();
+        return storeTrainingData(data.getFinalRecogznizerData());
 
    }
 
@@ -190,11 +189,11 @@ public class FaceRecognition {
                 projectedTestFace);  // coeffs
 
 
-        final FloatPointer pConfidence = new FloatPointer();
+        final FloatPointer pConfidence = new FloatPointer(0);
         iNearest = findNearestNeighbor(projectedTestFace, pConfidence);
         double confidence = pConfidence.get();
         nearest = data.personNumTruthMat.data_i().get(iNearest);
-        String emplid = data.personNames.get(nearest);
+        String emplid = data.personNames.get(nearest-1);
 
         return new ValidationResponse(true,  emplid, confidence);
     }
@@ -327,11 +326,11 @@ public class FaceRecognition {
      *  Stores the training data into the data field and databse if it is neawer than the curent data.
      *  Removes all old recognizerData from the database.
      */
-    private void storeTrainingData(RecognizerData newData) {
+    private RecognizerData storeTrainingData(RecognizerData newData) {
         if (newData != null && (this.data == null || newData.updated.isAfter(data.updated))) {
             try {
                 dataUpdateLock.lock();
-                if (this.data == null && newData.updated.isAfter(data.updated)) {
+                if (this.data == null || newData.updated.isAfter(data.updated)) {
                     this.data = newData;
                     dataRepository.deleteAll();
                     dataRepository.save(newData);
@@ -340,6 +339,7 @@ public class FaceRecognition {
                 dataUpdateLock.unlock();
             }
         }
+        return data;
    }
 
     private void updateData() {
