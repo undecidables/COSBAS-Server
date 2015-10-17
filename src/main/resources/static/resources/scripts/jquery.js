@@ -38,7 +38,7 @@ $(document).ready(function() {
         });
 
         // initialize datepair
-        $('.appointmentDate').datepair();
+        $('#appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
   if(document.title == "Make Appointment"){

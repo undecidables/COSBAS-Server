@@ -25,27 +25,30 @@
                                            name="appointmentReason"/>
                                     <i class="fa fa-question"></i>
                                 </div>
-                                <div class="controls appointmentDate">
-                                    <p class="text-left">Date: </p>
-                                    <input type="text" class="contact_input date" id="requestedDateTime"/>
+                                <div id="appointmentDate">
+	                                <div class="controls appointmentDate">
+	                                    <p class="text-left">Date: </p>
+	                                    <input type="text" class="contact_input date" id="requestedDateTime"/>
+	                                    <i class="fa fa-calendar"></i>
+	                                </div>
+	                                <div class="controls appointmentDate">
+	                                    <p class="text-left">Starting Time: </p>
+	                                    <input type="text" class="contact_input time start" id="timeStart"/>
+	                                    <i class="fa fa-calendar"></i>
+	                                </div>
+	                                <div class="controls appointmentDate">
+                                    <p class="text-left">Ending Time: </p>
+                                    <input type="text" class="contact_input time end" id="timeEnd"/>
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <div class="controls appointmentDate">
-                                    <p class="text-left">Starting Time: </p>
-                                    <input type="text" class="contact_input time start" id="timeStart"/>
-                                    <i class="fa fa-calendar"></i>
-                                </div>
+	                            </div>
                                 <!--div class="form-group" id="duration">
                                     <p class="text-left">Duration of appointment: </p>
                                     <input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
                                 </div-->
                             </div>
                             <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
-                                <div class="controls appointmentDate">
-                                    <p class="text-left">Ending Time: </p>
-                                    <input type="text" class="contact_input time end" id="timeEnd"/>
-                                    <i class="fa fa-calendar"></i>
-                                </div>
+                                
                                 <div class="controls" id="membersNum">
                                     <p class="text-left">Number of members making the appointment: </p>
                                     <input class="contact_input" type="number" min="1" value="1" id="numMembers"
