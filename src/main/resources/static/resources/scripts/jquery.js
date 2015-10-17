@@ -444,6 +444,7 @@ $(document).ready(function() {
   /***************************************************************************/
   /*****************************Home page**********************************/
   if(document.title == "COSBAS Service"){
+
     var returned;
     $date = moment().format('YYYY-MM-DD');
      $.ajax({
@@ -464,7 +465,17 @@ $(document).ready(function() {
               $(".fc-prev-button").hide();    
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
-            }
+            },
+            eventRender: function (event, element) {
+              element.attr('href', 'javascript:void(0);');
+              element.click(function() {
+                  $("#eventInfo").html(event.withWho);
+                  $("#startTime").html(moment(event.start).format('MMM Do h:mm A'));
+                  $("#endTime").html(((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)");
+                  $("#eventContent").dialog({ modal: true, title: event.title, width:350});
+                  return false;
+              });
+          }
           });
       });
 

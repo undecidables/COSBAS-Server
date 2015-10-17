@@ -24,6 +24,8 @@
 						<span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}" th:unless="${#httpServletRequest == null}"></span>
 						<!--br/>
    						Request send to server: <span th:text="${#httpServletRequest}" th:unless="${#httpServletRequest == null}"></span-->
+   						<br/>
+   						Request send to server: <span th:text="${#httpServletRequest.getQueryString()}" th:unless="${#httpServletRequest == null}"></span>
    					</div>
 				</div>
 			</div>
