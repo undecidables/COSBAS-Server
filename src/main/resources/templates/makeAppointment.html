@@ -19,12 +19,6 @@
                                     <select class="form_control" id="appointmentWith" name="appointmentWith"></select>
                                     <i class="fa fa-user"></i>
                                 </div>
-                                <div class="controls" id="reason">
-                                    <p class="text-left">Reason for Appointment:</p>
-                                    <input class="contact_input" type="text" id="appointmentReason"
-                                           name="appointmentReason"/>
-                                    <i class="fa fa-question"></i>
-                                </div>
                                 <div id="appointmentDate">
 	                                <div class="controls appointmentDate">
 	                                    <p class="text-left">Date: </p>
@@ -48,11 +42,16 @@
                                 </div-->
                             </div>
                             <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
-                                
+								<div class="controls" id="reason">
+									<p class="text-left">Reason for Appointment:</p>
+									<input class="contact_input" type="text" id="appointmentReason"
+										   name="appointmentReason"/>
+									<i class="fa fa-question"></i>
+								</div>
                                 <div class="controls" id="membersNum">
                                     <p class="text-left">Number of members making the appointment: </p>
                                     <input class="contact_input" type="number" min="1" value="1" id="numMembers"
-                                           name="numMembers"/>
+										   name="numMembers"/>
                                     <i class="fa fa-users"></i>
                                 </div>
                                 <div class="controls" id="appointmentMadeBy">
@@ -99,9 +98,9 @@
 	<!-- Include mixitup plugin -->
 	<script src="resources/assets/js/jquery.mixitup.js"></script>
 	<!-- ScrollTop -->
-	<script src="resources/assets/js/lightbox.min.js"></script>
 
-    <!-- preset js -->
+
+	<!-- preset js -->
 	<script src="resources/assets/js/style.changer.js"></script>
 	<!-- Modernizr js -->
 	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>

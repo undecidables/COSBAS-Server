@@ -77,33 +77,43 @@ $(document).ready(function() {
   timeVar = time;
   
 
-  $('#numMembers').change(function() {
-    
+  $('#email').focus(function() {
+
     if($("#numMembers").val() >= 1)
     {
-      $prevInputs = $('.appointmentDetails').length;
 
-      if($prevInputs < $("#numMembers").val())
-      {
-        for($i = $prevInputs; $i < $("#numMembers").val(); $i++)
-        {
-          var element = $('<div class="appointmentDetails"><p class="text-left">Appointment made by (your name/team members names): </p><input class="form-control appointmentBy" type="text" name="appointmentBy[]"/><p class="text-left">Your/team members email:</p><input class="form-control email" type="email" id="email" name="email"/></div>');
-          //var element = $('<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>');
-          $('#appointmentMadeBy').append(element);
-        }
-      } 
-      else if($prevInputs > $("#numMembers").val())
-      {
-        for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
-        {
-          $($(".appointmentDetails")[$i-1]).remove();
-        }
-      }
+      //$prevInputs = $('.appointmentDetails').length+1;
+        var amountMembers = $("#numMembers").val();
 
-      $('#errorNumbers').remove();
-      $('#madeByError').remove();
+      //if($prevInputs < $("#numMembers").val())
+     // {
+        var lightbox = '<div id="lightbox">' +
+                            '<div id="content">';
+
+        for($i = 0; $i < $("#numMembers").val(); $i++)
+        {
+          lightbox += '<p class="text-left">Your/team members email:</p><input class="form-control email emailinput" type="email" id="email" name="email"/>';
+        }
+        lightbox += "<br/>"
+        lightbox +=  '<p class="text-left">' +
+                        '<button type="submit" id="emailsubmit" class="btnLightbox btn-common">Confirm Emails</button>' +
+                     '</p>';
+        lightbox += '</div>' +
+                  '</div>';
+        $.featherlight(lightbox, null);
+      //}
+     // else if($prevInputs > $("#numMembers").val())
+     // {
+        //for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
+        //{
+         // $($(".appointmentDetails")[$i-1]).remove();
+        //}
+      //}
+
+      //$('#errorNumbers').remove();
+      //$('#madeByError').remove();
     }
-    else 
+    /*else
     {
       $prevInputs = $('.appointmentDetails').length;
       $("#numMembers").val(1);
@@ -114,7 +124,43 @@ $(document).ready(function() {
       $element = $('<p class="error" id="errorNumbers">The minimum of people making an appointment is one. </p>');
       $('#errorNumbers').remove();
       $('#membersNum').append($element);
-    }
+    }*/
+  });
+
+  var emailString;
+  $(document.body).on('click', '#emailsubmit' ,function(){
+    /*emailString = "";
+    $('.emailinput').each(function(i, obj) {
+        emailString += $(obj).val() + ", ";
+    });*/
+     //check emails
+     $allEmailsFilledIn = true;
+     $inputs = $(".email");
+      $tempEmail = [];
+      for($i = 1; $i < $inputs.length; $i++){
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
+        {
+          $element = $("<p class='error' id='emailError'>Invalid E-Mail/All members' emails must be entered. </p>");
+          $("#emailError").remove();
+          $('#appointmentMadeBy').append($element);
+          $allEmailsFilledIn = false;
+          $noError = false;
+          $.featherlight($element, null);
+          return;
+        }
+        else
+        {
+          if($i == $inputs.length-1 && $allEmailsFilledIn == true)
+          {
+            $("#emailError").remove();
+          }
+          $tempEmail[$i] = $($inputs[$i]).val();
+        }
+      }
+      $tempEmail = $tempEmail.join(", ");
+      $('.featherlight').click();
+      $('.email').val($tempEmail);
   });
 
   $('#makeAppointmentRequest').click(function(e) {
@@ -193,31 +239,7 @@ $(document).ready(function() {
     }
     $temp = $temp.join(", ");
     
-    //check emails
-    $allEmailsFilledIn = true;
 
-    $inputs = $(".email");
-    $tempEmail = [];
-    for($i = 0; $i < $inputs.length; $i++){
-      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
-      {
-        $element = $("<p class='error' id='emailError'>All members' emails must be entered. </p>");
-        $("#emailError").remove();
-        $('#appointmentMadeBy').append($element);
-        $allEmailsFilledIn = false;
-        $noError = false;
-      }
-      else 
-      {
-        if($i == $inputs.length-1 && $allEmailsFilledIn == true)
-        {
-          $("#emailError").remove();
-        }
-        $tempEmail[$i] = $($inputs[$i]).val();
-      }
-    }
-    $tempEmail = $tempEmail.join(", ");
 
     //check reason
     if($("#appointmentReason").val() == "")
@@ -232,7 +254,10 @@ $(document).ready(function() {
     }
 
     //appointmentWith error checking not yet done
-
+    if($tempEmail == null)
+    {
+      $noError = false;
+    }
     //send data if no errors
     if($noError == true)
     {
@@ -266,6 +291,7 @@ $(document).ready(function() {
       $("#signIn").text("Request an appointment");
       window.scrollTo(0, 0);
     }
+
   });
   /***************************************************************************/
 
