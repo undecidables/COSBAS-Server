@@ -59,7 +59,7 @@
 }
 
 #contact {
-    background: #eee
+    background-color: rgba(200,200,200,0.3);
 }
 
 #contact .section-title span
@@ -132,4 +132,9 @@ background: #cccc99;
     padding: 0 12px;
     width: 88%;
     border: 1px solid #003366;
+}
+
+body
+{
+    background: url('images/bg.png');
 }

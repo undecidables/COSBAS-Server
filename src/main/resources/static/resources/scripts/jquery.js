@@ -1,6 +1,6 @@
 $(document).ready(function() {
 // initialize input widgets first
-        $('#appointmentDate .time').timepicker({
+        $('.time').timepicker({
             'showDuration': false,
             'timeFormat': 'H:i',
             'minTime' : '07:30',
@@ -14,7 +14,7 @@ $(document).ready(function() {
             'scrollDefault': 'now'
         });
 
-        $('#appointmentDate .end').timepicker({
+        $('.appointmentDate .end').timepicker({
           'showDuration': true,
             'timeFormat': 'H:i',
             'minTime' : '07:30',
@@ -28,7 +28,7 @@ $(document).ready(function() {
             'scrollDefault': 'now'
         });
 
-        $('#appointmentDate .date').datepicker({
+        $('.date').datepicker({
             'beforeShowDay': $.datepicker.noWeekends,
             'format': 'mm/dd/yyyy',
             'autoclose': true,
@@ -38,7 +38,7 @@ $(document).ready(function() {
         });
 
         // initialize datepair
-        $('#appointmentDate').datepair();
+        $('.appointmentDate').datepair();
   /******************** Request Appointment ***********************************/
 
   if(document.title == "Make Appointment"){
