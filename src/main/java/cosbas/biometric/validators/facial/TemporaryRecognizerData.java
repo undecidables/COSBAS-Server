@@ -19,59 +19,59 @@ class TemporaryRecognizerData {
     TemporaryRecognizerData() {
     }
 
-    List<String> getPersonNames() {
+    public List<String> getPersonNames() {
         return personNames;
     }
 
-    void setPersonNames(List<String> personNames) {
+    public void setPersonNames(List<String> personNames) {
         this.personNames = personNames;
     }
 
-    List<opencv_core.IplImage> getTrainingFaces() {
+    public List<opencv_core.IplImage> getTrainingFaces() {
         return trainingFaces;
     }
 
-    void setTrainingFaces(List<opencv_core.IplImage> trainingFaces) {
+    public void setTrainingFaces(List<opencv_core.IplImage> trainingFaces) {
         this.trainingFaces = trainingFaces;
     }
 
-    opencv_core.IplImage[] getEigenVectors() {
+    public opencv_core.IplImage[] getEigenVectors() {
         return eigenVectors;
     }
 
-    void setEigenVectors(opencv_core.IplImage[] eigenVectors) {
+    public void setEigenVectors(opencv_core.IplImage[] eigenVectors) {
         this.eigenVectors = eigenVectors;
     }
 
-    opencv_core.IplImage getpAvgTrainImg() {
+    public opencv_core.IplImage getpAvgTrainImg() {
         return pAvgTrainImg;
     }
 
-    void setpAvgTrainImg(opencv_core.IplImage pAvgTrainImg) {
+    public void setpAvgTrainImg(opencv_core.IplImage pAvgTrainImg) {
         this.pAvgTrainImg = pAvgTrainImg;
     }
 
-    opencv_core.CvMat getEigenValues() {
+    public opencv_core.CvMat getEigenValues() {
         return eigenValues;
     }
 
-    void setEigenValues(opencv_core.CvMat eigenValues) {
+    public void setEigenValues(opencv_core.CvMat eigenValues) {
         this.eigenValues = eigenValues;
     }
 
-    opencv_core.CvMat getProjectedTrainFace() {
+    public opencv_core.CvMat getProjectedTrainFace() {
         return projectedTrainFace;
     }
 
-    void setProjectedTrainFace(opencv_core.CvMat projectedTrainFace) {
+    public void setProjectedTrainFace(opencv_core.CvMat projectedTrainFace) {
         this.projectedTrainFace = projectedTrainFace;
     }
 
-    opencv_core.CvMat getPersonNumTruthMat() {
+    public opencv_core.CvMat getPersonNumTruthMat() {
         return personNumTruthMat;
     }
 
-    void setPersonNumTruthMat(opencv_core.CvMat personNumTruthMat) {
+    public void setPersonNumTruthMat(opencv_core.CvMat personNumTruthMat) {
         this.personNumTruthMat = personNumTruthMat;
     }
 

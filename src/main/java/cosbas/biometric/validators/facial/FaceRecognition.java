@@ -1,4 +1,7 @@
-package cosbas.biometric.validators.facial;/*
+package cosbas.biometric.validators.facial;
+
+
+/*
  * FaceRecognition.java
  *
  * Created on Dec 7, 2011, 1:27:25 PM
@@ -32,16 +35,28 @@ package cosbas.biometric.validators.facial;/*
  *
  */
 
+/**
+ * An EigenFaces Face Recognizer
+ * Adapted from an example at https://github.com/bytedeco/javacv/blob/11a29b21975c957a0e5990b07e8c2401ef1cccd4/samples/FaceRecognition.java
+ *
+ */
+
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.validators.ValidationResponse;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
@@ -49,39 +64,52 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 
 /**
  * Recognizes faces.
- *
- * @author reed
+ * [@author Renette Ros}
  */
-
 @Component
-///NB: Add read-write lock or at least training lock + maybe double lock checking mechanism
 public class FaceRecognition {
 
+    public class Trainer implements Runnable {
+        @Override
+        public void run() {
+            trainFromDB();
+        }
+    }
+
     private volatile RecognizerData data;
+    private volatile ReentrantLock dataUpdateLock = new ReentrantLock();
 
-    private FaceRecognition() {}
+    private RecognizerDAO dataRepository;
+    private BiometricDataDAO biometricsRepository;
 
-    /**
-     * Executes this application.
-     *
-     * @param args the command line arguments
-     */
-    public static void main(final String[] args) {
-
-        final FaceRecognition faceRecognition = new FaceRecognition();
-        faceRecognition.learn(null);
-        faceRecognition.recognizeFace(null);
+    @Autowired
+    private FaceRecognition(RecognizerDAO dataRepository, BiometricDataDAO biometricsRepository) {
+        this.dataRepository = dataRepository;
+        this.biometricsRepository = biometricsRepository;
     }
 
     @PostConstruct
-    private void setup() {}
+    private void setup() {
+        data = dataRepository.findFirstByOrderByUpdatedDesc();
+        if (data == null) {
+            new Thread(new Trainer()).start();
+        }
+    }
+
+    private void trainFromDB() {
+        List<BiometricData> byType = biometricsRepository.findByType(BiometricTypes.FACE);
+        if (byType != null && !byType.isEmpty()) {
+            RecognizerData tempData = learn(byType);
+            storeTrainingData(tempData);
+        }
+    }
 
     private IplImage createIPL(BiometricData d) {
         byte[] b = d.getData();
         return cvDecodeImage(cvMat(1, b.length, CV_8UC1, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
-    private void learn(List<BiometricData> trainingData) {
+    RecognizerData learn(List<BiometricData> trainingData) {
 
         TemporaryRecognizerData data = new TemporaryRecognizerData();
 
@@ -127,14 +155,17 @@ public class FaceRecognition {
         }
         data.setProjectedTrainFace(projectedTrainFace);
 
-        storeTrainingData(data);
-    }
+        return data.getFinalRecogznizerData();
+
+   }
 
     /**
-     * Recognizes the face in each of the test images given, and compares the results with the truth.
-     *
+     * Recognizes the face in the given biometricData
      */
-    ValidationResponse recognizeFace(BiometricData face) {
+   public ValidationResponse recognizeFace(BiometricData face) throws ValidationException {
+        updateData();
+        if (data == null)
+            throw new ValidationException("Face recognizer has not been initialized");
         IplImage testFace;
 
         float[] projectedTestFace;
@@ -169,13 +200,11 @@ public class FaceRecognition {
     }
 
     /**
-     * Loads Biometric Face Data from the database into the recognizer.
+     * Loads Biometric Face Data list into the recognizer for training purposes.
      * @param dataList List of biometric data objects fetched from database.
+     * @param data The data object to store recognizer variables in.
      * @return List of IPL images to process with JavaCV
      */
-    private List<IplImage> loadFaceImageList(List<BiometricData> dataList) {
-        return loadFaceImageList(dataList, null);
-    }
 
     private List<IplImage> loadFaceImageList(List<BiometricData> dataList, TemporaryRecognizerData data) {
         HashMap<String, Integer> personNumMap = new HashMap<>();
@@ -295,41 +324,27 @@ public class FaceRecognition {
     }
 
     /**
-     * Stores the training data to the file 'data/facedata.xml'.
+     *  Stores the training data into the data field and databse if it is neawer than the curent data.
+     *  Removes all old recognizerData from the database.
      */
-    private void storeTrainingData(TemporaryRecognizerData data) {
-        this.data = data.getFinalRecogznizerData();
-    }
-
-
-    /**
-     * Converts the given float image to an unsigned character image.
-     *
-     * @param srcImg the given float image
-     * @return the unsigned character image
-     */
-    private IplImage convertFloatImageToUcharImage(IplImage srcImg) {
-        IplImage dstImg;
-        if ((srcImg != null) && (srcImg.width() > 0 && srcImg.height() > 0)) {
-            // Spread the 32bit floating point pixels to fit within 8bit pixel range.
-            double[] minVal = new double[1];
-            double[] maxVal = new double[1];
-            cvMinMaxLoc(srcImg, minVal, maxVal);
-            // Deal with NaN and extreme values, since the DFT seems to give some NaN results.
-            if (minVal[0] < -1e30) {
-                minVal[0] = -1e30;
+    private void storeTrainingData(RecognizerData newData) {
+        if (newData != null && (this.data == null || newData.updated.isAfter(data.updated))) {
+            try {
+                dataUpdateLock.lock();
+                if (this.data == null && newData.updated.isAfter(data.updated)) {
+                    this.data = newData;
+                    dataRepository.deleteAll();
+                    dataRepository.save(newData);
+                }
+            } finally {
+                dataUpdateLock.unlock();
             }
-            if (maxVal[0] > 1e30) {
-                maxVal[0] = 1e30;
-            }
-            if (maxVal[0] - minVal[0] == 0.0f) {
-                maxVal[0] = minVal[0] + 0.001;  // remove potential divide by zero errors.
-            }                        // Convert the format
-            dstImg = cvCreateImage(cvSize(srcImg.width(), srcImg.height()), 8, 1);
-            cvConvertScale(srcImg, dstImg, 255.0 / (maxVal[0] - minVal[0]), -minVal[0] * 255.0 / (maxVal[0] - minVal[0]));
-            return dstImg;
         }
-        return null;
+   }
+
+    private void updateData() {
+        RecognizerData newData = dataRepository.findFirstByOrderByUpdatedDesc();
+        storeTrainingData(newData);
     }
 
     /**

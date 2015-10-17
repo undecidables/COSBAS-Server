@@ -3,9 +3,16 @@ package cosbas.biometric.validators;
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.biometric.validators.facial.FaceRecognition;
+import org.bytedeco.javacpp.opencv_contrib;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_legacy.*;
 
 /**
  * {@author Renette Ros}
@@ -14,22 +21,18 @@ import java.util.List;
 @Component
 public class FaceValidator extends AccessValidator {
 
+    @Autowired
+    FaceRecognition recognizer;
+
+    public FaceValidator(FaceRecognition recognizer) {
+        this.recognizer = recognizer;
+    }
+
     protected Boolean checkValidationType(BiometricTypes type) {
         return type == BiometricTypes.FACE;
     }
 
-    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
-        return ValidationResponse.successfulValidation("u00000000");
-    }
-
-    public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
-        List<BiometricData> items = repository.findByType(request.getType());
-
-        for (BiometricData item : items) {
-            ValidationResponse response = matches(request, item, action);
-            if (response.approved) return response;
-
-        }
-        return ValidationResponse.failedValidation("No Match found");
+    public ValidationResponse identifyUser(BiometricData request, DoorActions action) throws ValidationException {
+       return recognizer.recognizeFace(request);
     }
 }

@@ -13,5 +13,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * Query Functions are defined in the AccessRecordDAO interface.
  */
 
-public interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessRecordDAO {
+interface AccessRepository  extends MongoRepository<AccessRecord, String>, AccessRecordDAO {
 }
