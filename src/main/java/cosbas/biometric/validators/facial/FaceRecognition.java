@@ -68,6 +68,10 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceRecognition {
 
+    public RecognizerData getData() {
+        return data;
+    }
+
     public class Trainer implements Runnable {
         @Override
         public void run() {
@@ -90,7 +94,7 @@ public class FaceRecognition {
     @PostConstruct
     private void setup() {
         data = dataRepository.findFirstByOrderByUpdatedDesc();
-        if (data == null) {
+        if (getData() == null) {
             new Thread(new Trainer()).start();
         }
     }
@@ -108,6 +112,11 @@ public class FaceRecognition {
         return cvDecodeImage(cvMat(1, b.length, CV_8UC1, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
+    /**
+     * Trains the recognizer and updates and persists the trainign data.
+     * @param trainingData
+     * @return
+     */
     RecognizerData learn(List<BiometricData> trainingData) {
 
         TemporaryRecognizerData data = new TemporaryRecognizerData();
@@ -163,14 +172,14 @@ public class FaceRecognition {
      */
    public ValidationResponse recognizeFace(BiometricData face) throws ValidationException {
         updateData();
-        if (data == null)
+        if (getData() == null)
             throw new ValidationException("Face recognizer has not been initialized");
         IplImage testFace;
 
         float[] projectedTestFace;
 
         testFace = createIPL(face);
-        int nEigens = data.eigenVectors.length;
+        int nEigens = getData().eigenVectors.length;
 
         // project the test images onto the PCA subspace
         projectedTestFace = new float[nEigens];
@@ -182,18 +191,18 @@ public class FaceRecognition {
         cvEigenDecomposite(
                 testFace, // obj
                 nEigens, // nEigObjs
-                data.eigenVectors, // eigInput (Pointer)
+                getData().eigenVectors, // eigInput (Pointer)
                 0, // ioFlags
                 null, // userData
-                data.pAvgTrainImg, // avg
+                getData().pAvgTrainImg, // avg
                 projectedTestFace);  // coeffs
 
 
         final FloatPointer pConfidence = new FloatPointer(0);
         iNearest = findNearestNeighbor(projectedTestFace, pConfidence);
         double confidence = pConfidence.get();
-        nearest = data.personNumTruthMat.data_i().get(iNearest);
-        String emplid = data.personNames.get(nearest-1);
+        nearest = getData().personNumTruthMat.data_i().get(iNearest);
+        String emplid = getData().personNames.get(nearest-1);
 
         return new ValidationResponse(true,  emplid, confidence);
     }
@@ -327,10 +336,10 @@ public class FaceRecognition {
      *  Removes all old recognizerData from the database.
      */
     private RecognizerData storeTrainingData(RecognizerData newData) {
-        if (newData != null && (this.data == null || newData.updated.isAfter(data.updated))) {
+        if (newData != null && (this.getData() == null || newData.updated.isAfter(getData().updated))) {
             try {
                 dataUpdateLock.lock();
-                if (this.data == null || newData.updated.isAfter(data.updated)) {
+                if (this.getData() == null || newData.updated.isAfter(getData().updated)) {
                     this.data = newData;
                     dataRepository.deleteAll();
                     dataRepository.save(newData);
@@ -339,7 +348,7 @@ public class FaceRecognition {
                 dataUpdateLock.unlock();
             }
         }
-        return data;
+        return getData();
    }
 
     private void updateData() {
@@ -360,15 +369,15 @@ public class FaceRecognition {
         int iTrain = 0;
         int iNearest = 0;
 
-        int nTrainFaces = data.trainingFaces.size();
-        int nEigens = data.eigenVectors.length;
+        int nTrainFaces = getData().trainingFaces.size();
+        int nEigens = getData().eigenVectors.length;
         for (iTrain = 0; iTrain < nTrainFaces; iTrain++) {
 
             double distSq = 0;
 
             for (i = 0; i < nEigens; i++) {
 
-                float projectedTrainFaceDistance = (float) data.projectedTrainFace.get(iTrain, i);
+                float projectedTrainFaceDistance = (float) getData().projectedTrainFace.get(iTrain, i);
                 float d_i = projectedTestFace[i] - projectedTrainFaceDistance;
                 distSq += d_i * d_i;
             }
