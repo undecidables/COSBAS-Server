@@ -3,51 +3,18 @@
     <Appenders>
         <RollingFile name="rolloverLogFile" fileName="logs/logging.log" filePattern="logs/logging-%d{yyyy-MM-dd}-%i.log"  append="true">
             <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <Pattern>%d %p %c %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB"/>
                 <TimeBasedTriggeringPolicy interval="1"/>
-                <!-- roll over for time and date -->
             </Policies>
             <DefaultRolloverStrategy max="2"/>
         </RollingFile>
-
-   <!--     <File name="fileLogFile" fileName="logs/failover.log">
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-        </File>
-
-        <File name="errorLogFile" fileName="logs/errors.log">
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-            <Filters>
-                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="ACCEPT"/>
-                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-
-            </Filters>
-
-        </File>
-        <File name="infoLogFile" fileName="logs/info.log">-->
-
-    <!--        <Filters>
-                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT"/>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
-
-
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-
-        </File>-->
     </Appenders>
     <Loggers>
         <Root level="TRACE">
             <AppenderRef ref="rolloverLogFile"/>
-
         </Root>
     </Loggers>
 </Configuration>
