@@ -16,21 +16,25 @@
 				<!-- Start Navigation Menu Logged In-->
 				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li class="active"><a href="index">Home</a></li>
+						<li><a href="index">Home</a></li>
 						<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
 						<li><a href="cancel">Cancel Appointment</a></li>
 						<li><a href="status">Check Appointment Status</a></li>
-							<li><a href="#" onclick="document.logoutForm.submit(); return false;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-						</ul>
+						<li>
+							<a href="#" onclick="document.logoutForm.submit(); return false;"><span
+									class="glyphicon glyphicon-log-in"></span> Logout</a>
+						</li>
+					</ul>
+
+					<form th:action="@{/logout}" method="post" name="logoutForm">
+					</form>
+
 				</div>
 				<!-- End Navigation Menu -->
 				<!-- Start Navigation Menu Not Logged In In-->
-				<div class="collapse navbar-collapse" th:action="@{/logout}"
-					 th:if="${#httpServletRequest.remoteUser == null}">
+				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser == null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li class="active"><a href="index">Home</a></li>
-						<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
 						<li><a href="cancel">Cancel Appointment</a></li>
 						<li><a href="status">Check Appointment Status</a></li>

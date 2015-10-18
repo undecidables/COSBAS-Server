@@ -167,7 +167,7 @@ public class AppointmentRestController {
                       "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
                       "<td><button type='submit' class='form-control accept approveBtn'><i class=\"fa fa-check-circle\"></i></button></td>" +
                       "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
-                      "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' /><input type='text' class='staffID' value='" + staffMember + "' /></td>" +
+                      "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
                       "</tr>" +
                       "</table>";
              /* returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>On: " + tempDateTime + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
