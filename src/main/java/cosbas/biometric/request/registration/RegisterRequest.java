@@ -3,12 +3,10 @@ package cosbas.biometric.request.registration;
 import cosbas.biometric.data.BiometricData;
 import cosbas.user.ContactDetail;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@author  Tienie}
@@ -22,7 +20,7 @@ public class RegisterRequest {
     /**
      * Time request object created on server..
      */
-    private final LocalDateTime time = LocalDateTime.now();
+    private final LocalDateTime time;
     /**
      * Array of biometric data from request.
      */
@@ -30,6 +28,14 @@ public class RegisterRequest {
 
     @Id
     private final String userID;
+
+    @PersistenceConstructor
+    protected RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID) {
+        this.contactDetails = contactDetails;
+        this.time = time;
+        this.data = data;
+        this.userID = userID;
+    }
 
     /**
      * Defines a Java Object which stores the user's data as parsed from the POST request
@@ -41,8 +47,12 @@ public class RegisterRequest {
     public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data) {
         this.contactDetails = new HashSet<>();
         this.contactDetails.addAll(details);
-        this.data = data;
+        if (data == null)
+            this.data = new LinkedList<>();
+        else
+            this.data = data;
         this.userID = userID;
+        this.time = LocalDateTime.now();
     }
 
     public Set<ContactDetail> getContactDetails() {
@@ -59,8 +69,17 @@ public class RegisterRequest {
 
     public String getUserID() {return userID;}
 
+    /**
+     * Merges the contact details and biometricData from another RegisterRequest into this one.
+     *  - Unique contact details are added to this object.
+     *  - All data is added to this object.
+     * The username and modification time remains unchanged.
+     * @param newUser The user to be merged into this one. It will remain unchanged.
+     */
     public void merge(RegisterRequest newUser) {
-        contactDetails.addAll(newUser.getContactDetails());
-        data.addAll(newUser.getData());
+        if (newUser != this) {
+            contactDetails.addAll(newUser.getContactDetails());
+            data.addAll(newUser.getData());
+        }
     }
 }

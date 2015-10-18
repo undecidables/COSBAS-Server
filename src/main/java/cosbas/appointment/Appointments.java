@@ -1,13 +1,23 @@
 package cosbas.appointment;
 
+import cosbas.biometric.data.AccessCode;
+import cosbas.biometric.data.AccessCodeGenerator;
+import cosbas.biometric.data.NumericalAccessCodeGenerator;
+import cosbas.biometric.data.TemporaryAccessCode;
+import cosbas.notifications.Email;
+import cosbas.notifications.Notifications;
+import cosbas.calendar_services.services.GoogleCalendarService;
+
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
-import java.lang.System;
-import java.io.*;
 
 /**
  * Appointments class used to Request, cancel, check the status, accept/deny appointments. 
@@ -16,15 +26,23 @@ import java.io.*;
 @Service
 public class Appointments 
 {
+    Notifications notifyEmail;
+
     /**
-     * The database adapter/repository to use.
+     * The database adapter/credentialRepository to use.
      */
     @Autowired
     private AppointmentDBAdapter repository;
 
+    @Autowired
+    private GoogleCalendarService calendar;
+
+    @Autowired
+    private AccessCodeGenerator visitorCodes;
+
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
-     * @param repository The repository to be injected.
+     * @param repository The credentialRepository to be injected.
      */
     public void setRepository(AppointmentDBAdapter repository) {
         this.repository = repository;
@@ -32,92 +50,115 @@ public class Appointments
     
      /**
      * Function used to request an appointment with a staff member using the system
-     * @param visitorID - The identified of who the visitor is that wants to make an appointment
+     * @param visitorIDs - The identified of who the visitor is that wants to make an appointment
      * @param staffID - The identifier of who the appointment is with, the staff member
-     * @param dateTime - The date and time of the requested apointment
-     * @param reason - The reson for the requested appointment
+     * @param dateTime - The date and time of the requested appointment
+     * @param reason - The reason for the requested appointment
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
-    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes){
-        //check is staffmemeber exists
-        //check if time is available - if not send error with suggested time
-        Appointment a = new Appointment(staffID, visitorIDs, dateTime, durationInMinutes, reason);
+    public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
+        //check is staffmember exists
+        if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
+			String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
+            String[] tempString = a.split(" ");
 
-        repository.save(a);
+            //Notifications
+            Appointment tempAppointment = repository.findById(tempString[0]);
+			notifyEmail = new Notifications();
+			notifyEmail.setEmail(new Email());
 
-        //save to calendar
-        //notify staff memeber
-        return "Appointment " + a.getId() + " has been saved.";
+            List<String> attendants = tempAppointment.getVisitorIDs();
 
-        //else throws Exception/return error message string
+            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+            ContactDetail contactDetailsStaff = null;
+
+            //create ContactDetail objects for visitors
+            for(String s: attendants) {
+                if (s.equals(attendants.get(attendants.size()-1))) {
+                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                }
+                else {
+                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                }
+            }
+
+            notifyEmail.sendNotifications(contactDetailsVisitor,contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs ,tempAppointment,false);
+
+            return "Appointment "+ tempString[0] + " has been saved.";
+        } else return "Time not available";
+		        
     }
     
      /**
      * Function used to cancel an appointment once it has been made/requested
      * @param cancelleeID - Identifier of the person wanting to cancel the appointment. Must be a participant of the appointment
-     * @param appointmentID - The appointmen's unique identifier 
+     * @param appointmentID - The appointment's unique identifier 
      */
     public String cancelAppointment(String cancelleeID, String appointmentID){        
         //find appointment with ID
-       
         Appointment tempAppointment = repository.findById(appointmentID);
 
         if(tempAppointment != null) {
+
             //check is cancellee is one who made the appointment/the appointment is with
              List<String> tempVisitors = tempAppointment.getVisitorIDs();
+
+            //Notifications
+            notifyEmail = new Notifications();
+            notifyEmail.setEmail(new Email());
+
+            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+            ContactDetail contactDetailsStaff = null;
+
+            //create ContactDetail objects for visitors
+            for(String s: tempVisitors) {
+                if (s.equals(tempVisitors.get(tempVisitors.size()-1))) {
+                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                }
+                else {
+                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                }
+            }
 
              for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
              {
                 String visitor = i.next();
-                //if so change status
 
                 if(visitor.equals(cancelleeID) && !tempAppointment.getStatus().equals("Cancelled"))
                 {            
-                    tempAppointment.setStatus("Cancelled");
-                    repository.save(tempAppointment);
+                    calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
+                    //revoke access of key
 
-                    //delete from calendar
-                    //Notify participants 
-                    //revoke access
-                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
+                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
+                    return "Appointment has been cancelled.";
                 } else if (tempAppointment.getStatus().equals("Cancelled"))
                 {
-                    //throw an excetion
-                    return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
+                    return "Appointment has already been cancelled.";
                 }
              }  
 
              //check if cancelleeID is with whom the appointment is with
              if(cancelleeID.equals(tempAppointment.getStaffID()) && !tempAppointment.getStatus().equals("Cancelled"))
              {
-                 tempAppointment.setStatus("Cancelled");
-                    repository.save(tempAppointment);
-
-                    //delete from calendar
-                    //Notify participants 
-                    return "Appointment " + tempAppointment.getId() + " has been cancelled.";
+                    calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
+                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
+                    return "Appointment has been cancelled.";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
-                //throw an excetion
-                return "Appointment " + tempAppointment.getId() + " has already been cancelled.";
+                return "Appointment has already been cancelled.";
              }
 
-             return "You are not authorised to cancel appointment " + tempAppointment.getId();
-             //else throws Exception not authorised
+             return "You are not authorised to cancel this appointment";
         }     
-             //else throws Exception Appointment doesn't exist
-         return "Appointment " + appointmentID + " does not exist.";
+         return "Appointment does not exist.";
     }
 
     /**
-     * Function used to check on the status of a requested/made apointment
-     * @param appointmentID - The appointmen's unique identifier 
+     * Function used to check on the status of a requested/made appointment
+     * @param appointmentID - The appointment's unique identifier
      * @param enquirer - The identifier of the person enquiring about the appointment's status. Must be a participant of the appointment
      */
-    //Pre - appointment must exist
-    //Pre - enquirer must be envolved with the appointment
-    //Post - Data is displayed/returned
     public String checkStatus(String enquirer, String appointmentID){
         //get appointment with ID
          Appointment tempAppointment = repository.findById(appointmentID);
@@ -128,15 +169,12 @@ public class Appointments
              for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
              {
                 String visitor = i.next();
-                //if so
                 if(visitor.equals(enquirer))
                 {
                     String[] parts = tempAppointment.getDateTime().toString().split("T");
-                    String tempDateTime = parts[0] + " at " + parts[1];
+                    String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length()-3);
 
-                    return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
-                    //print information/send back not sure yet
-                    //return;
+                    return "Appointment: " + tempAppointment.getId() + "\nWith: " + tempAppointment.getStaffID() + "\nOn: " + tempDateTime + "\nStatus: " + tempAppointment.getStatus();
                 }
              } 
 
@@ -146,11 +184,8 @@ public class Appointments
                 String[] parts = tempAppointment.getDateTime().toString().split("T");
                 String tempDateTime = parts[0] + " at " + parts[1];
 
-                return "Appointment " + tempAppointment.getId() + " with " + tempAppointment.getStaffID() + " is on " + tempDateTime + " and is: " + tempAppointment.getStatus();
-                //print information/send back not sure yet
-                //return;
+                return "Appointment: " + tempAppointment.getId() + "\nWith: " + tempAppointment.getStaffID() + "\nOn: " + tempDateTime + "\nStatus: " + tempAppointment.getStatus();
              }
-            //else throws Exception
             return "You are not authorised to view this appointment";
          }
         return "No such Appointment exists";
@@ -158,38 +193,59 @@ public class Appointments
 
     /**
      * Function used by staff members to approve a requested appointment
-     * @param appointmentID - The appointmen's unique identifier
+     * @param appointmentID - The appointment's unique identifier
      */
     public String approveAppointment(String appointmentID, String staffID){
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
         
-        //check if status is requested and that perspon is authorised to approve appointment
+        //check if status is requested and that person is authorised to approve appointment
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested") && staffID.equals(tempAppointment.getStaffID()))
         {
-            //set appointment status
+
             tempAppointment.setStatus("Approved");
+
+            List<AccessCode> codes = visitorCodes.getTemporaryAccessCode(tempAppointment);
+            tempAppointment.setAccessKeys(codes);
+
             repository.save(tempAppointment);
-            //send confirmation email with the code
+
+            //Notifications
+            notifyEmail = new Notifications();
+            notifyEmail.setEmail(new Email());
+
+            List<String> attendants = tempAppointment.getVisitorIDs();
+
+            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+            ContactDetail contactDetailsStaff = null;
+
+            //create ContactDetail objects for visitors
+            for(String s: attendants) {
+                if (s.equals(attendants.get(attendants.size()-1))) {
+                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                }
+                else {
+                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                }
+            }
+
+            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
+
             return "Appointment approved";
         } else if(tempAppointment == null){
-            //throw exception
             return "No such Appointment exists";
         } else if(!staffID.equals(tempAppointment.getStaffID())) {
-             //throw exception
              return "You are not authorised to accept this appointment";
         } else {
-            //throw exception
              return "Appointment was already " + tempAppointment.getStatus();
         }
     }
 
     /**
      * Function used by staff members to deny a requested appointment
-     * @param appointmentID - The appointmen's unique identifier
+     * @param appointmentID - The appointment's unique identifier
      */
     public String denyAppointment(String appointmentID, String staffID){
-        //check is perspon is authorised to approve appointment
 
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
@@ -197,20 +253,35 @@ public class Appointments
         //check if status is requested
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested")  && staffID.equals(tempAppointment.getStaffID()))
         {
-            //set appointment status
-            tempAppointment.setStatus("Denied");
-            repository.save(tempAppointment);
-            //remove from calendar
-            //notify participants
+            calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
+
+            //Notifications
+            notifyEmail = new Notifications();
+            notifyEmail.setEmail(new Email());
+
+            List<String> attendants = tempAppointment.getVisitorIDs();
+
+            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+            ContactDetail contactDetailsStaff = null;
+
+            //create ContactDetail objects for visitors
+            for(String s: attendants) {
+                if (s.equals(attendants.get(attendants.size()-1))) {
+                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                }
+                else {
+                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                }
+            }
+
+            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
+
             return "Appointment denied";
         } else if(tempAppointment == null){
-            //throw exception
             return "No such Appointment exists";
         } else if(!staffID.equals(tempAppointment.getStaffID())) {
-             //throw exception
-            return "You are not authorised to cancel this appointment";
+            return "You are not authorised to deny this appointment";
         } else {
-            //throw exception
              return "Appointment was already " + tempAppointment.getStatus();
         }
     }

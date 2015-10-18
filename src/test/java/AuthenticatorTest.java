@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import junit.framework.TestCase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -20,9 +21,14 @@ import cosbas.authentication.Authenticator;
 
 /**
  * This class is the unit tested for the authentication package. It contains unit tests to make sure successful/unsuccessful authentication happens at the correct places.
+ *
+ * This test is ignored because:
+ *      - it is not a proper unit test
+ *      - the authenticatior s not actually being used.
  */
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
-public class Main {
+public class AuthenticatorTest {
 
     private Authenticator servlet = new Authenticator();
 

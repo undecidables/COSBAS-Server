@@ -16,18 +16,37 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import com.google.common.base.Joiner;
+import java.security.Principal;
+import cosbas.calendar_services.services.GoogleCalendarService;
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
+import cosbas.calendar_services.authorization.CredentialWrapper;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @RestController
 public class AppointmentRestController {
     
-    //Private variable used to call the appointment class fuctions of the appointment class
+    //Private variable used to call the appointment class functions of the appointment class
     @Autowired
     private Appointments appointment;
 
     //The database adapter/repository to use.
     @Autowired
     private AppointmentDBAdapter repository;
+
+    @Autowired
+    private CalendarDBAdapter credentialRepository;
+
+    @Autowired
+    private GoogleCalendarService calendar;
+
+    public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
+        this.credentialRepository = credentialRepository;
+    }
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -37,13 +56,36 @@ public class AppointmentRestController {
         this.repository = repository;
     }
 
+    /**
+   * Function used to set up the active users of the system that needs to appear in the list of people an appointment can be made with. It is called as soon as the page is loaded
+   * @return Returns the list of active users to be placed in the selection element
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/getActiveUsers")
+  public String getActiveUsers() {
+    List<CredentialWrapper> credentials = credentialRepository.findAll();
+    String returnPage = "";
+
+    for(int i = 0; i < credentials.size(); i++)
+    { 
+      System.out.println(credentials.get(i));
+        returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
+    }
+      
+    if(credentials.size() == 0){
+      returnPage += "<option>No active users of the system</option>";
+    }
+
+    return returnPage;
+  }
+
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
    * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
-   * @param requestedDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
+   * @param appointmentDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
    * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
-   * @param appoitnmentDuration - Integer duration of the appointment in minutes as inputted on the html form
-   * @param appointmentReason - String reason for the appointment being made as indicated on the html form
+   * @param duration - Integer duration of the appointment in minutes as inputted on the html form
+   * @param reason - String reason for the appointment being made as indicated on the html form
    * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
    */
 
@@ -53,16 +95,17 @@ public class AppointmentRestController {
                      @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
                      @RequestParam(value = "appointmentBy", required = true) List<String> appointmentBy,
                      @RequestParam(value = "appointmentDuration", required = true) int duration,
-                     @RequestParam(value = "appointmentReason", required = true) String reason) {
+                     @RequestParam(value = "appointmentReason", required = true) String reason,
+                     @RequestParam(value = "appointmentEmails", required = true) List<String> emails) {
 
-    LocalDateTime dateTime = LocalDateTime.parse(appointmentDateTime);
-    return appointment.requestAppointment(appointmentBy, appointmentWith, dateTime, reason, duration);
+    LocalDateTime dateTime = LocalDateTime.parse(appointmentDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    return appointment.requestAppointment(appointmentBy, appointmentWith, dateTime, reason, duration, emails);
   }
 
   /**
    * Function used to cancel an appointment via the form on the cancel.html page
    * @param cancellee - String of the name of the person who wants to cancel the appointment. 
-   * @param appoitnmentID - String appointmentID, the appointment ID of the appointment that is being cancelled. 
+   * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
    * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
    */
 
@@ -95,18 +138,18 @@ public class AppointmentRestController {
    */
 
   @RequestMapping(method= RequestMethod.POST, value="/getApproveOrDeny")
-  public String getApproveOrDeny() {
+  public String getApproveOrDeny(Principal principal) {
     List<Appointment> appointments = repository.findByStatusLike("requested");
-    String staffMember = "Staff member";
+    String staffMember = principal.getName();
     String returnPage = "";
 
     for(int i = 0; i < appointments.size(); i++)
     {
       String[] parts = appointments.get(i).getDateTime().toString().split("T");
-      String tempDateTime = parts[0] + " at " + parts[1];
+      String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length()-3);
 
       if(appointments.get(i).getStaffID().equals(staffMember)){
-        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + " on " + tempDateTime + " for " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
+        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>On: " + tempDateTime + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
         returnPage += "<input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/>";
         returnPage += "</div>";
       }
@@ -144,4 +187,67 @@ public class AppointmentRestController {
 
       return appointment.denyAppointment(appointmentID, staffMember);
    }
+
+ /**
+   * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
+   * @return Returns the logged in user's month's appointments
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/getMonthAppointments")
+  public String getMonthAppointments(Principal principal) {
+    Date date = new Date();
+    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    int month = localDate.getMonthValue();
+
+    List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
+
+    String returnPage = "[";
+
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        int duration = appointments.get(i).getDurationMinutes();
+        String startDate = appointments.get(i).getDateTime().toString();
+
+        if(i != appointments.size()-1){
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
+        } else {
+          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
+        }
+      }
+   return (returnPage + "]");
+  }
+
+  /**
+   * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
+   * @return Returns the logged in user's day's appointments
+   */
+
+  @RequestMapping(method= RequestMethod.POST, value="/getDayAppointments")
+  public String getDayAppointments(Principal principal) {
+    List<Appointment> appointments = calendar.getTodaysAppointments(principal.getName());
+    
+    String returnPage = "";
+
+    if(appointments != null){
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        List<String> with = appointments.get(i).getVisitorIDs();
+        int duration = appointments.get(i).getDurationMinutes();
+        String reason = appointments.get(i).getReason();
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+
+        returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+      }
+        
+      if(appointments.size() == 0){
+        returnPage += "<p>You have no appointments for today</p>";
+      }
+     } else {
+      returnPage = "<p>You have no appointments for the week</p>";
+    }
+
+    return returnPage;
+  }
 }

@@ -1,5 +1,6 @@
 package cosbas.appointment;
 
+import cosbas.biometric.data.AccessCode;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -14,14 +15,16 @@ public class Appointment {
     @Id
     private String id;
 
+    private String eventID; //Needed for deletion of events.
     private String	staffID;
     private List<String> visitorIDs; //Maybe use email address since its unique?
 
-    private List<String> accessKeys;
+    private List<AccessCode> accessKeys;
 
     private LocalDateTime dateTime;
-    private int durationMinutes; //Maybe force multiples of 15/30?
+    private int durationMinutes;
 
+    private String summary;
     private String reason;
     private String status; //OR this could be an enum....
 
@@ -33,9 +36,11 @@ public class Appointment {
         this.durationMinutes = durationMinutes;
         this.reason = reason;
         this.status = "requested";
+        this.eventID = null;
+        this.summary = null;
     }
 
-    public void setAccessKeys(List<String> accessKeys) {
+    public void setAccessKeys(List<AccessCode> accessKeys) {
         this.accessKeys = accessKeys;
     }
 
@@ -54,7 +59,7 @@ public class Appointment {
         return visitorIDs;
     }
 
-    public List<String> getAccessKeys() {
+    public List<AccessCode> getAccessKeys() {
         return accessKeys;
     }
 
@@ -72,5 +77,21 @@ public class Appointment {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getSummary() {
+        return summary;
     }
 }

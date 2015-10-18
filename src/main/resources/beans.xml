@@ -20,12 +20,99 @@
         <constructor-arg name="password" value="${mongo.password}" />
     </bean>
 
-    <!-- MongoTemplate for connecting and quering the documents in the database -->
+    <!-- MongoTemplate for connecting and querying the documents in the database -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongo" ref="mongo" />
         <constructor-arg name="databaseName" value="${mongo.database}" />
         <constructor-arg name="userCredentials" ref="mongoCredentials" />
     </bean>
 
+    <!-- Bean to send our emails through the gmail smtp server -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="protocol" value="smtps"/>
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="465"/>
+        <property name="username" value="cosbasup@gmail.com"/>
+        <property name="password" value="bioPass123" />
+    </bean>
+
+    <!-- Template Email for the appointment request notification -->
+    <bean id="visitorTemplateMessageRequest" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Requested"/>
+    </bean>
+
+    <bean id="staffTemplateMessageRequest" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Requested"/>
+    </bean>
+
+    <bean id="emailManagerRequest" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="visitorTemplateMessageRequest" ref="visitorTemplateMessageRequest"/>
+        <property name="staffTemplateMessageRequest" ref="staffTemplateMessageRequest"/>
+    </bean>
+
+    <!-- Template Email for the appointment approve notification -->
+    <bean id="visitorTemplateMessageApprove" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Approved"/>
+    </bean>
+
+    <bean id="staffTemplateMessageApprove" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Approved"/>
+    </bean>
+
+    <bean id="emailManagerApprove" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="visitorTemplateMessageApprove" ref="visitorTemplateMessageApprove"/>
+        <property name="staffTemplateMessageApprove" ref="staffTemplateMessageApprove"/>
+    </bean>
+
+    <!-- Template Email for the appointment approve notification -->
+    <bean id="visitorTemplateMessageCancel" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Cancelled"/>
+    </bean>
+
+    <bean id="staffTemplateMessageCancel" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Cancelled"/>
+    </bean>
+
+    <bean id="emailManagerCancel" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="visitorTemplateMessageCancel" ref="visitorTemplateMessageCancel"/>
+        <property name="staffTemplateMessageCancel" ref="staffTemplateMessageCancel"/>
+    </bean>
+
+    <!-- Template Email for the appointment deny notification -->
+    <bean id="visitorTemplateMessageDeny" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Deny"/>
+    </bean>
+
+    <bean id="staffTemplateMessageDeny" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Appointment Deny"/>
+    </bean>
+
+    <bean id="emailManagerDeny" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="visitorTemplateMessageDeny" ref="visitorTemplateMessageDeny"/>
+        <property name="staffTemplateMessageDeny" ref="staffTemplateMessageDeny"/>
+    </bean>
+
+    <!-- Template Email for the registration notification -->
+    <bean id="staffTemplateMessageReg" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="cosbasup@gmail.com"/>
+        <property name="subject" value="COSBAS: Successful Registration"/>
+    </bean>
+
+    <bean id="emailManagerReg" class="cosbas.notifications.Email">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="staffTemplateMessageReg" ref="staffTemplateMessageReg"/>
+    </bean>
 
 </beans>
