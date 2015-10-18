@@ -82,7 +82,62 @@ $(document).ready(function() {
 
   timeVar = time;
   
+    $('.appointmentBy').focus(function() {
 
+        if($("#numMembers").val() >= 1)
+        {
+
+          //$prevInputs = $('.appointmentDetails').length+1;
+            var amountMembers = $("#numMembers").val();
+
+          //if($prevInputs < $("#numMembers").val())
+         // {
+            var lightbox = '<div id="lightbox">' +
+                                '<div id="content">';
+
+            for($i = 0; $i < $("#numMembers").val(); $i++)
+            {
+              lightbox += '<p class="text-left">Your team member\'s name:</p><input class="form-control nameinput" type="text" id="appointmentBy" name="appointmentBy"/>';
+            }
+            lightbox += "<br/>"
+            lightbox +=  '<p class="text-left">' +
+                            '<button type="submit" id="namesubmit" class="btnLightbox btn-common">Confirm Names</button>' +
+                         '</p>';
+            lightbox += '</div>' +
+                      '</div>';
+
+            $.featherlight(lightbox, null);
+        }
+      });
+      var emailString;
+        $(document.body).on('click', '#namesubmit' ,function(){
+               //check appointmentBy
+               $allFilledIn = true;
+
+               $inputs = $(".nameinput");
+               $temp = [];
+               for($i = 0; $i < $inputs.length; $i++){
+                 if($($inputs[$i]).val() == "")
+                 {
+                   $element = $("<p class='error' id='madeByError'>All members' names must be entered. </p>");
+                    $("#madeByError").remove();
+                    $('#appointmentMadeBy').append($element);
+                   $allFilledIn = false;
+                   $noError = false;
+                 }
+                 else
+                 {
+                   if($i == $inputs.length-1 && $allFilledIn == true)
+                   {
+                     $("#madeByError").remove();
+                   }
+                   $temp[$i] = $($inputs[$i]).val();
+                 }
+               }
+               $temp = $temp.join(", ");
+            $('.featherlight').click();
+            $('.appointmentBy').val($temp);
+        });
   $('#email').focus(function() {
 
     if($("#numMembers").val() >= 1)
@@ -107,30 +162,7 @@ $(document).ready(function() {
         lightbox += '</div>' +
                   '</div>';
         $.featherlight(lightbox, null);
-      //}
-     // else if($prevInputs > $("#numMembers").val())
-     // {
-        //for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
-        //{
-         // $($(".appointmentDetails")[$i-1]).remove();
-        //}
-      //}
-
-      //$('#errorNumbers').remove();
-      //$('#madeByError').remove();
     }
-    /*else
-    {
-      $prevInputs = $('.appointmentDetails').length;
-      $("#numMembers").val(1);
-      for($i = $prevInputs; $i > $("#numMembers").val(); $i--)
-      {
-        $($(".appointmentDetails")[$i-1]).remove();
-      }
-      $element = $('<p class="error" id="errorNumbers">The minimum of people making an appointment is one. </p>');
-      $('#errorNumbers').remove();
-      $('#membersNum').append($element);
-    }*/
   });
     $(document.body).on('click', '#appointmentsubmit' ,function(){
         $('.featherlight').click();
@@ -139,6 +171,7 @@ $(document).ready(function() {
     $(document.body).on('click', '#calendarOk' ,function(){
             $('.featherlight').click();
         });
+
 
   var emailString;
   $(document.body).on('click', '#emailsubmit' ,function(){
@@ -223,30 +256,7 @@ $(document).ready(function() {
       $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
     }
 
-    //check appointmentBy
-    $allFilledIn = true;
 
-    $inputs = $(".appointmentBy");
-    $temp = [];
-    for($i = 0; $i < $inputs.length; $i++){
-      if($($inputs[$i]).val() == "")
-      {
-        $element = $("<p class='error' id='madeByError'>All members' names must be entered. </p>");
-         $("#madeByError").remove();
-         $('#appointmentMadeBy').append($element);
-        $allFilledIn = false;
-        $noError = false;
-      }
-      else 
-      {
-        if($i == $inputs.length-1 && $allFilledIn == true)
-        {
-          $("#madeByError").remove();
-        }
-        $temp[$i] = $($inputs[$i]).val();
-      }
-    }
-    $temp = $temp.join(", ");
     
 
 
