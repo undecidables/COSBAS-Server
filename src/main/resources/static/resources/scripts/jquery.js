@@ -141,15 +141,11 @@ $(document).ready(function() {
         });
   var emailString;
   $(document.body).on('click', '#emailsubmit' ,function(){
-    /*emailString = "";
-    $('.emailinput').each(function(i, obj) {
-        emailString += $(obj).val() + ", ";
-    });*/
      //check emails
      $allEmailsFilledIn = true;
-     $inputs = $(".email");
+     $inputs = $(".emailinput");
       $tempEmail = [];
-      for($i = 1; $i < $inputs.length; $i++){
+      for($i = 0; $i < $inputs.length; $i++){
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
         {
@@ -251,31 +247,7 @@ $(document).ready(function() {
     }
     $temp = $temp.join(", ");
     
-    //check emails
-    $allEmailsFilledIn = true;
 
-    $inputs = $(".email");
-    $tempEmail = [];
-    for($i = 0; $i < $inputs.length; $i++){
-      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
-      {
-        $element = $("<p class='error' id='emailError'>All members' emails must be entered. </p>");
-        $("#emailError").remove();
-        $('#appointmentMadeBy').append($element);
-        $allEmailsFilledIn = false;
-        $noError = false;
-      }
-      else 
-      {
-        if($i == $inputs.length-1 && $allEmailsFilledIn == true)
-        {
-          $("#emailError").remove();
-        }
-        $tempEmail[$i] = $($inputs[$i]).val();
-      }
-    }
-    $tempEmail = $tempEmail.join(", ");
 
     //check reason
     if($("#appointmentReason").val() == "")
@@ -297,6 +269,7 @@ $(document).ready(function() {
     //send data if no errors
     if($noError == true)
     {
+        $.featherlight("<h1 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h1>");
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
@@ -307,6 +280,8 @@ $(document).ready(function() {
                "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
+            $('.featherlight').click();
+            $.featherlight("<h1 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h1>");
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
@@ -474,7 +449,7 @@ $(document).ready(function() {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){
-            $("#fieldset").append("<p>No appointments pending</p>");
+            $("#fieldset").append("<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
           }
         }
       }); 
@@ -497,7 +472,7 @@ $(document).ready(function() {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){
-            $("#fieldset").append("<p>No appointments pending</p>");
+            $("#fieldset").append("<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
           }
         }
       }); 
@@ -523,6 +498,7 @@ $(document).ready(function() {
             eventLimit: true, // allow "more" link when too many events
             events: returned,
             viewRender: function(currentView){
+              $('#loadingCalendar').remove();
               $(".fc-prev-button").hide();    
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
@@ -530,10 +506,18 @@ $(document).ready(function() {
             eventRender: function (event, element) {
               element.attr('href', 'javascript:void(0);');
               element.click(function() {
-                  $("#eventInfo").html(event.withWho);
+                  var htmlLightbox = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h3><br/>"+
+                                    "<p><b>Meeting Members:</b> "+event.withWho+"</p>" +
+                                    "<p><b>Starting Time:</b> "+moment(event.start).format('MMM Do h:mm A')+"</p>"+
+                                    "<p><b>Ending Time:</b> "+((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)"+"</p>";
+                   htmlLightbox +=  '<br/><p class="text-left">' +
+                                           '<button type="submit" id="calendarOk" class="btnLightbox btn-common">Return</button>' +
+                                        '</p>';
+                  $.featherlight(htmlLightbox,null);
+                  /*$("#eventInfo").html(event.withWho);
                   $("#startTime").html(moment(event.start).format('MMM Do h:mm A'));
                   $("#endTime").html(((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)");
-                  $("#eventContent").dialog({ modal: true, title: event.title, width:350});
+                  $("#eventContent").dialog({ modal: true, title: event.title, width:350});*/
                   return false;
               });
           }

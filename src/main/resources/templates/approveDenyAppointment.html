@@ -6,27 +6,66 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-		<br/>
-		<div>
-			<a href="#">
-				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-			</a>
-		</div>
-		<br/>
-		<div class="row">
-			<div>
-				<div class="cosbasLogin">
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Approve or Deny Appointments</div>
-					<br/>
-					<form>
-						<input type="Button" value="Deny all" id="DenyAll"/>
-						<fieldset id="fieldset">
-							
-						</fieldset>
-						<a href="#">To top</a>
-					</form>
+	<section id="contact">
+		<div class="overlay">
+			<div class="container">
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Approve or Deny</span> Appointments</h1>
+
+				<div class="row">
+					<div class="contact-form">
+						<form role="form" method="post">
+							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls">
+									<p class="text-left">Deny All Appointments:</p>
+									<input type="Button" class="contact_input contactA" value="Deny all" id="DenyAll"/>
+									<i class="fa fa-user"></i>
+								</div>
+								<br/>
+							</div>
+							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls" id="fieldset">
+									<!--<p class="text-left">Reason for Appointment:</p>
+                                <i class="fa fa-question"></i>
+                                    <a href="#">To top</a>-->
+								</div>
+								<div class="controls" id="reason">
+									<!--<p class="text-left">Reason for Appointment:</p>
+                                <i class="fa fa-question"></i>
+                                    <a href="#">To top</a>-->
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
+			</div>
+	</section>
+	<footer id="footer">
+		<div class="container">
+			<div class="copyright text-center">
+				<p>&copy; University of Pretoria, Department of Computer Science</p>
+			</div>
 		</div>
+	</footer>
+
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/assets/js/main.js"></script>
 	</body>
 </html>
