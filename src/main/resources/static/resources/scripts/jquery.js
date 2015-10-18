@@ -1,6 +1,6 @@
 $(document).ready(function() {
 // initialize input widgets first
-        $('.time').timepicker({
+        $('#appointmentDate .time').timepicker({
             'showDuration': false,
             'timeFormat': 'H:i',
             'minTime' : '07:30',
@@ -14,7 +14,7 @@ $(document).ready(function() {
             'scrollDefault': 'now'
         });
 
-        $('.appointmentDate .end').timepicker({
+        $('#appointmentDate .end').timepicker({
           'showDuration': true,
             'timeFormat': 'H:i',
             'minTime' : '07:30',
@@ -28,7 +28,7 @@ $(document).ready(function() {
             'scrollDefault': 'now'
         });
 
-        $('.date').datepicker({
+        $('#appointmentDate .date').datepicker({
             'beforeShowDay': $.datepicker.noWeekends,
             'format': 'mm/dd/yyyy',
             'autoclose': true,
@@ -251,7 +251,31 @@ $(document).ready(function() {
     }
     $temp = $temp.join(", ");
     
+    //check emails
+    $allEmailsFilledIn = true;
 
+    $inputs = $(".email");
+    $tempEmail = [];
+    for($i = 0; $i < $inputs.length; $i++){
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
+      {
+        $element = $("<p class='error' id='emailError'>All members' emails must be entered. </p>");
+        $("#emailError").remove();
+        $('#appointmentMadeBy').append($element);
+        $allEmailsFilledIn = false;
+        $noError = false;
+      }
+      else 
+      {
+        if($i == $inputs.length-1 && $allEmailsFilledIn == true)
+        {
+          $("#emailError").remove();
+        }
+        $tempEmail[$i] = $($inputs[$i]).val();
+      }
+    }
+    $tempEmail = $tempEmail.join(", ");
 
     //check reason
     if($("#appointmentReason").val() == "")
@@ -283,16 +307,19 @@ $(document).ready(function() {
                "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
-        $("#signIn").text(jsonReturned);
+          $("#signIn").text(jsonReturned);
+          if(jsonReturned != "Time not available"){
 
-          //cleanup user input on successfull appointment request
-          $( ":text" ).val("");
-          $( "input[type=email]" ).val("");
-          $("#appointmentWith").prop('selectedIndex', 0);
+            //cleanup user input on successfull appointment request
+            $( ":text" ).val("");
+            $( "input[type=email]" ).val("");
+            $("#appointmentWith").prop('selectedIndex', 0);
 
-          for($i = $("#numMembers").val(); $i > 1; $i--)
-          {
-            $($(".appointmentDetails")[$i-1]).remove();
+            for($i = $("#numMembers").val(); $i > 1; $i--)
+            {
+              $($(".appointmentDetails")[$i-1]).remove();
+            }
+            $("#numMembers").val(1);
           }
           $("#numMembers").val(1);
           $("#appointmentDuration").val(15);
@@ -303,7 +330,6 @@ $(document).ready(function() {
       $("#signIn").text("Request an appointment");
       window.scrollTo(0, 0);
     }
-
   });
   /***************************************************************************/
 
@@ -447,7 +473,7 @@ $(document).ready(function() {
         } else {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
-          if(tempThis.parent().parent().children().length == 0){
+          if(tempChildren - 1 == 0){
             $("#fieldset").append("<p>No appointments pending</p>");
           }
         }
@@ -470,7 +496,7 @@ $(document).ready(function() {
         } else {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
-          if(tempThis.parent().parent().children().length == 0){
+          if(tempChildren - 1 == 0){
             $("#fieldset").append("<p>No appointments pending</p>");
           }
         }
@@ -501,8 +527,16 @@ $(document).ready(function() {
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
             },
-
-
+            eventRender: function (event, element) {
+              element.attr('href', 'javascript:void(0);');
+              element.click(function() {
+                  $("#eventInfo").html(event.withWho);
+                  $("#startTime").html(moment(event.start).format('MMM Do h:mm A'));
+                  $("#endTime").html(((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)");
+                  $("#eventContent").dialog({ modal: true, title: event.title, width:350});
+                  return false;
+              });
+          }
           });
       });
 
@@ -525,5 +559,6 @@ $(document).ready(function() {
     $('.deny').click();
     $("#fieldset").empty();
     $("#fieldset").append("<p>No appointments pending</p>");
+    //window.location.reload(true);
   }));
 });
