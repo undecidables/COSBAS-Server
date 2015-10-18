@@ -10,73 +10,74 @@
 		<div class="overlay">
 			<div class="container">
 				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Make</span> Appointment</h1>
+
 				<div class="row">
 					<div class="contact-form">
 						<form role="form" method="post">
-                            <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
-                                <div class="controls">
-                                    <p class="text-left">Appointment with:</p>
-                                    <select class="form_control" id="appointmentWith" name="appointmentWith"></select>
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <div id="appointmentDate">
-	                                <div class="controls appointmentDate">
-	                                    <p class="text-left">Date: </p>
-	                                    <input type="text" class="contact_input date" id="requestedDateTime"/>
-	                                    <i class="fa fa-calendar"></i>
-	                                </div>
-	                                <div class="controls appointmentDate">
-	                                    <p class="text-left">Starting Time: </p>
-	                                    <input type="text" class="contact_input time start" id="timeStart"/>
-	                                    <i class="fa fa-calendar"></i>
-	                                </div>
-	                                <div class="controls appointmentDate">
-                                    <p class="text-left">Ending Time: </p>
-                                    <input type="text" class="contact_input time end" id="timeEnd"/>
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-	                            </div>
-                                <!--div class="form-group" id="duration">
+							<div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
+								<div id="appointmentDate">
+									<div class="controls">
+										<p class="text-left">Appointment with:</p>
+										<input class="contact_input" id="appointmentWith" name="appointmentWith"/>
+										<i class="fa fa-user"></i>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Date: </p>
+										<input type="text" class="contact_input date" id="requestedDateTime"/>
+										<i class="fa fa-calendar"></i>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Starting Time: </p>
+										<input type="text" class="contact_input time start" id="timeStart"/>
+										<i class="fa fa-calendar"></i>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Ending Time: </p>
+										<input type="text" class="contact_input time end" id="timeEnd"/>
+										<i class="fa fa-calendar"></i>
+									</div>
+								</div>
+								<!--div class="form-group" id="duration">
                                     <p class="text-left">Duration of appointment: </p>
                                     <input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
                                 </div-->
-                            </div>
-                            <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
+								</div>
+							<div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
 								<div class="controls" id="reason">
 									<p class="text-left">Reason for Appointment:</p>
 									<input class="contact_input" type="text" id="appointmentReason"
 										   name="appointmentReason"/>
 									<i class="fa fa-question"></i>
 								</div>
-                                <div class="controls" id="membersNum">
-                                    <p class="text-left">Number of members making the appointment: </p>
-                                    <input class="contact_input" type="number" min="1" value="1" id="numMembers"
+								<div class="controls" id="membersNum">
+									<p class="text-left">Number of members making the appointment: </p>
+									<input class="contact_input" type="number" min="1" value="1" id="numMembers"
 										   name="numMembers"/>
-                                    <i class="fa fa-users"></i>
-                                </div>
-                                <div class="controls" id="appointmentMadeBy">
-                                    <div class="appointmentDetails">
-                                        <p class="text-left">Appointment made by (your name/team members' names): </p>
-                                        <input class="contact_input appointmentBy" type="text" name="appointmentBy[]"/>
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                </div>
-                                <div class="controls">
-                                    <p class="text-left">Your/team members' email:</p>
-                                    <input class="contact_input email" type="email" id="email" name="email"/>
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-                                <button type="submit" id="makeAppointmentRequest" class="btn btn-common">Request
-                                    Appointment
-                                </button>
+									<i class="fa fa-users"></i>
+								</div>
+								<div class="controls" id="appointmentMadeBy">
+									<div class="appointmentDetails">
+										<p class="text-left">Appointment made by (your name/team members' names): </p>
+										<input class="contact_input appointmentBy" type="text" name="appointmentBy[]"/>
+										<i class="fa fa-user"></i>
+									</div>
+								</div>
+								<div class="controls">
+									<p class="text-left">Your/team members' email:</p>
+									<input class="contact_input email" type="email" id="email" name="email"/>
+									<i class="fa fa-envelope"></i>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+								<button type="submit" id="makeAppointmentRequest" class="btn btn-common">Request
+									Appointment
+								</button>
 							</div>
 						</form>
 					</div>
+					</div>
 				</div>
-            </div>
-        </div>
+			</div>
 	</section>
 
 	<footer id="footer">

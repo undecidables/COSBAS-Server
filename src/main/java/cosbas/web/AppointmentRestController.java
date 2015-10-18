@@ -6,23 +6,23 @@
 
 package cosbas.web;
 
+import com.google.common.base.Joiner;
+import cosbas.appointment.Appointment;
+import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.appointment.Appointments;
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import cosbas.appointment.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import com.google.common.base.Joiner;
-import java.security.Principal;
-import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.calendar_services.authorization.CalendarDBAdapter;
-import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
-import cosbas.calendar_services.authorization.CredentialWrapper;
+import java.util.List;
 
 @RestController
 public class AppointmentRestController {
@@ -62,9 +62,9 @@ public class AppointmentRestController {
   public String getActiveUsers() {
     List<CredentialWrapper> credentials = credentialRepository.findAll();
     String returnPage = "";
+      returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"appointmentWith\">";
+    for(int i = 0; i < credentials.size(); i++) {
 
-    for(int i = 0; i < credentials.size(); i++)
-    { 
       System.out.println(credentials.get(i));
         returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
     }
@@ -72,6 +72,11 @@ public class AppointmentRestController {
     if(credentials.size() == 0){
       returnPage += "<option>No active users of the system</option>";
     }
+      returnPage += "</select>";
+      returnPage += "<p class=\"text-left\">" +
+              "<br/>" +
+              "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>" +
+              "</p>";
 
     return returnPage;
   }

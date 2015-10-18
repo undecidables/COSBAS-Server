@@ -42,13 +42,19 @@ $(document).ready(function() {
   /******************** Request Appointment ***********************************/
 
   if(document.title == "Make Appointment"){
-     $.ajax({
-        type: "post",
-        url: "/getActiveUsers"
-      }).then(function(jsonReturned) {
-        $("#appointmentWith").append(jsonReturned);
-      });
-      window.scrollTo(0, 0);
+    $("#appointmentWith").click(function(){
+    $("#appointmentWith").prop('disabled', true);
+    $("#appointmentWith").val("Loading Staff Member List...");
+      $.ajax({
+              type: "post",
+              url: "/getActiveUsers"
+            }).then(function(jsonReturned) {
+              $.featherlight(jsonReturned,null);
+               $("#appointmentWith").prop('disabled', false);
+            });
+            window.scrollTo(0, 0);
+    });
+
   }
 
   var timeVar
@@ -92,7 +98,7 @@ $(document).ready(function() {
 
         for($i = 0; $i < $("#numMembers").val(); $i++)
         {
-          lightbox += '<p class="text-left">Your/team members email:</p><input class="form-control email emailinput" type="email" id="email" name="email"/>';
+          lightbox += '<p class="text-left">Your team member\'s email:</p><input class="form-control email emailinput" type="email" id="email" name="email"/>';
         }
         lightbox += "<br/>"
         lightbox +=  '<p class="text-left">' +
@@ -126,7 +132,10 @@ $(document).ready(function() {
       $('#membersNum').append($element);
     }*/
   });
-
+    $(document.body).on('click', '#appointmentsubmit' ,function(){
+        $('.featherlight').click();
+        $('#appointmentWith').val($('#appointmentData').val());
+    });
   var emailString;
   $(document.body).on('click', '#emailsubmit' ,function(){
     /*emailString = "";

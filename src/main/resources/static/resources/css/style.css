@@ -1,3 +1,5 @@
+
+
 #header .main-navigation
 {
     background: #003366;
@@ -5,7 +7,9 @@
 
 #footer
 {
-    min-height: 230px;
+    position: fixed;
+    bottom: 0;
+   // min-height: 230px;
 	background: #003366;
 }
 
@@ -54,7 +58,11 @@
 }
 
 #contact {
-    background-color: rgba(200,200,200,0.3);
+    background-color: rgba(200,200,200,0.0);
+    height: 100vh;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    position: relative;
 }
 
 #contact .section-title span
@@ -125,7 +133,32 @@ background: #cccc99;
     font-weight: 300;
     height: 48px;
     padding: 0 12px;
-    width: 88%;
+    width: 80%;
+    border: 1px solid #003366;
+    line-height: normal;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+#appointmentData
+{
+    color: #000;
+        background-color: #ffffff;
+        float: left;
+        border: 1px solid #0BAFA0;
+        font-size: 14px;
+        font-weight: 300;
+        height: 48px;
+        padding: 0 12px;
+        width: 100%;
+        border: 1px solid #003366;
+        line-height: normal;
+        margin: 0;
+        box-sizing: border-box;
+}
+
+#contact .contact-form .controls select.contact_input {
     border: 1px solid #003366;
 }
 
