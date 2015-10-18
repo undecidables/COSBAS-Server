@@ -436,6 +436,7 @@ $(document).ready(function() {
   $(document).on('click', '.accept', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
+    var tempChildren = $(this).parent().parent().children().length;
       $.ajax({
         type: "post",
         data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
@@ -459,6 +460,7 @@ $(document).ready(function() {
   $(document).on('click', '.deny', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
+    var tempChildren = $(this).parent().parent().children().length;
       $.ajax({
         type: "post",
         data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
