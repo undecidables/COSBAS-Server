@@ -246,19 +246,20 @@ $(document).ready(function() {
                "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
-        $("#signIn").text(jsonReturned);
+          $("#signIn").text(jsonReturned);
+          if(jsonReturned != "Time not available"){
 
-          //cleanup user input on successfull appointment request
-          $( ":text" ).val("");
-          $( "input[type=email]" ).val("");
-          $("#appointmentWith").prop('selectedIndex', 0);
+            //cleanup user input on successfull appointment request
+            $( ":text" ).val("");
+            $( "input[type=email]" ).val("");
+            $("#appointmentWith").prop('selectedIndex', 0);
 
-          for($i = $("#numMembers").val(); $i > 1; $i--)
-          {
-            $($(".appointmentDetails")[$i-1]).remove();
+            for($i = $("#numMembers").val(); $i > 1; $i--)
+            {
+              $($(".appointmentDetails")[$i-1]).remove();
+            }
+            $("#numMembers").val(1);
           }
-          $("#numMembers").val(1);
-          $("#appointmentDuration").val(15);
       });
       window.scrollTo(0, 0);
      
@@ -397,6 +398,7 @@ $(document).ready(function() {
   $(document).on('click', '.accept', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
+    var tempChildren = $(this).parent().parent().children().length;
       $.ajax({
         type: "post",
         data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
@@ -409,7 +411,7 @@ $(document).ready(function() {
         } else {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
-          if(tempThis.parent().parent().children().length == 0){
+          if(tempChildren - 1 == 0){
             $("#fieldset").append("<p>No appointments pending</p>");
           }
         }
@@ -420,6 +422,7 @@ $(document).ready(function() {
   $(document).on('click', '.deny', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
+    var tempChildren = $(this).parent().parent().children().length;
       $.ajax({
         type: "post",
         data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
@@ -432,7 +435,7 @@ $(document).ready(function() {
         } else {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
-          if(tempThis.parent().parent().children().length == 0){
+          if(tempChildren - 1 == 0){
             $("#fieldset").append("<p>No appointments pending</p>");
           }
         }
@@ -441,6 +444,7 @@ $(document).ready(function() {
   /***************************************************************************/
   /*****************************Home page**********************************/
   if(document.title == "COSBAS Service"){
+
     var returned;
     $date = moment().format('YYYY-MM-DD');
      $.ajax({
@@ -461,7 +465,17 @@ $(document).ready(function() {
               $(".fc-prev-button").hide();    
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
-            }
+            },
+            eventRender: function (event, element) {
+              element.attr('href', 'javascript:void(0);');
+              element.click(function() {
+                  $("#eventInfo").html(event.withWho);
+                  $("#startTime").html(moment(event.start).format('MMM Do h:mm A'));
+                  $("#endTime").html(((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)");
+                  $("#eventContent").dialog({ modal: true, title: event.title, width:350});
+                  return false;
+              });
+          }
           });
       });
 
@@ -484,5 +498,6 @@ $(document).ready(function() {
     $('.deny').click();
     $("#fieldset").empty();
     $("#fieldset").append("<p>No appointments pending</p>");
+    //window.location.reload(true);
   }));
 });

@@ -208,11 +208,12 @@ public class AppointmentRestController {
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
         int duration = appointments.get(i).getDurationMinutes();
         String startDate = appointments.get(i).getDateTime().toString();
+        String summary = appointments.get(i).getSummary();
 
         if(i != appointments.size()-1){
-          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
+          returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"},";
         } else {
-          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
+          returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"}";
         }
       }
    return (returnPage + "]");
