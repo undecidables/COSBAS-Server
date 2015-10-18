@@ -109,6 +109,7 @@ $(document).ready(function() {
             $.featherlight(lightbox, null);
         }
       });
+
       var emailString;
         $(document.body).on('click', '#namesubmit' ,function(){
                //check appointmentBy
@@ -290,10 +291,9 @@ $(document).ready(function() {
                "appointmentReason" : $('#appointmentReason').val(),
                "appointmentEmails" : $tempEmail},
         url: "/requestAppointment"
-      }).then(function(jsonReturned) {
+      }). then(function(jsonReturned) {
             $('.featherlight').click();
             $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h3>");
-          $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
             //cleanup user input on successfull appointment request
@@ -307,11 +307,13 @@ $(document).ready(function() {
             }
             $("#numMembers").val(1);
           }
-          $("#numMembers").val(1);
-          $("#appointmentDuration").val(15);
-      });
+          else
+          {
+            $('.featherlight').click();
+            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
+          }
       window.scrollTo(0, 0);
-     
+     });
     } else {
       $("#signIn").text("Request an appointment");
       window.scrollTo(0, 0);
@@ -362,7 +364,8 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
-        $("#signIn").text(jsonReturned);
+        $('.featherlight').click();
+        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
       });
@@ -418,8 +421,12 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
-        var obj =  $("#signIn").text(jsonReturned);
+        var obj =  $("<p>"+jsonReturned+"</p>");
         obj.html(obj.html().replace(/\n/g,'<br/>'));
+        
+        $('.featherlight').click();
+        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\">"+obj+"!</h3>");
+
         $("#appointmentID").val("");
         $("#requestedBy").val("");
       });
