@@ -121,10 +121,10 @@ $(document).ready(function() {
                  if($($inputs[$i]).val() == "")
                  {
                    $element = $("<p class='error' id='madeByError'>All members' names must be entered. </p>");
-                    $("#madeByError").remove();
-                    $('#appointmentMadeBy').append($element);
+                   $.featherlight($element);
                    $allFilledIn = false;
                    $noError = false;
+                   return;
                  }
                  else
                  {
@@ -185,11 +185,9 @@ $(document).ready(function() {
         if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
         {
           $element = $("<p class='error' id='emailError'>Invalid E-Mail/All members' emails must be entered. </p>");
-          $("#emailError").remove();
-          $('#appointmentMadeBy').append($element);
+          $.featherlight($element);
           $allEmailsFilledIn = false;
           $noError = false;
-          $.featherlight($element, null);
           return;
         }
         else
