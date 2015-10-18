@@ -1,12 +1,15 @@
 package cosbas.biometric.data;
 
-import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.BiometricTypes;
+import cosbas.biometric.request.DoorActions;
 
 /**
  * {@author Renette Ros}
  */
 public class AccessCode extends BiometricData {
+
+    protected boolean temporary = false;
+    private DoorActions lastAction;
 
     public AccessCode (String user, byte[] code) {
         super(user, BiometricTypes.CODE, code);
@@ -37,7 +40,4 @@ public class AccessCode extends BiometricData {
         }
         return String.valueOf(codeString);
     }
-
-    protected boolean temporary = false;
-    private DoorActions lastAction;
 }

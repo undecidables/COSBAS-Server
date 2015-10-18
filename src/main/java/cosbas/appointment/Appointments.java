@@ -2,12 +2,9 @@ package cosbas.appointment;
 
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.AccessCodeGenerator;
-import cosbas.biometric.data.NumericalAccessCodeGenerator;
-import cosbas.biometric.data.TemporaryAccessCode;
+import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
-import cosbas.calendar_services.services.GoogleCalendarService;
-
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Appointments class used to Request, cancel, check the status, accept/deny appointments. 
@@ -198,7 +194,7 @@ public class Appointments
     public String approveAppointment(String appointmentID, String staffID){
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
-        
+
         //check if status is requested and that person is authorised to approve appointment
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested") && staffID.equals(tempAppointment.getStaffID()))
         {

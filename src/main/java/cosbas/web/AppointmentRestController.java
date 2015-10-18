@@ -6,26 +6,26 @@
 
 package cosbas.web;
 
+import com.google.common.base.Joiner;
+import cosbas.appointment.Appointment;
+import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.appointment.Appointments;
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import cosbas.appointment.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import com.google.common.base.Joiner;
+
 import java.security.Principal;
-import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.calendar_services.authorization.CalendarDBAdapter;
-import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
-import cosbas.calendar_services.authorization.CredentialWrapper;
-import java.util.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 public class AppointmentRestController {
@@ -61,23 +61,28 @@ public class AppointmentRestController {
    * @return Returns the list of active users to be placed in the selection element
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/getActiveUsers")
-  public String getActiveUsers() {
-    List<CredentialWrapper> credentials = credentialRepository.findAll();
-    String returnPage = "";
+    @RequestMapping(method = RequestMethod.POST, value = "/getActiveUsers")
+    public String getActiveUsers() {
+        List<CredentialWrapper> credentials = credentialRepository.findAll();
+        String returnPage = "";
+        returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"appointmentWith\">";
+        for (int i = 0; i < credentials.size(); i++) {
 
-    for(int i = 0; i < credentials.size(); i++)
-    { 
-      System.out.println(credentials.get(i));
-        returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
-    }
-      
-    if(credentials.size() == 0){
-      returnPage += "<option>No active users of the system</option>";
-    }
+            System.out.println(credentials.get(i));
+            returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
+        }
 
-    return returnPage;
-  }
+        if (credentials.size() == 0) {
+            returnPage += "<option>No active users of the system</option>";
+        }
+        returnPage += "</select>";
+        returnPage += "<p class=\"text-left\">" +
+                "<br/>" +
+                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>" +
+                "</p>";
+
+        return returnPage;
+    }
 
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
@@ -190,32 +195,32 @@ public class AppointmentRestController {
 
  /**
    * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
-   * @return Returns the logged in user's month's appointments
+  * @return Returns the logged in user's month's appointments
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/getMonthAppointments")
-  public String getMonthAppointments(Principal principal) {
-    Date date = new Date();
-    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    int month = localDate.getMonthValue();
+ @RequestMapping(method = RequestMethod.POST, value = "/getMonthAppointments")
+ public String getMonthAppointments(Principal principal) {
+     Date date = new Date();
+     LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+     int month = localDate.getMonthValue();
 
-    List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
+     List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
 
-    String returnPage = "[";
+     String returnPage = "[";
 
       for(int i = 0; i < appointments.size(); i++)
       {
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
-        int duration = appointments.get(i).getDurationMinutes();
-        String startDate = appointments.get(i).getDateTime().toString();
+          int duration = appointments.get(i).getDurationMinutes();
+          String startDate = appointments.get(i).getDateTime().toString();
 
-        if(i != appointments.size()-1){
-          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
-        } else {
-          returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
-        }
+          if (i != appointments.size() - 1) {
+              returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"},";
+          } else {
+              returnPage += "{\"title\":\"Appointment with: " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\"}";
+          }
       }
-   return (returnPage + "]");
+     return (returnPage + "]");
   }
 
   /**

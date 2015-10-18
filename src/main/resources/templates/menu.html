@@ -16,7 +16,7 @@
 				<!-- Start Navigation Menu Logged In-->
 				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li class="active"><a href="#header">Home</a></li>
+						<li class="active"><a href="index">Home</a></li>
 						<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
 						<li><a href="cancel">Cancel Appointment</a></li>
@@ -29,7 +29,7 @@
 				<div class="collapse navbar-collapse" th:action="@{/logout}"
 					 th:if="${#httpServletRequest.remoteUser == null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li class="active"><a href="#header">Home</a></li>
+						<li class="active"><a href="index">Home</a></li>
 						<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
 						<li><a href="cancel">Cancel Appointment</a></li>

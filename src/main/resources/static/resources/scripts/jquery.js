@@ -136,6 +136,9 @@ $(document).ready(function() {
         $('.featherlight').click();
         $('#appointmentWith').val($('#appointmentData').val());
     });
+    $(document.body).on('click', '#calendarOk' ,function(){
+            $('.featherlight').click();
+        });
   var emailString;
   $(document.body).on('click', '#emailsubmit' ,function(){
     /*emailString = "";
@@ -490,13 +493,16 @@ $(document).ready(function() {
             defaultDate: $date,
             editable: false,
             draggable: false,
+            theme: true,
             eventLimit: true, // allow "more" link when too many events
             events: returned,
             viewRender: function(currentView){
               $(".fc-prev-button").hide();    
               $(".fc-next-button").hide();
               $(".fc-today-button").hide();
-            }
+            },
+
+
           });
       });
 

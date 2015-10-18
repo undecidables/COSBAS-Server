@@ -184,3 +184,28 @@ body
     width: 100%;
     padding: 15px;
 }
+
+#calendar
+{
+    width: 100%;
+    background-color: #ffff;
+}
+
+table {
+
+    background-color: white;
+}
+
+.fc th, .fc td {
+
+    border: 1px solid grey;
+}
+
+.fc-row .fc-content-skeleton td, .fc-row .fc-helper-skeleton td {
+
+    border-color: grey;
+}
+
+.fc-day-grid-event .fc-content {
+
+}
