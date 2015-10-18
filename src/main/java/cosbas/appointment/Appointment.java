@@ -1,5 +1,6 @@
 package cosbas.appointment;
 
+import cosbas.biometric.data.AccessCode;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class Appointment {
     private String	staffID;
     private List<String> visitorIDs; //Maybe use email address since its unique?
 
-    private List<String> accessKeys;
+    private List<AccessCode> accessKeys;
 
     private LocalDateTime dateTime;
     private int durationMinutes;
@@ -39,7 +40,7 @@ public class Appointment {
         this.summary = null;
     }
 
-    public void setAccessKeys(List<String> accessKeys) {
+    public void setAccessKeys(List<AccessCode> accessKeys) {
         this.accessKeys = accessKeys;
     }
 
@@ -58,7 +59,7 @@ public class Appointment {
         return visitorIDs;
     }
 
-    public List<String> getAccessKeys() {
+    public List<AccessCode> getAccessKeys() {
         return accessKeys;
     }
 

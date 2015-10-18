@@ -474,14 +474,33 @@ $(document).ready(function() {
       }); 
   }));
   /***************************************************************************/
-  /*****************************Approve/Deny**********************************/
+  /*****************************Home page**********************************/
   if(document.title == "COSBAS Service"){
+    var returned;
+    $date = moment().format('YYYY-MM-DD');
      $.ajax({
         type: "post",
-        url: "/getWeekAppointments"
+        url: "/getMonthAppointments"
       }).then(function(jsonReturned) {
-        $("#weekAppointments").append(jsonReturned);
+
+       returned =  jQuery.parseJSON(jsonReturned);
+    
+        /****************Callendar**************************/
+        $('#calendar').fullCalendar({
+            defaultDate: $date,
+            editable: false,
+            draggable: false,
+            eventLimit: true, // allow "more" link when too many events
+            events: returned,
+            viewRender: function(currentView){
+              $(".fc-prev-button").hide();    
+              $(".fc-next-button").hide();
+              $(".fc-today-button").hide();
+            }
+          });
       });
+
+       
       window.scrollTo(0, 0);
   }
 
@@ -495,4 +514,10 @@ $(document).ready(function() {
       window.scrollTo(0, 0);
   }
   /***************************************************************************/
+
+  $(document).on('click', '#DenyAll', (function(e) {
+    $('.deny').click();
+    $("#fieldset").empty();
+    $("#fieldset").append("<p>No appointments pending</p>");
+  }));
 });

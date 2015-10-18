@@ -1,5 +1,9 @@
 package cosbas.appointment;
 
+import cosbas.biometric.data.AccessCode;
+import cosbas.biometric.data.AccessCodeGenerator;
+import cosbas.biometric.data.NumericalAccessCodeGenerator;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
 import cosbas.calendar_services.services.GoogleCalendarService;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 
@@ -31,6 +36,9 @@ public class Appointments
 
     @Autowired
     private GoogleCalendarService calendar;
+
+    @Autowired
+    private AccessCodeGenerator visitorCodes;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -191,12 +199,16 @@ public class Appointments
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
         
-        //check if status is requested and that perspon is authorised to approve appointment
+        //check if status is requested and that person is authorised to approve appointment
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested") && staffID.equals(tempAppointment.getStaffID()))
         {
+
             tempAppointment.setStatus("Approved");
+
+            List<AccessCode> codes = visitorCodes.getTemporaryAccessCode(tempAppointment);
+            tempAppointment.setAccessKeys(codes);
+
             repository.save(tempAppointment);
-            //send confirmation email with the code
 
             //Notifications
             notifyEmail = new Notifications();
