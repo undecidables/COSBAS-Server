@@ -293,7 +293,6 @@ $(document).ready(function() {
       }).then(function(jsonReturned) {
             $('.featherlight').click();
             $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h3>");
-          $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
             //cleanup user input on successfull appointment request
@@ -306,6 +305,10 @@ $(document).ready(function() {
               $($(".appointmentDetails")[$i-1]).remove();
             }
             $("#numMembers").val(1);
+          }
+          else
+          {
+            $.featherlight("<p>"+jsonReturned+"</p>");
           }
           $("#numMembers").val(1);
           $("#appointmentDuration").val(15);
