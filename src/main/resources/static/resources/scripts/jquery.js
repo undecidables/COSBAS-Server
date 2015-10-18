@@ -234,8 +234,7 @@ $(document).ready(function() {
     if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
     {
       $element = $('<p class="error" id="dateError">Please select a date and time</p>');
-      $('#dateError').remove();
-      $('#appointmentDate').append($element);
+      $.featherlight($element);
       $noError = false;
     }
     else
@@ -247,8 +246,7 @@ $(document).ready(function() {
     if($("#timeEnd").val() == $("#timeStart").val())
     {
       $element = $('<p class="error" id="errorDuration">Your appointment duration must be atleast 30 minutes.</p>');
-      $('#errorDuration').remove();
-      $('#appointmentDate').append($element);
+      $.featherlight($element);
       $noError = false;
     } 
     else
@@ -265,8 +263,7 @@ $(document).ready(function() {
     if($("#appointmentReason").val() == "")
     {
       $element = $('<p class="error" id="errorReason">A reason for the appointment must be given. </p>');
-      $('#errorReason').remove();
-      $('#reason').append($element);
+      $.featherlight($element);
       $noError = false;
     } else
     {
@@ -339,8 +336,7 @@ $(document).ready(function() {
     {
       $noError = false;
       $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
-      $('#errorID').remove();
-      $('#appointmentCancel').append($element);
+      $.featherlight($element);
     }
 
     //add cancellee error
@@ -352,8 +348,7 @@ $(document).ready(function() {
     {
       $noError = false;
       $element = $('<p class="error" id="cancelError">You must enter who it is that wants to cancel the appointment. </p>');
-      $('#cancelError').remove();
-      $('#appointmentCancellee').append($element);
+      $.featherlight($element);
     }
 
     //send data if no errors
@@ -396,8 +391,7 @@ $(document).ready(function() {
     {
       $noError = false;
       $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
-      $('#errorID').remove();
-      $('#appointmentStatusRequest').append($element);
+      $.featherlight($element);
     }
 
     //add cancellee error
@@ -409,8 +403,7 @@ $(document).ready(function() {
     {
       $noError = false;
       $element = $('<p class="error" id="statusError">You must enter who it is that wants to check the appointment status. </p>');
-      $('#statusError').remove();
-      $('#statusRequest').append($element);
+      $.featherlight($element);
     }
 
     //send data if no errors
