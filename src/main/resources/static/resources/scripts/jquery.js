@@ -436,11 +436,11 @@ $(document).ready(function() {
   $(document).on('click', '.accept', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
-    var tempChildren = $(this).parent().parent().children().length;
+    var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
       $.ajax({
         type: "post",
-        data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
-                "staffMember" : $(this).siblings('.staffID').val()},
+        data: {"appointmentID" : $(this).parent().parent().siblings('.hiddenData').find('.appointmentID').val(),
+                "staffMember" : $(this).parent().parent().siblings('.hiddenData').find('.staffID').val()},
         url: "/approve"
       }).then(function(jsonReturned) {
         if(jsonReturned != "Appointment approved"){
@@ -460,11 +460,11 @@ $(document).ready(function() {
   $(document).on('click', '.deny', (function(e) {
     e.preventDefault();
     var tempThis = $(this);
-    var tempChildren = $(this).parent().parent().children().length;
+    var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
       $.ajax({
         type: "post",
-        data: {"appointmentID" : $(this).siblings('.appointmentID').val(),
-                "staffMember" : $(this).siblings('.staffID').val()},
+        data: {"appointmentID" : $(this).parent().parent().siblings('.hiddenData').find('.appointmentID').val(),
+                "staffMember" : $(this).parent().parent().siblings('.hiddenData').find('.staffID').val()},
         url: "/deny"
       }).then(function(jsonReturned) {
         if(jsonReturned != "Appointment denied"){
