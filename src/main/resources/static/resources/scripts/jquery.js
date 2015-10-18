@@ -413,11 +413,8 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
-        var obj =  $("<p>"+jsonReturned+"</p>");
-        obj.html(obj.html().replace(/\n/g,'<br/>'));
-        
         $('.featherlight').click();
-        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\">"+obj+"!</h3>");
+        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><pre>"+jsonReturned+"</pre></h3>");
 
         $("#appointmentID").val("");
         $("#requestedBy").val("");
