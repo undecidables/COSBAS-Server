@@ -139,6 +139,7 @@ $(document).ready(function() {
     $(document.body).on('click', '#calendarOk' ,function(){
             $('.featherlight').click();
         });
+
   var emailString;
   $(document.body).on('click', '#emailsubmit' ,function(){
      //check emails
@@ -269,7 +270,7 @@ $(document).ready(function() {
     //send data if no errors
     if($noError == true)
     {
-        $.featherlight("<h1 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h1>");
+        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h3>");
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
@@ -281,7 +282,7 @@ $(document).ready(function() {
         url: "/requestAppointment"
       }).then(function(jsonReturned) {
             $('.featherlight').click();
-            $.featherlight("<h1 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h1>");
+            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h3>");
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
@@ -423,6 +424,12 @@ $(document).ready(function() {
 
   /*****************************Approve/Deny**********************************/
   if(document.title == "Approve/Deny Appointment"){
+     $(document.body).on('click', '.approveBtn' ,function(){
+            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h3>");
+         });
+        $(document.body).on('click', '.denyBtn' ,function(){
+            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h3>");
+         });
      $.ajax({
         type: "post",
         url: "/getApproveOrDeny"
@@ -443,10 +450,12 @@ $(document).ready(function() {
                 "staffMember" : $(this).parent().parent().siblings('.hiddenData').find('.staffID').val()},
         url: "/approve"
       }).then(function(jsonReturned) {
+
         if(jsonReturned != "Appointment approved"){
           window.scrollTo(0, 0);
           $("#signIn").text(jsonReturned);
         } else {
+           location.reload();
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){
@@ -471,6 +480,7 @@ $(document).ready(function() {
           window.scrollTo(0, 0);
           $("#signIn").text(jsonReturned);
         } else {
+           location.reload();
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){

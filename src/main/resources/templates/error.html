@@ -6,33 +6,66 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-		<div>
-			<a href="#">
-				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-			</a>
-		</div>
-		<div class="row">
-			<div>
-				<div class="cosbasLogin">
+	<section id="contact">
+		<div class="overlay">
+			<div class="container">
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Check Appointment</span> Status</h1>
+
+				<div class="row">
 					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
 						<script>window.location.href = "/login?error=1"</script>
 					</div>
 					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login"}'>
 						<script>window.location.href = "/login?error=1"</script>
 					</div>
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span>
-						Unfortunately an error has occured on the server.
-						<br/>
-						Status code <span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')}" th:unless="${#httpServletRequest == null}"></span>
-						<br/>
-						<span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}" th:unless="${#httpServletRequest == null}"></span>
-						<!--br/>
-   						Request send to server: <span th:text="${#httpServletRequest}" th:unless="${#httpServletRequest == null}"></span>
-   						<br/>
-   						Previous URL: <span th:text='${#httpServletRequest.getHeader("Referer")}' th:unless="${#httpServletRequest == null}"></span-->
-   					</div>
+					<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+						<div class="controls" id="signIn">
+							Unfortunately an error has occured on the server.
+							<br/>
+							Status code <span
+								th:text="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')}"
+								th:unless="${#httpServletRequest == null}"></span>
+							<br/>
+							<span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}"
+								  th:unless="${#httpServletRequest == null}"></span>
+							<!--br/>
+                               Request send to server: <span th:text="${#httpServletRequest}" th:unless="${#httpServletRequest == null}"></span>
+                               <br/>
+                               Previous URL: <span th:text='${#httpServletRequest.getHeader("Referer")}' th:unless="${#httpServletRequest == null}"></span-->
+						</div>
+					</div>
+				</div>
+					</div>
 				</div>
 			</div>
+	</section>
+
+	<footer id="footer">
+		<div class="container">
+			<div class="copyright text-center">
+				<p>&copy; University of Pretoria, Department of Computer Science</p>
+			</div>
 		</div>
+	</footer>
+
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/assets/js/main.js"></script>
 	</body>
 </html>
