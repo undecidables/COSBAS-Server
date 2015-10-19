@@ -78,7 +78,7 @@ $(document).ready(function() {
   dateVar += currentdate.getDate();
   
 
-  var time = currentdate.getTime();// currentdate.getHours() + ":" + currentdate.getMinutes();
+  var time =  currentdate.getHours() + ":" + currentdate.getMinutes();
 
   timeVar = time;
   
@@ -217,9 +217,11 @@ $(document).ready(function() {
     $noError = true;
 
     //check time
+    console.log($("#requestedDateTime").val() == dateVar);
+    console.log($("#timeStart").val() <= timeVar);
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
-      $element = $('<p class="error" id="timeError">The appointments must be in the future</p>');
+      $element = $('<p class="error" id="timeError">The appointments must be in the future.</p>');
       $.featherlight($element);
       $noError = false;
     }
@@ -243,7 +245,7 @@ $(document).ready(function() {
     //check duration
     if($("#timeEnd").val() == $("#timeStart").val())
     {
-      $element = $('<p class="error" id="errorDuration">Your appointment duration must be atleast 30 minutes.</p>');
+      $element = $('<p class="error" id="errorDuration">Your appointment duration must be at least 30 minutes.</p>');
       $.featherlight($element);
       $noError = false;
     } 

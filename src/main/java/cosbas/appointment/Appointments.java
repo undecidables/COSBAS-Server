@@ -133,7 +133,7 @@ public class Appointments
                     return "Appointment has been cancelled.";
                 } else if (tempAppointment.getStatus().equals("Cancelled"))
                 {
-                    return "Appointment has already been cancelled.";
+                    return "Appointment has already been cancelled";
                 }
              }  
 
