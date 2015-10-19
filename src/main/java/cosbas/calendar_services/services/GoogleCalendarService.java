@@ -8,6 +8,7 @@ import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -201,10 +202,11 @@ public class GoogleCalendarService extends CalendarService {
             if (service != null) {
                 String pageToken = null;
                 List<Appointment> eventList = null;
+                int hoursTillMidnight = 24 - LocalDateTime.now().getHour();
                 do {
                     Events events = service.events().list("primary").setPageToken(pageToken)
                             .setMaxResults(25).setTimeMin(toDateTime(LocalDateTime.now()))
-                            .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(24))).setQ("COSBAS").execute();
+                            .setTimeMax(toDateTime((LocalDateTime.now()).plusHours(hoursTillMidnight))).setQ("COSBAS").execute();
                     List<Event> items = events.getItems();
                     if (eventList == null)
                         eventList = new ArrayList<>(items.size());
