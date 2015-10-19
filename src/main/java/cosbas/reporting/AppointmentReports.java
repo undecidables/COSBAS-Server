@@ -16,6 +16,7 @@ import net.sf.dynamicreports.report.builder.style.PenBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.builder.style.Styles;
 import net.sf.dynamicreports.report.constant.*;
+import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.definition.ReportParameters;
 import net.sf.dynamicreports.report.definition.datatype.DRIDataType;
 import net.sf.dynamicreports.report.exception.DRException;
@@ -49,16 +50,14 @@ public class AppointmentReports {
     public JasperReportBuilder createAllAppointmentsReports()
     {
         JasperReportBuilder report = buildReport();
-        List<Appointment> data = IteratorUtils.toList(repo.findAll().iterator());
-        report.setDataSource(data);
+        report.setDataSource(createDataSource(IteratorUtils.toList(repo.findAll().iterator())));
         return report;
     }
 
     public JasperReportBuilder createAllAppointmentsByStaffIdReports(String staffId)
     {
         JasperReportBuilder report = buildReport();
-        List<Appointment> data = IteratorUtils.toList(repo.findByStaffID(staffId).iterator());
-        report.setDataSource(data);
+      //  report.setDataSource(createDataSource(IteratorUtils.toList(repo.findByStaffID(staffId).iterator())));
         return report;
     }
 
@@ -78,15 +77,16 @@ public class AppointmentReports {
 
         BorderBuilder border = Styles.border(Styles.pen().setLineStyle(LineStyle.SOLID).setLineColor(Color.BLACK).setLineWidth((float) 0.5));
 
-        StyleBuilder everything = Styles.style().setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
+        StyleBuilder everything = Styles.style().setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setLeftIndent(10);
         StyleBuilder singleValue = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
         StyleBuilder columnTitleStyle = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBold(true).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
 
 
         report.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE).columns(
-                Columns.column("Staff ID", "staffID", DataTypes.stringType()).setMinWidth(60),
-                Columns.column("Visitor ID(s)", "visitorIDs", DataTypes.listType()).setMinWidth(90),
-                Columns.column("Duration", "durationMinutes", DataTypes.integerType()).setFixedWidth(50).setStyle(singleValue),
+                Columns.column("Staff ID", "staffId", DataTypes.stringType()).setMinWidth(60),
+                Columns.column("Visitor ID(s)", "visitorIds", DataTypes.stringType()).setMinWidth(90),
+                Columns.column("Date Time", "dateTime", DataTypes.stringType()).setFixedWidth(90).setStyle(singleValue),
+                Columns.column("Duration", "duration", DataTypes.integerType()).setFixedWidth(50).setStyle(singleValue),
                 Columns.column("Summary", "summary", DataTypes.stringType()),
                 Columns.column("Reason", "reason", DataTypes.stringType()),
                 Columns.column("Status", "status", DataTypes.stringType()).setMinWidth(60).setStyle(singleValue)
@@ -95,6 +95,17 @@ public class AppointmentReports {
         return report;
 
 
+    }
+
+    private DRDataSource createDataSource(List<Appointment> data)
+    {
+        DRDataSource dataSource = new DRDataSource("staffId","visitorIds","dateTime","duration","summary","reason","status");
+        for(Appointment appointment : data)
+        {
+            dataSource.add(appointment.getStaffID(), appointment.getListOfVisitors(), appointment.getDateTime().toLocalDate().toString() + " " + appointment.getDateTime().toLocalTime().minusSeconds(30).toString(), appointment.getDurationMinutes(), appointment.getSummary(), appointment.getReason(), appointment.getStatus());
+        }
+
+        return dataSource;
     }
 
 }
