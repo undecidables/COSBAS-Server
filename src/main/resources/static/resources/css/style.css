@@ -17,6 +17,7 @@ body {
 nav .navbar-nav
 {
     font-size: 1em;
+    margin-left: -0.8em;
 }
 
 a {
@@ -24,7 +25,10 @@ a {
     padding: 0;
 }
 
-
+#appointmentError
+{
+    color: red;
+}
 
 .vertical-center {
     min-height: 80vh; /* These two lines are counted as one :-)       */
@@ -68,11 +72,9 @@ h1 {
 }
 
 
-
 #buzzTitle {
     color: #14161b;
 }
-
 
 #brand {
     color: #14161b;
@@ -118,6 +120,7 @@ h1 {
 #Dropdown:active
 {
     color: #14161b;
+    padding-bottom: 0.3em;
 }
 
 #Dropdown:visited
@@ -354,4 +357,10 @@ td {
 
 .error{
     color: red;
+}
+
+#calendar 
+{
+    max-width: 650px;
+    margin: 0 auto;
 }

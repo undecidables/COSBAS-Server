@@ -24,5 +24,6 @@ public abstract class CalendarService {
     public abstract boolean removeAppointment(String emplid, String id);
     public abstract List<Appointment> getTodaysAppointments(String emplid);
     public abstract boolean isAvailable(String emplid, LocalDateTime start, int Duration);
+    public abstract List<Appointment> getMonthAppointments(String emplid, int Month);
 
 }
