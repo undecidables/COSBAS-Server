@@ -146,7 +146,7 @@ public class GoogleCalendarService extends CalendarService {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
                 List<String> attendants = clientEmail;
-                attendants.add("u13238435@tuks.co.za");
+                attendants.add(emplid + "@cs.up.ac.za");
                 Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
