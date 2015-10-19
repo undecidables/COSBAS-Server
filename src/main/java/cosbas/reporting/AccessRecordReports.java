@@ -1,7 +1,8 @@
 package cosbas.reporting;
 
-import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.biometric.request.access.AccessRecord;
+import cosbas.biometric.request.access.AccessRecordDAO;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.column.Columns;
@@ -23,45 +24,31 @@ import java.util.List;
 /**
  *  {@author Szymon}
  */
+
 @Service
-public class AppointmentReports {
+public class AccessRecordReports {
 
     @Autowired
-    private AppointmentDBAdapter repository;
+    private AccessRecordDAO repository;
 
-
-    public JasperReportBuilder createAllAppointmentsReports()
+    public JasperReportBuilder createAllAccessRecordReports()
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findAll().iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsByStaffIdReports(String staffId)
-    {
-        JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffID(staffId).iterator())));
-        return report;
-    }
-
-    public JasperReportBuilder createAllAppointmentsByStatusReports(String stats)
-    {
-        JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStatusLike(stats).iterator())));
-        return report;
-    }
-
-    public JasperReportBuilder createAllAppointmentsBetweenDateTimeReports(LocalDateTime dateS, LocalDateTime dateE)
+    public JasperReportBuilder createAccessRecordBetweenDateTimeReports(LocalDateTime dateS, LocalDateTime dateE)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(dateS, dateE).iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsByStaffIdAndDateTimeBetweenReports(String staffId, LocalDateTime dateS, LocalDateTime dateE)
+    public JasperReportBuilder createAccessRecordByUserIdAndDateTimeBetweenReports(String userId, LocalDateTime dateS, LocalDateTime dateE)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffIDAndDateTimeBetween(staffId, dateS, dateE).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserIDAndDateTimeBetween(userId, dateS, dateE).iterator())));
         return report;
     }
 
@@ -75,28 +62,25 @@ public class AppointmentReports {
         StyleBuilder singleValue = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
         StyleBuilder columnTitleStyle = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBold(true).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
 
-        report.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE).columns(
-                Columns.column("Staff ID", "staffId", DataTypes.stringType()).setMinWidth(60),
-                Columns.column("Visitor ID(s)", "visitorIds", DataTypes.stringType()).setMinWidth(90),
-                Columns.column("Date Time", "dateTime", DataTypes.stringType()).setFixedWidth(90).setStyle(singleValue),
-                Columns.column("Duration", "duration", DataTypes.integerType()).setFixedWidth(50).setStyle(singleValue),
-                Columns.column("Summary", "summary", DataTypes.stringType()),
-                Columns.column("Reason", "reason", DataTypes.stringType()),
-                Columns.column("Status", "status", DataTypes.stringType()).setMinWidth(60).setStyle(singleValue)
+        report.setPageFormat(PageType.A4, PageOrientation.PORTRAIT).columns(
+                Columns.column("Door ID", "doorId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
+                Columns.column("Action", "action", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
+                Columns.column("User ID", "userId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
+                Columns.column("Date Time", "dateTime", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue)
         ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Testing").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
+
 
         return report;
     }
 
-    private DRDataSource createDataSource(List<Appointment> data)
+    private DRDataSource createDataSource(List<AccessRecord> data)
     {
-        DRDataSource dataSource = new DRDataSource("staffId","visitorIds","dateTime","duration","summary","reason","status");
-        for(Appointment appointment : data)
+        DRDataSource dataSource = new DRDataSource("doorId","action","userId","dateTime");
+        for(AccessRecord accessRecord : data)
         {
-            dataSource.add(appointment.getStaffID(), appointment.getListOfVisitors(), appointment.getDateTime().toLocalDate().toString() + " " + appointment.getDateTime().toLocalTime().minusSeconds(30).toString(), appointment.getDurationMinutes(), appointment.getSummary(), appointment.getReason(), appointment.getStatus());
+            dataSource.add(accessRecord.getDoorID(), accessRecord.getAction().toString(), accessRecord.getUserID(), accessRecord.getDateTime().toLocalDate().toString() + " " + accessRecord.getDateTime().toLocalTime().minusSeconds(30).toString());
         }
 
         return dataSource;
     }
-
 }

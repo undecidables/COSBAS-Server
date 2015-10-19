@@ -1,6 +1,7 @@
 package cosbas.appointment;
 
 import cosbas.biometric.data.AccessCode;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -93,5 +94,13 @@ public class Appointment {
 
     public String getSummary() {
         return summary;
+    }
+
+    public String getListOfVisitors()
+    {
+        StringBuilder list = new StringBuilder();
+        list.append(StringUtils.join(visitorIDs, ", "));
+
+        return list.toString();
     }
 }
