@@ -111,12 +111,13 @@ $(document).ready(function() {
       });
 
       var emailString;
+      $temp = [];
         $(document.body).on('click', '#namesubmit' ,function(){
                //check appointmentBy
                $allFilledIn = true;
 
                $inputs = $(".nameinput");
-               $temp = [];
+               
                for($i = 0; $i < $inputs.length; $i++){
                  if($($inputs[$i]).val() == "")
                  {
@@ -175,11 +176,11 @@ $(document).ready(function() {
 
 
   var emailString;
+  $tempEmail = [];
   $(document.body).on('click', '#emailsubmit' ,function(){
      //check emails
      $allEmailsFilledIn = true;
      $inputs = $(".emailinput");
-      $tempEmail = [];
       for($i = 0; $i < $inputs.length; $i++){
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
@@ -269,10 +270,36 @@ $(document).ready(function() {
     }
 
     //appointmentWith error checking not yet done
-    if($tempEmail == null)
+    if($tempEmail.length == 0)
     {
+      $element = $('<p class="error" id="errorEmails">All member emails must be given. </p>');
+      $.featherlight($element);
       $noError = false;
+    } else 
+    {
+      $("#errorEmails").remove();
     }
+
+
+    if($temp.length == 0)
+    {
+      $element = $('<p class="error" id="errorNames">All member names must be given. </p>');
+      $.featherlight($element);
+      $noError = false;
+    } else 
+    {
+      $("#errorNames").remove();
+    }
+
+    if($('#appointmentWith').val() == "")
+    {
+      $element = $('<p class="error" id="appointmentWithError">Must make an appointment with someone. </p>');
+      $.featherlight($element);
+      $noError = false;
+    } else {
+      $("#appointmentWithError").remove();
+    }
+
     //send data if no errors
     if($noError == true)
     {
@@ -358,7 +385,6 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
-        $('.featherlight').click();
         $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
@@ -413,6 +439,8 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
+        $obj = $("<p>"+jsonReturned+"</p>")
+        $obj.html($obj.html().replace(/\n/g,'</p><p>'));
         $('.featherlight').click();
         $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><pre>"+jsonReturned+"</pre></h3>");
 
