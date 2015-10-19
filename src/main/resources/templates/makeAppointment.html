@@ -21,22 +21,22 @@
 									<div class="controls">
 										<p class="text-left">Appointment with:</p>
 										<input class="contact_input" id="appointmentWith" name="appointmentWith"/>
-										<i class="fa fa-user"></i>
+										<label for="appointmentWith"><i class="fa fa-user"></i></label>
 									</div>
 									<div class="controls appointmentDate">
 										<p class="text-left">Date: </p>
 										<input type="text" class="contact_input date" id="requestedDateTime"/>
-										<i class="fa fa-calendar"></i>
+										<label for="requestedDateTime"><i class="fa fa-calendar"></i></label>
 									</div>
 									<div class="controls appointmentDate">
 										<p class="text-left">Starting Time: </p>
 										<input type="text" class="contact_input time start" id="timeStart"/>
-										<i class="fa fa-calendar"></i>
+										<label for="timeStart"><i class="fa fa-calendar"></i></label>
 									</div>
 									<div class="controls appointmentDate">
 										<p class="text-left">Ending Time: </p>
 										<input type="text" class="contact_input time end" id="timeEnd"/>
-										<i class="fa fa-calendar"></i>
+										<label for="timeEnd"><i class="fa fa-calendar"></i></label>
 									</div>
 								</div>
 								<!--div class="form-group" id="duration">
@@ -49,25 +49,25 @@
 									<p class="text-left">Reason for Appointment:</p>
 									<input class="contact_input" type="text" id="appointmentReason"
 										   name="appointmentReason"/>
-									<i class="fa fa-question"></i>
+									<label for="appointmentReason"><i class="fa fa-question"></i></label>
 								</div>
 								<div class="controls" id="membersNum">
 									<p class="text-left">Number of members making the appointment: </p>
 									<input class="contact_input" type="number" min="1" value="1" id="numMembers"
 										   name="numMembers"/>
-									<i class="fa fa-users"></i>
+									<label for="numMembers"><i class="fa fa-users"></i></label>
 								</div>
 								<div class="controls" id="appointmentMadeBy">
 									<div class="appointmentDetails">
 										<p class="text-left">Appointment made by (your name/team members' names): </p>
-										<input class="contact_input appointmentBy" required="required" type="text" name="appointmentBy[]"/>
-										<i class="fa fa-user"></i>
+										<input class="contact_input appointmentBy" required="required" type="text" id="appointmentBy" name="appointmentBy[]"/>
+										<label for="appointmentBy"><i class="fa fa-user"></i></label>
 									</div>
 								</div>
 								<div class="controls">
 									<p class="text-left">Your/team members' email:</p>
 									<input class="contact_input email" type="email" required="required" id="email" name="email"/>
-									<i class="fa fa-envelope"></i>
+									<label for="email"><i class="fa fa-envelope"></i></label>
 								</div>
 							</div>
 							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
