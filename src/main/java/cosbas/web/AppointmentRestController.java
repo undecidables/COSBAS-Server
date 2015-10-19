@@ -297,9 +297,9 @@ public class AppointmentRestController {
         
       if(appointments.size() == 0){
         returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
-      } else {
+      } /*else {
         returnPage = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
-      }
+      }*/
     }
     return returnPage;
   }

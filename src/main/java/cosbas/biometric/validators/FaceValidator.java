@@ -23,12 +23,13 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceValidator extends AccessValidator {
 
-    @Autowired
+    
     FaceRecognition recognizer;
 
-    @Value ("$(faces.certaintyThreshold : 70}")
-    double certaintyThreshold;
+    //@Value ("$(faces.certaintyThreshold:70.0}")
+    double certaintyThreshold = 70.0;
 
+    @Autowired
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
@@ -46,7 +47,7 @@ public class FaceValidator extends AccessValidator {
     }
 
     //TODO Fix schedule!
-    @Scheduled
+    //@Scheduled
     public void train() {
         if (recognizer.getData().needsTraining()) {
             recognizer.trainFromDB();
