@@ -78,7 +78,7 @@ $(document).ready(function() {
   dateVar += currentdate.getDate();
   
 
-  var time = currentdate.getHours() + ":" + currentdate.getMinutes();
+  var time = currentdate.getTime();// currentdate.getHours() + ":" + currentdate.getMinutes();
 
   timeVar = time;
   
@@ -217,10 +217,6 @@ $(document).ready(function() {
     $noError = true;
 
     //check time
-    console.log($("#requestedDateTime").val() == dateVar);
-    console.log($("#timeStart").val() <= timeVar);
-    console.log($("#timeStart").val());
-    console.log(timeVar);
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
       $element = $('<p class="error" id="timeError">The appointments must be in the future</p>');
