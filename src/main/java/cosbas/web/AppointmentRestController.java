@@ -287,7 +287,7 @@ public class AppointmentRestController {
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
                       "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
-                      "<td colspan=\"2\"><p>On: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>At: " + tempDateTime + "</p></td>" +
                       "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
                       "</tr>" +
                       "</table>";
