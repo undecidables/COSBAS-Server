@@ -78,9 +78,9 @@ public class AppointmentReports {
 
         BorderBuilder border = Styles.border(Styles.pen().setLineStyle(LineStyle.SOLID).setLineColor(Color.BLACK).setLineWidth((float) 0.5));
 
-        StyleBuilder everything = Styles.style().setBorder(border).setVerticalAlignment(VerticalAlignment.MIDDLE);
-        StyleBuilder singleValue = Styles.style().setHorizontalAlignment(HorizontalAlignment.CENTER).setBorder(border).setVerticalAlignment(VerticalAlignment.MIDDLE);
-        StyleBuilder columnTitleStyle = Styles.style().setHorizontalAlignment(HorizontalAlignment.CENTER).setBold(true).setBorder(border).setVerticalAlignment(VerticalAlignment.MIDDLE);
+        StyleBuilder everything = Styles.style().setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
+        StyleBuilder singleValue = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
+        StyleBuilder columnTitleStyle = Styles.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setBold(true).setBorder(border).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
 
 
         report.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE).columns(
