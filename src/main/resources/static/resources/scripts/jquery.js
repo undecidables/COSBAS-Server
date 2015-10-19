@@ -348,7 +348,7 @@ $(document).ready(function() {
 
   $('#cancelAppointment').click(function(e) {
     e.preventDefault(); 
-
+    $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Cancelling Appointment</span> Please Wait...</h3>");
     //Check for errors
     $noError = true;
 
@@ -385,6 +385,7 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
+        $('.featherlight').click();
         $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
@@ -402,7 +403,7 @@ $(document).ready(function() {
 
   $('#checkStatus').click(function(e) {
     e.preventDefault(); 
-
+     $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h3>");
     //Check for errors
     $noError = true;
 
