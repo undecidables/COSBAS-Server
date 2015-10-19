@@ -303,4 +303,49 @@ public class AppointmentRestController {
     }
     return returnPage;
   }
+
+  @RequestMapping(method= RequestMethod.POST, value="/calendarLinked")
+  public String getLinkedCalendar(Principal principal) {
+    CredentialWrapper credentials = null;
+    credentials = credentialRepository.findByStaffID(principal.getName());
+
+    if(credentials == null){
+      return "Not Linked";
+    } else {
+      return "Linked";
+    }
+  }
+
+@RequestMapping(method= RequestMethod.POST, value="/dayAvailable")
+  public String getAvailableTimes(Principal principal) {
+    List<Appointment> appointments = calendar.getTodaysAppointments(principal.getName());
+    
+    String returnPage = "";
+
+    if(appointments != null){
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        List<String> with = appointments.get(i).getVisitorIDs();
+        int duration = appointments.get(i).getDurationMinutes();
+        String reason = appointments.get(i).getReason();
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\"><p>Appoinment at: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "</tr>" +
+                      "</table>";
+
+        //returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+      }
+        
+      if(appointments.size() == 0){
+        returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
+      } /*else {
+        returnPage = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
+      }*/
+    }
+    return returnPage;
+  }
 }

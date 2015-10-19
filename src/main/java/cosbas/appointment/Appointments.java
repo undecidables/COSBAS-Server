@@ -82,7 +82,10 @@ public class Appointments
             notifyEmail.sendNotifications(contactDetailsVisitor,contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs ,tempAppointment,false);
 
             return "Appointment "+ tempString[0] + " has been saved.";
-        } else return "Time not available";
+        } else {
+            
+            return "Time not available";
+        }
 		        
     }
     

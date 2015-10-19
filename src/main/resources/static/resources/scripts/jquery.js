@@ -298,7 +298,7 @@ $(document).ready(function() {
     //send data if no errors
     if($noError == true)
     {
-        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h3>");
+        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h6>");
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
@@ -310,7 +310,7 @@ $(document).ready(function() {
         url: "/requestAppointment"
       }). then(function(jsonReturned) {
             $('.featherlight').click();
-            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h3>");
+            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h6>");
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
@@ -328,7 +328,16 @@ $(document).ready(function() {
           else
           {
             $('.featherlight').click();
-            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
+            //var html = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"!</p><br/></h6>";
+            $.ajax({
+              type: "post",
+              url: "/dayAvailable"
+            }). then(function(jsonReturned) {
+                var html = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p><p>The Following Times Are Unavailable</p></h6>" + jsonReturned;
+                 $.featherlight(html);
+            });
+            
+            //$.featherlight(html);
           }
       window.scrollTo(0, 0);
      });
@@ -343,7 +352,7 @@ $(document).ready(function() {
 
   $('#cancelAppointment').click(function(e) {
     e.preventDefault(); 
-    $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Cancelling Appointment</span> Please Wait...</h3>");
+    $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Cancelling Appointment</span> Please Wait...</h6>");
     //Check for errors
     $noError = true;
     $errorNum = 0;
@@ -391,7 +400,7 @@ $(document).ready(function() {
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $('.featherlight').click();
-        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h3>");
+        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h6>");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
       });
@@ -408,7 +417,7 @@ $(document).ready(function() {
 
   $('#checkStatus').click(function(e) {
     e.preventDefault(); 
-     $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h3>");
+     $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h6>");
     //Check for errors
     $noError = true;
     $errorNum = 0;
@@ -458,7 +467,7 @@ $(document).ready(function() {
         obj.html(obj.html().replace(/\n/g,'<br/>'));
 
         $('.featherlight').click();
-        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h3>");
+        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h6>");
 
         $("#appointmentID").val("");
         $("#requestedBy").val("");
@@ -475,10 +484,10 @@ $(document).ready(function() {
   /*****************************Approve/Deny**********************************/
   if(document.title == "Approve/Deny Appointment"){
      $(document.body).on('click', '.approveBtn' ,function(){
-            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h3>");
+            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h6>");
          });
         $(document.body).on('click', '.denyBtn' ,function(){
-            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h3>");
+            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h6>");
          });
      $.ajax({
         type: "post",
@@ -509,7 +518,7 @@ $(document).ready(function() {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){
-            $("#fieldset").append("<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
+            $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
           }
         }
       }); 
@@ -534,7 +543,7 @@ $(document).ready(function() {
           tempThis.parent().remove();
           $("#signIn").text("Approve or Deny Appointments");
           if(tempChildren - 1 == 0){
-            $("#fieldset").append("<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
+            $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
           }
         }
       }); 
@@ -568,7 +577,7 @@ $(document).ready(function() {
             eventRender: function (event, element) {
               element.attr('href', 'javascript:void(0);');
               element.click(function() {
-                  var htmlLightbox = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h3><br/>"+
+                  var htmlLightbox = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h6><br/>"+
                                     "<p><b>Meeting Members:</b> "+event.withWho+"</p>" +
                                     "<p><b>Starting Time:</b> "+moment(event.start).format('MMM Do h:mm A')+"</p>"+
                                     "<p><b>Ending Time:</b> "+((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)"+"</p>";
@@ -591,6 +600,17 @@ $(document).ready(function() {
   }
 
   if(document.title == "COSBAS Service"){
+      $.ajax({
+        type: "post",
+        url: "/calendarLinked"
+      }).then(function(jsonReturned) {
+        if(jsonReturned != "Linked")
+        {
+          var html = "<h8 class=\"page-header\">Choose your calendar </h8><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
+          $.featherlight(html);
+        }
+      });
+
      $.ajax({
         type: "post",
         url: "/getDayAppointments"
