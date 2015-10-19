@@ -284,17 +284,23 @@ public class AppointmentRestController {
         String reason = appointments.get(i).getReason();
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
         String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
+                      "<td colspan=\"2\"><p>On: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "</tr>" +
+                      "</table>";
 
-        returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+        //returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
       }
         
       if(appointments.size() == 0){
-        returnPage += "<p>You have no appointments for today</p>";
+        returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
+      } else {
+        returnPage = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
       }
-     } else {
-      returnPage = "<p>You have no appointments for the week</p>";
     }
-
     return returnPage;
   }
 }

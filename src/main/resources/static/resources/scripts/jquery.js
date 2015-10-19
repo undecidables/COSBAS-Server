@@ -217,11 +217,14 @@ $(document).ready(function() {
     $noError = true;
 
     //check time
+    console.log($("#requestedDateTime").val() == dateVar);
+    console.log($("#timeStart").val() <= timeVar);
+    console.log($("#timeStart").val());
+    console.log(timeVar);
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
       $element = $('<p class="error" id="timeError">The appointments must be in the future</p>');
-      $('#timeError').remove();
-      $('#appointmentDate').append($element);
+      $.featherlight($element);
       $noError = false;
     }
     else
@@ -253,10 +256,6 @@ $(document).ready(function() {
       $('#errorDuration').remove();
       $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
     }
-
-
-    
-
 
     //check reason
     if($("#appointmentReason").val() == "")
@@ -315,7 +314,7 @@ $(document).ready(function() {
         url: "/requestAppointment"
       }). then(function(jsonReturned) {
             $('.featherlight').click();
-            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully!</h3>");
+            $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h3>");
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
@@ -351,6 +350,7 @@ $(document).ready(function() {
     $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Cancelling Appointment</span> Please Wait...</h3>");
     //Check for errors
     $noError = true;
+    $errorNum = 0;
 
     //add errorID
     if($("#appointmentID").val() != "")
@@ -359,6 +359,10 @@ $(document).ready(function() {
     }
     else
     {
+      $errorNum++;
+      if($errorNum == 1){
+        $('.featherlight').click();
+      }
       $noError = false;
       $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
       $.featherlight($element);
@@ -371,6 +375,11 @@ $(document).ready(function() {
     }
     else
     {
+      $errorNum++;
+      if($errorNum == 1){
+        $('.featherlight').click();
+      }
+
       $noError = false;
       $element = $('<p class="error" id="cancelError">You must enter who it is that wants to cancel the appointment. </p>');
       $.featherlight($element);
@@ -406,6 +415,7 @@ $(document).ready(function() {
      $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h3>");
     //Check for errors
     $noError = true;
+    $errorNum = 0;
 
     //add errorID
     if($("#appointmentID").val() != "")
@@ -414,18 +424,26 @@ $(document).ready(function() {
     }
     else
     {
+      $errorNum++;
+      if($errorNum == 1){
+        $('.featherlight').click();
+      }
       $noError = false;
       $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
       $.featherlight($element);
     }
 
-    //add cancellee error
+    //add status error
     if($("#requestedBy").val() != "")
     {
       $('#statusError').remove();
     }
     else
     {
+      $errorNum++;
+      if($errorNum == 1){
+        $('.featherlight').click();
+      }
       $noError = false;
       $element = $('<p class="error" id="statusError">You must enter who it is that wants to check the appointment status. </p>');
       $.featherlight($element);
@@ -440,10 +458,11 @@ $(document).ready(function() {
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
-        $obj = $("<p>"+jsonReturned+"</p>")
-        $obj.html($obj.html().replace(/\n/g,'</p><p>'));
+        var obj =  $("<p>"+jsonReturned+"</p>");
+        obj.html(obj.html().replace(/\n/g,'<br/>'));
+
         $('.featherlight').click();
-        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><pre>"+jsonReturned+"</pre></h3>");
+        $.featherlight("<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h3>");
 
         $("#appointmentID").val("");
         $("#requestedBy").val("");
