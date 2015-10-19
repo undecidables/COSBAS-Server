@@ -23,12 +23,13 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceValidator extends AccessValidator {
 
-    @Autowired
+
     FaceRecognition recognizer;
 
-    @Value ("$(faces.certaintyThreshold : 70}")
-    double certaintyThreshold;
+    //@Value ("$(faces.certainty}")
+    double certaintyThreshold = 0.7;
 
+    @Autowired
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
@@ -45,8 +46,7 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    //TODO Fix schedule!
-    @Scheduled
+    @Scheduled(cron="0 0 0 * * *")
     public void train() {
         if (recognizer.getData().needsTraining()) {
             recognizer.trainFromDB();
