@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
@@ -26,8 +27,8 @@ public class FaceValidator extends AccessValidator {
 
     FaceRecognition recognizer;
 
-    //@Value ("$(faces.certainty}")
-    double certaintyThreshold = 0.7;
+    @Value("${faces.certainty:0.6}")
+    double certaintyThreshold;
 
     @Autowired
     public FaceValidator(FaceRecognition recognizer) {
