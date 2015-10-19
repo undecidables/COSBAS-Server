@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * @author Jason Richard Evans
  */
-public interface CalCredentialRepository extends MongoRepository<CredentialWrapper, String>, CalendarDBAdapter {
+interface CalCredentialRepository extends MongoRepository<CredentialWrapper, String>, CalendarDBAdapter {
 }

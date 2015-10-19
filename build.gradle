@@ -62,8 +62,6 @@ dependencies {
     compile  "org.springframework.ldap:spring-ldap-core:2.0.3.RELEASE"
     compile "org.springframework:spring-tx"
 
-    compile "org.bytedeco:javacv:0.9"
-
     //compile  "net.sf.jasperreports:jasperreports:6.1.0"
 
     compile "org.apache.commons:commons-lang3:3.0"
@@ -75,6 +73,8 @@ dependencies {
     compile "org.aspectj:aspectjweaver:1.8.6"
     compile 'org.apache.logging.log4j:log4j-core:2.3'
     compile 'org.apache.logging.log4j:log4j-api:2.3'
+
+    compile fileTree(dir: 'libs', include: '*.jar')
 
 
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
@@ -89,6 +89,7 @@ dependencies {
 
 
     compile "org.springframework.security:spring-security-ldap"
+
     compile "org.apache.directory.server:apacheds-server-jndi:1.5.5"
 
     testCompile "junit:junit"
@@ -96,6 +97,9 @@ dependencies {
 
     compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
     compile "com.sun.mail:javax.mail"
+
+    testCompile 'org.springframework:spring-test'
+
 }
 
 task wrapper(type: Wrapper) {
