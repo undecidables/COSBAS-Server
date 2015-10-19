@@ -217,8 +217,6 @@ $(document).ready(function() {
     $noError = true;
 
     //check time
-    console.log($("#requestedDateTime").val() == dateVar);
-    console.log($("#timeStart").val() <= timeVar);
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
       $element = $('<p class="error" id="timeError">The appointments must be in the future.</p>');
@@ -350,7 +348,27 @@ $(document).ready(function() {
   });
   /***************************************************************************/
 
+  //Read URL parameter from URL
+  function getUrlParameter(parameter) {
+    $pageURL = decodeURIComponent(window.location.search.substring(1));
+    $variables = $pageURL.split('&');
+
+    for ($i = 0; $i < $variables.length; $i++) {
+        $parameterName = $variables[$i].split('=');
+
+        if ($parameterName[0] === parameter) {
+            return $parameterName[1];
+        } 
+    }
+
+    return "";
+  };
+
   /******************** Cancel Appointment ***********************************/
+
+  if(document.title == "Cancel Appointment"){
+      $("#appointmentID").val(getUrlParameter('ID'));
+  }
 
   $('#cancelAppointment').click(function(e) {
     e.preventDefault(); 
@@ -416,6 +434,9 @@ $(document).ready(function() {
   /***************************************************************************/
 
   /******************** Check Appointment Status ***********************************/
+    if(document.title == "Check Appointment Status"){
+      $("#appointmentID").val(getUrlParameter('ID'));
+    }
 
   $('#checkStatus').click(function(e) {
     e.preventDefault(); 
