@@ -10,7 +10,7 @@ $(document).ready(function() {
           });
           window.scrollTo(0, 0);
       }
-
+    handleDenyAllAppointments();
 
 
 
@@ -73,5 +73,15 @@ function denyAppointmentListener()
               }
             }
           });
+      }));
+}
+
+function handleDenyAllAppointments()
+{
+    $(document).on('click', '#DenyAll', (function(e) {
+        $('.deny').click();
+        $("#fieldset").empty();
+        $("#fieldset").append("<p>No appointments pending</p>");
+        //window.location.reload(true);
       }));
 }
