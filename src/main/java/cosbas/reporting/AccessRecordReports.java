@@ -1,6 +1,5 @@
 package cosbas.reporting;
 
-import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.biometric.request.access.AccessRecord;
 import cosbas.biometric.request.access.AccessRecordDAO;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -47,24 +45,24 @@ public class AccessRecordReports {
         return report;
     }
 
-    private JasperReportBuilder createAccessRecordBetweenDateTimeReports(AccessRecordDataReport data)
+    private JasperReportBuilder createAccessRecordBetweenDateTimeReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
-    private JasperReportBuilder createAccessRecordByUserIdAndBetweenDateTimeReports(AccessRecordDataReport data)
+    private JasperReportBuilder createAccessRecordByUserIdAndBetweenDateTimeReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserIDAndDateTimeBetween(data.getUserId(), data.getsDate(), data.geteDate()).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserIDAndDateTimeBetween(data.getStaffID(), data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
-    private JasperReportBuilder createAccessRecordByUserIdReports(AccessRecordDataReport data)
+    private JasperReportBuilder createAccessRecordByUserIdReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserID(data.getUserId()).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserID(data.getStaffID()).iterator())));
         return report;
     }
 
@@ -102,7 +100,7 @@ public class AccessRecordReports {
         return dataSource;
     }
 
-    public JasperReportBuilder getReport(reportTypes type, AccessRecordDataReport data)
+    public JasperReportBuilder getReport(reportTypes type, ReportData data)
     {
         switch (type)
         {

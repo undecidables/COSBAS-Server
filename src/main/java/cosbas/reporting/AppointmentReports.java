@@ -45,28 +45,28 @@ public class AppointmentReports {
         return report;
     }
 
-    private JasperReportBuilder createAllAppointmentsByStaffIdReports(AppointmentDataReport data)
+    private JasperReportBuilder createAllAppointmentsByStaffIdReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffID(data.getStaffID()).iterator())));
         return report;
     }
 
-    private JasperReportBuilder createAllAppointmentsByStatusReports(AppointmentDataReport data)
+    private JasperReportBuilder createAllAppointmentsByStatusReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStatusLike(data.getStatus()).iterator())));
         return report;
     }
 
-    private JasperReportBuilder createAllAppointmentsBetweenDateTimeReports(AppointmentDataReport data)
+    private JasperReportBuilder createAllAppointmentsBetweenDateTimeReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
-    private JasperReportBuilder createAllAppointmentsByStaffIdAndDateTimeBetweenReports(AppointmentDataReport data)
+    private JasperReportBuilder createAllAppointmentsByStaffIdAndDateTimeBetweenReports(ReportData data)
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffIDAndDateTimeBetween(data.getStaffID(), data.getsDate(), data.geteDate()).iterator())));
@@ -107,7 +107,7 @@ public class AppointmentReports {
         return dataSource;
     }
 
-    public JasperReportBuilder getReport(reportTypes type, AppointmentDataReport data)
+    public JasperReportBuilder getReport(reportTypes type, ReportData data)
     {
         switch (type)
         {
