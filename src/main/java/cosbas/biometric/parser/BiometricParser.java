@@ -2,12 +2,15 @@ package cosbas.biometric.parser;
 
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.preprocessor.BiometricsPreprocessor;
+import cosbas.biometric.preprocessor.PreprocessorFactory;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +48,13 @@ public class BiometricParser {
     private Pattern biometricPattern = null;
     private Pattern contactPattern = null;
 
+    public void setFactory(PreprocessorFactory factory) {
+        this.factory = factory;
+    }
+
+    @Autowired
+    private PreprocessorFactory factory;
+
     @PostConstruct
     private void init() {
         biometricPattern = Pattern.compile(biometricPatternString, Pattern.CASE_INSENSITIVE);
@@ -77,7 +87,7 @@ public class BiometricParser {
             for(Part part : parts)
             {
                 String name = part.getName();
-                checkBiometricData(part, name, biometricDatas);
+                checkBiometricData(part, name, biometricDatas, false);
             }
 
             return new AccessRequest(doorID, action, biometricDatas);
@@ -85,18 +95,27 @@ public class BiometricParser {
         throw new NullPointerException("Parts null, unable to parse http request ");
     }
 
-    private boolean checkBiometricData(Part part, String name, List<BiometricData> biometricDataList) throws IOException, BiometricTypeException {
+    private boolean checkBiometricData(Part part, String name, List<BiometricData> biometricDataList, boolean registration) throws IOException, BiometricTypeException {
         Matcher bioMatcher = biometricPattern.matcher(name);
         if (bioMatcher.matches()) {
             BiometricTypes dataType = BiometricTypes.fromString(bioMatcher.group(biometricPatternGroup));
-            BiometricData data = getBiometricData(part, dataType);
+            BiometricData data = getBiometricData(part, dataType, registration);
             biometricDataList.add(data);
             return true;
         }
         return  false;
     }
 
-    private BiometricData getBiometricData(Part part, BiometricTypes dataType) throws IOException {
+    private byte[] preprocess(byte[] data, BiometricTypes type, boolean register) {
+        BiometricsPreprocessor preprocessor = factory.getValidator(type);
+        if (register) {
+            return preprocessor.processRegister(data);
+        } else {
+            return preprocessor.processAccess(data);
+        }
+    }
+
+    private BiometricData getBiometricData(Part part, BiometricTypes dataType, boolean registration) throws IOException {
         byte[] file = null;
         InputStream partInputStream=part.getInputStream();
         ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
@@ -106,10 +125,10 @@ public class BiometricParser {
             outputStream.write(chunk,0,amountRead);
         }
         if (outputStream.size() != 0) {
-            file = outputStream.toByteArray();
+            file = preprocess(outputStream.toByteArray(), dataType, registration);
         }
 
-        return new BiometricData(dataType,file);
+         return new BiometricData(dataType,file);
     }
 
     /**
@@ -131,7 +150,7 @@ public class BiometricParser {
             for(Part part : parts)
             {
                 String name = part.getName();
-                if (!checkBiometricData(part, name, biometricData))
+                if (!checkBiometricData(part, name, biometricData, true))
                     checkContactDetails(request, name, contactDetails);
             }
 

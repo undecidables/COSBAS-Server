@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NoProcessing implements BiometricsPreprocessor {
     @Override
-    public byte[] process(byte[] data) {
+    public byte[] processAccess(byte[] data) {
         return data;
     }
 }

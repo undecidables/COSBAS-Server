@@ -5,7 +5,12 @@ package cosbas.biometric.preprocessor;
  */
 public class FacialProcessing implements BiometricsPreprocessor {
     @Override
-    public byte[] process(byte[] data) {
+    public byte[] processAccess(byte[] data) {
+        return data;
+    }
+
+    @Override
+    public byte[] processRegister(byte[] data) {
         return data;
     }
 }
