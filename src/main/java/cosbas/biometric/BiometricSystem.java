@@ -136,6 +136,10 @@ public class BiometricSystem {
         return u;
     }
 
+    public void deleteRegistrationRequest(String userID) {
+        registerRepository.delete(userID);
+    }
+
     public void removeUser(String id) throws BiometricTypeException {
         userRepository.delete(id);
         List<BiometricData> dataCollections = biometricDataRepository.deleteByUserID(id);
