@@ -75,7 +75,7 @@ public class FaceRecognition {
         }
     }
 
-    private volatile RecognizerData data;
+    volatile RecognizerData data;
     private volatile ReentrantLock dataUpdateLock = new ReentrantLock();
     private volatile ReentrantLock trainingLock = new ReentrantLock();
 
@@ -166,8 +166,9 @@ public class FaceRecognition {
             }
             data.setProjectedTrainFace(projectedTrainFace);
 
-            dataRepository.save(data.getFinalRecogznizerData());
-            updateData();
+            RecognizerData finalRecogznizerData = data.getFinalRecogznizerData();
+            dataRepository.save(finalRecogznizerData);
+            updateData(finalRecogznizerData);
         } finally {
             trainingLock.unlock();
         }
@@ -351,6 +352,21 @@ public class FaceRecognition {
             }
         }  finally {
                 dataUpdateLock.unlock();
+        }
+    }
+
+    private void updateData(RecognizerData newData) {
+        try {
+            dataUpdateLock.lock();
+            if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
+
+                    this.data = newData;
+                    dataRepository.deleteAll();
+                    dataRepository.save(newData);
+
+            }
+        }  finally {
+            dataUpdateLock.unlock();
         }
     }
 
