@@ -2,6 +2,7 @@ package cosbas.biometric.request.registration;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.user.ContactDetail;
+import org.apache.commons.lang3.text.StrBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
@@ -29,22 +30,26 @@ public class RegisterRequest {
     @Id
     private final String userID;
 
+    private final String requestBy;
+
     @PersistenceConstructor
-    protected RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID) {
+    protected RegisterRequest(Set<ContactDetail> contactDetails, LocalDateTime time, List<BiometricData> data, String userID, String requestBy) {
         this.contactDetails = contactDetails;
         this.time = time;
         this.data = data;
         this.userID = userID;
+        this.requestBy = requestBy;
     }
 
     /**
      * Defines a Java Object which stores the user's data as parsed from the POST request
-     *
-     * @param details    The user's contact details
+     *  @param details    The user's contact details
      * @param userID The user's EMPLID
      * @param data     The actual biometric data to persist on the database
+     * @param requestBy
      */
-    public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data) {
+    public RegisterRequest(Collection<ContactDetail> details, String userID, List<BiometricData> data, String requestBy) {
+        this.requestBy = requestBy;
         this.contactDetails = new HashSet<>();
         this.contactDetails.addAll(details);
         if (data == null)
@@ -81,5 +86,9 @@ public class RegisterRequest {
             contactDetails.addAll(newUser.getContactDetails());
             data.addAll(newUser.getData());
         }
+    }
+
+    public String toString() {
+        return (new StringBuilder()).append(time).append(" ").append(userID).append(" by ").append(requestBy).toString();
     }
 }

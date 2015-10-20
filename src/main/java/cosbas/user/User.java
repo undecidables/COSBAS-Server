@@ -48,4 +48,10 @@ public class User {
     public String getUserID() {
         return userID;
     }
+
+    @Override
+    public String toString() {
+        return getUserID();
+    }
+
 }
