@@ -36,9 +36,6 @@ public class BiometricSystem {
     private ValidatorFactory factory;
     private UserDAO userRepository;
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
-    }
 
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
@@ -108,7 +105,7 @@ public class BiometricSystem {
         return factory.getValidator(data.getType()).validate(data, requestAction);
     }
 
-   public User approveUser(String userID) throws BiometricTypeException {
+    public User approveUser(String userID) throws BiometricTypeException {
         /**
          * Fetch al data from DB
          * Generate and save AccessCode
@@ -152,6 +149,12 @@ public class BiometricSystem {
             v.deregisterUser(d);
         }
     }
+
+    public Iterable<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    public Iterable<RegisterRequest> getRegisterRequests() { return registerRepository.findAll(); }
 
     /**
      * Saves the record to the database.
