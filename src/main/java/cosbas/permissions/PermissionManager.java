@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class PermissionManager {
 
-    @Autowired
     private PermissionsDAO permissionsRepository;
 
+    @Autowired
     public PermissionManager(PermissionsDAO permissionsRepository) {
         this.permissionsRepository = permissionsRepository;
     }
