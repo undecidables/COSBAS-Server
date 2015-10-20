@@ -22,12 +22,18 @@ import java.util.List;
  */
 @Service
 public class GoogleCalendarService extends CalendarService {
+    final String SUMMARY = "COSBAS BOOKING: ";
+    private final String CALENDAR_ID = "primary";
     private CalendarDBAdapter credentialRepository;
     private AppointmentDBAdapter appointmentRepository;
-
     @Autowired
     private GoogleVariables variables;
 
+    /*@Autowired
+    public void setCalendarServiceFactory(CalendarFactory calendarServiceFactory) {
+        this.calendarServiceFactory = calendarServiceFactory;
+    }*/
+    private com.google.api.services.calendar.Calendar service;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
@@ -38,15 +44,6 @@ public class GoogleCalendarService extends CalendarService {
     public void setAppointmentRepository(AppointmentDBAdapter appointmentRepository){
         this.appointmentRepository = appointmentRepository;
     }
-
-    /*@Autowired
-    public void setCalendarServiceFactory(CalendarFactory calendarServiceFactory) {
-        this.calendarServiceFactory = calendarServiceFactory;
-    }*/
-
-    final String SUMMARY = "COSBAS BOOKING: ";
-    private final String CALENDAR_ID = "primary";
-    private com.google.api.services.calendar.Calendar service;
 
     /**
      * Functionality to get the current week's appointments directly from
@@ -149,7 +146,7 @@ public class GoogleCalendarService extends CalendarService {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
                 List<String> attendants = clientEmail;
-                attendants.add("u13238435@tuks.co.za");
+                attendants.add(emplid + "@cs.up.ac.za");
                 Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());

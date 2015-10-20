@@ -1,46 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<head >
-    <object th:include="head :: header" th:remove="tag" />
+<head>
+    <object th:include="head :: header" th:remove="tag"/>
     <title>Login</title>
 </head>
 <body>
-<nav th:replace="menu :: navigation"></nav>
-<br/>
-<!--div th:if="${#httpServletRequest.remoteUser == null}"-->
-    <div>
-        <a href="#">
-            <center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-        </a>
-    </div>
-    <br/>
-    <div class="row">
-        <div>
-            <div class="cosbasLogin">
-                <div class="text-center" id="signIn" th:if="!${param.logout} AND !${param.error}"><span class="glyphicon glyphicon-info-sign"></span> Please sign in</div>
-                <div class="text-center" id="signIn" th:if="${param.error}"><span class="glyphicon glyphicon-info-sign"></span> Invalid username and password.</div>
-                <div class="text-center" id="signIn" th:if="${param.logout}"><span class="glyphicon glyphicon-info-sign"></span> You have been logged out.</div>
-                <br/>
-                <form th:action="@{/login}" method="post">
-                    <fieldset>
-                        <div class="form-group">
-                            <p class="text-left">EMPLID</p>
-                            <input class="form-control" name="username" type="text"
-                                   required="required" autofocus="autofocus" value="u0000000"/>
-                        </div>
-                        <div class="form-group">
-                            <p class="text-left">Password</p>
-                            <input class="form-control" name="password" type="password" value="password" required="required"/>
-                        </div>
-                        <br/>
-                        <div>
-                            <input type="submit" value ="Sign in" class="btn btn-sm btn-success"/>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
 <!--/div>
 <div th:if="${#httpServletRequest.remoteUser != null}">
     <div>
@@ -52,5 +16,79 @@
     <div class="col-lg-9">Show calander here</div>
     <div class="col-lg-3">Show selected day's appointments and requested appointments</div>
 </div-->
+<header th:replace="menu :: navigation"></header>
+<br/>
+<br/>
+<section id="contact">
+    <div class="overlay">
+        <div class="container">
+            <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn"
+                th:if="!${param.logout} AND !${param.error}"><span
+                    class="glyphicon glyphicon-info-sign"></span><br/><span>Log</span> In</h1>
+
+            <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn" th:if="${param.error}"><span
+                    class="glyphicon glyphicon-info-sign"></span><br/><span>Invalid Username</span> Or Password</h1>
+
+            <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn" th:if="${param.logout}"><span
+                    class="glyphicon glyphicon-info-sign"></span><br/><span>Logged</span> Out</h1>
+
+            <div class="row">
+                <div class="contact-form">
+                    <form role="form" method="post" th:action="@{/login}">
+                        <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
+                            <div class="controls">
+                                <p class="text-left">EMPLID</p>
+                                <input class="contact_input" name="username" type="text"
+                                       required="required" autofocus="autofocus" value="u0000000"/>
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
+                            <div class="controls">
+                                <p class="text-left">Password</p>
+                                <input class="contact_input" name="password" type="password" value="password"
+                                       required="required"/>
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                            <button type="submit" class="btn btn-common">Sign
+                                In
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer id="footer">
+    <div class="container">
+        <div class="copyright text-center">
+            <p>&copy; University of Pretoria, Department of Computer Science</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Include Bootstrap plugin -->
+<script src="resources/assets/js/bootstrap.min.js"></script>
+<!-- One page Nav plugin -->
+<script src="resources/assets/js/jquery.nav.js"></script>
+<!-- Include Bootstrap plugin -->
+<script src="resources/assets/js/owl.carousel.js"></script>
+<!-- Include wow plugin -->
+<script src="resources/assets/js/wow.js"></script>
+<!-- Include mixitup plugin -->
+<script src="resources/assets/js/jquery.mixitup.js"></script>
+<!-- ScrollTop -->
+
+
+<!-- preset js -->
+<script src="resources/assets/js/style.changer.js"></script>
+<!-- Modernizr js -->
+<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+<!-- Main js -->
+<script src="resources/assets/js/main.js"></script>
 </body>
 </html>

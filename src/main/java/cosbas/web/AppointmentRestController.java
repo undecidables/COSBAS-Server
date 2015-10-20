@@ -6,26 +6,26 @@
 
 package cosbas.web;
 
+import com.google.common.base.Joiner;
+import cosbas.appointment.Appointment;
+import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.appointment.Appointments;
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import cosbas.appointment.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import com.google.common.base.Joiner;
+
 import java.security.Principal;
-import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.calendar_services.authorization.CalendarDBAdapter;
-import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
-import cosbas.calendar_services.authorization.CredentialWrapper;
-import java.util.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 public class AppointmentRestController {
@@ -61,23 +61,28 @@ public class AppointmentRestController {
    * @return Returns the list of active users to be placed in the selection element
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/getActiveUsers")
-  public String getActiveUsers() {
-    List<CredentialWrapper> credentials = credentialRepository.findAll();
-    String returnPage = "";
+    @RequestMapping(method = RequestMethod.POST, value = "/getActiveUsers")
+    public String getActiveUsers() {
+        List<CredentialWrapper> credentials = credentialRepository.findAll();
+        String returnPage = "";
+        returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"appointmentWith\">";
+        for (int i = 0; i < credentials.size(); i++) {
 
-    for(int i = 0; i < credentials.size(); i++)
-    { 
-      System.out.println(credentials.get(i));
-        returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
-    }
-      
-    if(credentials.size() == 0){
-      returnPage += "<option>No active users of the system</option>";
-    }
+           // System.out.println(credentials.get(i));
+            returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
+        }
 
-    return returnPage;
-  }
+        if (credentials.size() == 0) {
+            returnPage += "<option>No active users of the system</option>";
+        }
+        returnPage += "</select>";
+        returnPage += "<p class=\"text-left\">" +
+                "<br/>" +
+                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>" +
+                "</p>";
+
+        return returnPage;
+    }
 
   /**
    * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
@@ -104,7 +109,7 @@ public class AppointmentRestController {
 
   /**
    * Function used to cancel an appointment via the form on the cancel.html page
-   * @param cancellee - String of the name of the person who wants to cancel the appointment. 
+   * @param cancellee - String of the name of the person who wants to cancel the appointment.
    * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
    * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
    */
@@ -139,28 +144,69 @@ public class AppointmentRestController {
 
   @RequestMapping(method= RequestMethod.POST, value="/getApproveOrDeny")
   public String getApproveOrDeny(Principal principal) {
-    List<Appointment> appointments = repository.findByStatusLike("requested");
-    String staffMember = principal.getName();
-    String returnPage = "";
+      List<Appointment> appointments = repository.findByStatusLike("requested");
+      String staffMember = principal.getName();
+      String returnPage = "";
 
-    for(int i = 0; i < appointments.size(); i++)
-    {
-      String[] parts = appointments.get(i).getDateTime().toString().split("T");
-      String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length()-3);
+      /*returnPage += "<table id =\"appointmentsTable\" class=\"table table-striped table-bordered table-condensed\">" +
+              "<th colspan=\"2\">Appointment With</th>" +
+              "<th colspan=\"2\">Date</th>" +
+              "<th colspan=\"2\">Duration</th>" +
+              "<th>Approve</th>" +
+              "<th>Deny</th>"+
+             "</table>";*/
+      for (int i = 0; i < appointments.size(); i++) {
+          String[] parts = appointments.get(i).getDateTime().toString().split("T");
+          String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length() - 3);
 
-      if(appointments.get(i).getStaffID().equals(staffMember)){
-        returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>On: " + tempDateTime + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
-        returnPage += "<input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/>";
-        returnPage += "</div>";
+          if (appointments.get(i).getStaffID().equals(staffMember)) {
+              returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
+                      "<td colspan=\"2\"><p>On: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "<td><button type='submit' class='form-control accept approveBtn'><i class=\"fa fa-check-circle\"></i></button></td>" +
+                      "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
+                      "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
+                      "</tr>" +
+                      "</table>";
+             /* returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>On: " + tempDateTime + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
+              returnPage += "<input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/>";
+              returnPage += "</div>";*/
+          }
+
       }
-    }
-      
-    if(appointments.size() == 0){
-      returnPage += "<p>No appointments pending</p>";
-    }
 
-    return returnPage;
+      if (appointments.size() == 0) {
+          returnPage += "<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
+      }
+      return returnPage;
   }
+
+  /*
+    @RequestMapping(method= RequestMethod.POST, value="/getApproveOrDeny")
+    public String getApproveOrDeny(Principal principal) {
+        List<Appointment> appointments = repository.findByStatusLike("requested");
+        String staffMember = principal.getName();
+        String returnPage = "";
+
+        for (int i = 0; i < appointments.size(); i++) {
+            String[] parts = appointments.get(i).getDateTime().toString().split("T");
+            String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length() - 3);
+
+            if (appointments.get(i).getStaffID().equals(staffMember)) {
+                returnPage += "<div class='form-group'><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>On: " + tempDateTime + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p><input class='form-control accept' type='submit' value='Approve'/><input class='form-control deny' type='submit' value='Deny'/>";
+                returnPage += "<input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/>";
+                returnPage += "</div>";
+            }
+        }
+
+        if (appointments.size() == 0) {
+            returnPage += "<p>No appointments pending</p>";
+        }
+
+        return returnPage;
+    }*/
 
   /**
    * Function to approve a pending appointment
@@ -171,7 +217,7 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/approve")
    public String approve( @RequestParam(value = "appointmentID", required = true) String appointmentID,
                           @RequestParam(value = "staffMember", required = true) String staffMember) {
-
+    
       return appointment.approveAppointment(appointmentID, staffMember);
    }
 
@@ -190,33 +236,33 @@ public class AppointmentRestController {
 
  /**
    * Function used to set up the index page with the logged in users appointments. It is called as soon as the page is loaded
-   * @return Returns the logged in user's month's appointments
+  * @return Returns the logged in user's month's appointments
    */
 
-  @RequestMapping(method= RequestMethod.POST, value="/getMonthAppointments")
-  public String getMonthAppointments(Principal principal) {
-    Date date = new Date();
-    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    int month = localDate.getMonthValue();
+ @RequestMapping(method = RequestMethod.POST, value = "/getMonthAppointments")
+ public String getMonthAppointments(Principal principal) {
+     Date date = new Date();
+     LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+     int month = localDate.getMonthValue();
 
-    List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
+     List<Appointment> appointments = calendar.getMonthAppointments(principal.getName(), month);
 
-    String returnPage = "[";
+     String returnPage = "[";
 
       for(int i = 0; i < appointments.size(); i++)
       {
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
-        int duration = appointments.get(i).getDurationMinutes();
-        String startDate = appointments.get(i).getDateTime().toString();
-        String summary = appointments.get(i).getSummary();
+          int duration = appointments.get(i).getDurationMinutes();
+          String startDate = appointments.get(i).getDateTime().toString();
+          String summary = appointments.get(i).getSummary();
 
-        if(i != appointments.size()-1){
-          returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"},";
-        } else {
-          returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"}";
-        }
+          if (i != appointments.size() - 1) {
+              returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"},";
+          } else {
+              returnPage += "{\"title\":\"" + summary + "\", \"withWho\": \"" + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "\", \"start\": \"" + startDate + "\", \"duration\": \"" + duration + "\"}";
+          }
       }
-   return (returnPage + "]");
+     return (returnPage + "]");
   }
 
   /**
@@ -238,17 +284,72 @@ public class AppointmentRestController {
         String reason = appointments.get(i).getReason();
         String[] parts = appointments.get(i).getDateTime().toString().split("T");
         String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
+                      "<td colspan=\"2\"><p>At: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "</tr>" +
+                      "</table>";
 
-        returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+        //returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
       }
         
       if(appointments.size() == 0){
-        returnPage += "<p>You have no appointments for today</p>";
-      }
-     } else {
-      returnPage = "<p>You have no appointments for the week</p>";
+        returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
+      } /*else {
+        returnPage = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
+      }*/
     }
+    return returnPage;
+  }
 
+  /**
+   * Function used to check if the current logged in user has already linked their callendar or not so that a pop up can be given to link a calendar if needed.
+   * @return Returns Linked or Not Linked depending on if the calendar was already linked. 
+   */
+  @RequestMapping(method= RequestMethod.POST, value="/calendarLinked")
+  public String getLinkedCalendar(Principal principal) {
+    CredentialWrapper credentials = null;
+    credentials = credentialRepository.findByStaffID(principal.getName());
+
+    if(credentials == null){
+      return "Not Linked";
+    } else {
+      return "Linked";
+    }
+  }
+
+@RequestMapping(method= RequestMethod.POST, value="/dayAvailable")
+    public String getAvailableTimes(@RequestParam(value = "staffID", required = true) String staffID) {
+    List<Appointment> appointments = calendar.getTodaysAppointments(staffID);
+    
+    String returnPage = "";
+
+    if(appointments != null){
+      for(int i = 0; i < appointments.size(); i++)
+      {
+        List<String> with = appointments.get(i).getVisitorIDs();
+        int duration = appointments.get(i).getDurationMinutes();
+        String reason = appointments.get(i).getReason();
+        String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\"><p>Appoinment at: " + tempDateTime + "</p></td>" +
+                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "</tr>" +
+                      "</table>";
+
+        //returnPage += "<div class='form-group'><p class='text-left'>Time: " + tempDateTime + "</p><p> Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></div>";
+      }
+        
+      if(appointments.size() == 0){
+        returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
+      } /*else {
+        returnPage = "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
+      }*/
+    }
     return returnPage;
   }
 }

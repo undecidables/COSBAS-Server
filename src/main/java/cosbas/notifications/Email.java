@@ -10,7 +10,9 @@ import org.springframework.mail.SimpleMailMessage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * The Email class to send the email notifications to the visitor and staff member

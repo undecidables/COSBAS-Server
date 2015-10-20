@@ -99,7 +99,7 @@ public class CodeValidator extends AccessValidator {
         return true;
     }
 
-    @Scheduled
+   // @Scheduled
     public void cleanup() {
         //TODO Implement and schedule....
     }
