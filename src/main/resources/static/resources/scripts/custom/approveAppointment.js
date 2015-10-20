@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    /*
+    * Calls the controller function to get all requested appointments and the appends it to the html
+    */
      if(document.title == "Approve/Deny Appointment"){
      acceptAppointmentListener();
      denyAppointmentListener();
@@ -16,7 +19,11 @@ $(document).ready(function() {
 
 });
 
-
+/*
+* Listener for the accept buttons
+* Once it is clicked then the hidden input from UI - the appointmentID and the staff member ID  is send to the server
+* Results from the server is shown via a lightbox
+*/
 function acceptAppointmentListener()
 {
      //Click accept
@@ -47,6 +54,11 @@ function acceptAppointmentListener()
         }));
 }
 
+/*
+* Listener for the deny buttons
+* Once it is clicked then the hidden input from UI - the appointmentID and the staff member ID  is send to the server
+* Results from the server is shown via a lightbox
+*/
 function denyAppointmentListener()
 {
     //Click deny
@@ -76,6 +88,9 @@ function denyAppointmentListener()
       }));
 }
 
+/*
+* Once the denyAll button is clicked it calls the handler of each other deny button on the page
+*/
 function handleDenyAllAppointments()
 {
     $(document).on('click', '#DenyAll', (function(e) {

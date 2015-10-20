@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+  /*
+  * Get the month appointments from the calendar and adds the events to the calendar
+  */
    if(document.title == "COSBAS Service"){
        var returned;
        $date = moment().format('YYYY-MM-DD');
@@ -12,11 +16,18 @@ $(document).ready(function() {
 
      });
 
+    //Checks if a calendar has already been linked or not
      checkCalendarLinked();
 
     }
 });
 
+/*
+* Sets up calendar
+* Hides previous, next and today buttons
+* No events are editable or draggable
+* Sets date to the current day
+*/
 function spawnCalendar(returned)
 {
      /****************Callendar**************************/
@@ -57,6 +68,10 @@ function spawnCalendar(returned)
  window.scrollTo(0, 0);
 }
 
+/*
+* Calls server function to see if a calendar was already linked if not it shows a dialog letting the user link a calendar
+* Gets the day's appointments add appends them to the html
+*/
 function checkCalendarLinked()
 {
     if(document.title == "COSBAS Service"){

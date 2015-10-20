@@ -304,6 +304,10 @@ public class AppointmentRestController {
     return returnPage;
   }
 
+  /**
+   * Function used to check if the current logged in user has already linked their callendar or not so that a pop up can be given to link a calendar if needed.
+   * @return Returns Linked or Not Linked depending on if the calendar was already linked. 
+   */
   @RequestMapping(method= RequestMethod.POST, value="/calendarLinked")
   public String getLinkedCalendar(Principal principal) {
     CredentialWrapper credentials = null;
