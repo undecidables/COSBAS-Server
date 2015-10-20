@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,42 +25,51 @@ import java.util.List;
 @Service
 public class AppointmentReports {
 
+    public static enum reportTypes
+    {
+        ALL_APPOINTMENTS,
+        ALL_APPOINTMENTS_BY_STAFFID,
+        ALL_APPOINTMENTS_BY_STATUS,
+        ALL_APPOINTMENTS_BETWEEN_DATETIME,
+        ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME
+    }
+
     @Autowired
     private AppointmentDBAdapter repository;
 
 
-    public JasperReportBuilder createAllAppointmentsReports()
+    private JasperReportBuilder createAllAppointmentsReports()
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findAll().iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsByStaffIdReports(String staffId)
+    private JasperReportBuilder createAllAppointmentsByStaffIdReports(AppointmentDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffID(staffId).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffID(data.getStaffID()).iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsByStatusReports(String stats)
+    private JasperReportBuilder createAllAppointmentsByStatusReports(AppointmentDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStatusLike(stats).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStatusLike(data.getStatus()).iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsBetweenDateTimeReports(LocalDateTime dateS, LocalDateTime dateE)
+    private JasperReportBuilder createAllAppointmentsBetweenDateTimeReports(AppointmentDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(dateS, dateE).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAllAppointmentsByStaffIdAndDateTimeBetweenReports(String staffId, LocalDateTime dateS, LocalDateTime dateE)
+    private JasperReportBuilder createAllAppointmentsByStaffIdAndDateTimeBetweenReports(AppointmentDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffIDAndDateTimeBetween(staffId, dateS, dateE).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByStaffIDAndDateTimeBetween(data.getStaffID(), data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
@@ -97,6 +105,25 @@ public class AppointmentReports {
         }
 
         return dataSource;
+    }
+
+    public JasperReportBuilder getReport(reportTypes type, AppointmentDataReport data)
+    {
+        switch (type)
+        {
+            case ALL_APPOINTMENTS:
+                return createAllAppointmentsReports();
+            case ALL_APPOINTMENTS_BETWEEN_DATETIME:
+                return createAllAppointmentsBetweenDateTimeReports(data);
+            case ALL_APPOINTMENTS_BY_STAFFID:
+                return createAllAppointmentsByStaffIdReports(data);
+            case ALL_APPOINTMENTS_BY_STATUS:
+                return createAllAppointmentsByStatusReports(data);
+            case ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME:
+                return createAllAppointmentsByStaffIdAndDateTimeBetweenReports(data);
+            default:
+                return null;
+        }
     }
 
 }

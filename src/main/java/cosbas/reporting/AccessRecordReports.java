@@ -28,29 +28,47 @@ import java.util.List;
 @Service
 public class AccessRecordReports {
 
+    public static enum reportTypes
+    {
+        ALL_ACCESS_RECORDS,
+        ALL_ACCESS_RECORDS_BETWEEN_DATETIME,
+        ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME,
+        ALL_ACCESS_RECORDS_BY_USERID
+    }
+
+
     @Autowired
     private AccessRecordDAO repository;
 
-    public JasperReportBuilder createAllAccessRecordReports()
+    private JasperReportBuilder createAllAccessRecordReports()
     {
         JasperReportBuilder report = buildReport();
         report.setDataSource(createDataSource(IteratorUtils.toList(repository.findAll().iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAccessRecordBetweenDateTimeReports(LocalDateTime dateS, LocalDateTime dateE)
+    private JasperReportBuilder createAccessRecordBetweenDateTimeReports(AccessRecordDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(dateS, dateE).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByDateTimeBetween(data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
 
-    public JasperReportBuilder createAccessRecordByUserIdAndDateTimeBetweenReports(String userId, LocalDateTime dateS, LocalDateTime dateE)
+    private JasperReportBuilder createAccessRecordByUserIdAndBetweenDateTimeReports(AccessRecordDataReport data)
     {
         JasperReportBuilder report = buildReport();
-        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserIDAndDateTimeBetween(userId, dateS, dateE).iterator())));
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserIDAndDateTimeBetween(data.getUserId(), data.getsDate(), data.geteDate()).iterator())));
         return report;
     }
+
+    private JasperReportBuilder createAccessRecordByUserIdReports(AccessRecordDataReport data)
+    {
+        JasperReportBuilder report = buildReport();
+        report.setDataSource(createDataSource(IteratorUtils.toList(repository.findByUserID(data.getUserId()).iterator())));
+        return report;
+    }
+
+
 
     private JasperReportBuilder buildReport()
     {
@@ -67,7 +85,7 @@ public class AccessRecordReports {
                 Columns.column("Action", "action", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("User ID", "userId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("Date Time", "dateTime", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue)
-        ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Testing").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
+        ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Access Record").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
 
 
         return report;
@@ -82,5 +100,26 @@ public class AccessRecordReports {
         }
 
         return dataSource;
+    }
+
+    public JasperReportBuilder getReport(reportTypes type, AccessRecordDataReport data)
+    {
+        switch (type)
+        {
+            case ALL_ACCESS_RECORDS:
+                return createAllAccessRecordReports();
+
+            case ALL_ACCESS_RECORDS_BETWEEN_DATETIME:
+                return createAccessRecordBetweenDateTimeReports(data);
+
+            case ALL_ACCESS_RECORDS_BY_USERID:
+                return createAccessRecordByUserIdReports(data);
+
+            case ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME:
+                return createAccessRecordByUserIdAndBetweenDateTimeReports(data);
+
+            default:
+                return null;
+        }
     }
 }
