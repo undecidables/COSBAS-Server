@@ -1,5 +1,7 @@
 package cosbas.permissions;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
@@ -40,4 +42,25 @@ public class Permission {
 
     private String userID;
     private PermissionId permission;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        final Permission other = (Permission) object;
+        return new EqualsBuilder()
+                .append(userID, other.userID)
+                .append(permission, other.permission)
+                .isEquals();
+    }
+
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(37, 97)
+                .append(userID)
+                .append(permission)
+                .toHashCode();
+    }
 }
