@@ -2,6 +2,7 @@ $(document).ready(function() {
     /*
     * Calls the controller function to get all requested appointments and the appends it to the html
     */
+    handleDynamicInputClicks();
      if(document.title == "Approve/Deny Appointment"){
      acceptAppointmentListener();
      denyAppointmentListener();
@@ -28,7 +29,7 @@ function acceptAppointmentListener()
 {
      //Click accept
       $(document).on('click', '.accept', (function(e) {
-       $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h6>");
+       $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h6>");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -63,7 +64,7 @@ function denyAppointmentListener()
 {
     //Click deny
       $(document).on('click', '.deny', (function(e) {
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h6>");
+        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h6>");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -99,4 +100,12 @@ function handleDenyAllAppointments()
         $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
         //window.location.reload(true);
       }));
+}
+
+function handleDynamicInputClicks()
+{
+
+     $(document.body).on('click', '.btnLightbox' ,function(){
+                        $('.featherlight').click();
+                    });
 }

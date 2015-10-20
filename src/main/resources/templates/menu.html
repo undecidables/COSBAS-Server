@@ -9,14 +9,11 @@
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						<i class="fa fa-bars fa-lg"></i>
 					</button>
-
+					<a href="/index" class="navbar-brand"><img src="/resources/css/images/Logo.png" alt="Test"/></a>
 				</div>
-
 				<!-- Start Navigation Menu Logged In-->
 				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li><a href="/" class="navbar-brand"><img src="/resources/css/images/Logo.png" class="logoImg"
-																  alt=""/></a></li>
 						<li><a href="index">Home</a></li>
 						<li><a href="approveDenyAppointment">My Appointments</a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
@@ -37,8 +34,6 @@
 				<!-- Start Navigation Menu Not Logged In In-->
 				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser == null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
-						<li><a href="/" class="navbar-brand"><img src="/resources/css/images/Logo.png" class="logoImg"
-																  alt=""/></a></li>
 						<li><a href="makeAppointment">Request Appointment</a></li>
 						<li><a href="cancel">Cancel Appointment</a></li>
 						<li><a href="status">Check Appointment</a></li>

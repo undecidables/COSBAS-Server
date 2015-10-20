@@ -1,12 +1,40 @@
+.fa-bars
+{
+    color: white;
+}
+
+* {
+	margin: 0;
+}
+html, body {
+	height: 100%;
+}
+
+#contact
+{
+    min-height: 100%;
+    	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+    	height: 100%;
+    	margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+	height: 155px; /* .push must be the same height as .footer */
+    padding: 4em;
+}
+
+.footer
+{
+    background: #003366;
+    color: white;
+}
+
+
 .section-title
 {
     font-size: 18pt;
 }
 
-.logoImg
-{
-    margin-top: -9%;
-}
+
 
 #header .main-navigation
 {

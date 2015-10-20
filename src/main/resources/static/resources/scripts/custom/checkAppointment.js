@@ -3,6 +3,8 @@ $(document).ready(function() {
       /**
       * Checks for the appointment ID in the URL, if present it fills it into the appointment ID input box
       */
+
+      handleDynamicInputClicks();
       if(document.title == "Check Appointment Status"){
           $("#appointmentID").val(getUrlParameter('ID'));
         }
@@ -134,4 +136,13 @@ function getUrlParameter(parameter)
         }
     }
     return "";
+}
+
+
+function handleDynamicInputClicks()
+{
+
+     $(document.body).on('click', '.btnLightbox' ,function(){
+                        $('.featherlight').click();
+                    });
 }

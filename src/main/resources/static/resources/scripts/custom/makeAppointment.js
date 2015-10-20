@@ -299,6 +299,26 @@ function validateEmailInput()
 * Feedback is shown via a lightbox
 */
 function validateGlobalSubmit()
+{
+    var dateVar = calculateDate();
+        var timeVar = calculateTime();
+    //check time
+    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
+                html +=  '<p class="text-left">' +
+                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                          '</p>';
+      $element = $(html);
+      $.featherlight($element);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+}
+
 function checkTime()
 {
     var dateVar = calculateDate();
