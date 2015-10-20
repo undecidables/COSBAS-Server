@@ -5,16 +5,13 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.biometric.validators.facial.FaceRecognition;
-import org.bytedeco.javacpp.opencv_contrib;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
-import static org.bytedeco.javacpp.opencv_legacy.*;
+
 
 /**
  * {@author Renette Ros}
@@ -23,11 +20,11 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceValidator extends AccessValidator {
 
-    
+
     FaceRecognition recognizer;
 
-    //@Value ("$(faces.certaintyThreshold:70.0}")
-    double certaintyThreshold = 70.0;
+    //@Value ("$(faces.certainty}")
+    double certaintyThreshold = 0.7;
 
     @Autowired
     public FaceValidator(FaceRecognition recognizer) {
@@ -46,11 +43,23 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    //TODO Fix schedule!
-    //@Scheduled
+
+    @Scheduled(cron="0 0 0 * * *")
     public void train() {
-        if (recognizer.getData().needsTraining()) {
+        if (recognizer.needsTraining()) {
             recognizer.trainFromDB();
         }
     }
+
+    @Override
+    public void registerUser(BiometricData request, String userID) throws BiometricTypeException{
+        super.registerUser(request, userID);
+        recognizer.setNeedsTraining();
+    }
+
+    public void deregisterUser(BiometricData request) throws BiometricTypeException {
+        super.deregisterUser(request);
+        recognizer.setNeedsTraining();
+    }
+
 }

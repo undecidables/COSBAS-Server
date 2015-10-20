@@ -68,8 +68,8 @@ public class FaceRecognitionTest {
 
     @Test
     public void testRecognizeFace() throws Exception {
-        RecognizerData recognizerData = testee.learn(trainingList);
-        assertNotNull(recognizerData);
+       testee.learn(trainingList);
+        assertNotNull("Recognizer data null", testee.data);
 
         BufferedReader imgListFile = new BufferedReader(new FileReader(folder  + testingfile));
         String line = imgListFile.readLine();
