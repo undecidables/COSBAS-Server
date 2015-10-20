@@ -68,10 +68,6 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceRecognition {
 
-    public RecognizerData getData() {
-        return data;
-    }
-
     public class Trainer implements Runnable {
         @Override
         public void run() {
@@ -79,8 +75,9 @@ public class FaceRecognition {
         }
     }
 
-    private volatile RecognizerData data;
+    volatile RecognizerData data;
     private volatile ReentrantLock dataUpdateLock = new ReentrantLock();
+    private volatile ReentrantLock trainingLock = new ReentrantLock();
 
     private RecognizerDAO dataRepository;
     private BiometricDataDAO biometricsRepository;
@@ -94,17 +91,22 @@ public class FaceRecognition {
     @PostConstruct
     private void setup() {
         data = dataRepository.findFirstByOrderByUpdatedDesc();
-        if (getData() == null) {
+        if (data == null) {
             new Thread(new Trainer()).start();
         }
     }
 
-    public RecognizerData trainFromDB() {
-        List<BiometricData> datalist = biometricsRepository.findByType(BiometricTypes.FACE);
-        if (datalist != null && !datalist.isEmpty()) {
-            return learn(datalist);
+    public void trainFromDB() {
+        try {
+            trainingLock.lock();
+            updateData();
+            List<BiometricData> datalist = biometricsRepository.findByType(BiometricTypes.FACE);
+            if (datalist != null && !datalist.isEmpty()) {
+                learn(datalist);
+            }
+        }  finally {
+            trainingLock.unlock();
         }
-        return null;
     }
 
     private IplImage createIPL(BiometricData d) {
@@ -113,57 +115,63 @@ public class FaceRecognition {
     }
 
     /**
-     * Trains the recognizer and updates and persists the trainign data.
-     * @param trainingData
-     * @return
+     * Trains the recognizer and updates and persists the training data.
+     * @param trainingData The faces to train on
      */
-    RecognizerData learn(List<BiometricData> trainingData) {
+    void learn(List<BiometricData> trainingData) {
+        try {
+            trainingLock.lock();
 
-        TemporaryRecognizerData data = new TemporaryRecognizerData();
+            TemporaryRecognizerData data = new TemporaryRecognizerData();
 
-        CvMat projectedTrainFace;
+            CvMat projectedTrainFace;
 
-        loadFaceImageList(trainingData, data);
+            loadFaceImageList(trainingData, data);
 
-        //Principal Component Analysis
-        doPCA(data);
+            //Principal Component Analysis
+            doPCA(data);
 
-        int nTrainFaces = data.getnFaces();
-        int nEigens = data.getnEigens();
+            int nTrainFaces = data.getnFaces();
+            int nEigens = data.getnEigens();
 
-        // Project the training images onto the PCA subspace
-        projectedTrainFace = cvCreateMat(
-                nTrainFaces, // rows
-                nEigens, // cols
-                CV_32FC1);
+            // Project the training images onto the PCA subspace
+            projectedTrainFace = cvCreateMat(
+                    nTrainFaces, // rows
+                    nEigens, // cols
+                    CV_32FC1);
 
-        // Initialize the training face matrix - for ease of debugging
-        for (int i1 = 0; i1 < nTrainFaces; i1++) {
-            for (int j1 = 0; j1 < nEigens; j1++) {
-                projectedTrainFace.put(i1, j1, 0.0);
+            // Initialize the training face matrix - for ease of debugging
+            for (int i1 = 0; i1 < nTrainFaces; i1++) {
+                for (int j1 = 0; j1 < nEigens; j1++) {
+                    projectedTrainFace.put(i1, j1, 0.0);
+                }
             }
-        }
 
-        IplImage[] eigenVectors = data.getEigenVectors();
-        final FloatPointer floatPointer = new FloatPointer(nEigens);
-        for (int i = 0; i < nTrainFaces; i++) {
+            IplImage[] eigenVectors = data.getEigenVectors();
+            final FloatPointer floatPointer = new FloatPointer(nEigens);
+            for (int i = 0; i < nTrainFaces; i++) {
 
-            cvEigenDecomposite(
-                    data.getTrainingFaces().get(i),
-                    nEigens,
-                    eigenVectors,
-                    0,
-                    null,
-                    data.getpAvgTrainImg(),
-                    floatPointer);
+                cvEigenDecomposite(
+                        data.getTrainingFaces().get(i),
+                        nEigens,
+                        eigenVectors,
+                        0,
+                        null,
+                        data.getpAvgTrainImg(),
+                        floatPointer);
 
-            for (int j1 = 0; j1 < nEigens; j1++) {
-                projectedTrainFace.put(i, j1, floatPointer.get(j1));
+                for (int j1 = 0; j1 < nEigens; j1++) {
+                    projectedTrainFace.put(i, j1, floatPointer.get(j1));
+                }
             }
-        }
-        data.setProjectedTrainFace(projectedTrainFace);
+            data.setProjectedTrainFace(projectedTrainFace);
 
-        return storeTrainingData(data.getFinalRecogznizerData());
+            RecognizerData finalRecogznizerData = data.getFinalRecogznizerData();
+            dataRepository.save(finalRecogznizerData);
+            updateData(finalRecogznizerData);
+        } finally {
+            trainingLock.unlock();
+        }
 
    }
 
@@ -172,14 +180,14 @@ public class FaceRecognition {
      */
    public ValidationResponse recognizeFace(BiometricData face) throws ValidationException {
         updateData();
-        if (getData() == null)
+       if (data == null)
             throw new ValidationException("Face recognizer has not been initialized");
         IplImage testFace;
 
         float[] projectedTestFace;
 
         testFace = createIPL(face);
-        int nEigens = getData().eigenVectors.length;
+       int nEigens = data.eigenVectors.length;
 
         // project the test images onto the PCA subspace
         projectedTestFace = new float[nEigens];
@@ -188,21 +196,21 @@ public class FaceRecognition {
         int nearest;
 
         // project the test image onto the PCA subspace
-        cvEigenDecomposite(
+       cvEigenDecomposite(
                 testFace, // obj
                 nEigens, // nEigObjs
-                getData().eigenVectors, // eigInput (Pointer)
+                data.eigenVectors, // eigInput (Pointer)
                 0, // ioFlags
                 null, // userData
-                getData().pAvgTrainImg, // avg
+                data.pAvgTrainImg, // avg
                 projectedTestFace);  // coeffs
 
 
         final FloatPointer pConfidence = new FloatPointer(0);
         iNearest = findNearestNeighbor(projectedTestFace, pConfidence);
         double confidence = pConfidence.get();
-        nearest = getData().personNumTruthMat.data_i().get(iNearest);
-        String emplid = getData().personNames.get(nearest-1);
+       nearest = data.personNumTruthMat.data_i().get(iNearest);
+       String emplid = data.personNames.get(nearest-1);
 
         return new ValidationResponse(true,  emplid, confidence);
     }
@@ -331,29 +339,35 @@ public class FaceRecognition {
         return eigenVectors;
     }
 
-    /**
-     *  Stores the training data into the data field and databse if it is neawer than the curent data.
-     *  Removes all old recognizerData from the database.
-     */
-    private RecognizerData storeTrainingData(RecognizerData newData) {
-        if (newData != null && (this.getData() == null || newData.updated.isAfter(getData().updated))) {
-            try {
-                dataUpdateLock.lock();
-                if (this.getData() == null || newData.updated.isAfter(getData().updated)) {
+    private void updateData() {
+        try {
+            dataUpdateLock.lock();
+            RecognizerData newData = dataRepository.findFirstByOrderByUpdatedDesc();
+            if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
+                if (data == null || newData.updated.isAfter(data.updated)) {
                     this.data = newData;
                     dataRepository.deleteAll();
                     dataRepository.save(newData);
                 }
-            } finally {
-                dataUpdateLock.unlock();
             }
+        }  finally {
+                dataUpdateLock.unlock();
         }
-        return getData();
-   }
+    }
 
-    private void updateData() {
-        RecognizerData newData = dataRepository.findFirstByOrderByUpdatedDesc();
-        storeTrainingData(newData);
+    private void updateData(RecognizerData newData) {
+        try {
+            dataUpdateLock.lock();
+            if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
+
+                    this.data = newData;
+                    dataRepository.deleteAll();
+                    dataRepository.save(newData);
+
+            }
+        }  finally {
+            dataUpdateLock.unlock();
+        }
     }
 
     /**
@@ -369,15 +383,15 @@ public class FaceRecognition {
         int iTrain = 0;
         int iNearest = 0;
 
-        int nTrainFaces = getData().trainingFaces.size();
-        int nEigens = getData().eigenVectors.length;
+        int nTrainFaces = data.trainingFaces.size();
+        int nEigens = data.eigenVectors.length;
         for (iTrain = 0; iTrain < nTrainFaces; iTrain++) {
 
             double distSq = 0;
 
             for (i = 0; i < nEigens; i++) {
 
-                float projectedTrainFaceDistance = (float) getData().projectedTrainFace.get(iTrain, i);
+                float projectedTrainFaceDistance = (float) data.projectedTrainFace.get(iTrain, i);
                 float d_i = projectedTestFace[i] - projectedTrainFaceDistance;
                 distSq += d_i * d_i;
             }
@@ -395,6 +409,29 @@ public class FaceRecognition {
         pConfidencePointer.put(pConfidence);
 
         return iNearest;
+    }
+
+    public boolean needsTraining() {
+        updateData();
+        return data.needsTraining();
+    }
+
+    private class TrainingUpdater implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                updateData();
+                trainingLock.lock();
+                data.setNeedsTraining();
+            } finally {
+                trainingLock.unlock();
+            }
+        }
+    }
+
+    public void setNeedsTraining() {
+        (new Thread(new TrainingUpdater())).start();
     }
 
 }
