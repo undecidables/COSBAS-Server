@@ -1,3 +1,6 @@
+/*
+* Sets up page
+*/
 $(document).ready(function() {
         initializeTimePicker();
         loadStaffMembers();
@@ -8,7 +11,12 @@ $(document).ready(function() {
         validateGlobalSubmit();
 });
 
-
+/*
+* Initializes start timer so the min time is 7:30 and max time is 16:00 and it doesn't show the duration
+* Initializes end timer so the min time is 7:30 and max time is 16:00 and it shows the duration
+* Links the end and start time so the duration is shown for the end time
+* Sets up the dat picker so only future dates can be picked and no weekend dates can be picked
+*/
 function initializeTimePicker()
 {
      $('#appointmentDate .time').timepicker({
@@ -50,6 +58,9 @@ function initializeTimePicker()
     $('#appointmentDate').datepair();
 }
 
+/*
+* Function to load registered staffmemers from the db and display them in the drop down
+*/
 function loadStaffMembers()
 {
     if(document.title == "Make Appointment"){
@@ -69,6 +80,9 @@ function loadStaffMembers()
   }
 }
 
+/*
+* Gets the current date in a YYYY-MM-DD format
+*/
 function calculateDate()
 {
       var currentdate = new Date();
@@ -88,6 +102,9 @@ function calculateDate()
       return dateVar;
 }
 
+/*
+* Gets the time in a HH:MM format
+*/
 function calculateTime()
 {
     var currentdate = new Date();
@@ -97,6 +114,9 @@ function calculateTime()
     return timeVar;
 }
 
+/*
+* Creates a lightbox with the number of attendees' name input fields
+*/
 function createNameInput()
 {
     $('.appointmentBy').focus(function() {
@@ -129,6 +149,9 @@ function createNameInput()
   });
 }
 
+/*
+* Checks that no name was left out
+*/
 function validateNameInput()
 {
     var emailString;
@@ -163,6 +186,9 @@ function validateNameInput()
         });
 }
 
+/*
+* Creates a lightbox with the number of attendees' email input fields
+*/
 function createEmailInput()
 {
     $('#email').focus(function() {
@@ -194,6 +220,9 @@ function createEmailInput()
   });
 }
 
+/*
+* Closes lightbox if ok button is clicked
+*/
 function handleDynamicInputClicks()
 {
     $(document.body).on('click', '#appointmentsubmit' ,function(){
@@ -205,6 +234,9 @@ function handleDynamicInputClicks()
         });
 }
 
+/*
+* Checks that no emial was left out
+*/
 function validateEmailInput()
 {
     var emailString;
@@ -238,7 +270,10 @@ function validateEmailInput()
   });
 }
 
-
+/*
+* Check that no errors occured then send the UI data to the server
+* Feedback is shown via a lightbox
+*/
 function validateGlobalSubmit()
 {
     $('#makeAppointmentRequest').click(function(e) {

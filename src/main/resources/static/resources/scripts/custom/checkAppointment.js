@@ -1,8 +1,18 @@
 $(document).ready(function() {
+
+      /**
+      * Checks for the appointment ID in the URL, if present it fills it into the appointment ID input box
+      */
       if(document.title == "Check Appointment Status"){
           $("#appointmentID").val(getUrlParameter('ID'));
         }
 
+      /**
+      * Called when checkStatus is clicked
+      * It calls checkValidAppointmentID and checkValidUserChecker
+      * If no errors detected it calls checkAppointment and returns the appointment details to the user
+      * All feedback is shown in a lightbox
+      */
       $('#checkStatus').click(function(e) {
         e.preventDefault();
 
@@ -19,6 +29,11 @@ $(document).ready(function() {
 });
 
 
+/**
+* Checks if a valid appointmentID was entered if not shows an error else it removes the error
+* Checks if it is the first error to be displayed and then closes the light box saying that it is busy processing the data.
+* All feedback is given via lightbox
+*/
 function checkValidAppointmentID()
 {
      //add errorID
@@ -37,6 +52,12 @@ function checkValidAppointmentID()
       $.featherlight($element);
     }
 }
+
+/**
+* Checks if a valid user was entered if not shows an error else it removes the error
+* Checks if it is the first error to be displayed and then closes the light box saying that it is busy processing the data.
+* All feedback is given via lightbox
+*/
 function checkValidUserChecker()
 {
      //add status error
@@ -56,6 +77,12 @@ function checkValidUserChecker()
     }
 }
 
+/**
+* Checks that no errors occured
+* Sends data gotten from UI to server via ajax
+* Returned data is shown to user via a lightbox
+* Either it shows the error that occured or shows the appointemnt data
+*/
 function checkAppointment()
 {
      //send data if no errors
@@ -77,12 +104,15 @@ function checkAppointment()
         $("#requestedBy").val("");
       });
       window.scrollTo(0, 0);
-    } else {
-      $("#signIn").text("Check Appointment Status");
-      window.scrollTo(0, 0);
     }
 }
 
+/**
+  * function used to read and return the appointment out of the URL if it is present
+  * If the appointment ID is not present in the URL it returns an empty string
+  * The parameter must be named ID
+  * URL example: serverURL/PageURL?ID=theAppoitmentID
+  */
 function getUrlParameter(parameter)
 {
     $pageURL = decodeURIComponent(window.location.search.substring(1));
