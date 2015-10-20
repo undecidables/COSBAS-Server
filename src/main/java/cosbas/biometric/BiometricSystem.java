@@ -8,10 +8,15 @@ import cosbas.biometric.request.access.AccessResponse;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterRequestDAO;
 import cosbas.biometric.request.registration.RegisterResponse;
+import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +34,16 @@ public class BiometricSystem {
     private RegisterRequestDAO registerRepository;
     private BiometricDataDAO biometricDataRepository;
     private ValidatorFactory factory;
+    private UserDAO userRepository;
 
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
         this.registerRepository = registerRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserDAO userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Autowired
@@ -93,21 +104,45 @@ public class BiometricSystem {
         return factory.getValidator(data.getType()).validate(data, requestAction);
     }
 
-   public Boolean approveUser(String userID) {
+   public User approveUser(String userID) throws BiometricTypeException {
         /**
          * Fetch al data from DB
          * Generate and save AccessCode
          * Fore each BiometricData item
          *      Get correct validator
-         *      Call validator.register to save & do additional stuff
+         *      Call validator.register to do additional stuff
+         * Save to db
          */
+       RegisterRequest req = registerRepository.findByUserID(userID);
+       if (req == null)
+           throw new NullArgumentException("No registrations request for this user.");
+       List<BiometricData> dataCollections = req.getData();
+       for (BiometricData d : dataCollections) {
+           AccessValidator v = factory.getValidator(d.getType());
+           v.registerUser(d, userID);
+       }
 
-        return false;
+       biometricDataRepository.save(req.getData());
+
+       User u = userRepository.findOne(userID);
+
+       if (u == null)
+           u = new User(userID, req.getContactDetails());
+       else
+            u.addContactDetails(req.getContactDetails());
+
+       userRepository.save(u);
+
+        return u;
     }
 
-    public Boolean removeUser(String id) {
-        //Remove user info + biometric data from db
-        return false;
+    public void removeUser(String id) throws BiometricTypeException {
+        userRepository.delete(id);
+        List<BiometricData> dataCollections = biometricDataRepository.deleteByUserID(id);
+        for (BiometricData d : dataCollections) {
+            AccessValidator v = factory.getValidator(d.getType());
+            v.deregisterUser(d);
+        }
     }
 
     /**
@@ -136,4 +171,6 @@ public class BiometricSystem {
             return RegisterResponse.getSuccessResponse(request, "Request pending admin Approval.");
         }
     }
+
+
 }
