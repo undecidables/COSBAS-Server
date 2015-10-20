@@ -23,16 +23,7 @@ import java.util.List;
  *  {@author Szymon}
  */
 @Service
-public class AppointmentReports {
-
-    public static enum reportTypes
-    {
-        ALL_APPOINTMENTS,
-        ALL_APPOINTMENTS_BY_STAFFID,
-        ALL_APPOINTMENTS_BY_STATUS,
-        ALL_APPOINTMENTS_BETWEEN_DATETIME,
-        ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME
-    }
+public class AppointmentReports implements ReportInterface {
 
     @Autowired
     private AppointmentDBAdapter repository;
@@ -107,7 +98,7 @@ public class AppointmentReports {
         return dataSource;
     }
 
-    public JasperReportBuilder getReport(reportTypes type, ReportData data)
+    public JasperReportBuilder getReport(ReportFactory.reportTypes type, ReportData data)
     {
         switch (type)
         {

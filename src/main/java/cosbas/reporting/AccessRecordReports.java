@@ -24,15 +24,7 @@ import java.util.List;
  */
 
 @Service
-public class AccessRecordReports {
-
-    public static enum reportTypes
-    {
-        ALL_ACCESS_RECORDS,
-        ALL_ACCESS_RECORDS_BETWEEN_DATETIME,
-        ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME,
-        ALL_ACCESS_RECORDS_BY_USERID
-    }
+public class AccessRecordReports implements ReportInterface {
 
 
     @Autowired
@@ -81,7 +73,7 @@ public class AccessRecordReports {
         report.setPageFormat(PageType.A4, PageOrientation.PORTRAIT).columns(
                 Columns.column("Door ID", "doorId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("Action", "action", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
-                Columns.column("User ID", "userId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
+                Columns.column("User ID", "staffId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("Date Time", "dateTime", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue)
         ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Access Record").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
 
@@ -91,7 +83,7 @@ public class AccessRecordReports {
 
     private DRDataSource createDataSource(List<AccessRecord> data)
     {
-        DRDataSource dataSource = new DRDataSource("doorId","action","userId","dateTime");
+        DRDataSource dataSource = new DRDataSource("doorId","action","staffId","dateTime");
         for(AccessRecord accessRecord : data)
         {
             dataSource.add(accessRecord.getDoorID(), accessRecord.getAction().toString(), accessRecord.getUserID(), accessRecord.getDateTime().toLocalDate().toString() + " " + accessRecord.getDateTime().toLocalTime().minusSeconds(30).toString());
@@ -100,7 +92,7 @@ public class AccessRecordReports {
         return dataSource;
     }
 
-    public JasperReportBuilder getReport(reportTypes type, ReportData data)
+    public JasperReportBuilder getReport(ReportFactory.reportTypes type, ReportData data)
     {
         switch (type)
         {
@@ -110,10 +102,10 @@ public class AccessRecordReports {
             case ALL_ACCESS_RECORDS_BETWEEN_DATETIME:
                 return createAccessRecordBetweenDateTimeReports(data);
 
-            case ALL_ACCESS_RECORDS_BY_USERID:
+            case ALL_ACCESS_RECORDS_BY_STAFFID:
                 return createAccessRecordByUserIdReports(data);
 
-            case ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME:
+            case ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME:
                 return createAccessRecordByUserIdAndBetweenDateTimeReports(data);
 
             default:

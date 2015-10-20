@@ -25,6 +25,11 @@ public class ReportData {
         this.eDate = eDate;
     }
 
+    public ReportData()
+    {
+
+    }
+
     public ReportData(String staffID) {
 
         this.staffID = staffID;
