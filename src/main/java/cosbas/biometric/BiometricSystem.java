@@ -36,6 +36,10 @@ public class BiometricSystem {
     private ValidatorFactory factory;
     private UserDAO userRepository;
 
+    public Iterable<User> getUsers() {
+        return userRepository.findAll();
+    }
+
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
         this.registerRepository = registerRepository;
