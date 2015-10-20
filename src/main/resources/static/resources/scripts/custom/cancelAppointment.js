@@ -46,8 +46,11 @@ function checkValidAppointmentCancellee()
     }
     else
     {
-      $element = $('<p class="error" id="cancelError">You must enter who it is that wants to cancel the appointment. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
+                              html +=  '<p class="text-left">' +
+                                          '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                        '</p>';
+            $.featherlight(html);
       return false;
     }
 }
@@ -69,8 +72,11 @@ function checkValidAppointmentID()
         $('.featherlight').click();
       }
       $noError = false;
-      $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
+                        html +=  '<p class="text-left">' +
+                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                  '</p>';
+            $.featherlight(html);
     }
     return $noError;
 }

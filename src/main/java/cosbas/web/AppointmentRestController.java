@@ -333,7 +333,7 @@ public class AppointmentRestController {
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
                       "<td colspan=\"2\"><p>Appoinment at: " + tempDateTime + "</p></td>" +
-                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "<td colspan=\"5\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
                       "</tr>" +
                       "</table>";
 

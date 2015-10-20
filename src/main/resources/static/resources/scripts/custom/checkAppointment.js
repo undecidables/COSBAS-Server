@@ -33,8 +33,11 @@ function checkValidAppointmentID()
         $('.featherlight').click();
       }
       $noError = false;
-      $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
+                  html +=  '<p class="text-left">' +
+                              '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                            '</p>';
+      $.featherlight(html);
     }
 }
 function checkValidUserChecker()
@@ -51,8 +54,11 @@ function checkValidUserChecker()
         $('.featherlight').click();
       }
       $noError = false;
-      $element = $('<p class="error" id="statusError">You must enter who it is that wants to check the appointment status. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
+                        html +=  '<p class="text-left">' +
+                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                  '</p>';
+      $.featherlight(html);
     }
 }
 
@@ -78,7 +84,6 @@ function checkAppointment()
       });
       window.scrollTo(0, 0);
     } else {
-      $("#signIn").text("Check Appointment Status");
       window.scrollTo(0, 0);
     }
 }

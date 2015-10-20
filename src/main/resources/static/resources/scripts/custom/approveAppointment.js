@@ -81,7 +81,7 @@ function handleDenyAllAppointments()
     $(document).on('click', '#DenyAll', (function(e) {
         $('.deny').click();
         $("#fieldset").empty();
-        $("#fieldset").append("<p>No appointments pending</p>");
+        $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
         //window.location.reload(true);
       }));
 }
