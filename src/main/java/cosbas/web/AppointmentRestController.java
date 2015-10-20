@@ -317,8 +317,8 @@ public class AppointmentRestController {
   }
 
 @RequestMapping(method= RequestMethod.POST, value="/dayAvailable")
-  public String getAvailableTimes(Principal principal) {
-    List<Appointment> appointments = calendar.getTodaysAppointments(principal.getName());
+    public String getAvailableTimes(@RequestParam(value = "staffID", required = true) String staffID) {
+    List<Appointment> appointments = calendar.getTodaysAppointments(staffID);
     
     String returnPage = "";
 
