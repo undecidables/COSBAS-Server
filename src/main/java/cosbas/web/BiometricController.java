@@ -14,6 +14,7 @@ import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.serialize.BiometricSerializer;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.permissions.PermissionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,9 @@ public class
     final BiometricSerializer serializer;
     final BiometricParser parser;
     final BiometricSystem authSystem;
+
+    @Autowired
+    PermissionManager permissionManager;
 
     @Autowired
     public BiometricController(BiometricSerializer serializer, BiometricParser parser ,BiometricSystem authSystem) {
