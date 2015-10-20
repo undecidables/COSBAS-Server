@@ -1,19 +1,25 @@
 package cosbas.reporting;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  *  {@author Szymon}
  */
 
-@Service
+@Component
 public class ReportFactory {
 
     @Autowired
-    AppointmentReports appointmentReports;
+    public ReportFactory(AppointmentReports appointmentReports, AccessRecordReports accessRecordReports)
+    {
+        this.accessRecordReports = accessRecordReports;
+        this.appointmentReports = appointmentReports;
+    }
 
-    @Autowired
+
+    AppointmentReports appointmentReports;
     AccessRecordReports accessRecordReports;
 
     @Autowired

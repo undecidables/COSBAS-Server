@@ -14,7 +14,8 @@ import net.sf.dynamicreports.report.constant.*;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.*;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  *  {@author Szymon}
  */
-@Service
+@Component
 public class AppointmentReports implements ReportInterface {
 
     @Autowired

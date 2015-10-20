@@ -18,6 +18,10 @@ import java.util.List;
 public class ReportsRestController {
 
     @Autowired
+    public ReportsRestController(ReportFactory reports)
+    {
+        this.reports = reports;
+    }
     ReportFactory reports;
 
     @ResponseBody
@@ -69,6 +73,48 @@ public class ReportsRestController {
         data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
     }
+
+    @ResponseBody
+    @RequestMapping(method= RequestMethod.POST, value="/createAllAccessRecordReports")
+    public byte[] createAllAccessRecordReports(@RequestParam(value = "format", required = true) String format) {
+        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format));
+    }
+
+    @ResponseBody
+    @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordBetweenDateTimeReports")
+    public byte[] createAccessRecordBetweenDateTimeReports(@RequestParam(value = "format", required = true) String format,
+                                                              @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
+                                                              @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+
+        ReportData data = new ReportData();
+        data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+    }
+
+    @ResponseBody
+    @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByStaffIdAndBetweenDateTimeReports")
+    public byte[] createAccessRecordByStaffIdAndBetweenDateTimeReports(@RequestParam(value = "format", required = true) String format,
+                                                                       @RequestParam(value = "staffID", required = true) String staffID,
+                                                                       @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
+                                                                       @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+
+        ReportData data = new ReportData();
+        data.setStaffID(staffID);
+        data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+    }
+
+    @ResponseBody
+    @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdReports")
+    public byte[] createAccessRecordByUserIdReports(@RequestParam(value = "format", required = true) String format,
+                                                    @RequestParam(value = "staffID", required = true) String staffID) {
+        ReportData data = new ReportData();
+        data.setStaffID(staffID);
+        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format));
+    }
+
 
 
 }
