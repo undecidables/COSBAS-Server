@@ -1,59 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 	<head></head>
 	<body>
-		<nav class="navbar navbar-inverse container-fluid" th:fragment="navigation">
-			<div>
+	<header xmlns:th="http://www.w3.org/1999/xhtml" id="header" th:fragment="navigation">
+		<nav class="main-navigation navbar-fixed-top" role="navigation" data-spy="affix" data-offset-top="200">
+			<div class="container">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<i class="fa fa-bars fa-lg"></i>
 					</button>
+					<a href="/index" class="navbar-brand"><img src="/resources/css/images/Logo.png" alt="Test"/></a>
 				</div>
-				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}" id="myNavbar">
-					<ul class="nav navbar-nav">
+				<!-- Start Navigation Menu Logged In-->
+				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}">
+					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
+						<li><a href="index">Home</a></li>
+						<li><a href="approveDenyAppointment">My Appointments</a></li>
+						<li><a href="makeAppointment">Request Appointment</a></li>
+						<li><a href="cancel">Cancel Appointment</a></li>
+						<li><a href="status">Check Appointment</a></li>
+						<!--li><a href="status">Reporting</a></li-->
 						<li>
-							<a href="/">
-								Home
-							</a>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Appointment <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="approveDenyAppointment">Approve/Deny Appointments</a></li>
-								<li><a href="makeAppointment">Request Appointment</a></li>
-								<li><a href="cancel">Cancel Appointment</a></li>
-								<li><a href="status">Check Appointment Status</a></li>
-								<!--li><a href="addUser">Add authorized user</a></li-->
-							</ul>
+							<a href="#" onclick="document.logoutForm.submit(); return false;"><span
+									class="glyphicon glyphicon-log-in"></span> Logout</a>
 						</li>
 					</ul>
+
 					<form th:action="@{/logout}" method="post" name="logoutForm">
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#" onclick="document.logoutForm.submit(); return false;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-						</ul>
 					</form>
 
 				</div>
-				<div class="collapse navbar-collapse" th:action="@{/logout}" th:if="${#httpServletRequest.remoteUser == null}" id="myNavbar">
-					<ul class="nav navbar-nav" >
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Appointment <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="makeAppointment">Request Appointment</a></li>
-								<li><a href="cancel">Cancel Appointment</a></li>
-								<li><a href="status">Check Appointment Status</a></li>
-							</ul>
-						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
+				<!-- End Navigation Menu -->
+				<!-- Start Navigation Menu Not Logged In In-->
+				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser == null}">
+					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
+						<li><a href="makeAppointment">Request Appointment</a></li>
+						<li><a href="cancel">Cancel Appointment</a></li>
+						<li><a href="status">Check Appointment</a></li>
 						<li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 					</ul>
 				</div>
-			</div>
+				<!-- End Navigation Menu -->
+				</div>
 		</nav>
+	</header>
 	</body>
 </html>
+
 
 

@@ -5,35 +5,72 @@
 		<title>Check Appointment Status</title>
 	</head>
 	<body>
-		<nav th:replace="menu :: navigation"></nav>
-		<div>
-			<a href="#">
-				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-			</a>
-		</div>
-		<div class="row">
-			<div>
-				<div class="cosbasLogin">
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Check Appointment Status</div>
-					<br/>
-					<form th:action="@{/login}" method="post">
-						<fieldset>
-							<div class="form-group" id="appointmentStatusRequest">
-								<p class="text-left">Appointment ID:</p>
-								<input class="form-control" type="string" id="appointmentID" name="appointmentID"/>
+	<header th:replace="menu :: navigation"></header>
+	<br/>
+	<br/>
+	<section id="contact">
+		<div class="overlay">
+			<div class="container">
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Check Appointment</span> Status</h1>
+
+				<div class="row">
+					<div class="contact-form">
+						<form role="form" method="post" th:action="@{/login}">
+							<div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
+								<div class="controls" id="appointmentStatusRequest">
+									<p class="text-left">Appointment ID:</p>
+									<input class="contact_input" type="string" id="appointmentID" name="appointmentID"/>
+									<i class="fa fa-user"></i>
+								</div>
 							</div>
-							<div class="form-group" id="statusRequest">
-								<p class="text-left">Appointment made by (your name):</p>
-								<input class="form-control" type="string" id="requestedBy" name="appointmentBy"/>
+
+							<div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls" id="statusRequest">
+									<p class="text-left">Appointment made by (your email):</p>
+									<input class="contact_input" type="string" id="requestedBy" name="appointmentBy"/>
+									<i class="fa fa-user"></i>
+								</div>
 							</div>
-							<br/>
-							<div>
-								<input type="submit" value ="Check Appointment Status" id="checkStatus" class="btn btn-sm btn-success"/>
+							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+								<button type="submit" id="checkStatus" class="btn btn-common">Check Appointment Status
+								</button>
 							</div>
-						</fieldset>
-					</form>
+						</form>
+					</div>
+				</div>
 				</div>
 			</div>
+		<div class="push"></div>
+
+	</section>
+	<footer class="footer">
+		<div class="container">
+			<div class="copyright text-center">
+				<p>&copy; University of Pretoria, Department of Computer Science</p>
+			</div>
 		</div>
+	</footer>
+
+
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/assets/js/main.js"></script>
+	<script src="resources/scripts/custom/checkAppointment.js"></script>
 	</body>
 </html>

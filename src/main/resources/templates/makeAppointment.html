@@ -5,61 +5,114 @@
 		<title>Make Appointment</title>
 	</head>
 	<body>
-		<nav th:replace="menu :: navigation"></nav>
-		<br/>
-		<div>
-			<a href="#">
-				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-			</a>
-		</div>
-		<br/>
-		<div class="row">
-			<div>
-				<div class="cosbasLogin">
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Request an appointment</div>
-					<br/>
-					<form method="post">
-						<fieldset>
-							<div class="form-group">
-								<p class="text-left">Appointment with:</p>
-								<select class="form-control" id="appointmentWith" name="appointmentWith">
-								
-								</select>
-							</div>
-							<div class="form-group" id="reason">
-								<p class="text-left">Reason for appointment: </p>
-								<input class="form-control" type="text" id="appointmentReason" name="appointmentReason"/>
-							</div>
-							<p class="text-left">Date and Time of the meeting:</p>
-							<p id="appointmentDate">
-								<input type="text" class="date" id="requestedDateTime"/>
-							    <input type="text" class="time start" id="timeStart"/> to 
-							    <input type="text" class="time end" id="timeEnd"/>
-							</p>
-							<div class="form-group" id="membersNum">
-								<p class="text-left">Number of members making the appointment: </p>
-								<input type="number" min="1" value="1" id="numMembers" name="numMembers"/>
-							</div>
-							<div class="form-group" id="appointmentMadeBy">
-								<div class="appointmentDetails">
-									<p class="text-left">Appointment made by (your name/team members' names): </p>
-									<input class="form-control appointmentBy" type="text" name="appointmentBy[]"/>
+	<header th:replace="menu :: navigation"></header>
+	<br/>
+	<br/>
+	<section id="contact">
+		<div class="overlay">
+			<div class="container">
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Make</span> Appointment</h1>
+
+				<div class="row">
+					<div class="contact-form">
+						<form role="form" method="post">
+							<div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
+								<div id="appointmentDate">
+									<div class="controls">
+										<p class="text-left">Appointment with:</p>
+										<input class="contact_input" id="appointmentWith" name="appointmentWith"/>
+										<label for="appointmentWith"><i class="fa fa-user"></i></label>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Date: </p>
+										<input type="text" class="contact_input date" id="requestedDateTime"/>
+										<label for="requestedDateTime"><i class="fa fa-calendar"></i></label>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Starting Time: </p>
+										<input type="text" class="contact_input time start" id="timeStart"/>
+										<label for="timeStart"><i class="fa fa-calendar"></i></label>
+									</div>
+									<div class="controls appointmentDate">
+										<p class="text-left">Ending Time: </p>
+										<input type="text" class="contact_input time end" id="timeEnd"/>
+										<label for="timeEnd"><i class="fa fa-calendar"></i></label>
+									</div>
+								</div>
+								<!--div class="form-group" id="duration">
+                                    <p class="text-left">Duration of appointment: </p>
+                                    <input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
+                                </div-->
+								</div>
+							<div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls" id="reason">
+									<p class="text-left">Reason for Appointment:</p>
+									<input class="contact_input" type="text" id="appointmentReason"
+										   name="appointmentReason"/>
+									<label for="appointmentReason"><i class="fa fa-question"></i></label>
+								</div>
+								<div class="controls" id="membersNum">
+									<p class="text-left">Number of members making the appointment: </p>
+									<input class="contact_input" type="number" min="1" value="1" id="numMembers"
+										   name="numMembers"/>
+									<label for="numMembers"><i class="fa fa-users"></i></label>
+								</div>
+								<div class="controls" id="appointmentMadeBy">
+									<div class="appointmentDetails">
+										<p class="text-left">Appointment made by (your name/team members' names): </p>
+										<input class="contact_input appointmentBy" required="required" type="text" id="appointmentBy" name="appointmentBy[]"/>
+										<label for="appointmentBy"><i class="fa fa-user"></i></label>
+									</div>
+								</div>
+								<div class="controls">
 									<p class="text-left">Your/team members' email:</p>
-									<input class="form-control email" type="email" id="email" name="email"/>
+									<input class="contact_input email" type="email" required="required" id="email" name="email"/>
+									<label for="email"><i class="fa fa-envelope"></i></label>
 								</div>
 							</div>
-							<!--div class="form-group" id="duration">
-								<p class="text-left">Duration of appointment: </p>
-								<input class="form-control" type="number" min="15" step="15" id="appointmentDuration" name="appointmentDuration" value="15"/>
-							</div-->
-							<br/>
-							<div>
-								<button type="submit" class="btn btn-sm btn-success" id="makeAppointmentRequest">Request Appointment</button>
+							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+								<button type="submit" id="makeAppointmentRequest" class="btn btn-common">Request
+									Appointment
+								</button>
 							</div>
-						</fieldset>
-					</form>
+						</form>
+					</div>
+					</div>
 				</div>
 			</div>
+
+		<div class="push"></div>
+
+	</section>
+	<footer class="footer">
+		<div class="container">
+			<div class="copyright text-center">
+				<p>&copy; University of Pretoria, Department of Computer Science</p>
+			</div>
 		</div>
+	</footer>
+
+
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/assets/js/main.js"></script>
+	<!--Custom Script-->
+	<script src="resources/scripts/custom/makeAppointment.js"></script>
 	</body>
 </html>

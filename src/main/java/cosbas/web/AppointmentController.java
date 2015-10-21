@@ -46,8 +46,8 @@ public class AppointmentController {
      * @return index.html page
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index() {
-        return "index";
+    public String index(Principal principal) {
+        return principal == null ? "redirect:/makeAppointment" : "index";
     }
 
     /**

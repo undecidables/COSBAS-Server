@@ -41,13 +41,6 @@ public class Appointment {
         this.summary = null;
     }
 
-    public void setAccessKeys(List<AccessCode> accessKeys) {
-        this.accessKeys = accessKeys;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
     public String getId() {
         return id;
     }
@@ -62,6 +55,10 @@ public class Appointment {
 
     public List<AccessCode> getAccessKeys() {
         return accessKeys;
+    }
+
+    public void setAccessKeys(List<AccessCode> accessKeys) {
+        this.accessKeys = accessKeys;
     }
 
     public LocalDateTime getDateTime() {
@@ -80,27 +77,30 @@ public class Appointment {
         return status;
     }
 
-    public void setEventID(String eventID) {
-        this.eventID = eventID;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getEventID() {
         return eventID;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getSummary() {
         return summary;
     }
 
-    public String getListOfVisitors()
-    {
+    public String getListOfVisitors() {
         StringBuilder list = new StringBuilder();
         list.append(StringUtils.join(visitorIDs, ", "));
 
         return list.toString();
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
