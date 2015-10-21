@@ -42,9 +42,7 @@ public class FacialProcessing implements BiometricsPreprocessor {
         int rows = img.getWidth();
         int cols = img.getHeight();
         int type = opencv_core.CV_8UC3;
-        opencv_core.Mat mat = new opencv_core.Mat(rows, cols, type);
-        mat.data(new BytePointer(b));
-        return mat;
+        return new opencv_core.Mat(rows, cols, type, new BytePointer(b));
     }
 
     private opencv_core.Mat grayscaleMat(opencv_core.Mat m) {
