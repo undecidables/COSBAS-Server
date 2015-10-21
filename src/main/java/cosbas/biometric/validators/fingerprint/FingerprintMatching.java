@@ -43,24 +43,18 @@ public class FingerprintMatching {
 
     public ValidationResponse matches(BiometricData DBitem, String userID, DoorActions action){
 
-        try {
-            int score = match(originalImageTemplateData.getEndPoints(), endPointsa, originalImageTemplateData.getBifurcations(), intersectionsa);
+        int score = match(originalImageTemplateData.getEndPoints(), enter , originalImageTemplateData.getBifurcations(), enter );
 
-            matchingScore = calculateMatchingScore(score);
+        matchingScore = calculateMatchingScore(score);
 
-            System.out.println("Keys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+        System.out.println("Keys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
-            if (matchingScore >= 0.5) {
-                return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
-            }
-            else {
-                return new ValidationResponse(false, "No Match Found For " + userID, matchingScore);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (matchingScore >= 0.5) {
+            return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
-
-        return new ValidationResponse(false,"Something went wrong!", matchingScore);
+        else {
+            return new ValidationResponse(false, "No Match Found For " + userID, matchingScore);
+        }
     }
 
     private double calculateMatchingScore(int score) {

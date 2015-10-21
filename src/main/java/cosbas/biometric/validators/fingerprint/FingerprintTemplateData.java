@@ -1,5 +1,9 @@
 package cosbas.biometric.validators.fingerprint;
 
+import com.google.api.client.util.Value;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,19 +15,22 @@ import java.util.ArrayList;
  */
 public class FingerprintTemplateData {
 
-    private Fingerprint finger;
-    Point core;
-    int coreRadius;
-
     ArrayList<Point> bifurcations;
     ArrayList<Point> endPoints;
 
+    @PersistenceConstructor
+    public FingerprintTemplateData(ArrayList<Point> bifurcations,ArrayList<Point> endPoints) {
+        this.bifurcations = bifurcations;
+        this.endPoints = endPoints;
+    }
+
     public FingerprintTemplateData() {
+
     }
 
     public void createTemplateFingerprintData(BufferedImage image, boolean registrationOnly) {
 
-        finger = new Fingerprint(image);
+        Fingerprint finger = new Fingerprint(image);
         finger.setColors(Color.black, Color.green);
         finger.binarizeMean();
         finger.binarizeLocalMean();
@@ -35,8 +42,8 @@ public class FingerprintTemplateData {
         Fingerprint.direction[][] dir = finger.getDirections();
 
         BufferedImage i5 = finger.directionToBufferedImage(dir);
-        core = finger.getCore(dir);
-        coreRadius = i5.getWidth() / 2;
+        Point core = finger.getCore(dir);
+        int coreRadius = i5.getWidth() / 2;
 
         bifurcations = finger.getMinutiaeIntersections(core, coreRadius);
         endPoints = finger.getMinutiaeEndpoints(core, coreRadius);
