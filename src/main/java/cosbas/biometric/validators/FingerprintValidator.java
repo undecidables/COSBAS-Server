@@ -30,7 +30,6 @@ public class FingerprintValidator extends AccessValidator {
         for (BiometricData item : items) {
             ValidationResponse response = matches(request, item, action);
             if (response.approved) return response;
-
         }
         return ValidationResponse.failedValidation("No Match found");
     }
