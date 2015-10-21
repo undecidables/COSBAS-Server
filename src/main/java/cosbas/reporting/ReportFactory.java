@@ -12,17 +12,16 @@ import org.springframework.stereotype.Service;
 public class ReportFactory {
 
     @Autowired
-    public ReportFactory(AppointmentReports appointmentReports, AccessRecordReports accessRecordReports)
+    public ReportFactory(AppointmentReports appointmentReports, AccessRecordReports accessRecordReports, ReportFormatter formatter)
     {
         this.accessRecordReports = accessRecordReports;
         this.appointmentReports = appointmentReports;
+        this.formatter = formatter;
     }
 
 
     AppointmentReports appointmentReports;
     AccessRecordReports accessRecordReports;
-
-    @Autowired
     ReportFormatter formatter;
 
     public static enum reportTypes
