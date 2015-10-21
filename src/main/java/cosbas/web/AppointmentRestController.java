@@ -466,10 +466,10 @@ public class AppointmentRestController {
       for(int i = 0; i < users.size(); i++)
       {
         String user = users.get(i).toString();
+
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
-                      "<td colspan=\"2\"><p>" + user + "</p></td>" +
-                      "<td><button type='submit' class='form-control change' value='Change permisions'><i class=\"fa fa-check-circle\"></i></button></td>" +
+                      "<td colspan=\"2\" id=\"userCol\"><p id=\"userID\">" + user + "</p></td>" +
                       "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
                       "</tr>" +
                       "</table>";
@@ -487,35 +487,197 @@ public class AppointmentRestController {
   /**
    * Function used to return the information of a staff member registered on the system to update his/her permissions
    * @return Returns string with the staff member's information to be read into the UI
-   *
-  @RequestMapping(method= RequestMethod.POST, value="/getPermissions")
-  public String getPermissions(@RequestParam(value = "staffID", required = true) String staffID) {
+   */
+  @RequestMapping(method= RequestMethod.POST, value="/removeUser")
+  public String removeUser(@RequestParam(value = "staffID", required = true) String staffID) {
+    try{
+      biometricSystem.removeUser(staffID);
+    }
+    catch(Exception)
+    {
+      return e.toString();
+    }
 
-    Iterable<Permission> tempPermissions = permissionManager.permissionsForUser(staffID);
+    return "User removed";
+  }
+
+  /**
+  * Function to return all users on the system for permission altering
+  */
+  @RequestMapping(method= RequestMethod.POST, value="/getUsersForPermissionUpdate")
+  public String getUsersForPermissionUpdate(){
+    List<User> users = biometricSystem.getUsers();
+    
+    String returnPage = "";
+
+    if(users != null){
+      for(int i = 0; i < users.size(); i++)
+      {
+        String user = users.get(i).toString();
+
+        returnPage += "<option>"+user+"</option>";
+      }
+        
+      if(users.size() == 0){
+        returnPage += "no users";      
+      } 
+    } else {
+      returnPage += "no users";      
+    }
+    return returnPage;
+  }
+
+  /**
+  * Function to return all possible permissions
+  */
+  @RequestMapping(method= RequestMethod.POST, value="/getAllPermissions")
+  public String getAllPermissions(){
+    PermissionId[] permissions = permissionManager.allPermissions();
+    
+    String returnPage = "";
+
+    if(permissions != null){
+      for(int i = 0; i < permissions.size(); i++)
+      {
+        PermissionId permission = permissions[i];
+
+        returnPage += "<option>"+permission+"</option>";
+      }
+        
+      if(permissions.size() == 0){
+        returnPage += "no permissions";      
+      } 
+    } else {
+      returnPage += "no permissions";      
+    }
+    return returnPage;
+  }
+  
+  /**
+  * Function to return all user's permissions
+  */
+  @RequestMapping(method= RequestMethod.POST, value="/getUserPermissions")
+  public String getUserPermissions(@RequestParam(value = "staffID", required = true) String staffID) {
+    List<Permission> permissions = permissionManager.permissionsForUser(staffID);
+    
+    String returnPage = "";
+
+    if(permissions != null){
+      for(int i = 0; i < permissions.size(); i++)
+      {
+        PermissionId permission = permissions.get(i);
+
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permision.toString() + "</p></td>" +
+                      "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
+                      "</tr>" +
+                      "</table>";
+      }
+        
+      if(permissions.size() == 0){
+        returnPage += "no permissions";      
+      } 
+    } else {
+      returnPage += "no permissions";      
+    }
+    return returnPage;
   }
 
   /**
    * Function used to add a permission
    * @return Returns string with the outcome of the function
-   *
+   */
   @RequestMapping(method= RequestMethod.POST, value="/addPermission")
-  public String addPermission(@RequestParam(value = "permission", required = true) String permision, 
+  public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission, 
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-    PermissionId tempID = (PermissionId) permission;
-    permissionManager.addPermission(staffID, tempID);
+    PermissionId permission = null;
+
+    switch (stringPermission){
+      case "REGISTRATION_APPROVE": {
+        permission = PermissionId.REGISTRATION_APPROVE; 
+        break;
+      } 
+      case "SUPER":{
+        permission = PermissionId.SUPER; 
+        break;
+      } 
+      case "REPORTS":{
+        permission = PermissionId.REPORTS; 
+        break;
+      } 
+      case "REGISTRATION":{
+        permission = PermissionId.REGISTRATION; 
+        break;
+      } 
+      case "USER_DELETE":
+      {
+        permission = PermissionId.USER_DELETE; 
+        break;
+      } 
+      default:
+      {
+        permission = null;
+      }
+    }
+
+    try{
+      permissionManager.addPermission(staffID, permission);
+    } 
+    catch(Exception)
+    {
+      return e.toString();
+    }
+    return "Permission added"
   }
 
   /**
    * Function used to remove a permission
    * @return Returns string with the outcome of the function
-   *
+   */
   @RequestMapping(method= RequestMethod.POST, value="/removePermision")
-  public String removePermission(@RequestParam(value = "permission", required = true) String permission, 
+  public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission, 
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-    PermissionId tempID = (PermissionId) permission;
-    permissionManager.removePermission(staffID, tempID);
+    PermissionId permission = null;
+
+    switch (stringPermission){
+      case "REGISTRATION_APPROVE": {
+        permission = PermissionId.REGISTRATION_APPROVE; 
+        break;
+      } 
+      case "SUPER":{
+        permission = PermissionId.SUPER; 
+        break;
+      } 
+      case "REPORTS":{
+        permission = PermissionId.REPORTS; 
+        break;
+      } 
+      case "REGISTRATION":{
+        permission = PermissionId.REGISTRATION; 
+        break;
+      } 
+      case "USER_DELETE":
+      {
+        permission = PermissionId.USER_DELETE; 
+        break;
+      } 
+      default:
+      {
+        permission = null;
+      }
+    }
+
+    try{
+      permissionManager.removePermission(staffID, permission);
+    } 
+    catch (Exception){
+      return e.toString();
+    }
+
+    return "Permission removed";
   }
 
   //remove user from system
