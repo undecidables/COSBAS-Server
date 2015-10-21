@@ -9,12 +9,15 @@ import org.bytedeco.javacpp.opencv_contrib;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_legacy.*;
+
 
 /**
  * {@author Renette Ros}
@@ -23,16 +26,21 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceValidator extends AccessValidator {
 
-    
-    FaceRecognition recognizer;
 
-    //@Value ("$(faces.certaintyThreshold:70.0}")
-    double certaintyThreshold = 70.0;
+    private FaceRecognition recognizer;
+
+    @Value("${faces.certainty:0.6}")
+    private double certaintyThreshold;
+
+    public void setCertaintyThreshold(double certaintyThreshold) {
+        this.certaintyThreshold = certaintyThreshold;
+    }
 
     @Autowired
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
+
 
     protected Boolean checkValidationType(BiometricTypes type) {
         return type == BiometricTypes.FACE;
@@ -46,11 +54,26 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    //TODO Fix schedule!
-    //@Scheduled
+    @Scheduled(cron="0 0 0 * * *")
     public void train() {
-        if (recognizer.getData().needsTraining()) {
+        if (recognizer.needsTraining()) {
             recognizer.trainFromDB();
         }
     }
+
+    public void forceTrain() {
+        recognizer.trainFromDB();
+    }
+
+    @Override
+    public void registerUser(BiometricData request, String userID) throws BiometricTypeException{
+        super.registerUser(request, userID);
+        recognizer.setNeedsTraining();
+    }
+
+    public void deregisterUser(BiometricData request) throws BiometricTypeException {
+        super.deregisterUser(request);
+        recognizer.setNeedsTraining();
+    }
+
 }

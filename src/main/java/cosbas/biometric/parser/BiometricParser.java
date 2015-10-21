@@ -135,7 +135,7 @@ public class BiometricParser {
                     checkContactDetails(request, name, contactDetails);
             }
 
-            return new RegisterRequest(contactDetails, id, biometricData);
+            return new RegisterRequest(contactDetails, id, biometricData, "");
         }
         throw new NullPointerException("Parts null, unable to parse http request.");
     }
