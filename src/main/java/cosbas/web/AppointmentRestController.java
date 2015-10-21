@@ -18,6 +18,7 @@ import cosbas.permissions.PermissionId;
 import cosbas.permissions.Permission;
 import cosbas.biometric.BiometricSystem;
 import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -279,6 +280,8 @@ public class AppointmentRestController {
       if(appointments.size() == 0){
         returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
       } 
+    } else {
+      returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";  
     }
     return returnPage;
   }
@@ -331,6 +334,8 @@ public class AppointmentRestController {
       if(appointments.size() == 0){
         returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
       } 
+    } else {
+      returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>"; 
     }
     return returnPage;
   }
@@ -365,6 +370,8 @@ public class AppointmentRestController {
       if(requests.size() == 0){
         returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No registration requests pending</span></h4>";      
       } 
+    } else {
+      returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No registration requests pending</span></h4>";      
     }
     return returnPage;
   }
@@ -376,7 +383,7 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/approveRequest")
   public String approveRequest(@RequestParam(value = "staffID", required = true) String staffID) {
     try{
-      biometricSystem.approveUser(staffID);
+    //  biometricSystem.approveUser(staffID);
     }
     catch (Exception e){
       return e.toString();
@@ -392,7 +399,7 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/denyRequest")
   public String denyRequest(@RequestParam(value = "staffID", required = true) String staffID) {
     try{
-      biometricSystem.deleteRegistrationRequest(staffID);
+     // biometricSystem.deleteRegistrationRequest(staffID);
     }
     catch (Exception e){
       return e.toString();
@@ -406,53 +413,76 @@ public class AppointmentRestController {
   * @Returns the string "authorized" or "not authorized"
   */
   @RequestMapping(method= RequestMethod.POST, value="/authorizedToAccessRequests")
-  public String authorizedToAccessRequests(@RequestParam(value = "staffID", required = true) String staffID) {
-    List<Permission> permissions = permissionManager.permissionsForUser(staffID);
-    if(permissions != null)
-    {
-      for(int i = 0; i < permissions.size(); i++){
-        if(permissions.get(i).getPermission() == PermissionId.REGISTRATION_APPROVE)
-        {
-          return "authorized";
-        }
+  public String authorizedToAccessRequests(Principal principal,
+                                           @RequestParam(value = "authorized", required = true) String authorized) {
+    PermissionId permission = null;
+
+    switch (authorized){
+      case "REGISTRATION_APPROVE": {
+        permission = PermissionId.REGISTRATION_APPROVE; 
+        break;
+      } 
+      case "SUPER":{
+        permission = PermissionId.SUPER; 
+        break;
+      } 
+      case "REPORTS":{
+        permission = PermissionId.REPORTS; 
+        break;
+      } 
+      case "REGISTRATION":{
+        permission = PermissionId.REGISTRATION; 
+        break;
+      } 
+      case "USER_DELETE":
+      {
+        permission = PermissionId.USER_DELETE; 
+        break;
+      } 
+      default:
+      {
+        permission = null;
       }
     }
-
-    return "not authorized";
+   if(permissionManager.hasPermission(principal.getName(), permission))
+   {
+      return "authorized";
+   } else {
+      return "not authorized";
+    }
   }
 
   /**
-   * Function used to return all the users are registered on the system
+   * Function used to return all the users registered on the system
    * @return Returns string with the html code to display the users that are registered on the system
-   *
+   */
   @RequestMapping(method= RequestMethod.POST, value="/getRegisteredUsers")
   public String getRegisteredUsers() {
-    /*List<Appointment> appointments = calendar.getTodaysAppointments(staffID);
+    List<User> users = biometricSystem.getUsers();
     
     String returnPage = "";
 
-    if(appointments != null){
-      for(int i = 0; i < appointments.size(); i++)
+    if(users != null){
+      for(int i = 0; i < users.size(); i++)
       {
-        List<String> with = appointments.get(i).getVisitorIDs();
-        int duration = appointments.get(i).getDurationMinutes();
-        String reason = appointments.get(i).getReason();
-        String[] parts = appointments.get(i).getDateTime().toString().split("T");
-        String tempDateTime = parts[1].substring(0, parts[1].length()-3);
+        String user = users.get(i).toString();
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
-                      "<td colspan=\"2\"><p>Appoinment at: " + tempDateTime + "</p></td>" +
-                      "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                      "<td colspan=\"2\"><p>" + user + "</p></td>" +
+                      "<td><button type='submit' class='form-control change' value='Change permisions'><i class=\"fa fa-check-circle\"></i></button></td>" +
+                      "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
                       "</tr>" +
                       "</table>";
       }
         
-      if(appointments.size() == 0){
-        returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";      
+      if(users.size() == 0){
+        returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No users on the system</span></h4>";      
       } 
+    } else {
+      returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No users on the system</span></h4>";      
     }
-    return returnPage;*
-  }*/
+    return returnPage;
+  }
 
   /**
    * Function used to return the information of a staff member registered on the system to update his/her permissions
@@ -487,5 +517,7 @@ public class AppointmentRestController {
     PermissionId tempID = (PermissionId) permission;
     permissionManager.removePermission(staffID, tempID);
   }
+
+  //remove user from system
   */
 }

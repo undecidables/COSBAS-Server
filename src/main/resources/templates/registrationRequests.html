@@ -13,21 +13,28 @@
 			<div class="container">
 				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Registration</span> Requests</h1>
 				<div class="row">
-					<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
-						<div class="controls" id="denyDiv">
-							<p class="text-left">Deny All Requests:</p>
-							<input type="Button" class="contact_input contactA" value="Deny all" id="DenyAll"/>
-							<i class="fa fa-user"></i>
-						</div>
-						<br/>
+					<div class="contact-form">
+						<form role="form" method="post">
+							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls" id="denyDiv">
+									<p class="text-left">Deny All Requests:</p>
+									<input type="Button" class="contact_input contactA" value="Deny all" id="DenyAll"/>
+									<i class="fa fa-user"></i>
+								</div>
+								<br/>
+							</div>
+							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+								<div id="requests">
+									<h2 id="loadingRequests" class="section-title wow fadeIn"
+														   data-wow-delay=".2s"><span>Loading users</span> Please wait...</h2>
+														   
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="contact-form" id="requests">
-						<h2 id="loadingRequests" class="section-title wow fadeIn"
-											   data-wow-delay=".2s"><span>You are not authorized</span> to view this information</h2>
-					</div>
-				</div>
 				</div>
 			</div>
+		</div>
 	</section>
 
 	<footer id="footer">
