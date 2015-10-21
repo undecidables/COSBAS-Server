@@ -1,5 +1,7 @@
 package cosbas.web;
 
+import cosbas.calendar_services.authorization.CalendarDBAdapter;
+import cosbas.calendar_services.authorization.CredentialWrapper;
 import cosbas.reporting.ReportData;
 import cosbas.reporting.ReportFactory;
 import cosbas.reporting.ReportFormatter;
@@ -27,6 +29,7 @@ public class ReportsRestController {
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
     public byte[] createAllAppointmentsReport(@RequestParam(value = "format", required = true) String format) {
+        System.out.println("yolo");
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
@@ -113,6 +116,54 @@ public class ReportsRestController {
         ReportData data = new ReportData();
         data.setStaffID(staffID);
         return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format));
+    }
+
+
+    @Autowired
+    private CalendarDBAdapter credentialRepository;
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getListOfUsers")
+    public String getListOfUsers() {
+        List<CredentialWrapper> credentials = credentialRepository.findAll();
+        String returnPage = "";
+        for (int i = 0; i < credentials.size(); i++) {
+
+            // System.out.println(credentials.get(i));
+            returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
+        }
+
+        if (credentials.size() == 0) {
+            returnPage += "<option>No active users of the system</option>";
+        }
+
+        return returnPage;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getListOfReports")
+    public String getListOfReports() {
+
+        String result = "";
+
+        for (ReportFactory.reportTypes t : ReportFactory.reportTypes.values())
+        {
+            result += "<option>" + t.toString() + "</option>";
+        }
+
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getListOfFormats")
+    public String getListOfFormats() {
+
+        String result = "";
+
+        for (ReportFormatter.Formats t : ReportFormatter.Formats.values())
+        {
+            result += "<option>" + t.toString() + "</option>";
+        }
+
+        return result;
     }
 
 

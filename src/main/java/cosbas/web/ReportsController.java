@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ReportsController {
 
     @RequestMapping(value = "/reports", method = RequestMethod.GET)
-    public String status()
+    public String reports()
     {
         return "reports";
     }
