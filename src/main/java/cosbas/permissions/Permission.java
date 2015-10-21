@@ -38,6 +38,9 @@ public class Permission {
         return userID + " can " + permission;
     }
 
+    public PermissionId getPermission(){
+        return permission;
+    }
     private String userID;
     private PermissionId permission;
 }
