@@ -220,7 +220,7 @@ public class FaceRecognition {
      * Loads Biometric Face Data list into the recognizer for training purposes.
      * @param dataList List of biometric data objects fetched from database.
      * @param data The data object to store recognizer variables in.
-     * @return List of IPL images to process with JavaCV
+     * @return List of IPL images to processAccess with JavaCV
      */
 
     private List<IplImage> loadFaceImageList(List<BiometricData> dataList, TemporaryRecognizerData data) {

@@ -1,11 +1,12 @@
 package cosbas.biometric.preprocessor;
 
-import org.springframework.stereotype.Component;
+import cosbas.biometric.BiometricTypes;
+import cosbas.biometric.data.BiometricData;
 
 /**
  * {@author Reneette}
  */
-
 public interface BiometricsPreprocessor {
-    byte[] process(byte[] data);
+    BiometricData processAccess(byte[] data, BiometricTypes type);
+    BiometricData processRegister(byte[] data, BiometricTypes type);
 }
