@@ -27,7 +27,8 @@ public class PermissionManager {
     }
 
     public boolean hasPermission(String user, PermissionId permissionId) {
-        return (permissionsRepository.findByUserIDAndPermission(user, permissionId)) != null;
+        return (permissionsRepository.findByUserIDAndPermission(user, permissionId) != null)
+               || (permissionsRepository.findByUserIDAndPermission(user, PermissionId.SUPER) != null);
     }
 
     public void addPermission(String user, PermissionId permissionId) {
