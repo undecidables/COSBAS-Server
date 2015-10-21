@@ -106,12 +106,12 @@ public class BiometricParser {
         return  false;
     }
 
-    private byte[] preprocess(byte[] data, BiometricTypes type, boolean register) {
+    private BiometricData preprocess(byte[] data, BiometricTypes type, boolean register) {
         BiometricsPreprocessor preprocessor = factory.getValidator(type);
         if (register) {
-            return preprocessor.processRegister(data);
+            return preprocessor.processRegister(data, type);
         } else {
-            return preprocessor.processAccess(data);
+            return preprocessor.processAccess(data, type);
         }
     }
 
@@ -124,11 +124,12 @@ public class BiometricParser {
         while ((amountRead=partInputStream.read(chunk)) != -1) {
             outputStream.write(chunk,0,amountRead);
         }
-        if (outputStream.size() != 0) {
-            file = preprocess(outputStream.toByteArray(), dataType, registration);
-        }
+        if (outputStream.size() <= 0)
+            throw new IOException("No data in output stream.");
 
-         return new BiometricData(dataType,file);
+        return preprocess(outputStream.toByteArray(), dataType, registration);
+
+
     }
 
     /**

@@ -1,16 +1,19 @@
 package cosbas.biometric.preprocessor;
 
+import cosbas.biometric.BiometricTypes;
+import cosbas.biometric.data.BiometricData;
+
 /**
  * {@author Renette}
  */
 public class FacialProcessing implements BiometricsPreprocessor {
     @Override
-    public byte[] processAccess(byte[] data) {
-        return data;
+    public BiometricData processAccess(byte[] data, BiometricTypes type) {
+        return new BiometricData(type, data);
     }
 
     @Override
-    public byte[] processRegister(byte[] data) {
-        return data;
+    public BiometricData processRegister(byte[] data, BiometricTypes type) {
+        return new BiometricData(type, data);
     }
 }
