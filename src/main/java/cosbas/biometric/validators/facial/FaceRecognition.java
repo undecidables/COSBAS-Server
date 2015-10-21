@@ -58,7 +58,8 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
+import static org.bytedeco.javacpp.opencv_highgui.cvDecodeImage;
 import static org.bytedeco.javacpp.opencv_legacy.*;
 
 /**
