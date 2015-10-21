@@ -20,7 +20,9 @@ import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -150,11 +152,24 @@ public class BiometricSystem {
         }
     }
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    public List<User> getUsers() {
+        Iterable<User> users = userRepository.findAll();
+        List<User> userList = new ArrayList<>((int) userRepository.count());
+        for (User u : users) {
+            userList.add(u);
+        }
+        return userList;
     }
 
-    public Iterable<RegisterRequest> getRegisterRequests() { return registerRepository.findAll(); }
+    public List<RegisterRequest> getRegisterRequests() {
+        Iterable<RegisterRequest> reqs =  registerRepository.findAll();
+
+        List<RegisterRequest> reqList = new ArrayList<>((int) registerRepository.count());
+        for (RegisterRequest r : reqs) {
+            reqList.add(r);
+        }
+        return reqList;
+    }
 
     /**
      * Saves the record to the database.
