@@ -66,11 +66,9 @@ public class AppointmentRestController {
     List<CredentialWrapper> credentials = credentialRepository.findAll();
     String returnPage = "";
 
-    for(int i = 0; i < credentials.size(); i++)
-    { 
-      System.out.println(credentials.get(i));
-        returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
-    }
+      for (CredentialWrapper credential : credentials) {
+          returnPage += "<option>" + credential.getStaffID() + "</option>";
+      }
       
     if(credentials.size() == 0){
       returnPage += "<option>No active users of the system</option>";
