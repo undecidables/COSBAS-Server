@@ -12,5 +12,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the AppointmentDBAdapter interface.
  */
-public interface AppointmentRepository  extends MongoRepository<Appointment, String>, AppointmentDBAdapter {
+interface AppointmentRepository  extends MongoRepository<Appointment, String>, AppointmentDBAdapter {
 }

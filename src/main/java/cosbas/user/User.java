@@ -1,6 +1,7 @@
 package cosbas.user;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class User {
      */
     private final Set<ContactDetail> contact;
 
+    @PersistenceConstructor
     public User(String userID, Set<ContactDetail> contact) {
         this.userID = userID;
         this.contact = contact;
@@ -33,10 +35,23 @@ public class User {
         return contact;
     }
 
-    private boolean addContactDetail(ContactDetail c) {
+    public boolean addContactDetail(ContactDetail c) {
         return this.contact.add(c);
     }
-    private boolean addContactDetails(Collection<ContactDetail> c ) {
+    public boolean addContactDetails(Collection<ContactDetail> c ) {
         return contact.addAll(c);
     }
+
+    public boolean removeContactDetail(ContactDetail c) {
+        return this.contact.remove(c);
+    }
+    public String getUserID() {
+        return userID;
+    }
+
+    @Override
+    public String toString() {
+        return getUserID();
+    }
+
 }

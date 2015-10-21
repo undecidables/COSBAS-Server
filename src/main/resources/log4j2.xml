@@ -1,36 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <File name="errorLogFile" fileName="logs/errors.log">
+        <RollingFile name="rolloverLogFile" fileName="logs/logging.log" filePattern="logs/logging-%d{yyyy-MM-dd}-%i.log"  append="true">
             <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <Pattern>%d %p %c %m%n</Pattern>
             </PatternLayout>
-            <Filters>
-                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="ACCEPT"/>
-                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-
-            </Filters>
-
-        </File>
-        <File name="infoLogFile" fileName="logs/info.log">
-
-            <Filters>
-                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT"/>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
-
-
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-
-        </File>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="2"/>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="TRACE">
-            <AppenderRef level="INFO" ref="infoLogFile"/>
-            <AppenderRef level="ERROR" ref="errorLogFile"/>
-
+            <AppenderRef ref="rolloverLogFile"/>
         </Root>
     </Loggers>
 </Configuration>

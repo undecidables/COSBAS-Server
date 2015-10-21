@@ -12,5 +12,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * For more functions research the MongoRepository Interface.
  * Query Functions are defined in the BiometricDataDAO interface.
  */
-public interface BiometricDataRepository extends MongoRepository<BiometricData, String>, BiometricDataDAO {
+interface BiometricDataRepository extends MongoRepository<BiometricData, String>, BiometricDataDAO {
 }
