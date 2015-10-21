@@ -3,6 +3,7 @@ package cosbas.biometric.validators;
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.validators.fingerprint.FingerprintMatching;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,16 +20,12 @@ public class FingerprintValidator extends AccessValidator {
         return type == BiometricTypes.FINGER;
     }
 
-
-    protected ValidationResponse matches(BiometricData request, BiometricData dbItem, DoorActions action) {
-        return ValidationResponse.successfulValidation("u00000000");
-    }
-
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
+        FingerprintMatching matcher = new FingerprintMatching(request.getData());
         List<BiometricData> items = repository.findByType(request.getType());
 
         for (BiometricData item : items) {
-            ValidationResponse response = matches(request, item, action);
+            ValidationResponse response = matcher.matches(item, request.getUserID(), action);
             if (response.approved) return response;
         }
         return ValidationResponse.failedValidation("No Match found");

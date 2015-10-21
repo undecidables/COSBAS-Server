@@ -14,16 +14,16 @@ public class FingerprintTemplateData {
     private Fingerprint finger;
     Point core;
     int coreRadius;
+
     ArrayList<Point> bifurcations;
     ArrayList<Point> endPoints;
 
     public FingerprintTemplateData() {
     }
 
-    public void createTemplateFingerprintData(boolean registrationOnly) {
-        // Will need to send in a bufferedimage to the constructor
-        // finger = new FingerPrint();
+    public void createTemplateFingerprintData(BufferedImage image, boolean registrationOnly) {
 
+        finger = new Fingerprint(image);
         finger.setColors(Color.black, Color.green);
         finger.binarizeMean();
         finger.binarizeLocalMean();
@@ -65,5 +65,13 @@ public class FingerprintTemplateData {
         //File f1 = new File(path + "temp1_2.bmp");
         //ImageIO.write(i1, "bmp", f1);
 
+    }
+
+    public ArrayList<Point> getBifurcations() {
+        return bifurcations;
+    }
+
+    public ArrayList<Point> getEndPoints() {
+        return endPoints;
     }
 }

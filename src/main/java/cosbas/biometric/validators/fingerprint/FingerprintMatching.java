@@ -1,9 +1,15 @@
 package cosbas.biometric.validators.fingerprint;
 
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.ValidationResponse;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -11,24 +17,76 @@ import java.util.*;
  */
 public class FingerprintMatching {
     double matchingScore;
+    InputStream in;
+    BufferedImage originalImage;
+    FingerprintTemplateData originalImageTemplateData;
+    int Num_KeypointsFound;
 
-    public ValidationResponse match(BiometricData sample1, String userID) {
+    public FingerprintMatching(byte[] image) {
+        try {
 
-        int score = match(endPoints, endPointsa, intersections, intersectionsa);
-        int size = endPoints.size() + intersections.size();
-        double perc = (score*100)/size;
+            this.matchingScore = 0.0;
+            in = new ByteArrayInputStream(image);
+            originalImage = getImage(in);
 
-        System.out.println("Keys: " + size + "\nMatched: " + score + "\nPercentage: " + perc + "\nSend Percentage: " + (double)Math.round(perc)/100.00);
+            // bifurcations and endpoints is stored in this object
+            originalImageTemplateData   = new FingerprintTemplateData();
+            originalImageTemplateData.createTemplateFingerprintData(originalImage, false);
 
-        return new ValidationResponse(true,"Match Found For " + userID, matchingScore);
+            Num_KeypointsFound = originalImageTemplateData.getEndPoints().size() + originalImageTemplateData.getBifurcations().size();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public int match(ArrayList<Point> a, ArrayList<Point> b, ArrayList<Point> ab, ArrayList<Point> bb) {
+    public ValidationResponse matches(BiometricData DBitem, String userID, DoorActions action){
+
+        try {
+            int score = match(originalImageTemplateData.getEndPoints(), endPointsa, originalImageTemplateData.getBifurcations(), intersectionsa);
+
+            matchingScore = calculateMatchingScore(score);
+
+            System.out.println("Keys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+
+            if (matchingScore >= 0.5) {
+                return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
+            }
+            else {
+                return new ValidationResponse(false, "No Match Found For " + userID, matchingScore);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ValidationResponse(false,"Something went wrong!", matchingScore);
+    }
+
+    private double calculateMatchingScore(int score) {
+        double percentage = (score * 100) / Num_KeypointsFound;
+        return Math.round(percentage) / 100.00;
+    }
+
+    private BufferedImage getImage(InputStream in) throws IOException {
+        return ImageIO.read(in);
+    }
+
+
+    /**
+     * The matching function to match two fingerprints.
+     * @param a - endPoints of the original image
+     * @param b - endPoints of the DB image
+     * @param ab - bifurcations of the original image
+     * @param bb - bifurcations of the DB image
+     * @return score - the number of key points that matched
+     */
+    private int match(ArrayList<Point> a, ArrayList<Point> b, ArrayList<Point> ab, ArrayList<Point> bb) {
         HashMap<Point,ArrayList<Integer>> intersectionData = new HashMap<>();
         HashMap<Point,ArrayList<Integer>> endpointData = new HashMap<>();
 
-        in = new ArrayList<>();
-        end = new ArrayList<>();
+        ArrayList<Point> in = new ArrayList<>();
+        ArrayList<Point> end = new ArrayList<>();
 
         Integer[] distances_b = new Integer[b.size()];
         Integer[] distances_bb = new Integer[bb.size()];
@@ -99,12 +157,12 @@ public class FingerprintMatching {
         return score;
     }
 
-    public int euclideanDistance(Point a, Point b) {
+    private int euclideanDistance(Point a, Point b) {
         return (int) Math.sqrt( (Math.pow((a.x - b.x),2)) + (Math.pow((a.y - b.y),2)));
     }
 
 
-    public void printArrayLists(ArrayList<Integer> a) {
+    private void printArrayLists(ArrayList<Integer> a) {
         int k = 0;
 
         System.out.print("\n[ ");

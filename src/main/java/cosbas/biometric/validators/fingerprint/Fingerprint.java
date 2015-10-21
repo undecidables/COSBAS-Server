@@ -1,6 +1,5 @@
 package cosbas.biometric.validators.fingerprint;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,79 +11,62 @@ import java.util.*;
  * Created by VivianWork on 10/21/2015.
  */
 public class Fingerprint {
-        //-------------------------------------------------------------- TYPES --//
-        // Pixel direction
+
+     /**
+      * Pixel direction Enumeration
+      */
         public enum direction { NONE, HORIZONTAL, VERTICAL, POSITIVE, NEGATIVE};
 
 
-        //---------------------------------------------------------- CONSTANTS --//
         Color DEFAULT_ZERO_COLOR = Color.black;         // Default color of FALSE pixels
         Color DEFAULT_ONE_COLOR = Color.pink;           // Default color of TRUE pixels
-        //---------------------------------------------------------- VARIABLES --//
-        boolean binMap [][];                                            // Binary picture
-        int [][] greyMap;                                                       // Grey level picture
-        int greymean;                                                           // Global mean of greylevel map
 
-        int width;                                                                      // Dimensions
+        boolean binMap [][];  // Binary picture
+        int [][] greyMap; // Grey level picture
+        int greymean; // Global mean of greylevel map
+
+        int width;// Dimensions
         int height;
-        Color zeroColor;                                                        // Colors
+
+        Color zeroColor; // Colors
         Color oneColor;
 
-        BufferedImage originalImage;                            // Original image
 
-        ArrayList<Point> in;
-        ArrayList<Point> end;
-
-        //------------------------------------------------------- CONSTRUCTORS --//
         /**
-         * Build a fingerprint from a filename
-         *
-         * @param filename file from which a fingerprint is build
+         * Build a fingerprint from a BufferedImage
          */
-        public Fingerprint(String filename)
+        public Fingerprint(BufferedImage image)
         {
             // Initialize colors
             zeroColor = DEFAULT_ZERO_COLOR;
             oneColor = DEFAULT_ONE_COLOR;
 
-            // Open and create the buffered image
-            try
+            // Create the binary picture
+            width = image.getWidth();
+            height = image.getHeight();
+
+            greyMap = new int [width][height];
+            binMap = new boolean [width][height];
+
+            // Generate greymap
+            int curColor;
+            for (int i = 0 ; i < width ; ++i)
             {
-                // Read file
-                originalImage = ImageIO.read(new File(filename));
-
-                // Create the binary picture
-                width = originalImage.getWidth();
-                height = originalImage.getHeight();
-
-                greyMap = new int [width][height];
-                binMap = new boolean [width][height];
-
-                // Generate greymap
-                int curColor;
-                for (int i = 0 ; i < width ; ++i)
+                for (int j = 0 ; j < height ; ++j)
                 {
-                    for (int j = 0 ; j < height ; ++j)
-                    {
-                        // Split the integer color
-                        curColor = originalImage.getRGB(i,j);
-                        int R = (curColor >>16 ) & 0xFF;
-                        int G = (curColor >> 8 ) & 0xFF;
-                        int B = (curColor      ) & 0xFF;
+                    // Split the integer color
+                    curColor = image.getRGB(i,j);
+                    int R = (curColor >>16 ) & 0xFF;
+                    int G = (curColor >> 8 ) & 0xFF;
+                    int B = (curColor      ) & 0xFF;
 
-                        int greyVal = (R + G + B) / 3;
-                        greyMap[i][j] = greyVal;
-                    }
+                    int greyVal = (R + G + B) / 3;
+                    greyMap[i][j] = greyVal;
                 }
+            }
 
-                // Get the grey mean
-                greymean = getGreylevelMean(greyMap, width, height);
-            }
-            catch (IOException e)
-            {
-                originalImage = null;
-                e.printStackTrace();
-            }
+            // Get the grey mean
+            greymean = getGreylevelMean(greyMap, width, height);
         }
 
         public void printGreyMap(int[][]map, int w, int h){
@@ -110,11 +92,10 @@ public class Fingerprint {
             fw.close();
         }
 
-        //------------------------------------------------------------ METHODS --//
         /**
          * Get the width
          *
-         * @return the width
+         * @return the width of the fingerprint image
          */
         public int getWidth()
         {
@@ -124,21 +105,11 @@ public class Fingerprint {
         /**
          * Get the height
          *
-         * @return the height
+         * @return the height of the fingerprint image
          */
         public int getHeight()
         {
             return height;
-        }
-
-        /**
-         * Return the original image
-         *
-         * @return the original image
-         */
-        public BufferedImage getOriginalImage()
-        {
-            return originalImage;
         }
 
         /**
