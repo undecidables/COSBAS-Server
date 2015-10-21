@@ -383,7 +383,7 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/approveRequest")
   public String approveRequest(@RequestParam(value = "staffID", required = true) String staffID) {
     try{
-    //  biometricSystem.approveUser(staffID);
+      biometricSystem.approveUser(staffID);
     }
     catch (Exception e){
       return e.toString();
@@ -399,7 +399,7 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/denyRequest")
   public String denyRequest(@RequestParam(value = "staffID", required = true) String staffID) {
     try{
-     // biometricSystem.deleteRegistrationRequest(staffID);
+      biometricSystem.deleteRegistrationRequest(staffID);
     }
     catch (Exception e){
       return e.toString();
