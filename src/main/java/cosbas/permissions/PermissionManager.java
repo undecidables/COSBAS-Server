@@ -22,7 +22,7 @@ public class PermissionManager {
         return permissionsRepository.findByPermission(permissions);
     }
 
-    public Iterable<Permission> permissionsForUser(String userID) {
+    public List<Permission> permissionsForUser(String userID) {
         return permissionsRepository.findByUserID(userID);
     }
 
