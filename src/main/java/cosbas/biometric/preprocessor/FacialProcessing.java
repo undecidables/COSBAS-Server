@@ -4,7 +4,6 @@ import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.opencv_core;
-import org.bytedeco.javacpp.opencv_highgui;
 import org.bytedeco.javacpp.opencv_imgproc;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ import static org.bytedeco.javacpp.opencv_core.CV_8UC1;
 import static org.bytedeco.javacpp.opencv_core.cvMat;
 import static org.bytedeco.javacpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
 import static org.bytedeco.javacpp.opencv_highgui.cvDecodeImage;
-import static org.bytedeco.javacpp.opencv_highgui.imdecode;
 import static org.bytedeco.javacpp.opencv_imgproc.cvResize;
 import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 
@@ -29,7 +27,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 public class FacialProcessing implements BiometricsPreprocessor {
     private int scaledFaceSize = 150;
 
-    private opencv_core.IplImage createGrayscaleIpl(byte[] b) {
+    private opencv_core.IplImage createIPl(byte[] b) {
         return cvDecodeImage(cvMat(1, b.length, CV_8UC1, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
@@ -43,10 +41,17 @@ public class FacialProcessing implements BiometricsPreprocessor {
 
         int rows = img.getWidth();
         int cols = img.getHeight();
-        int type = opencv_core.CV_8UC1;
+        int type = opencv_core.CV_8UC3;
         opencv_core.Mat mat = new opencv_core.Mat(rows, cols, type);
         mat.data(new BytePointer(b));
         return mat;
+    }
+
+    private opencv_core.Mat grayscaleMat(opencv_core.Mat m) {
+        opencv_core.Mat newMat = new opencv_core.Mat(m.rows(), m.cols(), CV_8UC1);
+        cvtColor(m, newMat, opencv_imgproc.COLOR_BGR2GRAY);
+
+        return newMat;
     }
 
     private byte[] iplToByteArray(opencv_core.IplImage image) {
@@ -61,7 +66,7 @@ public class FacialProcessing implements BiometricsPreprocessor {
 
     @Override
     public BiometricData processRegister(byte[] data, BiometricTypes type) {
-        opencv_core.IplImage iplImage = createGrayscaleIpl(data);
+        opencv_core.IplImage iplImage = createIPl(data);
 
         opencv_core.IplImage resizedImage = resizeImage(iplImage);
 
