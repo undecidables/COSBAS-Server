@@ -4,15 +4,18 @@ import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_imgproc;
 import org.springframework.stereotype.Component;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 
-import static org.bytedeco.javacpp.opencv_core.CV_8UC3;
+import static org.bytedeco.javacpp.opencv_core.CV_8UC1;
 import static org.bytedeco.javacpp.opencv_core.cvMat;
+import static org.bytedeco.javacpp.opencv_core.cvReleaseData;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_imgproc.cvResize;
-import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 
 /**
  * {@author Renette}
@@ -20,20 +23,26 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 @Component
 public class FacialProcessing implements BiometricsPreprocessor {
     private int scaledFaceSize = 150;
+    private final String encoding_format = ".png";
 
     opencv_core.IplImage grayscaleIpl(byte[] b) {
-        return cvDecodeImage(cvMat(1, b.length, CV_8UC3, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
+        return cvDecodeImage(cvMat(1, b.length, CV_8UC1, new BytePointer(b)), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
-    opencv_core.Mat byteArrayToMat(byte[] b) throws IOException {
+    opencv_core.Mat byteArrayToGrayscaleMat(byte[] b) throws IOException {
         return new opencv_core.Mat(grayscaleIpl(b));
     }
 
     byte[] matToByteAray(opencv_core.Mat mat) {
-        byte[] arr = new byte[mat.rows() * mat.cols()];
-        boolean res = imencode(".png", mat, arr);
 
-        return arr;
+        opencv_core.CvMat m = cvEncodeImage(encoding_format, mat.asCvMat());
+        BytePointer bytePointer = m.data_ptr();
+
+        byte[] imageData = new byte[m.size()];
+        bytePointer.get(imageData, 0, m.size());
+        cvReleaseData(m);
+
+        return imageData;
     }
 
 
@@ -46,9 +55,6 @@ public class FacialProcessing implements BiometricsPreprocessor {
         cvResize(original, resizedImage);
         return resizedImage;
     }
-
-
-
 
     @Override
     public BiometricData processAccess(byte[] data, BiometricTypes type) {
