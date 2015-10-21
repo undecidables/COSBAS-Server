@@ -13,6 +13,10 @@ import cosbas.appointment.Appointments;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
 import cosbas.calendar_services.services.GoogleCalendarService;
+import cosbas.permissions.PermissionManager;
+import cosbas.permissions.PermissionId;
+import.cosbas.permissions.Permission;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,15 +38,21 @@ public class AppointmentRestController {
     @Autowired
     private Appointments appointment;
 
-    //The database adapter/repository to use.
+    //The database adapter/repository to use for appointments
     @Autowired
     private AppointmentDBAdapter repository;
 
+    //The database adapter/repository to use for the crendentials
     @Autowired
     private CalendarDBAdapter credentialRepository;
 
+    //Private variable used to call the appointment class functions of the calendar Class
     @Autowired
     private GoogleCalendarService calendar;
+
+    //Private variable used to call the appointment class functions of the PermissionsManager class
+    @Autowired
+    private PermissionManager permissionManager;
 
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
@@ -392,24 +402,31 @@ public class AppointmentRestController {
   @RequestMapping(method= RequestMethod.POST, value="/getPermissions")
   public String getPermissions(@RequestParam(value = "staffID", required = true) String staffID) {
 
+    Iterable<Permission> tempPermissions = permissionManager.permissionsForUser(staffID);
   }
 
   /**
-   * Function used to add a permision
+   * Function used to add a permission
    * @return Returns string with the outcome of the function
    */
-  @RequestMapping(method= RequestMethod.POST, value="/addPermision")
-  public String addPermision(@RequestParam(value = "permision", required = true) String permision) {
+  @RequestMapping(method= RequestMethod.POST, value="/addPermission")
+  public String addPermission(@RequestParam(value = "permission", required = true) String permision, 
+                                @RequestParam(value = "staffID", required = true) String staffID) {
 
+    PermissionId tempID = (PermissionId) permission;
+    permissionManager.addPermission(staffID, tempID);
   }
 
   /**
-   * Function used to remove a permision
+   * Function used to remove a permission
    * @return Returns string with the outcome of the function
    */
   @RequestMapping(method= RequestMethod.POST, value="/removePermision")
-  public String removePermision(@RequestParam(value = "permision", required = true) String permision) {
+  public String removePermission(@RequestParam(value = "permission", required = true) String permission, 
+                                @RequestParam(value = "staffID", required = true) String staffID) {
 
+    PermissionId tempID = (PermissionId) permission;
+    permissionManager.removePermission(staffID, tempID);
   }
 
 }
