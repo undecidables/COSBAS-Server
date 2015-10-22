@@ -4,6 +4,8 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
+
 import static org.bytedeco.javacpp.opencv_core.CV_8UC1;
 import static org.bytedeco.javacpp.opencv_core.cvMat;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseData;
@@ -17,14 +19,14 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvResize;
  * Conversion between openCV's IPLImage and byte[]
  */
 @Component
-public class IplByteConverter implements ByteImageConverter<opencv_core.IplImage> {
+public class IplProcessor implements ImageProcessor<opencv_core.IplImage> {
     @Override
-    public opencv_core.IplImage createGrayScaleImage(byte[] data) {
+    public opencv_core.IplImage grayScalefromBytes(byte[] data) {
         return cvDecodeImage(cvMat(1, data.length, CV_8UC1, new BytePointer(data)), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
     @Override
-    public byte[] encodeBinary(opencv_core.IplImage image, String format) {
+    public byte[] toBytes(opencv_core.IplImage image, String format) {
         if (!format.startsWith(".")) format = "." + format;
 
         opencv_core.CvMat m = cvEncodeImage(format, image.asCvMat());
@@ -43,4 +45,22 @@ public class IplByteConverter implements ByteImageConverter<opencv_core.IplImage
         cvResize(original, resizedImage);
         return resizedImage;
     }
+
+    @Override
+    public opencv_core.IplImage crop(opencv_core.IplImage iplImage, Rectangle rectangle) {
+        opencv_core.Mat tmp = new opencv_core.Mat(iplImage);
+        return (new opencv_core.Mat(tmp, new opencv_core.Rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height)).clone().asIplImage());
+    }
+
+    @Override
+    public double getCenterX(opencv_core.IplImage t) {
+        return t.width()/2.0;
+    }
+
+    @Override
+    public double getCenterY(opencv_core.IplImage t) {
+        return t.height()/2.0;
+    }
+
+
 }

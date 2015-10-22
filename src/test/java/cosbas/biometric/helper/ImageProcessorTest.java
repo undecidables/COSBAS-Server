@@ -3,6 +3,7 @@ package cosbas.biometric.helper;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,9 +18,10 @@ import java.util.List;
  * {@author Renette}
  * This test can be manually executed to check the correctness of the ImageConverter Classes
  */
-public class ByteImageConverterTest {
+@Ignore
+public class ImageProcessorTest {
 
-    List<ByteImageConverter> converters = Arrays.asList(new IplByteConverter(), new MatByteConverter(), new CvMatByteConverter());
+    List<ImageProcessor> converters = Arrays.asList(new IplProcessor(), new MatProcessor());
 
     private String encodingFormat = ".png";
     private static final String folder = "./src/test/resources/helper/";
@@ -42,8 +44,8 @@ public class ByteImageConverterTest {
         System.out.print("HERE");
         for (int i =0; i<converters.size(); ++i) {
             final String resultFile = folder + "ResizedResult" + i + "." + encodingFormat;
-            ByteImageConverter testee = converters.get(i);
-            byte[] newData = testee.encodeBinary(testee.scaleImage(testee.createGrayScaleImage(imageData), 100, 150), encodingFormat);
+            ImageProcessor testee = converters.get(i);
+            byte[] newData = testee.toBytes(testee.scaleImage(testee.grayScalefromBytes(imageData), 100, 150), encodingFormat);
             File file = new File(resultFile);
             FileUtils.writeByteArrayToFile(file, newData);
         }
