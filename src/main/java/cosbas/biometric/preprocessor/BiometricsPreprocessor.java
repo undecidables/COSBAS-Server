@@ -1,7 +1,5 @@
 package cosbas.biometric.preprocessor;
 
-import org.springframework.stereotype.Component;
-
 /**
  * {@author Reneette}
  */
