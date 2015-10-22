@@ -27,6 +27,7 @@
                        write-fsync="true"/>
     </mongo:mongo>
 
+    <bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager" />
 
     <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
         <constructor-arg name="username" value="${mongo.user}"/>
@@ -127,5 +128,7 @@
         <property name="mailSender" ref="mailSender"/>
         <property name="staffTemplateMessageReg" ref="staffTemplateMessageReg"/>
     </bean>
+
+
 
 </beans>
