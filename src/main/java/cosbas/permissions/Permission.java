@@ -46,8 +46,6 @@ public class Permission {
     public PermissionId getPermission(){
         return permission;
     }
-    private String userID;
-    private PermissionId permission;
 
     @Override
     public boolean equals(Object object) {
