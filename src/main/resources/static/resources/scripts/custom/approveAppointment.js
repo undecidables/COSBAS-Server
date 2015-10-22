@@ -44,8 +44,7 @@ function acceptAppointmentListener()
               $("#signIn").text(jsonReturned);
             } else {
                location.reload();
-              tempThis.parent().remove();
-              $("#signIn").text("Approve or Deny Appointments");
+              tempThis.parent().parent().parent().parent().remove();
               if(tempChildren - 1 == 0){
                 $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
               }
@@ -78,7 +77,7 @@ function denyAppointmentListener()
               $("#signIn").text(jsonReturned);
             } else {
                location.reload();
-              tempThis.parent().remove();
+              tempThis.parent().parent().parent().parent().remove();
               $("#signIn").text("Approve or Deny Appointments");
               if(tempChildren - 1 == 0){
                 $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");

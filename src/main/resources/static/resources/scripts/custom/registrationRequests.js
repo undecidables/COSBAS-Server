@@ -15,15 +15,14 @@ $(document).ready(function() {
             data: {"authorized": "REGISTRATION_APPROVE"},
             url: "/authorizedToAccessRequests"
           	}).then(function(approvalReturned) {
-          		//if(approvalReturned == "authorized")
+          		if(approvalReturned == "authorized")
           		{
             		$("#requests").empty();
             		$("#requests").append(jsonReturned);
             		$("#denyDiv").show();
-            	} /*else {
+            	} else {
                 $("#loadingRequests").html("<span>You are not authorized </span>to view this content");
               }
-              */
             });
           });
           window.scrollTo(0, 0);

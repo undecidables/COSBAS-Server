@@ -184,7 +184,7 @@ public class AppointmentRestController {
 
       }
 
-      if (appointments.size() == 0) {
+      if (appointments.size() == 0 || returnPage == "") {
           returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
       }
       return returnPage;
