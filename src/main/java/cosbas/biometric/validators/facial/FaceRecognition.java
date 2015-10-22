@@ -49,6 +49,7 @@ import cosbas.biometric.validators.exceptions.ValidationException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -67,6 +68,7 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
  * [@author Renette Ros}
  */
 @Component
+@Scope("singleton")
 public class FaceRecognition {
 
     public class Trainer implements Runnable {
@@ -100,7 +102,6 @@ public class FaceRecognition {
     public void trainFromDB() {
         try {
             trainingLock.lock();
-            updateData();
             List<BiometricData> datalist = biometricsRepository.findByType(BiometricTypes.FACE);
             if (datalist != null && !datalist.isEmpty()) {
                 learn(datalist);
@@ -168,7 +169,7 @@ public class FaceRecognition {
             data.setProjectedTrainFace(projectedTrainFace);
 
             RecognizerData finalRecogznizerData = data.getFinalRecogznizerData();
-            dataRepository.save(finalRecogznizerData);
+
             updateData(finalRecogznizerData);
         } finally {
             trainingLock.unlock();
@@ -347,7 +348,7 @@ public class FaceRecognition {
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
                 this.data = newData;
                 dataRepository.deleteAll();
-                dataRepository.save(newData);
+               // dataRepository.save(newData);
             }
         }  finally {
             dataUpdateLock.unlock();
@@ -361,7 +362,7 @@ public class FaceRecognition {
 
                     this.data = newData;
                     dataRepository.deleteAll();
-                    dataRepository.save(newData);
+                   // dataRepository.save(newData);
 
             }
         }  finally {
@@ -412,7 +413,12 @@ public class FaceRecognition {
 
     public boolean needsTraining() {
         updateData();
-        return data == null || data.needsTraining();
+        try {
+            trainingLock.lock();
+            return data == null || data.needsTraining();
+        } finally {
+            trainingLock.unlock();
+        }
     }
 
     private class TrainingUpdater implements Runnable {
