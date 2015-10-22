@@ -3,17 +3,14 @@ package cosbas.biometric.validators;
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
+import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.biometric.validators.facial.FaceRecognition;
-import org.bytedeco.javacpp.opencv_contrib;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_legacy.*;
@@ -32,15 +29,14 @@ public class FaceValidator extends AccessValidator {
     @Value("${faces.certainty:0.6}")
     private double certaintyThreshold;
 
-    public void setCertaintyThreshold(double certaintyThreshold) {
-        this.certaintyThreshold = certaintyThreshold;
-    }
-
     @Autowired
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
 
+    public void setCertaintyThreshold(double certaintyThreshold) {
+        this.certaintyThreshold = certaintyThreshold;
+    }
 
     protected Boolean checkValidationType(BiometricTypes type) {
         return type == BiometricTypes.FACE;
@@ -54,7 +50,7 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    @Scheduled(cron="0 0 0 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void train() {
         if (recognizer.needsTraining()) {
             recognizer.trainFromDB();
@@ -66,7 +62,7 @@ public class FaceValidator extends AccessValidator {
     }
 
     @Override
-    public void registerUser(BiometricData request, String userID) throws BiometricTypeException{
+    public void registerUser(BiometricData request, String userID) throws BiometricTypeException {
         super.registerUser(request, userID);
         recognizer.setNeedsTraining();
     }

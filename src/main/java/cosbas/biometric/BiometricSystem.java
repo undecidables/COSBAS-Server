@@ -20,7 +20,6 @@ import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -114,25 +113,25 @@ public class BiometricSystem {
          *      Call validator.register to do additional stuff
          * Save to db
          */
-       RegisterRequest req = registerRepository.findByUserID(userID);
-       if (req == null)
-           throw new NullArgumentException("No registrations request for this user.");
-       List<BiometricData> dataCollections = req.getData();
-       for (BiometricData d : dataCollections) {
-           AccessValidator v = factory.getValidator(d.getType());
-           v.registerUser(d, userID);
-       }
+        RegisterRequest req = registerRepository.findByUserID(userID);
+        if (req == null)
+            throw new NullArgumentException("No registrations request for this user.");
+        List<BiometricData> dataCollections = req.getData();
+        for (BiometricData d : dataCollections) {
+            AccessValidator v = factory.getValidator(d.getType());
+            v.registerUser(d, userID);
+        }
 
-       biometricDataRepository.save(req.getData());
+        biometricDataRepository.save(req.getData());
 
-       User u = userRepository.findOne(userID);
+        User u = userRepository.findOne(userID);
 
-       if (u == null)
-           u = new User(userID, req.getContactDetails());
-       else
+        if (u == null)
+            u = new User(userID, req.getContactDetails());
+        else
             u.addContactDetails(req.getContactDetails());
 
-       userRepository.save(u);
+        userRepository.save(u);
 
         return u;
     }
@@ -154,7 +153,9 @@ public class BiometricSystem {
         return userRepository.findAll();
     }
 
-    public Iterable<RegisterRequest> getRegisterRequests() { return registerRepository.findAll(); }
+    public Iterable<RegisterRequest> getRegisterRequests() {
+        return registerRepository.findAll();
+    }
 
     /**
      * Saves the record to the database.
