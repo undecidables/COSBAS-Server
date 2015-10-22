@@ -5,12 +5,18 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.biometric.validators.facial.FaceRecognition;
+import org.bytedeco.javacpp.opencv_contrib;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.List;
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_legacy.*;
 
 
 /**
@@ -21,15 +27,20 @@ import org.springframework.stereotype.Component;
 public class FaceValidator extends AccessValidator {
 
 
-    FaceRecognition recognizer;
+    private FaceRecognition recognizer;
 
-    //@Value ("$(faces.certainty}")
-    double certaintyThreshold = 0.7;
+    @Value("${faces.certainty:0.6}")
+    private double certaintyThreshold;
+
+    public void setCertaintyThreshold(double certaintyThreshold) {
+        this.certaintyThreshold = certaintyThreshold;
+    }
 
     @Autowired
     public FaceValidator(FaceRecognition recognizer) {
         this.recognizer = recognizer;
     }
+
 
     protected Boolean checkValidationType(BiometricTypes type) {
         return type == BiometricTypes.FACE;
@@ -48,6 +59,10 @@ public class FaceValidator extends AccessValidator {
         if (recognizer.needsTraining()) {
             recognizer.trainFromDB();
         }
+    }
+
+    public void forceTrain() {
+        recognizer.trainFromDB();
     }
 
     @Override
