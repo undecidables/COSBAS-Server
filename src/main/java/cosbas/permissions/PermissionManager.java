@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class PermissionManager {
         this.permissionsRepository = permissionsRepository;
     }
 
+    @PostConstruct
     private void setUp() {
         List<Permission> perms = usersForPermission(PermissionId.SUPER);
         if (perms == null || perms.isEmpty()) {
