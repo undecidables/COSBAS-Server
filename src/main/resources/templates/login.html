@@ -21,14 +21,13 @@
     <div class="overlay">
         <div class="container">
             <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn"
-                th:if="!${param.logout} AND !${param.error}"><span
-                    class="glyphicon glyphicon-info-sign"></span><br/><span>Log</span> In</h1>
+                th:if="!${param.logout} AND !${param.error}"><i class="fa fa-exclamation-circle"></i> Log In</h1>
 
-            <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn" th:if="${param.error}"><span
-                    class="glyphicon glyphicon-info-sign"></span><br/><span>Invalid Username</span> Or Password</h1>
+            <h1 class="section-title wow fadeIn alert alert-danger" data-wow-delay=".2s" id="signIn"
+                th:if="${param.error}"><i class="fa fa-exclamation-circle"></i> Invalid Username Or Password</h1>
 
-            <h1 class="section-title wow fadeIn" data-wow-delay=".2s" id="signIn" th:if="${param.logout}"><span
-                    class="glyphicon glyphicon-info-sign"></span><br/><span>Logged</span> Out</h1>
+            <h1 class="section-title wow fadeIn alert alert-warning" data-wow-delay=".2s" id="signIn"
+                th:if="${param.logout}"><i class="fa fa-exclamation-circle"></i> Logged Out</h1>
 
             <div class="row">
                 <div class="contact-form">
@@ -36,8 +35,8 @@
                         <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
                             <div class="controls">
                                 <p class="text-left">EMPLID</p>
-                                <i class="fa fa-user"></i>
-                                <input class="contact_input" name="username" type="text"
+                                <label for="username"><i class="fa fa-user"></i></label>
+                                <input id="username" class="contact_input" name="username" type="text"
                                        required="required" autofocus="autofocus" value="u0000000"/>
 
                             </div>
@@ -45,14 +44,15 @@
                         <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
                             <div class="controls">
                                 <p class="text-left">Password</p>
-                                <i class="fa fa-user"></i>
-                                <input class="contact_input" name="password" type="password" value="password"
+                                <label for="password"><i class="fa fa-lock"></i></label>
+                                <input id="password" class="contact_input" name="password" type="password"
+                                       value="password"
                                        required="required"/>
 
                             </div>
                         </div>
                         <div class="col-md-12  wow fadeInUp" data-wow-delay="0.5s">
-                            <button type="submit" class="btn btn-common">Sign
+                            <button type="submit" class="btn btn-common signIn">Sign
                                 In
                             </button>
                         </div>
@@ -84,5 +84,6 @@
 <script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
 <!-- Main js -->
 <script src="resources/assets/js/main.js"></script>
+<script src="resources/scripts/custom/login.js"></script>
 </body>
 </html>

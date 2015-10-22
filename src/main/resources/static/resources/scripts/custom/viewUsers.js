@@ -35,7 +35,7 @@ function removeUserListener()
 {
     //Click deny
       $(document).on('click', '.deny', (function(e) {
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Removing user</span> Please Wait...</h6>");
+        spawnBusyMessage("Removing User");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -47,11 +47,13 @@ function removeUserListener()
             if(jsonReturned != "User removed"){
               window.scrollTo(0, 0);
               $('.featherlight').click();
-              $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Error " + jsonReturned + " occured</span> could not remove user</h6>");
+              spawnErrorMessage("Could not remove User: " + jsonReturned);
             } else {
               tempThis.parent().remove();
               if(tempChildren - 1 == 0){
-                $("#users").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No users on the system</span></h4>");
+
+                $("#users").append(getWarningMessage("No users on the system"));
+
               }
             }
           });

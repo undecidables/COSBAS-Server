@@ -16,9 +16,18 @@ $(document).ready(function() {
 
      });
 
+
     //Checks if a calendar has already been linked or not
      checkCalendarLinked();
      handleDynamicInputClicks();
+
+
+     $('#todayAppointBtn').on("click", function(e)
+     {
+        e.preventDefault();
+        var html = $('#dayAppointments').html();
+         $.featherlight(html);
+     });
 
     }
 });
@@ -33,17 +42,23 @@ function spawnCalendar(returned)
 {
      /****************Callendar**************************/
    $('#calendar').fullCalendar({
+    header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
        defaultDate: $date,
        editable: false,
        draggable: false,
        theme: true,
        eventLimit: true, // allow "more" link when too many events
        events: returned,
+        defaultView: 'month',
        viewRender: function(currentView){
          $('#loadingCalendar').remove();
-         $(".fc-prev-button").hide();
+         /*$(".fc-prev-button").hide();
          $(".fc-next-button").hide();
-         $(".fc-today-button").hide();
+         $(".fc-today-button").hide();*/
        },
        eventRender: function (event, element) {
          element.attr('href', 'javascript:void(0);');
@@ -66,6 +81,7 @@ function spawnCalendar(returned)
      });
 
 
+
  window.scrollTo(0, 0);
 }
 
@@ -82,7 +98,7 @@ function checkCalendarLinked()
          }).then(function(jsonReturned) {
            if(jsonReturned != "Linked")
            {
-             var html = "<h6 class=\"page-header\">Choose your calendar </h6><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
+             var html = "<h6 class=\"section-title\">Choose your calendar </h6><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
              $.featherlight(html);
            }
          });

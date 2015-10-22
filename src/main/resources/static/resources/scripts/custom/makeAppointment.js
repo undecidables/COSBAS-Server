@@ -180,12 +180,7 @@ function validateNameInput()
                }
                if(!$allFilledIn)
                {
-                    var html = "<p class='error col-md-8 col-md-offset-2 section-title' id='madeByError'><i class=\"fa fa-exclamation-circle\"></i> All members' names must be entered. </p>"
-                    html +=  '<p class="text-left">' +
-                                '<button type="submit" id="nameErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                              '</p>';
-                    $element = $(html);
-                    $.featherlight($element);
+                    spawnErrorMessage("All members' names must be entered.");
 
                }
             $('.appointmentBy').val($temp);
@@ -280,12 +275,7 @@ function validateEmailInput()
       }
       if($allEmailsFilledIn == false || $noError == false)
       {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='emailError'><i class=\"fa fa-exclamation-circle\"></i> Invalid E-Mail/All members' emails must be entered. </p>";
-        html +=  '<p class="text-left">' +
-                    '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                  '</p>';
-        $element = $(html);
-        $.featherlight($element);
+        spawnErrorMessage("Invalid E-Mail/All E-Mails must be entered");
         return;
       }
       $tempEmail = $tempEmail.join(", ");
@@ -294,6 +284,7 @@ function validateEmailInput()
   });
 }
 
+<<<<<<< HEAD
 /*
 * Check that no errors occured then send the UI data to the server
 * Feedback is shown via a lightbox
@@ -319,6 +310,8 @@ function validateGlobalSubmit()
       return true;
     }
 }
+=======
+>>>>>>> origin/inf/appointment
 
 function checkTime()
 {
@@ -328,12 +321,7 @@ function checkTime()
     //check time
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
-                html +=  '<p class="text-left">' +
-                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                          '</p>';
-      $element = $(html);
-      $.featherlight($element);
+      spawnErrorMessage("The appointment must be in the future.");
       return false;
     }
     else
@@ -348,12 +336,7 @@ function checkDateAndTime()
     //check date and time
         if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
         {
-            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='dateError'><i class=\"fa fa-exclamation-circle\"></i> Please select a date and time.</p>";
-                            html +=  '<p class="text-left">' +
-                                        '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                                      '</p>';
-                  $element = $(html);
-          $.featherlight($element);
+          spawnErrorMessage("Please select a date and time.");
           return false;
         }
         else
@@ -367,12 +350,7 @@ function checkDuration()
      //check duration
         if($("#timeEnd").val() == $("#timeStart").val())
         {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> Your appointment duration must be at least 30 minutes.</p>";
-                                    html +=  '<p class="text-left">' +
-                                                '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                                              '</p>';
-                          $element = $(html);
-          $.featherlight($element);
+          spawnErrorMessage("The appointment duration must be at least 30 minutes.");
           return false;
         }
         else
@@ -387,12 +365,7 @@ function checkReason()
       //check reason
         if($("#appointmentReason").val() == "")
         {
-            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> A reason for the appointment must be given.</p>";
-                html +=  '<p class="text-left">' +
-                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                          '</p>';
-          $element = $(html);
-          $.featherlight($element);
+          spawnErrorMessage("A reason for the appointment must be given.");
           return false;
         } else
         {
@@ -404,12 +377,7 @@ function checkAppointmentWith()
 {
      if($('#appointmentWith').val() == "")
         {
-            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> Must make an appointment with someone.</p>";
-                            html +=  '<p class="text-left">' +
-                                        '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                                      '</p>';
-          $element = $(html);
-          $.featherlight($element);
+          spawnErrorMessage("Must make an appointment with someone.");
           return false;
         } else {
           return true;
@@ -421,12 +389,7 @@ function checkEmail()
 {
     if($("#email").val() == "")
     {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> Please fill in your/your team members' e-mail(s).</p>";
-            html +=  '<p class="text-left">' +
-                        '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                      '</p>';
-      $element = $(html);
-      $.featherlight($element);
+      spawnErrorMessage("Please fill in you/your team members' e-mail.");
       return false;
     } else
     {
@@ -438,12 +401,7 @@ function checkNames()
 {
     if($("#appointmentBy").val() == "")
     {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> Please enter your/your team members' names.</p>";
-            html +=  '<p class="text-left">' +
-                        '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                      '</p>';
-      $element = $(html);
-      $.featherlight($element);
+      spawnErrorMessage("Please enter your team/team members' names.");
       return false;
     }
     else
@@ -467,8 +425,7 @@ function validateGlobalSubmit()
 
         if(checkAppointmentWith() && checkTime() && checkDateAndTime() && checkDuration() && checkReason()  &&  checkNames() && checkEmail())
         {
-            var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Requesting Appointment </p><p>Please Wait...</p></h6>";
-           $.featherlight(html);
+            spawnBusyMessage("Requesting Appointment");
             requestAppointment();
         }
     })
@@ -493,11 +450,7 @@ function requestAppointment()
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
-            var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h6>";
-                        html +=  '<p class="text-left">' +
-                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                                  '</p>';
-            $.featherlight(html);
+            spawnSuccessMessage("Requested Appointment Successfully! You will receive an e-mail when the staff member approves the appointment.")
             //cleanup user input on successfull appointment request
             $( ":text" ).val("");
             $( "input[type=email]" ).val("");
@@ -513,17 +466,20 @@ function requestAppointment()
           {
             $('.featherlight').click();
 
-            //var html = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"!</p><br/></h6>";
+            //var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"!</p><br/></h6>";
             $.ajax({
               type: "post",
               data: {"staffID": $("#appointmentWith").val()},
               url: "/dayAvailable"
             }). then(function(jsonReturned) {
-                var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p></h6>";//<p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
+               /* var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p></h6>";//<p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
                                         html +=  '<p class="text-left">' +
                                                     '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
                                                   '</p>';
-                 $.featherlight(html);
+                 $.featherlight(html);*/
+
+                //spawnErrorMessage("Time Unavailable - The following times are unavailable:", jsonReturned);
+                spawnErrorMessage("Time Unavailable", null);
             });
 
             //$.featherlight(html);

@@ -24,7 +24,7 @@ $(document).ready(function() {
 
         if( checkValidAppointmentID() && checkValidUserChecker())
         {
-            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h6>");
+            $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><i class=\"fa fa-circle-o-notch fa-spin\"></i><br/><span>Checking Appointment Status</span> Please Wait...</h6>");
             checkAppointment();
         }
         });
@@ -50,11 +50,7 @@ function checkValidAppointmentID()
         $('.featherlight').click();
       }
       $noError = false;
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
-                  html +=  '<p class="text-left">' +
-                              '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                            '</p>';
-      $.featherlight(html);
+      spawnErrorMessage("Please enter a valid Appointment ID");
     }
 }
 
@@ -77,11 +73,7 @@ function checkValidUserChecker()
         $('.featherlight').click();
       }
       $noError = false;
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
-                        html +=  '<p class="text-left">' +
-                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                                  '</p>';
-      $.featherlight(html);
+      spawnErrorMessage("Please enter your name");
     }
 }
 
@@ -106,7 +98,7 @@ function checkAppointment()
         obj.html(obj.html().replace(/\n/g,'<br/>'));
 
         $('.featherlight').click();
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h6>");
+        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h6>");
 
         $("#appointmentID").val("");
         $("#requestedBy").val("");
