@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,18 +35,41 @@ public class ReportsRestController {
     }
     ReportFactory reports;
 
+
+
+    @RequestMapping(value = "/downloads/reports/{file_name}", method = RequestMethod.GET)
+    public void getFile(@PathVariable("file_name") String fileName,
+                        HttpServletResponse response) {
+        try {
+
+            Path path = Paths.get("downloads/reports/" + fileName);
+
+            InputStream is = new ByteArrayInputStream(Files.readAllBytes(path));
+
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+            File file = path.toFile();
+            if(file.exists())
+            {
+                file.delete();
+            }
+        } catch (IOException ex) {
+        }
+
+    }
+
+
+
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
-    public byte[] createAllAppointmentsReport(Principal principal,
+    public String createAllAppointmentsReport(Principal principal,
                                               @RequestParam(value = "format", required = true) String format, HttpServletResponse response) {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdReports")
-    public byte[] createAllAppointmentsByStaffIdReports(Principal principal,
+    public String createAllAppointmentsByStaffIdReports(Principal principal,
                                                         @RequestParam(value = "format", required = true) String format,
                                                         @RequestParam(value = "staffID", required = true) String staffID) {
         ReportData data = new ReportData();
@@ -53,9 +78,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStatusReports")
-    public byte[] createAllAppointmentsByStatusReports(Principal principal,
+    public String createAllAppointmentsByStatusReports(Principal principal,
                                                        @RequestParam(value = "format", required = true) String format,
                                                        @RequestParam(value = "status", required = true) String status) {
         ReportData data = new ReportData();
@@ -64,9 +88,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsBetweenDateTimeReports")
-    public byte[] createAllAppointmentsBetweenDateTimeReports(Principal principal,
+    public String createAllAppointmentsBetweenDateTimeReports(Principal principal,
                                                               @RequestParam(value = "format", required = true) String format,
                                                               @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
                                                               @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
@@ -78,9 +101,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdAndDateTimeBetweenReports")
-    public byte[] createAllAppointmentsByStaffIdAndDateTimeBetweenReports(Principal principal,
+    public String createAllAppointmentsByStaffIdAndDateTimeBetweenReports(Principal principal,
                                                                           @RequestParam(value = "format", required = true) String format,
                                                                           @RequestParam(value = "staffID", required = true) String staffID,
                                                                           @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
@@ -94,17 +116,15 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAccessRecordReports")
-    public byte[] createAllAccessRecordReports(Principal principal,
+    public String createAllAccessRecordReports(Principal principal,
                                                @RequestParam(value = "format", required = true) String format) {
         return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordBetweenDateTimeReports")
-    public byte[] createAccessRecordBetweenDateTimeReports(Principal principal,
+    public String createAccessRecordBetweenDateTimeReports(Principal principal,
                                                            @RequestParam(value = "format", required = true) String format,
                                                            @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
                                                            @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
@@ -116,9 +136,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByStaffIdAndBetweenDateTimeReports")
-    public byte[] createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
+    public String createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
                                                                        @RequestParam(value = "format", required = true) String format,
                                                                        @RequestParam(value = "staffID", required = true) String staffID,
                                                                        @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
@@ -132,9 +151,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdReports")
-    public byte[] createAccessRecordByUserIdReports(Principal principal,
+    public String createAccessRecordByUserIdReports(Principal principal,
                                                     @RequestParam(value = "format", required = true) String format,
                                                     @RequestParam(value = "staffID", required = true) String staffID) {
         ReportData data = new ReportData();

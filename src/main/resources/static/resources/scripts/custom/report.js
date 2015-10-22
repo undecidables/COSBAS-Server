@@ -244,9 +244,10 @@ function getReport()
             url: url,
             data: data
         }).then(function(response){
-            uriContent = "data:application/pdf," + encodeURIComponent(response);
-            newWindow = window.open(uriContent, 'report');
-
+            console.log("This is the file name: " + response)
+            //var button  = '<button onclick="window.location='http://www.example.com';">Visit Page Now</button>'
+            //window.location.href = "/downloads/reports/"+response;
+            window.open("/downloads/reports/"+response, "_blank");
         });
 
 

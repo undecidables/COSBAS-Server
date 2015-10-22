@@ -4,6 +4,7 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.exception.DRException;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,38 +29,41 @@ public class ReportFormatter {
         XML
     }
 
-    public byte[] getFile(JasperReportBuilder report, Formats format)
+    public String getFile(JasperReportBuilder report, Formats format)
     {
-        long fileName = System.currentTimeMillis();
-        byte[] file = null;
+        File dir = new File("downloads/reports/");
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
+        String path = "downloads/reports/";
+        String fileName = "" + System.currentTimeMillis();
         try {
 
             switch (format)
             {
                 case PDF:
-                    report.toPdf(new FileOutputStream(fileName+""));
+                    report.toPdf(new FileOutputStream(path + fileName+""));
                     break;
                 case HTML:
-                    report.toHtml(new FileOutputStream(fileName + ""));
+                    report.toHtml(new FileOutputStream(path + fileName + ""));
                     break;
                 case WORD:
-                    report.toDocx(new FileOutputStream(fileName + ""));
+                    report.toDocx(new FileOutputStream(path + fileName + ""));
                     break;
                 case CSV:
-                    report.toCsv(new FileOutputStream(fileName + ""));
+                    report.toCsv(new FileOutputStream(path + fileName + ""));
                     break;
                 case EXCL:
-                    report.toXlsx(new FileOutputStream(fileName + ""));
+                    report.toXlsx(new FileOutputStream(path + fileName + ""));
                     break;
                 case XML:
-                    report.toXml(new FileOutputStream(fileName + ""));
+                    report.toXml(new FileOutputStream(path + fileName + ""));
                     break;
                 default:
                     break;
             }
 
-            Path path = Paths.get(fileName+"");
-            file = Files.readAllBytes(path);
 
 
         } catch (DRException e) {
@@ -69,7 +73,7 @@ public class ReportFormatter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return file;
+        return fileName;
     }
 
 }
