@@ -284,11 +284,40 @@ function validateEmailInput()
   });
 }
 
+<<<<<<< HEAD
+/*
+* Check that no errors occured then send the UI data to the server
+* Feedback is shown via a lightbox
+*/
+function validateGlobalSubmit()
+{
+    var dateVar = calculateDate();
+    var timeVar = calculateTime();
+
+    //check time
+    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
+                html +=  '<p class="text-left">' +
+                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                          '</p>';
+      $element = $(html);
+      $.featherlight($element);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+}
+=======
+>>>>>>> origin/inf/appointment
 
 function checkTime()
 {
     var dateVar = calculateDate();
-        var timeVar = calculateTime();
+    var timeVar = calculateTime();
+
     //check time
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
@@ -443,7 +472,14 @@ function requestAppointment()
               data: {"staffID": $("#appointmentWith").val()},
               url: "/dayAvailable"
             }). then(function(jsonReturned) {
-                spawnErrorMessage("Time Unavailable - The following times are unavailable:", jsonReturned);
+               /* var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p></h6>";//<p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
+                                        html +=  '<p class="text-left">' +
+                                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                                  '</p>';
+                 $.featherlight(html);*/
+
+                //spawnErrorMessage("Time Unavailable - The following times are unavailable:", jsonReturned);
+                spawnErrorMessage("Time Unavailable", null);
             });
 
             //$.featherlight(html);

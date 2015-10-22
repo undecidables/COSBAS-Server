@@ -15,6 +15,7 @@ $(document).ready(function() {
       }).then(function(appovalReturned) {
       if(appovalReturned == "authorized")
         {
+          $("#permissionAuthorization").hide();
           $("#permissionForm").show();
           $("#permissions").empty();
           getUserPermissions();
@@ -61,18 +62,20 @@ $(document).ready(function() {
           data: {"staffID": $("#users").val()},
           url: "/getUserPermissions"
         }).then(function(jsonReturned) {
+            $("#permissionsHide").show();
             $("#permissions").empty();
             $("#permissions").append(jsonReturned);
           });
-        }
+      } else {
+        $("#permissionsHide").hide();
       }
+    }
     
 
     //Listener for the update click event. Updates the selected user's permissions
     function addPermission(){
       $(document).on('click', '#update', (function(e) {
           e.preventDefault();
-
           $.ajax({
             type: "post",
             data: {"permission" : $("#newPermissions").val(),
@@ -84,7 +87,7 @@ $(document).ready(function() {
       }));
     }
 
-    function removePermission(){
+    function removePermissionListener(){
       $(document).on('click', '.deny', (function(e) {
           e.preventDefault();
           var tempThis = $(this);
@@ -98,4 +101,9 @@ $(document).ready(function() {
           });
       }));
     }
+
+    //Calls functions each time a new user is selected
+    $("#users").change(function () {
+      getUserPermissions();
+    });
 });
