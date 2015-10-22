@@ -14,8 +14,8 @@
 				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Check Appointment</span> Status</h1>
 
 				<div class="row">
-					java.lang.NoSuchMethodError: org.springframework.security.core.userdetails.UsernameNotFoundException.
-					<div th:if='${#httpServletRequest.getAttribute("javax.servlet.error.exception").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
+					
+					<div th:if='${#httpServletRequest.getAttribute("javax.servlet.error.exception").toString().substring(0, 101) == "java.lang.NoSuchMethodError: org.springframework.security.core.userdetails.UsernameNotFoundException."}'>
 						<script>window.location.href = "/login?error=1"</script>
 					</div>
 					<!--div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
