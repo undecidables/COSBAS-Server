@@ -12,9 +12,22 @@ $(document).ready(function(e) {
    });
 
 
+function spawnCustomErrorMessage(message, type)
+{
+        if(type == "")
+            type = "INVALID INPUT";
+        var html = "<div class=\"alert alert-danger\">"+
+                      "<strong><i class=\"fa fa-exclamation-circle\"></i>  " + type + " </strong><br/>" + message +
+                    "</div>";
+         html +=  '<p class="text-left">' +
+                    '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                  '</p>';
+         $.featherlight(html);
+}
 function spawnErrorMessage(message, jsonReturned)
 {
-
+    if(!jsonReturned)
+        jsonReturned = "";
     var msg = "<div class=\"alert alert-danger\">"+
                             "<strong><i class=\"fa fa-exclamation-circle\"></i>  INVALID INPUT </strong><br/> " + message + jsonReturned +
                           "</div>";

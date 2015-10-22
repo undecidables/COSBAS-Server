@@ -32,9 +32,10 @@ $(document).ready(function() {
 function cancelAppointment()
 {
      //send data if no errors
+     spawnBusyMessage("Cancelling Appointment");
     if(checkValidAppointmentID() && checkValidAppointmentCancellee())
     {
-        spawnBusyMessage("Cancelling Appointment");
+
         $.ajax({
         type: "post",
         data: {"cancellee" : $('#cancelBy').val(),
@@ -42,7 +43,10 @@ function cancelAppointment()
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $('.featherlight').click();
-        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h6>");
+        if(jsonReturned == "Appointment does not exist.")
+            spawnCustomErrorMessage("Appointment Does Not Exist", "FAILED");
+        else
+            spawnSuccessMessage("Appointment Cancelled Successfully");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
       });

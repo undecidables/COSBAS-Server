@@ -24,8 +24,8 @@ $(document).ready(function() {
 
         if( checkValidAppointmentID() && checkValidUserChecker())
         {
-            $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><i class=\"fa fa-circle-o-notch fa-spin\"></i><br/><span>Checking Appointment Status</span> Please Wait...</h6>");
-            checkAppointment();
+           spawnBusyMessage("Checking Appointment Status");
+           checkAppointment();
         }
         });
 });
@@ -41,7 +41,7 @@ function checkValidAppointmentID()
      //add errorID
     if($("#appointmentID").val() != "")
     {
-      $('#errorID').remove();
+      return true;
     }
     else
     {
@@ -49,9 +49,10 @@ function checkValidAppointmentID()
       if($errorNum == 1){
         $('.featherlight').click();
       }
-      $noError = false;
+
       spawnErrorMessage("Please enter a valid Appointment ID");
     }
+    return false;
 }
 
 /**
@@ -64,7 +65,7 @@ function checkValidUserChecker()
      //add status error
     if($("#requestedBy").val() != "")
     {
-      $('#statusError').remove();
+      return true;
     }
     else
     {
@@ -72,9 +73,10 @@ function checkValidUserChecker()
       if($errorNum == 1){
         $('.featherlight').click();
       }
-      $noError = false;
+
       spawnErrorMessage("Please enter your name");
     }
+    return false;
 }
 
 /**
@@ -94,6 +96,12 @@ function checkAppointment()
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
+        if(jsonReturned == "No such Appointment exists")
+        {
+            spawnCustomErrorMessage("Appointment does not exist", "FAILED");
+            return;
+        }
+
         var obj =  $("<p>"+jsonReturned+"</p>");
         obj.html(obj.html().replace(/\n/g,'<br/>'));
 
