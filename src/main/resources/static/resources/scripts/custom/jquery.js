@@ -15,7 +15,6 @@ $(document).ready(function(e) {
 function spawnErrorMessage(message, jsonReturned)
 {
 
-    alert("asd");
     var msg = "<div class=\"alert alert-danger\">"+
                             "<strong><i class=\"fa fa-exclamation-circle\"></i>  INVALID INPUT </strong><br/> " + message + jsonReturned +
                           "</div>";
