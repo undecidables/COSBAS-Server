@@ -2,11 +2,11 @@ package cosbas.biometric.validators.facial;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,32 +17,27 @@ public class RecognizerData {
 
     @Id
     String id;
-    @Transient
     private boolean needsTraining;
 
+    public final List<String> personNames;
     @Transient
-    public List<String> personNames;
+    public final List<opencv_core.IplImage> trainingFaces;
+    private final List<IplStorage> storeTrainingFaces;
     @Transient
-    public List<opencv_core.IplImage> trainingFaces;
+    public final opencv_core.IplImage[] eigenVectors;
     @Transient
-    public opencv_core.IplImage[] eigenVectors;
+    public final opencv_core.IplImage pAvgTrainImg;
     @Transient
-    public opencv_core.IplImage pAvgTrainImg;
+    public final opencv_core.CvMat eigenValues;
     @Transient
-    public opencv_core.CvMat eigenValues;
+    public final opencv_core.CvMat projectedTrainFace;
     @Transient
-    public opencv_core.CvMat projectedTrainFace;
-    @Transient
-    public opencv_core.CvMat personNumTruthMat;
+    public final opencv_core.CvMat personNumTruthMat;
 
-    @Transient
+
     public LocalDateTime updated;
 
-    @PersistenceConstructor
-    private RecognizerData() {
-        needsTraining = true;
-        updated = LocalDateTime.now().minusDays(1);
-    }
+
     //@PersistenceConstructor
     protected RecognizerData(String id, List<String> personNames,
                              List<opencv_core.IplImage> trainingFaces,
@@ -56,6 +51,10 @@ public class RecognizerData {
         this.id = id;
         this.personNames = personNames;
         this.trainingFaces = trainingFaces;
+        this.storeTrainingFaces = new ArrayList<>(trainingFaces.size());
+        for (opencv_core.IplImage trainingFace : trainingFaces) {
+            storeTrainingFaces.add(new IplStorage(trainingFace));
+        }
         this.eigenVectors = eigenVectors;
         this.pAvgTrainImg = pAvgTrainImg;
         this.eigenValues = eigenValues;
