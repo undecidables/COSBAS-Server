@@ -38,7 +38,7 @@
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongo" ref="mongo" />
         <constructor-arg name="databaseName" value="${mongo.database}" />
-        <!--<constructor-arg name="userCredentials" ref="mongoCredentials"/>-->
+        <constructor-arg name="userCredentials" ref="mongoCredentials"/>
     </bean>
 
     <!-- Bean to send our emails through the gmail smtp server -->

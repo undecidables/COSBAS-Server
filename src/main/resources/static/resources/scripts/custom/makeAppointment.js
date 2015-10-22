@@ -284,7 +284,6 @@ function validateEmailInput()
   });
 }
 
-<<<<<<< HEAD
 /*
 * Check that no errors occured then send the UI data to the server
 * Feedback is shown via a lightbox
@@ -310,8 +309,7 @@ function validateGlobalSubmit()
       return true;
     }
 }
-=======
->>>>>>> origin/inf/appointment
+
 
 function checkTime()
 {
