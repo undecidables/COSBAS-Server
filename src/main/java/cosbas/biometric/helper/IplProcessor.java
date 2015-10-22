@@ -62,5 +62,15 @@ public class IplProcessor implements ImageProcessor<opencv_core.IplImage> {
         return t.height()/2.0;
     }
 
+    @Override
+    public int getWidth(opencv_core.IplImage image) {
+        return image.width();
+    }
+
+    @Override
+    public int getHeight(opencv_core.IplImage image) {
+        return image.height();
+    }
+
 
 }

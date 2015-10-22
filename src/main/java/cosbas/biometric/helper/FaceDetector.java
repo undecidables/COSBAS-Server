@@ -1,8 +1,10 @@
 package cosbas.biometric.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.List;
 
@@ -16,15 +18,22 @@ public abstract class FaceDetector<T> {
     @Autowired
     final ImageProcessor<T> converter;
 
+    public void setImageSize(int imageSize) {
+        this.imageSize = imageSize;
+    }
+
+    @Value("${faces.imageSize}")
+    private int imageSize;
+
     @Autowired
     protected FaceDetector(ImageProcessor<T> converter) {
         this.converter = converter;
     }
 
-    private void test() {
-        System.out.print("");
+     protected FaceDetector(ImageProcessor<T> converter, int imageSize) {
+        this.converter = converter;
+         this.imageSize = imageSize;
     }
-
 
     /**
      * Detects faces, returns list of bounding Rectangles
@@ -46,7 +55,8 @@ public abstract class FaceDetector<T> {
         T image = converter.grayScalefromBytes(data);
         List<Rectangle> rectangles = detectFaces(image);
         Rectangle center = mostCenterRect(rectangles, converter.getCenterX(image), converter.getCenterY(image));
-        T result = converter.crop(image, center);
+        T result = converter.scaleImage(converter.crop(image, center), imageSize, imageSize);
+
         return converter.toBytes(result, resultEncoding);
     }
 }

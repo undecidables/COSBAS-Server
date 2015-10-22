@@ -23,8 +23,8 @@ public class OpenCVFaceDetector extends FaceDetector<opencv_core.Mat> {
     @Value("${faces.classifierFile}")
     private String classifierFilename;
 
-    public OpenCVFaceDetector(ImageProcessor<opencv_core.Mat> converter, String classifierFilename) {
-        this(converter);
+    public OpenCVFaceDetector(ImageProcessor<opencv_core.Mat> converter, String classifierFilename, int squareSize) {
+        super(converter, squareSize);
         this.classifierFilename = classifierFilename;
     }
 

@@ -42,4 +42,7 @@ public interface ImageProcessor<ImageType> {
     double getCenterX(ImageType t);
 
     double getCenterY(ImageType t);
+
+    int getWidth(ImageType image);
+    int getHeight(ImageType image);
 }

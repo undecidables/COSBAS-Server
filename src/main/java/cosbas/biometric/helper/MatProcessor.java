@@ -65,4 +65,14 @@ public class MatProcessor implements ImageProcessor<opencv_core.Mat> {
     public double getCenterY(opencv_core.Mat t) {
         return t.rows()/2.0;
     }
+
+    @Override
+    public int getWidth(opencv_core.Mat image) {
+        return image.cols();
+    }
+
+    @Override
+    public int getHeight(opencv_core.Mat image) {
+        return image.rows();
+    }
 }
