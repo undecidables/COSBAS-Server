@@ -71,7 +71,7 @@ public class FaceRecognition {
     public class Trainer implements Runnable {
         @Override
         public void run() {
-            trainFromDB();
+            //trainFromDB();
         }
     }
 
