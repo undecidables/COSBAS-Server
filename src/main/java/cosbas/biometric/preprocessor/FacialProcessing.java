@@ -4,6 +4,7 @@ import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.helper.FaceDetector;
 import cosbas.biometric.helper.ImageProcessor;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class FacialProcessing implements BiometricsPreprocessor {
      * @return
      */
     @Override
-    public BiometricData processAccess(byte[] data, BiometricTypes type) {
+    public BiometricData processAccess(byte[] data, BiometricTypes type) throws ValidationException {
         byte[] face = detector.getCenterFace(data, encoding);
         return new BiometricData(type, face);
     }
