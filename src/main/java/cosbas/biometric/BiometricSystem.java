@@ -20,7 +20,10 @@ import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+
 import java.util.List;
 
 /**
@@ -114,25 +117,25 @@ public class BiometricSystem {
          *      Call validator.register to do additional stuff
          * Save to db
          */
-       RegisterRequest req = registerRepository.findByUserID(userID);
-       if (req == null)
-           throw new NullArgumentException("No registrations request for this user.");
-       List<BiometricData> dataCollections = req.getData();
-       for (BiometricData d : dataCollections) {
-           AccessValidator v = factory.getValidator(d.getType());
-           v.registerUser(d, userID);
-       }
+        RegisterRequest req = registerRepository.findByUserID(userID);
+        if (req == null)
+            throw new NullArgumentException("No registrations request for this user.");
+        List<BiometricData> dataCollections = req.getData();
+        for (BiometricData d : dataCollections) {
+            AccessValidator v = factory.getValidator(d.getType());
+            v.registerUser(d, userID);
+        }
 
-       biometricDataRepository.save(req.getData());
+        biometricDataRepository.save(req.getData());
 
-       User u = userRepository.findOne(userID);
+        User u = userRepository.findOne(userID);
 
-       if (u == null)
-           u = new User(userID, req.getContactDetails());
-       else
+        if (u == null)
+            u = new User(userID, req.getContactDetails());
+        else
             u.addContactDetails(req.getContactDetails());
 
-       userRepository.save(u);
+        userRepository.save(u);
 
         return u;
     }
@@ -150,11 +153,26 @@ public class BiometricSystem {
         }
     }
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    private <T> List<T> iterableToList(Iterable<T> it, int count) {
+        List<T> list = new ArrayList<>(count);
+        for (T t : it) {
+            list.add(t);
+        }
+        return list;
     }
 
-    public Iterable<RegisterRequest> getRegisterRequests() { return registerRepository.findAll(); }
+    public List<User> getUsers() {
+        Iterable<User> users = userRepository.findAll();
+        int count = (int) userRepository.count();
+        return iterableToList(users, count);
+    }
+
+    public List<RegisterRequest> getRegisterRequests() {
+        Iterable<RegisterRequest> reqs =  registerRepository.findAll();
+        int count = (int) registerRepository.count();
+        return iterableToList(reqs, count);
+
+    }
 
     /**
      * Saves the record to the database.

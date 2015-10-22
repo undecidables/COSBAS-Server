@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.BufferedReader;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,13 +29,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class FaceRecognitionTest {
 
-    FaceRecognition testee;
-    BiometricDataDAO biometricRepo;
-    RecognizerDAO recognizerDAO;
-
     private final String folder = "./src/test/resources/faces/";
     private final String trainingFile = "upper6.txt";
     private final String testingfile = "lower3.txt";
+    FaceRecognition testee;
+    BiometricDataDAO biometricRepo;
+    RecognizerDAO recognizerDAO;
     private List<BiometricData> trainingList = new LinkedList<>();
 
     @Before
@@ -66,7 +64,7 @@ public class FaceRecognitionTest {
 
     @Test
     public void testRecognizeFace() throws Exception {
-       testee.learn(trainingList);
+        testee.learn(trainingList);
         assertNotNull("Recognizer data null", testee.data);
 
         BufferedReader imgListFile = new BufferedReader(new FileReader(folder  + testingfile));
