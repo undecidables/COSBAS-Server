@@ -140,7 +140,7 @@ public class GoogleCalendarService extends CalendarService {
         }
 
         //getting the employee id from database.
-        Collection<ContactDetail> empEmail = userRepository.findById(emplid).getContact();
+        Collection<ContactDetail> empEmail = userRepository.findByUserID(emplid).getContact();
         for (ContactDetail emp: empEmail){
             if (emp.getType() == ContactTypes.EMAIL){
                 attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
