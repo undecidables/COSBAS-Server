@@ -2,6 +2,7 @@ package cosbas.web;
 
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
+import cosbas.logging.AuthenticateReports;
 import cosbas.reporting.ReportData;
 import cosbas.reporting.ReportFactory;
 import cosbas.reporting.ReportFormatter;
@@ -32,6 +33,7 @@ public class ReportsRestController {
     }
     ReportFactory reports;
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
     public byte[] createAllAppointmentsReport(Principal principal,
@@ -39,6 +41,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdReports")
     public byte[] createAllAppointmentsByStaffIdReports(Principal principal,
@@ -49,6 +52,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStatusReports")
     public byte[] createAllAppointmentsByStatusReports(Principal principal,
@@ -59,6 +63,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STATUS, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsBetweenDateTimeReports")
     public byte[] createAllAppointmentsBetweenDateTimeReports(Principal principal,
@@ -72,6 +77,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdAndDateTimeBetweenReports")
     public byte[] createAllAppointmentsByStaffIdAndDateTimeBetweenReports(Principal principal,
@@ -87,6 +93,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAccessRecordReports")
     public byte[] createAllAccessRecordReports(Principal principal,
@@ -94,6 +101,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordBetweenDateTimeReports")
     public byte[] createAccessRecordBetweenDateTimeReports(Principal principal,
@@ -107,6 +115,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByStaffIdAndBetweenDateTimeReports")
     public byte[] createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
@@ -122,6 +131,7 @@ public class ReportsRestController {
         return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
     }
 
+    @AuthenticateReports
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdReports")
     public byte[] createAccessRecordByUserIdReports(Principal principal,
