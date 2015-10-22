@@ -177,26 +177,27 @@ function getReport()
         {
             case "ALL_APPOINTMENTS":
                 data = {"format" : $('#reportFormat').val()};
-                url = '/createAllAppointmentsReport';
+                url = "/createAllAppointmentsReport";
+                console.log("ALL_APPOINTMENTS");
                 break;
             case "ALL_APPOINTMENTS_BY_STAFFID":
                 data = {"format" : $('#reportFormat').val(),
                     "staffID":$('#staffID').val()
                 };
-                url = '/createAllAppointmentsByStaffIdReports';
+                url = "/createAllAppointmentsByStaffIdReports";
                 break;
             case "ALL_APPOINTMENTS_BY_STATUS":
                 data = {"format" : $('#reportFormat').val(),
                     "status":$('#status').val()
                 };
-                url = '/createAllAppointmentsByStatusReports';
+                url = "/createAllAppointmentsByStatusReports";
                 break;
             case "ALL_APPOINTMENTS_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
                     "dateTimeS":$('#dateTimeS').val(),
                     "dateTimeE":$('#dateTimeE').val()
                 };
-                url = '/createAllAppointmentsBetweenDateTimeReports';
+                url = "/createAllAppointmentsBetweenDateTimeReports";
                 break;
             case "ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
@@ -204,10 +205,10 @@ function getReport()
                     "dateTimeE":$('#dateTimeE').val(),
                     "staffID":$('#staffID').val()
                 };
-                url = '/createAllAppointmentsByStaffIdAndDateTimeBetweenReports';
+                url = "/createAllAppointmentsByStaffIdAndDateTimeBetweenReports";
                 break;
             case "ALL_ACCESS_RECORDS":
-                url = '/createAllAccessRecordReports';
+                url = "/createAllAccessRecordReports";
                 data = {"format" : $('#reportFormat').val()};
                 break;
             case "ALL_ACCESS_RECORDS_BETWEEN_DATETIME":
@@ -215,7 +216,7 @@ function getReport()
                     "dateTimeS":$('#dateTimeS').val(),
                     "dateTimeE":$('#dateTimeE').val()
                 };
-                url = '/createAccessRecordBetweenDateTimeReports';
+                url = "/createAccessRecordBetweenDateTimeReports";
                 break;
             case "ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
@@ -223,26 +224,28 @@ function getReport()
                     "dateTimeE":$('#dateTimeE').val(),
                     "staffID":$('#staffID').val()
                 };
-                url = '/createAccessRecordByStaffIdAndBetweenDateTimeReports';
+                url = "/createAccessRecordByStaffIdAndBetweenDateTimeReports";
                 break;
             case "ALL_ACCESS_RECORDS_BY_STAFFID":
                 data = {"format" : $('#reportFormat').val(),
                     "staffID":$('#staffID').val()
                 };
-                url = '/createAccessRecordByUserIdReports';
+                url = "/createAccessRecordByUserIdReports";
                 break;
             default:
                 break;
 
         }
 
-        alert(JSON.stringify(data));
+       // alert(JSON.stringify(data));
 
         $.ajax({
-            type: 'post',
+            type: "post",
             url: url,
-            date: data
+            data: data
         }).then(function(response){
+            uriContent = "data:application/pdf," + encodeURIComponent(response);
+            newWindow = window.open(uriContent, 'report');
 
         });
 

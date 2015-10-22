@@ -5,9 +5,14 @@ import cosbas.calendar_services.authorization.CredentialWrapper;
 import cosbas.reporting.ReportData;
 import cosbas.reporting.ReportFactory;
 import cosbas.reporting.ReportFormatter;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,8 +33,7 @@ public class ReportsRestController {
 
     @ResponseBody
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
-    public byte[] createAllAppointmentsReport(@RequestParam(value = "format", required = true) String format) {
-        System.out.println("yolo");
+    public byte[] createAllAppointmentsReport(@RequestParam(value = "format", required = true) String format, HttpServletResponse response) {
         return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format));
     }
 
