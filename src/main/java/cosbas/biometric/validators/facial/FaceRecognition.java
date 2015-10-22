@@ -58,7 +58,8 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
+import static org.bytedeco.javacpp.opencv_highgui.cvDecodeImage;
 import static org.bytedeco.javacpp.opencv_legacy.*;
 
 /**
@@ -68,20 +69,11 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Component
 public class FaceRecognition {
 
-    public class Trainer implements Runnable {
-        @Override
-        public void run() {
-            trainFromDB();
-        }
-    }
-
     volatile RecognizerData data;
     private volatile ReentrantLock dataUpdateLock = new ReentrantLock();
     private volatile ReentrantLock trainingLock = new ReentrantLock();
-
     private RecognizerDAO dataRepository;
     private BiometricDataDAO biometricsRepository;
-
     @Autowired
     public FaceRecognition(RecognizerDAO dataRepository, BiometricDataDAO biometricsRepository) {
         this.dataRepository = dataRepository;
@@ -104,7 +96,7 @@ public class FaceRecognition {
             if (datalist != null && !datalist.isEmpty()) {
                 learn(datalist);
             }
-        }  finally {
+        } finally {
             trainingLock.unlock();
         }
     }
@@ -199,10 +191,10 @@ public class FaceRecognition {
        cvEigenDecomposite(
                 testFace, // obj
                 nEigens, // nEigObjs
-                data.eigenVectors, // eigInput (Pointer)
+               data.eigenVectors, // eigInput (Pointer)
                 0, // ioFlags
                 null, // userData
-                data.pAvgTrainImg, // avg
+               data.pAvgTrainImg, // avg
                 projectedTestFace);  // coeffs
 
 
@@ -210,7 +202,7 @@ public class FaceRecognition {
         iNearest = findNearestNeighbor(projectedTestFace, pConfidence);
         double confidence = pConfidence.get();
        nearest = data.personNumTruthMat.data_i().get(iNearest);
-       String emplid = data.personNames.get(nearest-1);
+       String emplid = data.personNames.get(nearest - 1);
 
         return new ValidationResponse(true,  emplid, confidence);
     }
@@ -350,8 +342,8 @@ public class FaceRecognition {
                     dataRepository.save(newData);
                 }
             }
-        }  finally {
-                dataUpdateLock.unlock();
+        } finally {
+            dataUpdateLock.unlock();
         }
     }
 
@@ -360,12 +352,12 @@ public class FaceRecognition {
             dataUpdateLock.lock();
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
 
-                    this.data = newData;
-                    dataRepository.deleteAll();
-                    dataRepository.save(newData);
+                this.data = newData;
+                dataRepository.deleteAll();
+                dataRepository.save(newData);
 
             }
-        }  finally {
+        } finally {
             dataUpdateLock.unlock();
         }
     }
@@ -416,6 +408,17 @@ public class FaceRecognition {
         return data.needsTraining();
     }
 
+    public void setNeedsTraining() {
+        (new Thread(new TrainingUpdater())).start();
+    }
+
+    public class Trainer implements Runnable {
+        @Override
+        public void run() {
+            trainFromDB();
+        }
+    }
+
     private class TrainingUpdater implements Runnable {
 
         @Override
@@ -428,10 +431,6 @@ public class FaceRecognition {
                 trainingLock.unlock();
             }
         }
-    }
-
-    public void setNeedsTraining() {
-        (new Thread(new TrainingUpdater())).start();
     }
 
 }

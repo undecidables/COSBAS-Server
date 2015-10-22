@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * {@author Renette Ros}
  */
-public interface PermissionsRepository extends PermissionsDAO, MongoRepository<Permission, String>{
+public interface PermissionsRepository extends PermissionsDAO, MongoRepository<Permission, String> {
 }

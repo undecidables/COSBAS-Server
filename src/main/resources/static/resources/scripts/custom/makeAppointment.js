@@ -5,8 +5,12 @@ $(document).ready(function() {
         initializeTimePicker();
         loadStaffMembers();
 
+        $('.appointmentBy').focus(function() {
         createNameInput()
-        createEmailInput();
+        });
+        $('#email').focus(function() {
+            createEmailInput();
+        });
         handleDynamicInputClicks();
         validateGlobalSubmit();
 });
@@ -119,7 +123,6 @@ function calculateTime()
 */
 function createNameInput()
 {
-    $('.appointmentBy').focus(function() {
 
     if($("#numMembers").val() >= 1)
     {
@@ -146,7 +149,6 @@ function createNameInput()
         $.featherlight(lightbox, null);
     }
     validateNameInput();
-  });
 }
 
 /*
@@ -161,15 +163,10 @@ function validateNameInput()
                $allFilledIn = true;
 
                $inputs = $(".nameinput");
-
                for($i = 0; $i < $inputs.length; $i++){
                  if($($inputs[$i]).val() == "")
                  {
-                   $element = $("<p class='error' id='madeByError'>All members' names must be entered. </p>");
-                   $.featherlight($element);
                    $allFilledIn = false;
-                   $noError = false;
-                   return;
                  }
                  else
                  {
@@ -178,10 +175,19 @@ function validateNameInput()
                      $("#madeByError").remove();
                    }
                    $temp[$i] = $($inputs[$i]).val();
+                    $temp = $temp.join(", ");
                  }
                }
-               $temp = $temp.join(", ");
-            $('.featherlight').click();
+               if(!$allFilledIn)
+               {
+                    var html = "<p class='error col-md-8 col-md-offset-2 section-title' id='madeByError'><i class=\"fa fa-exclamation-circle\"></i> All members' names must be entered. </p>"
+                    html +=  '<p class="text-left">' +
+                                '<button type="submit" id="nameErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                              '</p>';
+                    $element = $(html);
+                    $.featherlight($element);
+
+               }
             $('.appointmentBy').val($temp);
         });
 }
@@ -191,8 +197,8 @@ function validateNameInput()
 */
 function createEmailInput()
 {
-    $('#email').focus(function() {
 
+    validateEmailInput();
     if($("#numMembers").val() >= 1)
     {
 
@@ -216,8 +222,7 @@ function createEmailInput()
                   '</div>';
         $.featherlight(lightbox, null);
     }
-    validateEmailInput();
-  });
+
 }
 
 /*
@@ -232,6 +237,16 @@ function handleDynamicInputClicks()
     $(document.body).on('click', '#calendarOk' ,function(){
             $('.featherlight').click();
         });
+     $(document.body).on('click', '#emailErrorOkay' ,function(){
+                 $('.featherlight').click();
+             });
+     $(document.body).on('click', '#nameErrorOkay' ,function(){
+                   $('.featherlight').click();
+               });
+
+     $(document.body).on('click', '.btnLightbox' ,function(){
+                        $('.featherlight').click();
+                    });
 }
 
 /*
@@ -244,16 +259,15 @@ function validateEmailInput()
   $(document.body).on('click', '#emailsubmit' ,function(){
      //check emails
      $allEmailsFilledIn = true;
+     $noError = true;
      $inputs = $(".emailinput");
+
       for($i = 0; $i < $inputs.length; $i++){
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if($($inputs[$i]).val() == "" || !regex.test($($inputs[$i]).val()))
         {
-          $element = $("<p class='error' id='emailError'>Invalid E-Mail/All members' emails must be entered. </p>");
-          $.featherlight($element);
           $allEmailsFilledIn = false;
           $noError = false;
-          return;
         }
         else
         {
@@ -263,6 +277,16 @@ function validateEmailInput()
           }
           $tempEmail[$i] = $($inputs[$i]).val();
         }
+      }
+      if($allEmailsFilledIn == false || $noError == false)
+      {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='emailError'><i class=\"fa fa-exclamation-circle\"></i> Invalid E-Mail/All members' emails must be entered. </p>";
+        html +=  '<p class="text-left">' +
+                    '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                  '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return;
       }
       $tempEmail = $tempEmail.join(", ");
       $('.featherlight').click();
@@ -276,102 +300,182 @@ function validateEmailInput()
 */
 function validateGlobalSubmit()
 {
-    $('#makeAppointmentRequest').click(function(e) {
-    e.preventDefault();
-
-    if($("#numMembers").val() >= 1)
-    {
-      $('#errorNumbers').remove();
-    }
     var dateVar = calculateDate();
-    var timeVar = calculateTime();
-    //Check for errors
-    $noError = true;
-
-
+        var timeVar = calculateTime();
     //check time
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
-      $element = $('<p class="error" id="timeError">The appointments must be in the future.</p>');
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
+                html +=  '<p class="text-left">' +
+                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                          '</p>';
+      $element = $(html);
       $.featherlight($element);
-      $noError = false;
+      return false;
     }
     else
     {
-      $('#timeError').remove();
+      return true;
     }
+}
 
+function checkTime()
+{
+    var dateVar = calculateDate();
+        var timeVar = calculateTime();
+    //check time
+    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
+                html +=  '<p class="text-left">' +
+                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                          '</p>';
+      $element = $(html);
+      $.featherlight($element);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+}
+
+
+function checkDateAndTime()
+{
     //check date and time
-    if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
+        if($("#requestedDateTime").val() == "" || $("#timeStart").val() == "")
+        {
+            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='dateError'><i class=\"fa fa-exclamation-circle\"></i> Please select a date and time.</p>";
+                            html +=  '<p class="text-left">' +
+                                        '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                                      '</p>';
+                  $element = $(html);
+          $.featherlight($element);
+          return false;
+        }
+        else
+        {
+          return true;
+        }
+}
+
+function checkDuration()
+{
+     //check duration
+        if($("#timeEnd").val() == $("#timeStart").val())
+        {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> Your appointment duration must be at least 30 minutes.</p>";
+                                    html +=  '<p class="text-left">' +
+                                                '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                                              '</p>';
+                          $element = $(html);
+          $.featherlight($element);
+          return false;
+        }
+        else
+        {
+          $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
+          return true;
+        }
+}
+
+function checkReason()
+{
+      //check reason
+        if($("#appointmentReason").val() == "")
+        {
+            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> A reason for the appointment must be given.</p>";
+                html +=  '<p class="text-left">' +
+                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                          '</p>';
+          $element = $(html);
+          $.featherlight($element);
+          return false;
+        } else
+        {
+          return true;
+        }
+}
+
+function checkAppointmentWith()
+{
+     if($('#appointmentWith').val() == "")
+        {
+            var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i> Must make an appointment with someone.</p>";
+                            html +=  '<p class="text-left">' +
+                                        '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
+                                      '</p>';
+          $element = $(html);
+          $.featherlight($element);
+          return false;
+        } else {
+          return true;
+        }
+}
+
+
+function checkEmail()
+{
+    if($("#email").val() == "")
     {
-      $element = $('<p class="error" id="dateError">Please select a date and time</p>');
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> Please fill in your/your team members' e-mail(s).</p>";
+            html +=  '<p class="text-left">' +
+                        '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                      '</p>';
+      $element = $(html);
       $.featherlight($element);
-      $noError = false;
+      return false;
+    } else
+    {
+      return true;
+    }
+}
+
+function checkNames()
+{
+    if($("#appointmentBy").val() == "")
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> Please enter your/your team members' names.</p>";
+            html +=  '<p class="text-left">' +
+                        '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                      '</p>';
+      $element = $(html);
+      $.featherlight($element);
+      return false;
     }
     else
     {
-      $('#dateError').remove();
+      return true;
     }
+}
+function validateGlobalSubmit()
+{
+    $('#makeAppointmentRequest').click(function(e)
+    {
+        e.preventDefault();
 
-    //check duration
-    if($("#timeEnd").val() == $("#timeStart").val())
-    {
-      $element = $('<p class="error" id="errorDuration">Your appointment duration must be at least 30 minutes.</p>');
-      $.featherlight($element);
-      $noError = false;
-    }
-    else
-    {
-      $('#errorDuration').remove();
-      $duration = ($('#appointmentDate').datepair('getTimeDiff') / 1000 / 60);
-    }
+        if($("#numMembers").val() >= 1)
+        {
+          $('#errorNumbers').remove();
+        }
 
-    //check reason
-    if($("#appointmentReason").val() == "")
-    {
-      $element = $('<p class="error" id="errorReason">A reason for the appointment must be given. </p>');
-      $.featherlight($element);
-      $noError = false;
-    } else
-    {
-      $('#errorReason').remove();
-    }
+        //Check for errors
+        $noError = true;
 
-    //appointmentWith error checking not yet done
-    if($tempEmail.length == 0)
-    {
-      $element = $('<p class="error" id="errorEmails">All member emails must be given. </p>');
-      $.featherlight($element);
-      $noError = false;
-    } else
-    {
-      $("#errorEmails").remove();
-    }
+        if(checkAppointmentWith() && checkTime() && checkDateAndTime() && checkDuration() && checkReason()  &&  checkNames() && checkEmail())
+        {
+            var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Requesting Appointment </p><p>Please Wait...</p></h6>";
+           $.featherlight(html);
+            requestAppointment();
+        }
+    })
 
+}
 
-    if($temp.length == 0)
-    {
-      $element = $('<p class="error" id="errorNames">All member names must be given. </p>');
-      $.featherlight($element);
-      $noError = false;
-    } else
-    {
-      $("#errorNames").remove();
-    }
-
-    if($('#appointmentWith').val() == "")
-    {
-      $element = $('<p class="error" id="appointmentWithError">Must make an appointment with someone. </p>');
-      $.featherlight($element);
-      $noError = false;
-    } else {
-      $("#appointmentWithError").remove();
-    }
-
+function requestAppointment()
+{
     //send data if no errors
-    if($noError == true)
-    {
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Requesting Appointment</span> Please Wait...(this may take a while)</h6>");
       $.ajax({
         type: "post",
         data: {"appointmentWith" : $('#appointmentWith').val(),
@@ -383,10 +487,15 @@ function validateGlobalSubmit()
         url: "/requestAppointment"
       }). then(function(jsonReturned) {
             $('.featherlight').click();
-            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h6>");
+
           $("#signIn").text(jsonReturned);
           if(jsonReturned != "Time not available"){
 
+            var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Requested Appointment</span> Successfully! An email has been sent.</h6>";
+                        html +=  '<p class="text-left">' +
+                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                  '</p>';
+            $.featherlight(html);
             //cleanup user input on successfull appointment request
             $( ":text" ).val("");
             $( "input[type=email]" ).val("");
@@ -401,13 +510,17 @@ function validateGlobalSubmit()
           else
           {
             $('.featherlight').click();
+
             //var html = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"!</p><br/></h6>";
             $.ajax({
               type: "post",
               data: {"staffID": $("#appointmentWith").val()},
               url: "/dayAvailable"
             }). then(function(jsonReturned) {
-                var html = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p><p>The Following Times Are Unavailable</p></h6>" + jsonReturned;
+                var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p><p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
+                                        html +=  '<p class="text-left">' +
+                                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                                  '</p>';
                  $.featherlight(html);
             });
 
@@ -415,9 +528,5 @@ function validateGlobalSubmit()
           }
       window.scrollTo(0, 0);
      });
-    } else {
-      $("#signIn").text("Request an appointment");
-      window.scrollTo(0, 0);
-    }
-  });
+
 }

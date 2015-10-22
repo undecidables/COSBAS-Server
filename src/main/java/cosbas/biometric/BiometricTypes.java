@@ -15,12 +15,13 @@ import cosbas.biometric.validators.exceptions.BiometricTypeException;
  *
  */
 public enum BiometricTypes {
-    CODE (CodeValidator.class, NoProcessing.class),
-    FACE (FaceValidator.class, FacialProcessing.class),
-    FINGER (FingerprintValidator.class, NoProcessing.class);
+    CODE(CodeValidator.class, NoProcessing.class),
+    FACE(FaceValidator.class, FacialProcessing.class),
+    FINGER(FingerprintValidator.class, NoProcessing.class);
 
     public final Class<? extends AccessValidator> validatorClass;
     public final Class<? extends BiometricsPreprocessor> preprocessorClass;
+
     BiometricTypes(Class<? extends AccessValidator> validatorClass, Class<? extends BiometricsPreprocessor> preprocessorClass) {
         this.validatorClass = validatorClass;
         this.preprocessorClass = preprocessorClass;

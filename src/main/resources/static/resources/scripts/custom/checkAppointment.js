@@ -3,6 +3,8 @@ $(document).ready(function() {
       /**
       * Checks for the appointment ID in the URL, if present it fills it into the appointment ID input box
       */
+
+      handleDynamicInputClicks();
       if(document.title == "Check Appointment Status"){
           $("#appointmentID").val(getUrlParameter('ID'));
         }
@@ -48,8 +50,11 @@ function checkValidAppointmentID()
         $('.featherlight').click();
       }
       $noError = false;
-      $element = $('<p class="error" id="errorID">A valid appointment ID has to be entered. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
+                  html +=  '<p class="text-left">' +
+                              '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                            '</p>';
+      $.featherlight(html);
     }
 }
 
@@ -72,8 +77,11 @@ function checkValidUserChecker()
         $('.featherlight').click();
       }
       $noError = false;
-      $element = $('<p class="error" id="statusError">You must enter who it is that wants to check the appointment status. </p>');
-      $.featherlight($element);
+      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
+                        html +=  '<p class="text-left">' +
+                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
+                                  '</p>';
+      $.featherlight(html);
     }
 }
 
@@ -104,6 +112,8 @@ function checkAppointment()
         $("#requestedBy").val("");
       });
       window.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, 0);
     }
 }
 
@@ -126,4 +136,13 @@ function getUrlParameter(parameter)
         }
     }
     return "";
+}
+
+
+function handleDynamicInputClicks()
+{
+
+     $(document.body).on('click', '.btnLightbox' ,function(){
+                        $('.featherlight').click();
+                    });
 }
