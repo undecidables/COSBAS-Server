@@ -10,16 +10,15 @@ import com.google.common.base.Joiner;
 import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.appointment.Appointments;
+import cosbas.biometric.BiometricSystem;
+import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
 import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.permissions.PermissionManager;
-import cosbas.permissions.PermissionId;
 import cosbas.permissions.Permission;
-import cosbas.biometric.BiometricSystem;
-import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.permissions.PermissionId;
+import cosbas.permissions.PermissionManager;
 import cosbas.user.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -476,10 +475,12 @@ public class AppointmentRestController {
       }
         
       if(users.size() == 0){
-        returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No users on the system</span></h4>";      
-      } 
+          returnPage += "<div id=\"permissionAuthorization\" class=\"wow fadeIn alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> No Users On The System</div>";
+
+
+      }
     } else {
-      returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No users on the system</span></h4>";      
+        returnPage += "<div id=\"permissionAuthorization\" class=\"wow fadeIn alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> No Users On The System</div>";
     }
     return returnPage;
   }

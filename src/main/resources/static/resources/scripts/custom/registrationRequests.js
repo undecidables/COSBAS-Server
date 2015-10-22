@@ -21,7 +21,8 @@ $(document).ready(function() {
             		$("#requests").append(jsonReturned);
             		$("#denyDiv").show();
             	} else {
-                $("#loadingRequests").html("<span>You are not authorized </span>to view this content");
+
+                $("#requests").html(getErrorMessage("You are not authorized to view this content", "UNAUTHORIZED"));
               }
             });
           });
@@ -38,7 +39,7 @@ function acceptReqistrationListener()
 {
      //Click accept
       $(document).on('click', '.accept', (function(e) {
-       $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Request</span> Please Wait...</h6>");
+      spawnBusyMessage("Approving Request");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -51,13 +52,13 @@ function acceptReqistrationListener()
             if(jsonReturned != "Request approved"){
               window.scrollTo(0, 0);
               $('.featherlight').click();
-              $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Error " + jsonReturned + " occured</span> could not aprove request</h6>");
+              spawnErrorMessage("Unable to Approve Request: " + jsonReturned);
             } else {
               $('.featherlight').click();
             //  location.reload();
               tempThis.parent().parent().parent().parent().remove();
               if(tempChildren - 1 == 0){
-                $("#requests").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No registration requests pending</span></h4>");
+                $("#requests").append(getWarningMessage("No pending registration requests"));
               }
             }
           });
@@ -73,7 +74,7 @@ function denyRegistrationListener()
 {
     //Click deny
       $(document).on('click', '.deny', (function(e) {
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Request</span> Please Wait...</h6>");
+        spawnBusyMessage("Denying Request");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -85,13 +86,13 @@ function denyRegistrationListener()
             if(jsonReturned != "Request denied"){
               window.scrollTo(0, 0);
               $('.featherlight').click();
-              $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Error " + jsonReturned + " occured</span> could not deny request</h6>");
+             spawnErrorMessage("Unable to Deny Request: " + jsonReturned);
             } else {
               //location.reload();
               $('.featherlight').click();
               tempThis.parent().parent().parent().parent().remove();
               if(tempChildren - 1 == 0){
-                $("#requests").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No registration requests pending</span></h4>");
+                $("#requests").append(getWarningMessage("No pending registration requests"));
               }
             }
           });
@@ -106,7 +107,7 @@ function handleDenyAllAppointments()
     $(document).on('click', '#DenyAll', (function(e) {
         $('.deny').click();
         $("#requests").empty();
-        $("#requests").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No registration requests pending</span></h4>");
+        $("#requests").append(getWarningMessage("No pending registration requests"));
       }));
 }
 });

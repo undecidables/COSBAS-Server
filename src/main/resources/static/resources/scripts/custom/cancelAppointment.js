@@ -34,15 +34,15 @@ function cancelAppointment()
      //send data if no errors
     if(checkValidAppointmentID() && checkValidAppointmentCancellee())
     {
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Cancelling Appointment</span> Please Wait...</h6>");
-      $.ajax({
+        spawnBusyMessage("Cancelling Appointment");
+        $.ajax({
         type: "post",
         data: {"cancellee" : $('#cancelBy').val(),
                "appointmentID" : $('#appointmentID').val()},
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $('.featherlight').click();
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h6>");
+        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>"+jsonReturned+"</p>!</h6>");
         $("#appointmentID").val("");
         $("#cancelBy").val("");
       });
@@ -63,11 +63,8 @@ function checkValidAppointmentCancellee()
     }
     else
     {
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
-                              html +=  '<p class="text-left">' +
-                                          '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                                        '</p>';
-            $.featherlight(html);
+
+      spawnErrorMessage("Please enter your name");
       return false;
     }
 }
@@ -94,11 +91,7 @@ function checkValidAppointmentID()
         $('.featherlight').click();
       }
       $noError = false;
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
-                        html +=  '<p class="text-left">' +
-                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                                  '</p>';
-            $.featherlight(html);
+      spawnErrorMessage("Please enter an appointment ID");
     }
     return $noError;
 }

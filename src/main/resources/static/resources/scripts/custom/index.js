@@ -82,7 +82,7 @@ function checkCalendarLinked()
          }).then(function(jsonReturned) {
            if(jsonReturned != "Linked")
            {
-             var html = "<h6 class=\"page-header\">Choose your calendar </h6><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
+             var html = "<h6 class=\"section-title\">Choose your calendar </h6><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
              $.featherlight(html);
            }
          });

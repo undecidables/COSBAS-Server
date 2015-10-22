@@ -114,6 +114,11 @@ html, body {
     color: #cccc99;
 }
 
+.alert
+{
+    padding: 64px 20px;
+    font-size: 1.5em;
+}
 .section-title {
     color: #003366;
     padding: 64px 20px;
@@ -439,4 +444,19 @@ h2
     border-top: 1px solid #003366;
     padding: 2em;
 
+}
+
+.errorIn
+{
+    background: #fff;
+    border: 1px solid lightgrey;
+}
+
+.alert
+{
+    text-align: center;
+}
+.alert > strong
+{
+    font-size: 1em;
 }

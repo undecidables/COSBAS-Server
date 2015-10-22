@@ -9,13 +9,17 @@
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
-				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Change</span> Permissionss</h1>
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Change</span> Permissions</h1>
 				<div class="row">
 					<div class="contact-form">
 						<form role="form" method="post">
 							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
-								<h2 id="permissionAuthorization" class="section-title wow fadeIn"
-														   data-wow-delay=".2s"><span>You are not authorized</span> to change permissions</h2>
+								<div id="permissionAuthorization" class="wow fadeIn alert alert-warning"
+									 data-wow-delay=".2s"><strong><i class="fa fa-exclamation-triangle"></i>
+									INFORMATION: </strong><br/> You are not authorized to change permissions
+								</div>
+
+
 								<div id="permissionForm">
 									<label for="users">User: </label><select id="users" name = "users">
 
@@ -23,7 +27,8 @@
 									<label for="permissions">Permissions: </label><div id="permissions" name="permissions">
 										
 									</div>
-									<label for="newPermission">New Permission: </label><select id="newPermissions" name="newPermission">
+									<label for="newPermissions">New Permission: </label><select id="newPermissions"
+																								name="newPermission">
 
 									</select>
 									<button type="submit" id="update" class="btn btn-common">
@@ -39,6 +44,24 @@
 		<div class="push"></div>
 	</section>
 	<object th:include="footer" th:remove="tag"/>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
 	<script src="resources/scripts/custom/changePermissions.js"></script>
 	</body>
 </html>
