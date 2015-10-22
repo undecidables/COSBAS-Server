@@ -117,7 +117,6 @@ html, body {
 .section-title {
     color: #003366;
     padding: 64px 20px;
-    padding-bottom: 10px;
 }
 
 .controls
@@ -419,4 +418,25 @@ label >  i {
 
 nav{
     float: left;
+}
+
+h2
+{
+    margin-top: 0;
+    text-align: center;
+}
+
+.cal
+{
+
+    padding: 2em;
+    border-right: 1px solid #003366;
+    border-top: 1px solid #003366;
+}
+
+.todayAppoint
+{
+    border-top: 1px solid #003366;
+    padding: 2em;
+
 }
