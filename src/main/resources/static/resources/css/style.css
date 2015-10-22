@@ -119,6 +119,17 @@ html, body {
     padding: 64px 20px;
     font-size: 1.5em;
 }
+
+.fadeInLeft
+{
+    padding: 0;
+}
+
+.cal
+{
+    padding: 90px 0px;
+    padding-bottom: 10px;
+}
 .section-title {
     color: #003366;
     padding: 64px 20px;
@@ -431,17 +442,10 @@ h2
     text-align: center;
 }
 
-.cal
-{
 
-    padding: 2em;
-    border-right: 1px solid #003366;
-    border-top: 1px solid #003366;
-}
 
 .todayAppoint
 {
-    border-top: 1px solid #003366;
     padding: 2em;
 
 }
@@ -459,4 +463,29 @@ h2
 .alert > strong
 {
     font-size: 1em;
+}
+
+.btn-common
+{
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        margin: 10px 20px;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+        margin: 0;
+        background: #003366;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        width: 100%;
+        padding: 15px;
+}
+
+#dayAppointments
+{
+    visibility: hidden;
+    display:none;
 }

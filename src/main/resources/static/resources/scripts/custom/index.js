@@ -16,9 +16,18 @@ $(document).ready(function() {
 
      });
 
+
     //Checks if a calendar has already been linked or not
      checkCalendarLinked();
      handleDynamicInputClicks();
+
+
+     $('#todayAppointBtn').on("click", function(e)
+     {
+        e.preventDefault();
+        var html = $('#dayAppointments').html();
+         $.featherlight(html);
+     });
 
     }
 });
@@ -33,17 +42,23 @@ function spawnCalendar(returned)
 {
      /****************Callendar**************************/
    $('#calendar').fullCalendar({
+    header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
        defaultDate: $date,
        editable: false,
        draggable: false,
        theme: true,
        eventLimit: true, // allow "more" link when too many events
        events: returned,
+        defaultView: 'month',
        viewRender: function(currentView){
          $('#loadingCalendar').remove();
-         $(".fc-prev-button").hide();
+         /*$(".fc-prev-button").hide();
          $(".fc-next-button").hide();
-         $(".fc-today-button").hide();
+         $(".fc-today-button").hide();*/
        },
        eventRender: function (event, element) {
          element.attr('href', 'javascript:void(0);');
@@ -64,6 +79,7 @@ function spawnCalendar(returned)
          });
      }
      });
+
 
 
  window.scrollTo(0, 0);
