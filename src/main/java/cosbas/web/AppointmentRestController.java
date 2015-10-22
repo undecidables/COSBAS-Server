@@ -493,7 +493,7 @@ public class AppointmentRestController {
     try{
       biometricSystem.removeUser(staffID);
     }
-    catch(Exception)
+    catch(Exception e)
     {
       return e.toString();
     }
@@ -537,14 +537,14 @@ public class AppointmentRestController {
     String returnPage = "";
 
     if(permissions != null){
-      for(int i = 0; i < permissions.size(); i++)
+      for(int i = 0; i < permissions.length; i++)
       {
         PermissionId permission = permissions[i];
 
         returnPage += "<option>"+permission+"</option>";
       }
         
-      if(permissions.size() == 0){
+      if(permissions.length == 0){
         returnPage += "no permissions";      
       } 
     } else {
@@ -565,11 +565,11 @@ public class AppointmentRestController {
     if(permissions != null){
       for(int i = 0; i < permissions.size(); i++)
       {
-        PermissionId permission = permissions.get(i);
+        Permission permission = permissions.get(i);
 
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
-                      "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permision.toString() + "</p></td>" +
+                      "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
                       "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
                       "</tr>" +
                       "</table>";
@@ -586,7 +586,7 @@ public class AppointmentRestController {
 
   /**
    * Function used to add a permission
-   * @return Returns string with the outcome of the function
+   * @return the string "Permission added"
    */
   @RequestMapping(method= RequestMethod.POST, value="/addPermission")
   public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission, 
@@ -622,14 +622,9 @@ public class AppointmentRestController {
       }
     }
 
-    try{
-      permissionManager.addPermission(staffID, permission);
-    } 
-    catch(Exception)
-    {
-      return e.toString();
-    }
-    return "Permission added"
+    permissionManager.addPermission(staffID, permission);
+  
+    return "Permission added";
   }
 
   /**
@@ -673,13 +668,10 @@ public class AppointmentRestController {
     try{
       permissionManager.removePermission(staffID, permission);
     } 
-    catch (Exception){
+    catch (Exception e){
       return e.toString();
     }
 
     return "Permission removed";
   }
-
-  //remove user from system
-  */
 }

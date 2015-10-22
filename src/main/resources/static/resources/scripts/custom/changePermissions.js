@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   getUsers();
   getPermissions();
-
+  $("#permissionForm").hide();
 	 /*
     * Calls the controller function to get all users and their permissions
     */
@@ -15,6 +15,7 @@ $(document).ready(function() {
       }).then(function(appovalReturned) {
       if(appovalReturned == "authorized")
         {
+          $("#permissionForm").show();
           $("#permissions").empty();
           getUserPermissions();
           removePermissionListener();
@@ -27,8 +28,7 @@ $(document).ready(function() {
         }
       });
       window.scrollTo(0, 0);
-     });
-    }
+     }
 
     //Function that gets all users of the system
     function getUsers(){
@@ -63,10 +63,10 @@ $(document).ready(function() {
         }).then(function(jsonReturned) {
             $("#permissions").empty();
             $("#permissions").append(jsonReturned);
-          }
-        });
+          });
+        }
       }
-    }
+    
 
     //Listener for the update click event. Updates the selected user's permissions
     function addPermission(){
@@ -81,7 +81,7 @@ $(document).ready(function() {
           }).then(function(jsonReturned) {
             getUserPermissions();
           });
-      }
+      }));
     }
 
     function removePermission(){
@@ -96,6 +96,6 @@ $(document).ready(function() {
           }).then(function(jsonReturned) {
             getUserPermissions();
           });
-      }
+      }));
     }
-	}
+});

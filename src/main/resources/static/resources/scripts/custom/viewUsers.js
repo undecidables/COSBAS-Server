@@ -3,7 +3,6 @@ $(document).ready(function() {
     * Calls the controller function to get all registered users on the system
     */
      if(document.title == "Registered Users"){
-     changePermisionListener();
      removeUserListener();
      $.ajax({
             type: "post",
@@ -23,17 +22,6 @@ $(document).ready(function() {
             	   $(".deny").show();
             	}
             });
-       /*   $.ajax({
-            type: "post",
-            data: {"authorized": "SUPER"},
-            url: "/authorizedToAccessRequests"
-            }).then(function(appovalReturned) {
-              if(appovalReturned == "authorized")
-              {
-                 $(".change").show(); 
-                 $(".userPermissions").show();
-              }
-            });*/
           });
           window.scrollTo(0, 0);
 	}

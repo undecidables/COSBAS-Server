@@ -16,25 +16,22 @@
 					<div class="contact-form">
 						<form role="form" method="post">
 							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
-								<div class="controls" id="denyDiv">
-									<p class="text-left">Deny All Requests:</p>
-									<input type="Button" class="contact_input contactA" value="Deny all" id="DenyAll"/>
-									<i class="fa fa-user"></i>
-								</div>
-								<br/>
-							</div>
-							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
-								User: <select id="users">
-
-								</select>
-								Permissions: <div id="permissions">
-									<h2 id="permissionAuthorization" class="section-title wow fadeIn"
+								<h2 id="permissionAuthorization" class="section-title wow fadeIn"
 														   data-wow-delay=".2s"><span>You are not authorized</span> to change permissions</h2>
-								</div>
-								New Permission: <select id="newPermissions">
+								<div id="permissionForm">
+									<label for="users">User: </label><select id="users" name = "users">
 
-								</select>
-								<input type="submit" id="update" value="Add permission"/>
+									</select>
+									<label for="permissions">Permissions: </label><div id="permissions" name="permissions">
+										
+									</div>
+									<label for="newPermission">New Permission: </label><select id="newPermissions" name="newPermission">
+
+									</select>
+									<button type="submit" id="update" class="btn btn-common">
+										Add Permission
+									</button>
+								</div>
 							</div>
 						</form>
 					</div>

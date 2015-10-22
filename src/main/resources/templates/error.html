@@ -14,12 +14,16 @@
 				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Check Appointment</span> Status</h1>
 
 				<div class="row">
-					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
+					java.lang.NoSuchMethodError: org.springframework.security.core.userdetails.UsernameNotFoundException.
+					<div th:if='${#httpServletRequest.getAttribute("javax.servlet.error.exception").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
+						<script>window.location.href = "/login?error=1"</script>
+					</div>
+					<!--div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
 						<script>window.location.href = "/login?error=1"</script>
 					</div>
 					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login"}'>
 						<script>window.location.href = "/login?error=1"</script>
-					</div>
+					</div-->
 					<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
 						<div class="controls" id="signIn">
 							Unfortunately an error has occured on the server.
