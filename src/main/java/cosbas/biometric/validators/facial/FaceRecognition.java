@@ -49,6 +49,7 @@ import cosbas.biometric.validators.exceptions.ValidationException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -67,6 +68,7 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
  * [@author Renette Ros}
  */
 @Component
+@Scope("singleton")
 public class FaceRecognition {
 
     public class Trainer implements Runnable {
@@ -100,7 +102,6 @@ public class FaceRecognition {
     public void trainFromDB() {
         try {
             trainingLock.lock();
-            updateData();
             List<BiometricData> datalist = biometricsRepository.findByType(BiometricTypes.FACE);
             if (datalist != null && !datalist.isEmpty()) {
                 learn(datalist);
@@ -168,7 +169,7 @@ public class FaceRecognition {
             data.setProjectedTrainFace(projectedTrainFace);
 
             RecognizerData finalRecogznizerData = data.getFinalRecogznizerData();
-            dataRepository.save(finalRecogznizerData);
+
             updateData(finalRecogznizerData);
         } finally {
             trainingLock.unlock();
@@ -220,7 +221,7 @@ public class FaceRecognition {
      * Loads Biometric Face Data list into the recognizer for training purposes.
      * @param dataList List of biometric data objects fetched from database.
      * @param data The data object to store recognizer variables in.
-     * @return List of IPL images to process with JavaCV
+     * @return List of IPL images to processAccess with JavaCV
      */
 
     private List<IplImage> loadFaceImageList(List<BiometricData> dataList, TemporaryRecognizerData data) {
@@ -345,14 +346,12 @@ public class FaceRecognition {
             dataUpdateLock.lock();
             RecognizerData newData = dataRepository.findFirstByOrderByUpdatedDesc();
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
-                if (data == null || newData.updated.isAfter(data.updated)) {
-                    this.data = newData;
-                    dataRepository.deleteAll();
-                    dataRepository.save(newData);
-                }
+                this.data = newData;
+                dataRepository.deleteAll();
+               // dataRepository.save(newData);
             }
         }  finally {
-                dataUpdateLock.unlock();
+            dataUpdateLock.unlock();
         }
     }
 
@@ -363,7 +362,7 @@ public class FaceRecognition {
 
                     this.data = newData;
                     dataRepository.deleteAll();
-                    dataRepository.save(newData);
+                   // dataRepository.save(newData);
 
             }
         }  finally {
@@ -414,7 +413,12 @@ public class FaceRecognition {
 
     public boolean needsTraining() {
         updateData();
-        return data.needsTraining();
+        try {
+            trainingLock.lock();
+            return data == null || data.needsTraining();
+        } finally {
+            trainingLock.unlock();
+        }
     }
 
     private class TrainingUpdater implements Runnable {
@@ -424,8 +428,11 @@ public class FaceRecognition {
             try {
                 updateData();
                 trainingLock.lock();
-                data.setNeedsTraining();
+                dataUpdateLock.lock();
+                if (data != null)
+                    data.setNeedsTraining();
             } finally {
+                dataUpdateLock.unlock();
                 trainingLock.unlock();
             }
         }

@@ -1,8 +1,10 @@
 package cosbas.permissions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -11,11 +13,22 @@ import java.util.List;
 @Service
 public class PermissionManager {
 
-    private PermissionsDAO permissionsRepository;
+    @Value("${permissions.newSuper}")
+    String newSuper;
+
+    private final PermissionsDAO permissionsRepository;
 
     @Autowired
     public PermissionManager(PermissionsDAO permissionsRepository) {
         this.permissionsRepository = permissionsRepository;
+    }
+
+    @PostConstruct
+    private void setUp() {
+        List<Permission> perms = usersForPermission(PermissionId.SUPER);
+        if (perms == null || perms.isEmpty()) {
+            addPermission(newSuper, PermissionId.SUPER);
+        }
     }
 
     public List<Permission> usersForPermission(PermissionId permissions) {
@@ -27,7 +40,8 @@ public class PermissionManager {
     }
 
     public boolean hasPermission(String user, PermissionId permissionId) {
-        return (permissionsRepository.findByUserIDAndPermission(user, permissionId)) != null;
+        return (permissionsRepository.findByUserIDAndPermission(user, permissionId) != null)
+               || (permissionsRepository.findByUserIDAndPermission(user, PermissionId.SUPER) != null);
     }
 
     public void addPermission(String user, PermissionId permissionId) {

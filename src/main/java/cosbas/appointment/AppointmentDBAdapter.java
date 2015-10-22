@@ -1,5 +1,6 @@
 package cosbas.appointment;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -12,7 +13,10 @@ import java.util.List;
  */
 public interface AppointmentDBAdapter extends CrudRepository<Appointment, String> {
 
+    @Cacheable("Appointments-staff")
     List<Appointment> findByStaffID(String staffID);
+    @Cacheable("Appointments-id")
     Appointment findById(String id);
+    @Cacheable("Appointments-status")
     List<Appointment> findByStatusLike(String status);
 }
