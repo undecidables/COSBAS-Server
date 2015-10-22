@@ -422,7 +422,8 @@ public class FaceRecognition {
             try {
                 updateData();
                 trainingLock.lock();
-                data.setNeedsTraining();
+                if (data != null)
+                    data.setNeedsTraining();
             } finally {
                 trainingLock.unlock();
             }
