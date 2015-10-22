@@ -168,7 +168,7 @@ public class FaceRecognition {
             data.setProjectedTrainFace(projectedTrainFace);
 
             RecognizerData finalRecogznizerData = data.getFinalRecogznizerData();
-            dataRepository.save(finalRecogznizerData);
+            //dataRepository.save(finalRecogznizerData);
             updateData(finalRecogznizerData);
         } finally {
             trainingLock.unlock();
@@ -347,7 +347,7 @@ public class FaceRecognition {
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
                 this.data = newData;
                 dataRepository.deleteAll();
-                dataRepository.save(newData);
+               // dataRepository.save(newData);
             }
         }  finally {
             dataUpdateLock.unlock();
@@ -361,7 +361,7 @@ public class FaceRecognition {
 
                     this.data = newData;
                     dataRepository.deleteAll();
-                    dataRepository.save(newData);
+                   // dataRepository.save(newData);
 
             }
         }  finally {

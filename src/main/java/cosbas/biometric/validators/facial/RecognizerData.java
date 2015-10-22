@@ -17,33 +17,24 @@ public class RecognizerData {
 
     @Id
     String id;
-    @Transient
+
     private boolean needsTraining;
 
-    @Transient
     public List<String> personNames;
-    @Transient
     public List<opencv_core.IplImage> trainingFaces;
-    @Transient
     public opencv_core.IplImage[] eigenVectors;
-    @Transient
     public opencv_core.IplImage pAvgTrainImg;
-    @Transient
     public opencv_core.CvMat eigenValues;
-    @Transient
     public opencv_core.CvMat projectedTrainFace;
-    @Transient
     public opencv_core.CvMat personNumTruthMat;
-
-    @Transient
     public LocalDateTime updated;
 
-    @PersistenceConstructor
+
     private RecognizerData() {
         needsTraining = true;
         updated = LocalDateTime.now().minusDays(1);
     }
-    //@PersistenceConstructor
+    @PersistenceConstructor
     protected RecognizerData(String id, List<String> personNames,
                              List<opencv_core.IplImage> trainingFaces,
                              opencv_core.IplImage[] eigenVectors,
