@@ -344,14 +344,12 @@ public class FaceRecognition {
             dataUpdateLock.lock();
             RecognizerData newData = dataRepository.findFirstByOrderByUpdatedDesc();
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
-                if (data == null || newData.updated.isAfter(data.updated)) {
-                    this.data = newData;
-                    dataRepository.deleteAll();
-                    dataRepository.save(newData);
-                }
+                this.data = newData;
+                dataRepository.deleteAll();
+                dataRepository.save(newData);
             }
         }  finally {
-                dataUpdateLock.unlock();
+            dataUpdateLock.unlock();
         }
     }
 
@@ -413,7 +411,7 @@ public class FaceRecognition {
 
     public boolean needsTraining() {
         updateData();
-        return data.needsTraining();
+        return data == null || data.needsTraining();
     }
 
     private class TrainingUpdater implements Runnable {
