@@ -35,8 +35,8 @@
                         <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
                             <div class="controls">
                                 <p class="text-left">EMPLID</p>
-                                <i class="fa fa-user"></i>
-                                <input class="contact_input" name="username" type="text"
+                                <label for="username"><i class="fa fa-user"></i></label>
+                                <input id="username" class="contact_input" name="username" type="text"
                                        required="required" autofocus="autofocus" value="u0000000"/>
 
                             </div>
@@ -44,8 +44,9 @@
                         <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
                             <div class="controls">
                                 <p class="text-left">Password</p>
-                                <i class="fa fa-user"></i>
-                                <input class="contact_input" name="password" type="password" value="password"
+                                <label for="password"><i class="fa fa-lock"></i></label>
+                                <input id="password" class="contact_input" name="password" type="password"
+                                       value="password"
                                        required="required"/>
 
                             </div>
