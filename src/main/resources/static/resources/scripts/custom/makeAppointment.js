@@ -301,7 +301,8 @@ function validateEmailInput()
 function validateGlobalSubmit()
 {
     var dateVar = calculateDate();
-        var timeVar = calculateTime();
+    var timeVar = calculateTime();
+
     //check time
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
@@ -322,7 +323,8 @@ function validateGlobalSubmit()
 function checkTime()
 {
     var dateVar = calculateDate();
-        var timeVar = calculateTime();
+    var timeVar = calculateTime();
+
     //check time
     if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
     {
@@ -517,7 +519,7 @@ function requestAppointment()
               data: {"staffID": $("#appointmentWith").val()},
               url: "/dayAvailable"
             }). then(function(jsonReturned) {
-                var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p><p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
+                var html = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><p>Time Not Available!</p></h6>";//<p>The Following Times Are Unavailable</p></h6>"+ jsonReturned;
                                         html +=  '<p class="text-left">' +
                                                     '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
                                                   '</p>';

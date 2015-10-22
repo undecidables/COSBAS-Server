@@ -349,11 +349,11 @@ public class AppointmentRestController {
     List<RegisterRequest> requests = biometricSystem.getRegisterRequests();
     
     String returnPage = "";
-
     if(requests != null){
       for(int i = 0; i < requests.size(); i++)
       {
         String[] requestDetails = requests.get(i).toString().split(",");
+
         String[] requestDateTime = requestDetails[0].split("T");
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
@@ -514,16 +514,20 @@ public class AppointmentRestController {
       for(int i = 0; i < users.size(); i++)
       {
         String user = users.get(i).toString();
-
-        returnPage += "<option>"+user+"</option>";
+        if(i == 0){
+          returnPage += "<option selected=\"selected\">"+user+"</option>";
+        } else {
+          returnPage += "<option>"+user+"</option>";
+        }
       }
         
       if(users.size() == 0){
-        returnPage += "no users";      
+        returnPage += "<option selected=\"selected\">no users</option>";      
       } 
     } else {
-      returnPage += "no users";      
+      returnPage += "<option  selected=\"selected\">no users</option>";      
     }
+   
     return returnPage;
   }
 
@@ -629,9 +633,9 @@ public class AppointmentRestController {
 
   /**
    * Function used to remove a permission
-   * @return Returns string with the outcome of the function
+   * @return Returns "Permission removed"
    */
-  @RequestMapping(method= RequestMethod.POST, value="/removePermision")
+  @RequestMapping(method= RequestMethod.POST, value="/removePermission")
   public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission, 
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
@@ -665,12 +669,7 @@ public class AppointmentRestController {
       }
     }
 
-    try{
-      permissionManager.removePermission(staffID, permission);
-    } 
-    catch (Exception e){
-      return e.toString();
-    }
+    permissionManager.removePermission(staffID, permission);
 
     return "Permission removed";
   }
