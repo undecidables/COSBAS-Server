@@ -1,5 +1,11 @@
 $(document).ready(function(e) {
-    $("body").css("visibility", "visible");
-    e.stopImmediatePropagation();
-     $('.nav li').removeClass('active');//or $('.active').removeClass('active');
-});
+       $("body").css("visibility", "visible");
+
+
+       $('.dropdown').on('shown.bs.dropdown', function () {
+         $('.active').removeClass('active');
+       })
+
+
+
+   });
