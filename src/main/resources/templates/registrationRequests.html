@@ -6,8 +6,6 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
@@ -35,17 +33,10 @@
 				</div>
 			</div>
 		</div>
-	</section>
 		<div class="push"></div>
-
 	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
-			</div>
-		</div>
-	</footer>
+	<object th:include="footer" th:remove="tag"/>
+
 
 	<!-- Include Bootstrap plugin -->
 	<script src="resources/assets/js/bootstrap.min.js"></script>

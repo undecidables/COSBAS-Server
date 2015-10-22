@@ -1,3 +1,10 @@
+
+
+body
+{
+    visibility:hidden;
+}
+
 .fa-bars
 {
     color: white;
@@ -13,14 +20,15 @@ html, body {
 #contact
 {
     min-height: 100%;
-    	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-    	height: 100%;
-    	margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+    height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
 }
 .footer, .push {
-	height: 155px; /* .push must be the same height as .footer */
-    padding: 4em;
+	height: 100px; /* .push must be the same height as .footer */
+    padding: 2em;
 }
+
 
 .footer
 {
@@ -138,8 +146,6 @@ background: #cccc99;
 {
     font-size: 18px;
     color: #0BAFA0;
-    width: 48px;
-    height: 48px;
     background-color: #ffffff;
     padding: 12px;
     text-align: center;
@@ -147,7 +153,7 @@ background: #cccc99;
 }
 #contact .contact-form .btn
 {
-    width:98%;
+    width:100%;
 }
 
 #footer .copyright
@@ -356,3 +362,61 @@ table {
 
 
 
+
+
+.dropdown-menu
+{
+    background:#003366;
+    width: 200%;
+    padding: 1em;
+    min-width: 250px;
+}
+
+@media (max-width: 1024px) and (min-width: 768px)
+#header .navbar-brand img {
+    padding: 0;
+}
+
+@media (max-width: 1024px) and (min-width: 768px)
+#header .navbar-brand img {
+    padding: 0;
+
+}
+
+/*
+#contact .contact-form .btn {
+
+width: 100%;
+}
+*/
+#contact .contact-form .controls input.contact_input {
+    width: 85%;
+}
+
+label
+{
+    width: 15%;
+}
+
+label >  i {
+    width: 100%;
+}
+/*
+
+
+.fadeInLeft > .controls > .contact_input  {
+    float: left;
+}
+
+.fadeInRight > .controls > .contact_input  {
+    float: right;
+}
+
+.fadeInRight > .controls > .fa  {
+    float: right;
+}*/
+
+
+nav{
+    float: left;
+}

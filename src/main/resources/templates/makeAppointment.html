@@ -6,8 +6,6 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
@@ -59,7 +57,7 @@
 								</div>
 								<div class="controls" id="appointmentMadeBy">
 									<div class="appointmentDetails">
-										<p class="text-left">Appointment made by (your name/team members' names): </p>
+										<p class="text-left">Appointment made by: </p>
 										<input class="contact_input appointmentBy" required="required" type="text" id="appointmentBy" name="appointmentBy[]"/>
 										<label for="appointmentBy"><i class="fa fa-user"></i></label>
 									</div>
@@ -70,7 +68,7 @@
 									<label for="email"><i class="fa fa-envelope"></i></label>
 								</div>
 							</div>
-							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+							<div class="col-md-12 wow fadeInUp" data-wow-delay="0.5s">
 								<button type="submit" id="makeAppointmentRequest" class="btn btn-common">Request
 									Appointment
 								</button>
@@ -80,19 +78,9 @@
 					</div>
 				</div>
 			</div>
-
 		<div class="push"></div>
-
 	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
-			</div>
-		</div>
-	</footer>
-
-
+	<object th:include="footer" th:remove="tag"/>
 	<!-- Include Bootstrap plugin -->
 	<script src="resources/assets/js/bootstrap.min.js"></script>
 	<!-- One page Nav plugin -->
