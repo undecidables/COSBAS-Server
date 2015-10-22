@@ -18,21 +18,25 @@ public abstract class FaceDetector<T> {
     @Autowired
     final ImageProcessor<T> converter;
 
-    public void setImageSize(int imageSize) {
-        this.imageSize = imageSize;
+    public void setImageSize(int imageWidth, int imgeHeight) {
+        this.imageWidth = imageWidth;
+        this.imageHeight = imgeHeight;
     }
 
-    @Value("${faces.imageSize}")
-    private int imageSize;
+    @Value("${faces.imageWidth}")
+    private int imageWidth;
+    @Value("${faces.imageHeight}")
+    private int imageHeight;
 
     @Autowired
     protected FaceDetector(ImageProcessor<T> converter) {
         this.converter = converter;
     }
 
-     protected FaceDetector(ImageProcessor<T> converter, int imageSize) {
+     protected FaceDetector(ImageProcessor<T> converter, int imageWidth, int imageHeight) {
         this.converter = converter;
-         this.imageSize = imageSize;
+         this.imageWidth = imageWidth;
+         this.imageHeight = imageHeight;
     }
 
     /**
@@ -55,7 +59,7 @@ public abstract class FaceDetector<T> {
         T image = converter.grayScalefromBytes(data);
         List<Rectangle> rectangles = detectFaces(image);
         Rectangle center = mostCenterRect(rectangles, converter.getCenterX(image), converter.getCenterY(image));
-        T result = converter.scaleImage(converter.crop(image, center), imageSize, imageSize);
+        T result = converter.scaleImage(converter.crop(image, center), imageWidth, imageHeight);
 
         return converter.toBytes(result, resultEncoding);
     }
