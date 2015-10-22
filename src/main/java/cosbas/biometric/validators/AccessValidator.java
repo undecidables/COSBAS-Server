@@ -6,6 +6,7 @@ import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.NoUserException;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,11 @@ public abstract class AccessValidator {
     public ValidationResponse validate(BiometricData request, DoorActions action) throws BiometricTypeException {
         if (!checkValidationType(request.getType()))
             throw new BiometricTypeException(this.getClass() + " cannot validate " + request.getType());
-        return identifyUser(request, action);
+        try {
+            return identifyUser(request, action);
+        } catch (ValidationException e) {
+           return ValidationResponse.failedValidation(e.getMessage());
+        }
     }
 
     /**
@@ -61,25 +66,23 @@ public abstract class AccessValidator {
      * @return A validation response with: if approved, success = true and data is the UserID identified"
      * If failure, success = false and the data is the failure message.
      */
-    public abstract ValidationResponse identifyUser(BiometricData request, DoorActions action);
+    public abstract ValidationResponse identifyUser(BiometricData request, DoorActions action) throws ValidationException;
+
 
     /**
      * A function to perform extra actions necessary when registering a user. It handles saving to the database and
      * error checking and can be overridden in base classes.
      * @param request A biometricData
-     * @return The saved requests database ID
+     * @param userID The userID for the user being registered
      * @throws BiometricTypeException when the bioemtric type cannot be validated by this validator.
      * @throws NoUserException When the request object does not contain a userID.
      */
-    public String registerUser(BiometricData request) throws BiometricTypeException, NoUserException {
+    public void registerUser(BiometricData request, String userID) throws BiometricTypeException {
+       request.setUserID(userID);
         if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
-        if (request.getUserID() == null) throw new NoUserException("Cannot register data without a userID");
-        repository.save(request);
-        return request.getId();
     }
 
-    public String registerUser(BiometricData request, String userID) throws BiometricTypeException, NoUserException {
-       request.setUserID(userID);
-        return registerUser(request);
+    public void deregisterUser(BiometricData request) throws BiometricTypeException {
+        if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
     }
 }

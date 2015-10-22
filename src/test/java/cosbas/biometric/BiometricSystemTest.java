@@ -158,13 +158,13 @@ public class BiometricSystemTest {
         RegisterResponse resp = testee.register(req);
         assertFalse(resp.getResult());
 
-        req = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        req = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>(), "");
         resp = testee.register(req);
         assertFalse(resp.getResult());
         verify(repo, never()).save(req);
 
-        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[] {1, 2, 3, 4, 5})));
-        RegisterRequest repoUser = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>());
+        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[] {1, 2, 3, 4, 5})), "");
+        RegisterRequest repoUser = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>(), "");
         when(repo.findByUserID(anyString())).thenReturn(repoUser);
         resp = testee.register(req);
         verify(repo, atLeastOnce()).save(any(RegisterRequest.class));

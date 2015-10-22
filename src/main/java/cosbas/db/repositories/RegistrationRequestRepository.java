@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * {@author Renette Ros}
  */
-public interface RegistrationRequestRepository extends MongoRepository<RegisterRequest, String>, RegisterRequestDAO {
+interface RegistrationRequestRepository extends MongoRepository<RegisterRequest, String>, RegisterRequestDAO {
 }
