@@ -31,7 +31,7 @@ public class User {
         this.contact = new HashSet<>();
     }
 
-    public Collection<ContactDetail> getContact() {
+    public Set<ContactDetail> getContact() {
         return contact;
     }
 

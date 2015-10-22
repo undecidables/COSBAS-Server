@@ -21,6 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class AppointmentController {
@@ -47,6 +50,11 @@ public class AppointmentController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
+        List<String> names = new ArrayList<String>();
+        names.add("Jason");
+        List<String> emails = new ArrayList<String>();
+        emails.add("jasonevans@tuks.co.za");
+        System.out.println(test.makeAppointment("MEvans", LocalDateTime.now().plusHours(3), 30, "Testing", names, emails));
         return "index";
     }
 

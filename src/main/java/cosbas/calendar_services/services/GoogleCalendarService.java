@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * {@author Jason Richard Evans}
@@ -140,7 +137,8 @@ public class GoogleCalendarService extends CalendarService {
         }
 
         //getting the employee id from database.
-        Collection<ContactDetail> empEmail = userRepository.findByUserID(emplid).getContact();
+        Set<ContactDetail> empEmail;
+        empEmail = userRepository.findByUserID(emplid).getContact();
         for (ContactDetail emp: empEmail){
             if (emp.getType() == ContactTypes.EMAIL){
                 attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
