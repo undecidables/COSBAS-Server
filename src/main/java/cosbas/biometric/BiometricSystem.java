@@ -139,8 +139,6 @@ public class BiometricSystem {
         biometricDataRepository.save(dataCollections);
         System.out.print("Saved Data");
         return userManager.addContactDetails(userID, req.getContactDetails());
-        System.out.print("User saved");
-
     }
 
     public void deleteRegistrationRequest(String userID) {
@@ -148,7 +146,6 @@ public class BiometricSystem {
     }
 
     public void removeUser(String id) throws BiometricTypeException {
-        userRepository.delete(id);
         List<BiometricData> dataCollections = biometricDataRepository.deleteByUserID(id);
         for (BiometricData d : dataCollections) {
             AccessValidator v = factory.getValidator(d.getType());
