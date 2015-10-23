@@ -12,18 +12,18 @@ import java.util.Collections;
  */
 @Service
 public class UserManager {
-
-    public UserManager() {
-    }
+    private final UserDAO userRepository;
 
     @Autowired
-    UserDAO userRepository;
-
-    public void addContactDetail(String userID, ContactDetail detail) {
-        addContactDetails(userID, Collections.singletonList(detail));
+    public UserManager() {
+        userRepository = null;
     }
 
-    public void addContactDetails(String userID, Collection<ContactDetail> detailCollections) {
+    public User addContactDetail(String userID, ContactDetail detail) {
+        return addContactDetails(userID, Collections.singletonList(detail));
+    }
+
+    public User addContactDetails(String userID, Collection<ContactDetail> detailCollections) {
         User u = userRepository.findOne(userID);
 
         if (u == null) {
@@ -35,6 +35,7 @@ public class UserManager {
         }
 
         userRepository.save(u);
+        return u;
     }
 
     public void removeContactDetail(String userID, ContactDetail detail) throws NoSuchUserException {
@@ -51,6 +52,10 @@ public class UserManager {
         } else {
             userRepository.save(u);
         }
+    }
+
+    public User getUser(String userID) {
+        return userRepository.findOne(userID);
     }
 
 }

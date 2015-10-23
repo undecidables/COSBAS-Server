@@ -15,6 +15,7 @@ import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.user.User;
 import cosbas.user.UserDAO;
+import cosbas.user.UserManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,12 @@ public class BiometricSystem {
     private BiometricDataDAO biometricDataRepository;
     private ValidatorFactory factory;
     private UserDAO userRepository;
+    private UserManager userManager;
 
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
 
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
@@ -132,16 +138,9 @@ public class BiometricSystem {
 
         biometricDataRepository.save(dataCollections);
         System.out.print("Saved Data");
-        User u = userRepository.findOne(userID);
-
-        if (u == null)
-            u = new User(userID, req.getContactDetails());
-        else
-            u.addContactDetails(req.getContactDetails());
-        System.out.print("Updated User");
-        userRepository.save(u);
+        return userManager.addContactDetails(userID, req.getContactDetails());
         System.out.print("User saved");
-        return u;
+
     }
 
     public void deleteRegistrationRequest(String userID) {
