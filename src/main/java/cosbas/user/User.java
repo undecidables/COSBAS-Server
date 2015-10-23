@@ -3,9 +3,7 @@ package cosbas.user;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@author Renette}
@@ -31,8 +29,12 @@ public class User {
         this.contact = new HashSet<>();
     }
 
-    public Set<ContactDetail> getContact() {
-        return contact;
+    public List<ContactDetail> getContact() {
+        List<ContactDetail> temp = new ArrayList<>();
+        for (ContactDetail c: contact){
+            temp.add(c);
+        }
+        return temp;
     }
 
     public boolean addContactDetail(ContactDetail c) {

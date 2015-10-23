@@ -25,18 +25,13 @@ import java.util.*;
 public class GoogleCalendarService extends CalendarService {
     final String SUMMARY = "COSBAS BOOKING: ";
     private final String CALENDAR_ID = "primary";
+    private com.google.api.services.calendar.Calendar service;
     private CalendarDBAdapter credentialRepository;
     private AppointmentDBAdapter appointmentRepository;
     private UserDAO userRepository;
 
     @Autowired
     private GoogleVariables variables;
-
-    /*@Autowired
-    public void setCalendarServiceFactory(CalendarFactory calendarServiceFactory) {
-        this.calendarServiceFactory = calendarServiceFactory;
-    }*/
-    private com.google.api.services.calendar.Calendar service;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
@@ -52,10 +47,6 @@ public class GoogleCalendarService extends CalendarService {
     public void setUserRepository(UserDAO userRepository){
         this.userRepository = userRepository;
     }
-
-    final String SUMMARY = "COSBAS BOOKING: ";
-    private final String CALENDAR_ID = "primary";
-    private com.google.api.services.calendar.Calendar service;
 
     /**
      * Functionality to get the current week's appointments directly from
@@ -142,13 +133,13 @@ public class GoogleCalendarService extends CalendarService {
         }
 
         //getting the employee id from database.
-        Set<ContactDetail> empEmail;
-        empEmail = userRepository.findByUserID(emplid).getContact();
-        for (ContactDetail emp: empEmail){
+        List<ContactDetail> empEmail = new ArrayList<>();
+        /*empEmail = */userRepository.findByUserID(emplid).getContact();
+        /*for (ContactDetail emp: empEmail){
             if (emp.getType() == ContactTypes.EMAIL){
                 attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
             }
-        }
+        }*/
         event.setAttendees(Arrays.asList(attendees));
 
         EventReminder[] reminderOverride = new EventReminder[]{
@@ -166,11 +157,11 @@ public class GoogleCalendarService extends CalendarService {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
                 List<String> attendants = clientEmail;
-                for (ContactDetail emp: empEmail){
+                /*for (ContactDetail emp: empEmail){
                     if (emp.getType() == ContactTypes.EMAIL){
                         attendants.add(emp.getDetails());
                     }
-                }
+                }*/
                 Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
