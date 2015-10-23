@@ -10,6 +10,7 @@ import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import cosbas.user.User;
 import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,13 +134,16 @@ public class GoogleCalendarService extends CalendarService {
         }
 
         //getting the employee id from database.
-        List<ContactDetail> empEmail = new ArrayList<>();
-        /*empEmail = */userRepository.findByUserID(emplid).getContact();
-        /*for (ContactDetail emp: empEmail){
-            if (emp.getType() == ContactTypes.EMAIL){
-                attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
+        User lecturer = userRepository.findByUserID(emplid);
+        if (lecturer != null) {
+            List<ContactDetail> empEmail = new ArrayList<>();
+            empEmail = lecturer.getContact();
+            for (ContactDetail emp: empEmail){
+                if (emp.getType() == ContactTypes.EMAIL){
+                    attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
+                }
             }
-        }*/
+        }
         event.setAttendees(Arrays.asList(attendees));
 
         EventReminder[] reminderOverride = new EventReminder[]{

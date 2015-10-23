@@ -50,11 +50,6 @@ public class AppointmentController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Principal principal) {
-        List<String> names = new ArrayList<String>();
-        names.add("Jason");
-        List<String> emails = new ArrayList<String>();
-        emails.add("jasonevans@tuks.co.za");
-        System.out.println(test.makeAppointment("MEvans", LocalDateTime.now().plusHours(3), 30, "Testing", names, emails));
         return principal == null ? "redirect:/makeAppointment" : "index";
     }
 
