@@ -22,12 +22,15 @@ public interface BiometricDataDAO extends CrudRepository<BiometricData, String> 
     BiometricData findByData (byte[] data);
 
     @CacheEvict("Biometric-Data")
-
     List<BiometricData> deleteByUserID(String userID);
 
     @Override
     @CacheEvict("Biometric-Data")
     <T extends BiometricData> T save(T d);
 
+    @Cacheable("Biometric-Data")
+    List<TemporaryAccessCode> findByAppointmentID(String appointmentID);
 
+    @Cacheable("Biometric-Data")
+    TemporaryAccessCode findById(String id);
 }

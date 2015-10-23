@@ -40,7 +40,7 @@ public abstract class AccessCodeGenerator {
         LocalDateTime to = appointment.getDateTime().plusMinutes(appointment.getDurationMinutes() + 15);
 
         for (int i = 0; i < visitors.size() - 1; i++) {
-            codes.add(new TemporaryAccessCode(visitors.get(i), getCode(), from, to, id));
+            codes.add(new TemporaryAccessCode(id, visitors.get(i), getCode(), from, to));
         }
 
         return codes;
