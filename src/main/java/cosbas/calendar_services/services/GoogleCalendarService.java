@@ -106,7 +106,8 @@ public class GoogleCalendarService extends CalendarService {
             summary += "with " + clientName.get(0);
         }
 
-        String description = "Reason: " + reason + "\r\nAppointment with the following clients occur at " + startTime.toString() + ".\r\n";
+        String description = "Reason: " + reason + "\r\n" +
+                "Attendants:  " + "\r\n";
         for (String email: clientEmail){
             description += email + ".\r\n";
         }
