@@ -15,12 +15,16 @@ import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.user.User;
 import cosbas.user.UserDAO;
+import cosbas.user.UserManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+
 import java.util.List;
 
 /**
@@ -35,7 +39,12 @@ public class BiometricSystem {
     private BiometricDataDAO biometricDataRepository;
     private ValidatorFactory factory;
     private UserDAO userRepository;
+    private UserManager userManager;
 
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
 
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
@@ -114,27 +123,22 @@ public class BiometricSystem {
          *      Call validator.register to do additional stuff
          * Save to db
          */
-       RegisterRequest req = registerRepository.findByUserID(userID);
-       if (req == null)
-           throw new NullArgumentException("No registrations request for this user.");
-       List<BiometricData> dataCollections = req.getData();
-       for (BiometricData d : dataCollections) {
-           AccessValidator v = factory.getValidator(d.getType());
-           v.registerUser(d, userID);
-       }
+        System.out.print("Here");
+        RegisterRequest req = registerRepository.findByUserID(userID);
 
-       biometricDataRepository.save(req.getData());
+        if (req == null)
+            throw new NullArgumentException("No registrations request for this user.");
+        System.out.print("Got reg Req");
+        List<BiometricData> dataCollections = req.getData();
+        for (BiometricData d : dataCollections) {
+            AccessValidator v = factory.getValidator(d.getType());
+            v.registerUser(d, userID);
+            System.out.print("Validator reg");
+        }
 
-       User u = userRepository.findOne(userID);
-
-       if (u == null)
-           u = new User(userID, req.getContactDetails());
-       else
-            u.addContactDetails(req.getContactDetails());
-
-       userRepository.save(u);
-
-        return u;
+        biometricDataRepository.save(dataCollections);
+        System.out.print("Saved Data");
+        return userManager.addContactDetails(userID, req.getContactDetails());
     }
 
     public void deleteRegistrationRequest(String userID) {
@@ -142,7 +146,6 @@ public class BiometricSystem {
     }
 
     public void removeUser(String id) throws BiometricTypeException {
-        userRepository.delete(id);
         List<BiometricData> dataCollections = biometricDataRepository.deleteByUserID(id);
         for (BiometricData d : dataCollections) {
             AccessValidator v = factory.getValidator(d.getType());
@@ -150,11 +153,26 @@ public class BiometricSystem {
         }
     }
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    private <T> List<T> iterableToList(Iterable<T> it, int count) {
+        List<T> list = new ArrayList<>(count);
+        for (T t : it) {
+            list.add(t);
+        }
+        return list;
     }
 
-    public Iterable<RegisterRequest> getRegisterRequests() { return registerRepository.findAll(); }
+    public List<User> getUsers() {
+        Iterable<User> users = userRepository.findAll();
+        int count = (int) userRepository.count();
+        return iterableToList(users, count);
+    }
+
+    public List<RegisterRequest> getRegisterRequests() {
+        Iterable<RegisterRequest> reqs =  registerRepository.findAll();
+        int count = (int) registerRepository.count();
+        return iterableToList(reqs, count);
+
+    }
 
     /**
      * Saves the record to the database.

@@ -2,9 +2,9 @@ package cosbas.biometric;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.access.AccessRequest;
 import cosbas.biometric.request.access.AccessResponse;
-import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterRequestDAO;
 import cosbas.biometric.request.registration.RegisterResponse;
@@ -18,7 +18,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -30,13 +32,13 @@ import static org.mockito.Mockito.*;
  */
 public class BiometricSystemTest {
 
-    private BiometricSystem testee;
-    private AccessValidator validator;
     private static BiometricData data1;
     private static BiometricData data2;
     private static ValidationResponse successU1;
     private static ValidationResponse successU2;
     private static ValidationResponse fail;
+    private BiometricSystem testee;
+    private AccessValidator validator;
 
     @BeforeClass
     public static void globalSetUp() {
@@ -163,7 +165,7 @@ public class BiometricSystemTest {
         assertFalse(resp.getResult());
         verify(repo, never()).save(req);
 
-        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[] {1, 2, 3, 4, 5})), "");
+        req = new RegisterRequest(Collections.singletonList(new ContactDetail(ContactTypes.EMAIL, "A@b.c")), "user1", Collections.singletonList(new BiometricData("user1", BiometricTypes.FACE, new byte[]{1, 2, 3, 4, 5})), "");
         RegisterRequest repoUser = new RegisterRequest(new LinkedList<>(), "user1", new LinkedList<>(), "");
         when(repo.findByUserID(anyString())).thenReturn(repoUser);
         resp = testee.register(req);
