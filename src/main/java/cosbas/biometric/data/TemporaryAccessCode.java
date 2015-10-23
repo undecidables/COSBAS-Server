@@ -1,5 +1,7 @@
 package cosbas.biometric.data;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+
 import java.time.LocalDateTime;
 
 /**
@@ -10,6 +12,7 @@ public class TemporaryAccessCode extends AccessCode {
     private LocalDateTime validTo = null;
     private String appointmentID = null;
 
+    @PersistenceConstructor
     public TemporaryAccessCode(String user, byte[] code, LocalDateTime from, LocalDateTime to, String appointmentID) {
         super(user, code);
         this.validFrom = from;
@@ -25,4 +28,9 @@ public class TemporaryAccessCode extends AccessCode {
     public LocalDateTime getValidTo() {
         return validTo;
     }
+
+    public String getAppointmentID() {
+        return appointmentID;
+    }
+
 }

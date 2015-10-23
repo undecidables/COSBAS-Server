@@ -2,6 +2,7 @@ package cosbas.db.repositories;
 
 import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.AccessCodeDBAdapter;
+import cosbas.biometric.data.TemporaryAccessCode;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

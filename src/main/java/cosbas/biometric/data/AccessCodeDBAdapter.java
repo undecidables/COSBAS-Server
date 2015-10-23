@@ -2,7 +2,6 @@ package cosbas.biometric.data;
 
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
 
 /**
  *  {@author Vivian Venter}
