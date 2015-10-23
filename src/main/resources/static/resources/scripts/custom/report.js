@@ -26,14 +26,54 @@ function hideInputs()
 function initializeTimePicker()
 {
 
-    $('#report .date').datepicker({
-        'beforeShowDay': $.datepicker.noWeekends,
-        'format': 'mm/dd/yyyy',
-        'autoclose': true,
-        'dateFormat': 'yy-mm-dd',
+    $("#dateTimeE").datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        dateFormat: 'yy-mm-dd',
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        onSelect: function(dateStr)
+        {
+            if($("#dateTimeS").val() == '')
+            {
+               // $("#dateTimeS").val(dateStr);
+                $("#dateTimeS").datepicker("option",{ maxDate: new Date(dateStr)});
+            }
+        }
+    });
+
+
+    $("#dateTimeS").datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        dateFormat: 'yy-mm-dd',
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        onSelect: function(dateStr)
+        {
+
+            //$("#dateTimeE").val(dateStr);
+            $("#dateTimeE").datepicker("option",{ minDate: new Date(dateStr)});
+        }
+    });
+
+//    setDateE();
+}
+
+
+
+function setDateE()
+{
+    $("#dateTimeE").click(function(){
+        if($("#dateTimeS").val() == "" )
+        {
+        }
+        else
+        {
+            $("dateTimeE").datepicker('option','minDate',new Date($('#dateTimeS').val()));
+        }
 
     });
-    $('#report').datepair();
 }
 
 
@@ -41,7 +81,6 @@ function loadStaffMembers()
 {
     $("#staffID").click(function(){
         $("#staffID").prop('disabled', true);
-        $("#staffID").val("Loading Staff Member List...");
         $.ajax({
             type: "post",
             url: "/getListOfUsers"
@@ -65,7 +104,6 @@ function loadReportTypes()
 {
     $("#reportType").click(function(){
         $("#reportType").prop('disabled', true);
-        $("#reportType").val("Loading Report Types...");
         $.ajax({
             type: "post",
             url: "/getListOfReports"
@@ -89,7 +127,6 @@ function loadReportFormats()
 {
     $("#reportFormat").click(function(){
         $("#reportFormat").prop('disabled', true);
-        $("#reportFormat").val("Loading Report Types...");
         $.ajax({
             type: "post",
             url: "/getListOfFormats"
@@ -165,11 +202,28 @@ function handleDynamicInputClicks()
         $('#reportFormat').val($('#reportFormats').val());
         $('.featherlight').click();
     });
+
+    $(document.body).on('click', '#errorButton',function(){
+        $('.featherlight').click();
+    });
 }
+
+
 
 function getReport()
 {
+
+
+
     $("#createReport").click(function(){
+        if(checkReportType() && checkFormat() && checkStaffID() && checkStatus() && checkDates())
+        {
+
+        }
+        else
+        {
+            return;
+        }
         var selection = $("#reportType").val();
         var data;
         var url = "";
@@ -193,15 +247,15 @@ function getReport()
                 break;
             case "ALL_APPOINTMENTS_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val(),
-                    "dateTimeE":$('#dateTimeE').val()
+                    "dateTimeS":$('#dateTimeS').val() + "T00:00:00+02:00",
+                    "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00"
                 };
                 url = "/createAllAppointmentsBetweenDateTimeReports";
                 break;
             case "ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val(),
-                    "dateTimeE":$('#dateTimeE').val(),
+                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00",
                     "staffID":$('#staffID').val()
                 };
                 url = "/createAllAppointmentsByStaffIdAndDateTimeBetweenReports";
@@ -212,15 +266,15 @@ function getReport()
                 break;
             case "ALL_ACCESS_RECORDS_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val(),
-                    "dateTimeE":$('#dateTimeE').val()
+                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00"
                 };
                 url = "/createAccessRecordBetweenDateTimeReports";
                 break;
             case "ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val(),
-                    "dateTimeE":$('#dateTimeE').val(),
+                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00",
                     "staffID":$('#staffID').val()
                 };
                 url = "/createAccessRecordByStaffIdAndBetweenDateTimeReports";
@@ -259,4 +313,88 @@ function open(verb, url, data, target)
     form.style.display = 'none';
     document.body.appendChild(form);
     form.submit();
+}
+
+
+function checkStaffID()
+{
+    if($('#staffID').val() == "" && $('#staffID').is(":visible"))
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i>Please choose a staff member.</p>";
+        html +=  '<p class="text-left">' +
+            '<button type="submit" id="errorButton" class="btnLightbox btn-common">Okay</button>' +
+            '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function checkStatus()
+{
+    if($('#status').val() == "" && $('#status').is(":visible"))
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i>Please enter a status.</p>";
+        html +=  '<p class="text-left">' +
+            '<button type="submit" id="errorButton" class="btnLightbox btn-common">Okay</button>' +
+            '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function checkDates()
+{
+    if(($('#dateTimeS').is(":visible") && $('#dateTimeE').is(":visible")) && ($('#dateTimeS').val() == "" ||  $('#dateTimeE').val() == ""))
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i>Please select the correct dates.</p>";
+        html +=  '<p class="text-left">' +
+            '<button type="submit" id="errorButton" class="btnLightbox btn-common">Okay</button>' +
+            '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+
+
+function checkReportType()
+{
+    if($('#reportType').val() == "")
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i>Please select a report type.</p>";
+        html +=  '<p class="text-left">' +
+            '<button type="submit" id="errorButton" class="btnLightbox btn-common">Okay</button>' +
+            '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function checkFormat()
+{
+    if($('#reportFormat').val() == "")
+    {
+        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='errorDuration'><i class=\"fa fa-exclamation-circle\"></i>Please select a format.</p>";
+        html +=  '<p class="text-left">' +
+            '<button type="submit" id="errorButton" class="btnLightbox btn-common">Okay</button>' +
+            '</p>';
+        $element = $(html);
+        $.featherlight($element);
+        return false;
+    } else {
+        return true;
+    }
 }

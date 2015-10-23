@@ -20,9 +20,7 @@ public class ReportFormatter {
     {
         PDF,
         HTML,
-        EXCL,
         CSV,
-        WORD,
         XML
     }
 
@@ -39,14 +37,8 @@ public class ReportFormatter {
                 case HTML:
                     report.toHtml(file);
                     break;
-                case WORD:
-                    report.toDocx(file);
-                    break;
                 case CSV:
                     report.toCsv(file);
-                    break;
-                case EXCL:
-                    report.toXlsx(file);
                     break;
                 case XML:
                     report.toXml(file);

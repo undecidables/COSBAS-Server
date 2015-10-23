@@ -7,6 +7,10 @@ import cosbas.reporting.ReportData;
 import cosbas.reporting.ReportFactory;
 import cosbas.reporting.ReportFormatter;
 import org.apache.commons.io.IOUtils;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.parser.AutoDetectParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +63,26 @@ public class ReportsRestController {
     }
 
 
+    private String getMimeType(InputStream is) throws IOException {
+        AutoDetectParser parser = new AutoDetectParser();
+        Detector detector = parser.getDetector();
+        Metadata metadata = new Metadata();
+        MediaType mediatype = detector.detect(is, metadata);
+        return mediatype.toString();
+    }
+
+    private void sendOutputStream(HttpServletResponse response, InputStream stream) throws IOException {
+        String mimeType = getMimeType(stream);
+        if(mimeType == "null")
+        {
+            mimeType = "application/octet-stream";
+        }
+        IOUtils.copy(stream, response.getOutputStream());
+        response.setContentType(mimeType);
+        response.flushBuffer();
+    }
+
+
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
@@ -66,8 +90,7 @@ public class ReportsRestController {
                                               @RequestParam(value = "format", required = true) String format, HttpServletResponse response) {
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,8 +107,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,8 +124,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STATUS, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,8 +144,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -146,8 +166,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,8 +180,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -183,8 +201,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -207,8 +224,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -225,8 +241,7 @@ public class ReportsRestController {
 
         InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format)));
         try {
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
+            sendOutputStream(response, is);
         } catch (IOException e) {
             e.printStackTrace();
         }

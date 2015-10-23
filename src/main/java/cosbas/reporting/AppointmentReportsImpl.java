@@ -82,7 +82,7 @@ public class AppointmentReportsImpl implements AppointmentReports {
                 Columns.column("Summary", "summary", DataTypes.stringType()),
                 Columns.column("Reason", "reason", DataTypes.stringType()),
                 Columns.column("Status", "status", DataTypes.stringType()).setMinWidth(60).setStyle(singleValue)
-        ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Testing").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
+        ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Appointments").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
 
         return report;
     }
