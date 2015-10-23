@@ -4,6 +4,8 @@ import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.request.DoorActions;
 import org.springframework.data.annotation.PersistenceConstructor;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+
 import java.time.LocalDateTime;
 
 /**
@@ -13,11 +15,6 @@ public class TemporaryAccessCode extends AccessCode {
     private LocalDateTime validFrom;
     private LocalDateTime validTo;
     private String appointmentID;
-
-    public String getAppointmentID() {
-        return appointmentID;
-    }
-
 
     @PersistenceConstructor
     protected TemporaryAccessCode(String userID, BiometricTypes type, byte[] data, boolean temporary, DoorActions lastAction, LocalDateTime validFrom, LocalDateTime validTo, String appointmentID) {
@@ -42,4 +39,9 @@ public class TemporaryAccessCode extends AccessCode {
     public LocalDateTime getValidTo() {
         return validTo;
     }
+
+    public String getAppointmentID() {
+        return appointmentID;
+    }
+
 }

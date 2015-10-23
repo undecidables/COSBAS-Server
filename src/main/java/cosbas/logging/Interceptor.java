@@ -104,7 +104,8 @@ public class Interceptor {
                 } else if (methodName.equals("approveAppointment")) {
                     if (result.toString().equals("Appointment approved")) {
 
-                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        System.out.println("Notification");
+                        /*Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
 
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
@@ -122,7 +123,7 @@ public class Interceptor {
                         }
 
                         notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
-
+                        */
                     }
                 }
 

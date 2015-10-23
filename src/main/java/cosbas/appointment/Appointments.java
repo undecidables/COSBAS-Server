@@ -1,7 +1,6 @@
 package cosbas.appointment;
 
-import cosbas.biometric.data.AccessCode;
-import cosbas.biometric.data.AccessCodeGenerator;
+import cosbas.biometric.data.*;
 import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
@@ -37,12 +36,23 @@ public class Appointments
     @Autowired
     private AccessCodeGenerator visitorCodes;
 
+    @Autowired
+    private AccessCodeDBAdapter codeRepository;
+
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
      * @param repository The credentialRepository to be injected.
      */
     public void setRepository(AppointmentDBAdapter repository) {
         this.repository = repository;
+    }
+
+    /**
+     * Setter based dependency injection since mongo automatically creates the bean.
+     * @param repository The AccessCodeRepository to be injected.
+     */
+    public void setRepository(AccessCodeDBAdapter repository) {
+        this.codeRepository = repository;
     }
     
      /**
@@ -187,7 +197,16 @@ public class Appointments
             tempAppointment.setStatus("Approved");
             repository.save(tempAppointment);
 
+            TemporaryAccessCode code;
+            List<TemporaryAccessCode> generatedCodes = visitorCodes.getTemporaryAccessCode(tempAppointment);
 
+            int i = 0;
+            for (TemporaryAccessCode a: generatedCodes) {
+                String visitor = tempAppointment.getVisitorIDs().get(i);
+                code = new TemporaryAccessCode(visitor,a.getData(),a.getValidFrom(),a.getValidTo(),tempAppointment.getId());
+                codeRepository.save(code);
+                i++;
+            }
 
             return "Appointment approved";
         } else if(tempAppointment == null){
