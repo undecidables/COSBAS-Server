@@ -5,6 +5,7 @@ import cosbas.biometric.data.AccessCodeGenerator;
 import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
+import cosbas.notifications.Notify;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,33 +54,12 @@ public class Appointments
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
+     @Notify
     public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
-        //check is staffmember exists
+        //check is staff member exists
         if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
 			String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
             String[] tempString = a.split(" ");
-
-            //Notifications
-            Appointment tempAppointment = repository.findById(tempString[0]);
-			notifyEmail = new Notifications();
-			notifyEmail.setEmail(new Email());
-
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor,contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs ,tempAppointment,false);
 
             return "Appointment "+ tempString[0] + " has been saved.";
         } else {
@@ -94,6 +74,7 @@ public class Appointments
      * @param cancelleeID - Identifier of the person wanting to cancel the appointment. Must be a participant of the appointment
      * @param appointmentID - The appointment's unique identifier 
      */
+     @Notify
     public String cancelAppointment(String cancelleeID, String appointmentID){        
         //find appointment with ID
         Appointment tempAppointment = repository.findById(appointmentID);
@@ -194,6 +175,7 @@ public class Appointments
      * Function used by staff members to approve a requested appointment
      * @param appointmentID - The appointment's unique identifier
      */
+    @Notify
     public String approveAppointment(String appointmentID, String staffID){
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
@@ -203,32 +185,9 @@ public class Appointments
         {
 
             tempAppointment.setStatus("Approved");
-
-            List<AccessCode> codes = visitorCodes.getTemporaryAccessCode(tempAppointment);
-            tempAppointment.setAccessKeys(codes);
-
             repository.save(tempAppointment);
 
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
 
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
 
             return "Appointment approved";
         } else if(tempAppointment == null){
