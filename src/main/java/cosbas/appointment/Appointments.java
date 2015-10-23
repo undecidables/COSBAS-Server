@@ -1,5 +1,6 @@
 package cosbas.appointment;
 
+import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.*;
 import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.notifications.Email;
@@ -37,7 +38,7 @@ public class Appointments
     private AccessCodeGenerator visitorCodes;
 
     @Autowired
-    private AccessCodeDBAdapter codeRepository;
+    private BiometricDataDAO codeRepository;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -51,7 +52,7 @@ public class Appointments
      * Setter based dependency injection since mongo automatically creates the bean.
      * @param repository The AccessCodeRepository to be injected.
      */
-    public void setRepository(AccessCodeDBAdapter repository) {
+    public void setRepository(BiometricDataDAO repository) {
         this.codeRepository = repository;
     }
     
@@ -203,7 +204,7 @@ public class Appointments
             int i = 0;
             for (TemporaryAccessCode a: generatedCodes) {
                 String visitor = tempAppointment.getVisitorIDs().get(i);
-                code = new TemporaryAccessCode(visitor,a.getData(),a.getValidFrom(),a.getValidTo(),tempAppointment.getId());
+                code = new TemporaryAccessCode(tempAppointment.getId(),visitor,a.getData(),a.getValidFrom(),a.getValidTo());
                 codeRepository.save(code);
                 i++;
             }
