@@ -123,22 +123,22 @@ public class BiometricSystem {
          *      Call validator.register to do additional stuff
          * Save to db
          */
-        System.out.print("Here");
         RegisterRequest req = registerRepository.findByUserID(userID);
 
         if (req == null)
             throw new NullArgumentException("No registrations request for this user.");
-        System.out.print("Got reg Req");
+
         List<BiometricData> dataCollections = req.getData();
         for (BiometricData d : dataCollections) {
             AccessValidator v = factory.getValidator(d.getType());
             v.registerUser(d, userID);
-            System.out.print("Validator reg");
         }
 
+        User u = userManager.addContactDetails(userID, req.getContactDetails());
         biometricDataRepository.save(dataCollections);
-        System.out.print("Saved Data");
-        return userManager.addContactDetails(userID, req.getContactDetails());
+        registerRepository.delete(req);
+
+        return u;
     }
 
     public void deleteRegistrationRequest(String userID) {

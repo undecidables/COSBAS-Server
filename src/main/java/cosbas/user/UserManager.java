@@ -15,8 +15,8 @@ public class UserManager {
     private final UserDAO userRepository;
 
     @Autowired
-    public UserManager() {
-        userRepository = null;
+    public UserManager(UserDAO userRepository) {
+        this.userRepository = userRepository;
     }
 
     public User addContactDetail(String userID, ContactDetail detail) {
