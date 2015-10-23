@@ -28,13 +28,13 @@ public abstract class AccessCodeGenerator {
      *                    It should already have an id field.
      * @return A list containing TemporaryAccessCode
      */
-    public List<AccessCode> getTemporaryAccessCode(Appointment appointment) {
+    public List<TemporaryAccessCode> getTemporaryAccessCode(Appointment appointment) {
 
         String id = appointment.getId();
 
 
         List<String> visitors = appointment.getVisitorIDs();
-        List<AccessCode> codes = new ArrayList<>(visitors.size());
+        List<TemporaryAccessCode> codes = new ArrayList<>(visitors.size());
 
         LocalDateTime from = appointment.getDateTime().minusMinutes(15);
         LocalDateTime to = appointment.getDateTime().plusMinutes(appointment.getDurationMinutes() + 15);

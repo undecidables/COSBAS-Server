@@ -2,6 +2,7 @@ package cosbas.biometric.data;
 
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.request.DoorActions;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 /**
  * {@author Renette Ros}
@@ -11,6 +12,7 @@ public class AccessCode extends BiometricData {
     protected boolean temporary = false;
     private DoorActions lastAction;
 
+    @PersistenceConstructor
     public AccessCode (String user, byte[] code) {
         super(user, BiometricTypes.CODE, code);
     }
