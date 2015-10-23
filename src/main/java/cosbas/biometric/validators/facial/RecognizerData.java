@@ -23,7 +23,7 @@ public class RecognizerData {
     public final List<String> personNames;
 
     @PersistenceConstructor
-    public RecognizerData(String id, boolean needsTraining, List<String> personNames, List<CvMatStorage> storeTrainingFaces, List<CvMatStorage> storeEigenVectors, CvMatStorage storePAvgTrainImg, CvMatStorage storeEigenValues, CvMatStorage storeProjectedTrainFace, CvMatStorage storePersonNymTurhMat, LocalDateTime updated) {
+    public RecognizerData(String id, boolean needsTraining, List<String> personNames, List<CvMatStorage> storeTrainingFaces, List<CvMatStorage> storeEigenVectors, CvMatStorage storePAvgTrainImg, CvMatStorage storeEigenValues, CvMatStorage storeProjectedTrainFace, CvMatStorage storePersonNumTruthMat, LocalDateTime updated) {
         this.id = id;
         this.needsTraining = needsTraining;
         this.personNames = personNames;
@@ -39,8 +39,8 @@ public class RecognizerData {
         this.eigenValues = this.storeEigenValues.getCVMat();
         this.storeProjectedTrainFace = storeProjectedTrainFace;
         this.projectedTrainFace = this.storeProjectedTrainFace.getCVMat();
-        this.storePersonNumTurhMat = storePersonNymTurhMat;
-        this.personNumTruthMat = this.storePersonNumTurhMat.getCVMat();
+        this.storePersonNumTruthMat = storePersonNumTruthMat;
+        this.personNumTruthMat = this.storePersonNumTruthMat.getCVMat();
     }
 
     @Transient
@@ -61,7 +61,7 @@ public class RecognizerData {
     public final CvMatStorage storeProjectedTrainFace;
     @Transient
     public final opencv_core.CvMat personNumTruthMat;
-    private final CvMatStorage storePersonNumTurhMat;
+    private final CvMatStorage storePersonNumTruthMat;
 
 
     public LocalDateTime updated;
@@ -94,7 +94,7 @@ public class RecognizerData {
         this.storeProjectedTrainFace = new CvMatStorage(projectedTrainFace);
 
         this.personNumTruthMat = personNumTruthMat;
-        this.storePersonNumTurhMat = new CvMatStorage(personNumTruthMat);
+        this.storePersonNumTruthMat = new CvMatStorage(personNumTruthMat);
 
         this.updated = updated;
         this.needsTraining = needsTraining;
