@@ -3,6 +3,7 @@ package cosbas.notifications;
 import cosbas.appointment.Appointment;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Vivian Venter
  * @date 10/4/2015.
  */
-
+@Service
 public class Notifications {
 
     /**
