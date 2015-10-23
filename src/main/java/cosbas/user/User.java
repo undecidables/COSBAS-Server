@@ -38,13 +38,15 @@ public class User {
     public boolean addContactDetail(ContactDetail c) {
         return this.contact.add(c);
     }
-    public boolean addContactDetails(Collection<ContactDetail> c ) {
+
+    public boolean addContactDetails(Collection<ContactDetail> c) {
         return contact.addAll(c);
     }
 
     public boolean removeContactDetail(ContactDetail c) {
         return this.contact.remove(c);
     }
+
     public String getUserID() {
         return userID;
     }

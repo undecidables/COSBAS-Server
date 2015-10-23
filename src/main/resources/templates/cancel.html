@@ -5,35 +5,63 @@
 		<title>Cancel Appointment</title>
 	</head>
 	<body>
-		<nav th:replace="menu :: navigation"></nav>
-		<div>
-			<a href="#">
-				<center><img class="img-responsive" src="/resources/css/images/Logo.png" alt="COSBAS Logo" width="300" /></center>
-			</a>
-		</div>
-		<div class="row">
-			<div>
-				<div class="cosbasLogin">
-					<div class="text-center" id="signIn"><span class="glyphicon glyphicon-info-sign"></span> Cancel an appointment</div>
-					<br/>
-					<form>
-						<fieldset>
-							<div class="form-group" id="appointmentCancel">
-								<p class="text-left">Appointment ID:</p>
-								<input class="form-control" type="string" name="appointmentID" id="appointmentID"/>
+	<header th:replace="menu :: navigation"></header>
+	<section id="contact">
+		<div class="overlay">
+			<div class="container">
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Cancel</span> Appointment</h1>
+
+				<div class="row">
+					<div class="contact-form">
+						<form role="form" method="post" th:action="@{/login}">
+							<div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
+								<div class="controls" id="appointmentCancel">
+									<p class="text-left">Appointment ID:</p>
+									<input class="contact_input" type="string" name="appointmentID" id="appointmentID"/>
+									<label for="appointmentID"><i class="fa fa-key"></i></label>
+								</div>
 							</div>
-							<div class="form-group" id="appointmentCancellee">
-								<p class="text-left">Appointment cancelled by (your name):</p>
-								<input class="form-control" type="string" name="cancelBy" id="cancelBy"/>
+							<div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
+								<div class="controls" id="appointmentCancellee">
+									<p class="text-left">Appointment cancelled by (your email):</p>
+									<input class="contact_input" type="string" name="cancelBy" id="cancelBy"/>
+									<label for="cancelBy"><i class="fa fa-user"></i></label>
+								</div>
 							</div>
-							<br/>
-							<div>
-								<input type="submit" id="cancelAppointment" value ="Cancel Appointment" class="btn btn-sm btn-success"/>
+							<div class="col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+								<button type="submit" class="btn btn-common" id="cancelAppointment">Cancel Appointment
+								</button>
 							</div>
-						</fieldset>
-					</form>
+						</form>
+					</div>
+				</div>
 				</div>
 			</div>
-		</div>
+		<div class="push"></div>
+	</section>
+	<object th:include="footer" th:remove="tag"/>
+
+
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/assets/js/main.js"></script>
+	<!--Custom Script-->
+	<script src="resources/scripts/custom/cancelAppointment.js"></script>
 	</body>
 </html>

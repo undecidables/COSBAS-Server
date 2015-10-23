@@ -10,9 +10,7 @@ import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
-import cosbas.user.User;
 import cosbas.user.UserDAO;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +23,8 @@ import java.util.*;
  */
 @Service
 public class GoogleCalendarService extends CalendarService {
+    final String SUMMARY = "COSBAS BOOKING: ";
+    private final String CALENDAR_ID = "primary";
     private CalendarDBAdapter credentialRepository;
     private AppointmentDBAdapter appointmentRepository;
     private UserDAO userRepository;
@@ -32,6 +32,11 @@ public class GoogleCalendarService extends CalendarService {
     @Autowired
     private GoogleVariables variables;
 
+    /*@Autowired
+    public void setCalendarServiceFactory(CalendarFactory calendarServiceFactory) {
+        this.calendarServiceFactory = calendarServiceFactory;
+    }*/
+    private com.google.api.services.calendar.Calendar service;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
@@ -263,10 +268,10 @@ public class GoogleCalendarService extends CalendarService {
                             .setMaxResults(25).setTimeMin(convStart).setTimeMax(convEnd).execute();
                     List<Event> items = events.getItems();
                     if (items.size() <= 0) {
-                        System.out.println("No events at all, " + emplid + " is available");
+                        //System.out.println("No events at all, " + emplid + " is available");
                         return true;
                     } else {
-                        System.out.println("There are events found, " + emplid + " is not available");
+                        //System.out.println("There are events found, " + emplid + " is not available");
                         return false;
                     }
                 }

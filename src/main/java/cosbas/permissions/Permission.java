@@ -11,6 +11,8 @@ import org.springframework.data.annotation.PersistenceConstructor;
 public class Permission {
     @Id
     private String id;
+    private String userID;
+    private PermissionId permission;
 
     @PersistenceConstructor
     protected Permission(String id, String userID, PermissionId permission) {
@@ -28,6 +30,7 @@ public class Permission {
     /**
      * Creates an id for the object to ensure there are no duplicates in the database.
      * Duplicate = userId and permission is the same.
+     *
      * @param userID
      * @param permission
      * @return
@@ -40,8 +43,9 @@ public class Permission {
         return userID + " can " + permission;
     }
 
-    private String userID;
-    private PermissionId permission;
+    public PermissionId getPermission(){
+        return permission;
+    }
 
     @Override
     public boolean equals(Object object) {

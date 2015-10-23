@@ -1,5 +1,6 @@
 package cosbas.biometric.request.registration;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,5 +11,8 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface RegisterRequestDAO extends CrudRepository<RegisterRequest, String> {
 
+    @Cacheable("Register")
     RegisterRequest findByUserID(String userID);
+    @Cacheable("Register")
+    Iterable<RegisterRequest> findAll();
 }

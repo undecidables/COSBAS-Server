@@ -49,13 +49,13 @@ public class AppointmentController {
      * @return index.html page
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index() {
+    public String index(Principal principal) {
         List<String> names = new ArrayList<String>();
         names.add("Jason");
         List<String> emails = new ArrayList<String>();
         emails.add("jasonevans@tuks.co.za");
         System.out.println(test.makeAppointment("MEvans", LocalDateTime.now().plusHours(3), 30, "Testing", names, emails));
-        return "index";
+        return principal == null ? "redirect:/makeAppointment" : "index";
     }
 
     /**
@@ -149,5 +149,35 @@ public class AppointmentController {
       }
       
       return "index";
+    }
+
+    /**
+    * Route function to go to registeredUsers.html - Page where all registered users on the biometric access system is shown and can be removed from the system
+    * @return registeredUsers.html page
+    */
+    @RequestMapping(value = "/registeredUsers", method = RequestMethod.GET)
+    public String registeredUsers()
+    {
+      return "registeredUsers";
+    }
+
+    /**
+    * Route function to go to registrationRequests.html - Page where all users who area awaiting approval of their registration request are shown
+    * @return registrationRequests.html page
+    */
+    @RequestMapping(value = "/registrationRequests", method = RequestMethod.GET)
+    public String registrationRequests()
+    {
+      return "registrationRequests";
+    }
+
+    /**
+    * Route function to go to changePermissions.html - Page where a users permisions on the system can be changed
+    * @return changePermissions.html page
+    */
+    @RequestMapping(value = "/changePermissions", method = RequestMethod.GET)
+    public String changePermissions()
+    {
+      return "changePermissions";
     }
 }

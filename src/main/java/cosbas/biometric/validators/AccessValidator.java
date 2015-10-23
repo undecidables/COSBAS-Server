@@ -78,11 +78,12 @@ public abstract class AccessValidator {
      * @throws NoUserException When the request object does not contain a userID.
      */
     public void registerUser(BiometricData request, String userID) throws BiometricTypeException {
-       request.setUserID(userID);
+        request.setUserID(userID);
         if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
     }
 
     public void deregisterUser(BiometricData request) throws BiometricTypeException {
-        if (!checkValidationType(request.getType())) throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
+        if (!checkValidationType(request.getType()))
+            throw new BiometricTypeException(this.getClass() + " is the wrong validator for " + request.getType());
     }
 }
