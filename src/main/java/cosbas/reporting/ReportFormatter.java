@@ -4,10 +4,7 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.exception.DRException;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,36 +26,30 @@ public class ReportFormatter {
         XML
     }
 
-    public String getFile(JasperReportBuilder report, Formats format)
+    public byte[] getFile(JasperReportBuilder report, Formats format)
     {
-        File dir = new File("downloads/reports/");
-        if(!dir.exists())
-        {
-            dir.mkdirs();
-        }
-        String path = "downloads/reports/";
-        String fileName = "" + System.currentTimeMillis();
+        ByteArrayOutputStream file = new ByteArrayOutputStream();
         try {
 
             switch (format)
             {
                 case PDF:
-                    report.toPdf(new FileOutputStream(path + fileName+""));
+                    report.toPdf(file);
                     break;
                 case HTML:
-                    report.toHtml(new FileOutputStream(path + fileName + ""));
+                    report.toHtml(file);
                     break;
                 case WORD:
-                    report.toDocx(new FileOutputStream(path + fileName + ""));
+                    report.toDocx(file);
                     break;
                 case CSV:
-                    report.toCsv(new FileOutputStream(path + fileName + ""));
+                    report.toCsv(file);
                     break;
                 case EXCL:
-                    report.toXlsx(new FileOutputStream(path + fileName + ""));
+                    report.toXlsx(file);
                     break;
                 case XML:
-                    report.toXml(new FileOutputStream(path + fileName + ""));
+                    report.toXml(file);
                     break;
                 default:
                     break;
@@ -68,12 +59,8 @@ public class ReportFormatter {
 
         } catch (DRException e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return fileName;
+        return file.toByteArray();
     }
 
 }

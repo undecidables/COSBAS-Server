@@ -62,102 +62,174 @@ public class ReportsRestController {
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsReport")
-    public String createAllAppointmentsReport(Principal principal,
+    public void createAllAppointmentsReport(Principal principal,
                                               @RequestParam(value = "format", required = true) String format, HttpServletResponse response) {
-        return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format));
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS, new ReportData(), ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdReports")
-    public String createAllAppointmentsByStaffIdReports(Principal principal,
+    public void createAllAppointmentsByStaffIdReports(Principal principal,
                                                         @RequestParam(value = "format", required = true) String format,
-                                                        @RequestParam(value = "staffID", required = true) String staffID) {
+                                                        @RequestParam(value = "staffID", required = true) String staffID,
+                                                        HttpServletResponse response) {
         ReportData data = new ReportData();
         data.setStaffID(staffID);
-        return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStatusReports")
-    public String createAllAppointmentsByStatusReports(Principal principal,
+    public void createAllAppointmentsByStatusReports(Principal principal,
                                                        @RequestParam(value = "format", required = true) String format,
-                                                       @RequestParam(value = "status", required = true) String status) {
+                                                       @RequestParam(value = "status", required = true) String status,
+                                                       HttpServletResponse response) {
         ReportData data = new ReportData();
         data.setStatus(status);
-        return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STATUS, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STATUS, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsBetweenDateTimeReports")
-    public String createAllAppointmentsBetweenDateTimeReports(Principal principal,
+    public void createAllAppointmentsBetweenDateTimeReports(Principal principal,
                                                               @RequestParam(value = "format", required = true) String format,
                                                               @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
-                                                              @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+                                                              @RequestParam(value = "dateTimeE", required = true) String dateTimeE,
+                                                              HttpServletResponse response) {
 
         ReportData data = new ReportData();
         data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAppointmentsByStaffIdAndDateTimeBetweenReports")
-    public String createAllAppointmentsByStaffIdAndDateTimeBetweenReports(Principal principal,
+    public void createAllAppointmentsByStaffIdAndDateTimeBetweenReports(Principal principal,
                                                                           @RequestParam(value = "format", required = true) String format,
                                                                           @RequestParam(value = "staffID", required = true) String staffID,
                                                                           @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
-                                                                          @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+                                                                          @RequestParam(value = "dateTimeE", required = true) String dateTimeE,
+                                                                          HttpServletResponse response) {
 
         ReportData data = new ReportData();
         data.setStaffID(staffID);
         data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        return reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAllAccessRecordReports")
-    public String createAllAccessRecordReports(Principal principal,
-                                               @RequestParam(value = "format", required = true) String format) {
-        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format));
+    public void createAllAccessRecordReports(Principal principal,
+                                               @RequestParam(value = "format", required = true) String format,
+                                               HttpServletResponse response) {
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS, new ReportData(), ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordBetweenDateTimeReports")
-    public String createAccessRecordBetweenDateTimeReports(Principal principal,
+    public void createAccessRecordBetweenDateTimeReports(Principal principal,
                                                            @RequestParam(value = "format", required = true) String format,
                                                            @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
-                                                           @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+                                                           @RequestParam(value = "dateTimeE", required = true) String dateTimeE,
+                                                           HttpServletResponse response) {
 
         ReportData data = new ReportData();
         data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByStaffIdAndBetweenDateTimeReports")
-    public String createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
+    public void createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
                                                                        @RequestParam(value = "format", required = true) String format,
                                                                        @RequestParam(value = "staffID", required = true) String staffID,
                                                                        @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
-                                                                       @RequestParam(value = "dateTimeE", required = true) String dateTimeE) {
+                                                                       @RequestParam(value = "dateTimeE", required = true) String dateTimeE,
+                                                                       HttpServletResponse response) {
 
         ReportData data = new ReportData();
         data.setStaffID(staffID);
         data.seteDate(LocalDateTime.parse(dateTimeE, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         data.setsDate(LocalDateTime.parse(dateTimeS, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdReports")
-    public String createAccessRecordByUserIdReports(Principal principal,
+    public void createAccessRecordByUserIdReports(Principal principal,
                                                     @RequestParam(value = "format", required = true) String format,
-                                                    @RequestParam(value = "staffID", required = true) String staffID) {
+                                                    @RequestParam(value = "staffID", required = true) String staffID,
+                                                    HttpServletResponse response) {
         ReportData data = new ReportData();
         data.setStaffID(staffID);
-        return reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format));
+
+        InputStream is = new ByteArrayInputStream(reports.getReport(ReportFactory.reportTypes.ALL_ACCESS_RECORDS_BY_STAFFID, data, ReportFormatter.Formats.valueOf(format)));
+        try {
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

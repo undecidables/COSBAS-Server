@@ -37,7 +37,7 @@ public class ReportFactory {
         ALL_ACCESS_RECORDS_BY_STAFFID
     }
 
-    public String getReport(reportTypes type, ReportData data, ReportFormatter.Formats format)
+    public byte[] getReport(reportTypes type, ReportData data, ReportFormatter.Formats format)
     {
         switch (type)
         {

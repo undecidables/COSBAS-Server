@@ -178,7 +178,6 @@ function getReport()
             case "ALL_APPOINTMENTS":
                 data = {"format" : $('#reportFormat').val()};
                 url = "/createAllAppointmentsReport";
-                console.log("ALL_APPOINTMENTS");
                 break;
             case "ALL_APPOINTMENTS_BY_STAFFID":
                 data = {"format" : $('#reportFormat').val(),
@@ -237,22 +236,27 @@ function getReport()
 
         }
 
-       // alert(JSON.stringify(data));
-
-        $.ajax({
-            type: "post",
-            url: url,
-            data: data
-        }).then(function(response){
-            console.log("This is the file name: " + response)
-            //var button  = '<button onclick="window.location='http://www.example.com';">Visit Page Now</button>'
-            //window.location.href = "/downloads/reports/"+response;
-            window.open("/downloads/reports/"+response, "_blank");
-        });
-
-
-
-
-
+        open('POST', url, data, '_blank');
     });
+}
+
+function open(verb, url, data, target)
+{
+    var form = document.createElement("form");
+    form.action = url;
+    form.method = verb;
+    form.target = target || "_sefl";
+    if(data)
+    {
+        for(var key in data)
+        {
+            var input = document.createElement("textarea");
+            input.name = key;
+            input.value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
+            form.appendChild(input);
+        }
+    }
+    form.style.display = 'none';
+    document.body.appendChild(form);
+    form.submit();
 }
