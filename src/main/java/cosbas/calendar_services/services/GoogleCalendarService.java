@@ -161,11 +161,15 @@ public class GoogleCalendarService extends CalendarService {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
                 List<String> attendants = clientEmail;
-                /*for (ContactDetail emp: empEmail){
-                    if (emp.getType() == ContactTypes.EMAIL){
-                        attendants.add(emp.getDetails());
+                if (lecturer != null) {
+                    List<ContactDetail> empEmail = new ArrayList<>();
+                    empEmail = lecturer.getContact();
+                    for (ContactDetail emp: empEmail){
+                        if (emp.getType() == ContactTypes.EMAIL){
+                            attendants.add(emp.getDetails());
+                        }
                     }
-                }*/
+                }
                 Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
