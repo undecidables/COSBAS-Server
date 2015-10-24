@@ -30,6 +30,7 @@ function acceptAppointmentListener()
      //Click accept
       $(document).on('click', '.accept', (function(e) {
         e.preventDefault();
+        spawnBusyMessage("Approving Appointment");
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
           $.ajax({
@@ -41,9 +42,11 @@ function acceptAppointmentListener()
 
             if(jsonReturned != "Appointment approved"){
               window.scrollTo(0, 0);
-              $("#signIn").text(jsonReturned);
+              spawnErrorMessage(jsonReturned);
             } else {
+
                location.reload();
+               spawnSuccessMessage(jsonReturned);
               tempThis.parent().parent().parent().parent().remove();
               if(tempChildren - 1 == 0){
                 $("#fieldset").append(getErrorMessage("No Appointments Pending"));
@@ -74,9 +77,10 @@ function denyAppointmentListener()
           }).then(function(jsonReturned) {
             if(jsonReturned != "Appointment denied"){
               window.scrollTo(0, 0);
-              $("#signIn").text(jsonReturned);
+               spawnErrorMessage(jsonReturned);
             } else {
                location.reload();
+               spawnSuccessMessage(jsonReturned);
               tempThis.parent().parent().parent().parent().remove();
               $("#signIn").text("Approve or Deny Appointments");
               if(tempChildren - 1 == 0){
@@ -94,8 +98,8 @@ function handleDenyAllAppointments()
 {
     $(document).on('click', '#DenyAll', (function(e) {
         $('.deny').click();
-        $("#fieldset").empty();
-        $("#fieldset").append(getWarningMessage("No Appointments Pending"));
+        //$("#fieldset").empty();
+        //$("#fieldset").append(getWarningMessage("No Appointments Pending"));
         //window.location.reload(true);
       }));
 }
