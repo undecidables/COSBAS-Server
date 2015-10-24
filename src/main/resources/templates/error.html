@@ -6,20 +6,22 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
 				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Check Appointment</span> Status</h1>
 
 				<div class="row">
-					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
+					
+					<div th:if='${#httpServletRequest.getAttribute("javax.servlet.error.exception").toString().substring(0, 101) == "java.lang.NoSuchMethodError: org.springframework.security.core.userdetails.UsernameNotFoundException."}'>
+						<script>window.location.href = "/login?error=1"</script>
+					</div>
+					<!--div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login?error=1"}'>
 						<script>window.location.href = "/login?error=1"</script>
 					</div>
 					<div th:if='${#httpServletRequest.getHeader("Referer").substring((#httpServletRequest.getHeader("Referer").lastIndexOf("/")), (#httpServletRequest.getHeader("Referer").length())) == "/login"}'>
 						<script>window.location.href = "/login?error=1"</script>
-					</div>
+					</div-->
 					<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
 						<div class="controls" id="signIn">
 							Unfortunately an error has occured on the server.
@@ -40,17 +42,8 @@
 			</div>
 		</div>
 		<div class="push"></div>
-
 	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
-			</div>
-		</div>
-	</footer>
-
-
+	<object th:include="footer" th:remove="tag"/>
 
 	<!-- Include Bootstrap plugin -->
 	<script src="resources/assets/js/bootstrap.min.js"></script>

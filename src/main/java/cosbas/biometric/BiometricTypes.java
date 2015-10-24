@@ -2,6 +2,7 @@ package cosbas.biometric;
 
 import cosbas.biometric.preprocessor.BiometricsPreprocessor;
 import cosbas.biometric.preprocessor.FacialProcessing;
+import cosbas.biometric.preprocessor.FingerProcessing;
 import cosbas.biometric.preprocessor.NoProcessing;
 import cosbas.biometric.validators.AccessValidator;
 import cosbas.biometric.validators.CodeValidator;
@@ -15,9 +16,9 @@ import cosbas.biometric.validators.exceptions.BiometricTypeException;
  *
  */
 public enum BiometricTypes {
-    CODE(CodeValidator.class, NoProcessing.class),
-    FACE(FaceValidator.class, FacialProcessing.class),
-    FINGER(FingerprintValidator.class, NoProcessing.class);
+    CODE (CodeValidator.class, NoProcessing.class),
+    FACE (FaceValidator.class, FacialProcessing.class),
+    FINGER (FingerprintValidator.class, FingerProcessing.class);
 
     public final Class<? extends AccessValidator> validatorClass;
     public final Class<? extends BiometricsPreprocessor> preprocessorClass;

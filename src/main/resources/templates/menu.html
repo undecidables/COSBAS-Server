@@ -15,12 +15,26 @@
 				<div class="collapse navbar-collapse" th:if="${#httpServletRequest.remoteUser != null}">
 					<ul class="nav navbar-nav navbar-right" id="main_navigation_menu">
 						<li><a href="index">Home</a></li>
-						<li><a href="approveDenyAppointment">My Appointments</a></li>
-						<li><a href="makeAppointment">Request Appointment</a></li>
-						<li><a href="cancel">Cancel Appointment</a></li>
-						<li><a href="status">Check Appointment</a></li>
-						<li><a href="registrationRequests">Registration Requests</a></li>
-						<!--li><a href="status">Reporting</a></li-->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+							   aria-haspopup="true" aria-expanded="false">Appointments <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="approveDenyAppointment">My Appointments</a></li>
+								<li><a href="makeAppointment">Request Appointment</a></li>
+								<li><a href="cancel">Cancel Appointment</a></li>
+								<li><a href="status">Check Appointment</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+							   aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="reports">Reporting</a></li>
+								<li><a href="registrationRequests">Registration Requests</a></li>
+								<li><a href="registeredUsers">View users</a></li>
+								<li><a href="changePermissions">User Permissions</a></li>
+							</ul>
+						</li>
 						<li>
 							<a href="#" onclick="document.logoutForm.submit(); return false;"><span
 									class="glyphicon glyphicon-log-in"></span> Logout</a>

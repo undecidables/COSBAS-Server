@@ -16,8 +16,18 @@ $(document).ready(function() {
 
      });
 
+
     //Checks if a calendar has already been linked or not
      checkCalendarLinked();
+     handleDynamicInputClicks();
+
+
+     $('#todayAppointBtn').on("click", function(e)
+     {
+        e.preventDefault();
+        var html = $('#dayAppointments').html();
+         $.featherlight(html);
+     });
 
     }
 });
@@ -32,22 +42,28 @@ function spawnCalendar(returned)
 {
      /****************Callendar**************************/
    $('#calendar').fullCalendar({
+    header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
        defaultDate: $date,
        editable: false,
        draggable: false,
        theme: true,
        eventLimit: true, // allow "more" link when too many events
        events: returned,
+        defaultView: 'month',
        viewRender: function(currentView){
          $('#loadingCalendar').remove();
-         $(".fc-prev-button").hide();
+         /*$(".fc-prev-button").hide();
          $(".fc-next-button").hide();
-         $(".fc-today-button").hide();
+         $(".fc-today-button").hide();*/
        },
        eventRender: function (event, element) {
          element.attr('href', 'javascript:void(0);');
          element.click(function() {
-             var htmlLightbox = "<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h6><br/>"+
+             var htmlLightbox = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h6><br/>"+
                                "<p><b>Meeting Members:</b> "+event.withWho+"</p>" +
                                "<p><b>Starting Time:</b> "+moment(event.start).format('MMM Do h:mm A')+"</p>"+
                                "<p><b>Ending Time:</b> "+((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)"+"</p>";
@@ -63,6 +79,7 @@ function spawnCalendar(returned)
          });
      }
      });
+
 
 
  window.scrollTo(0, 0);
@@ -81,7 +98,7 @@ function checkCalendarLinked()
          }).then(function(jsonReturned) {
            if(jsonReturned != "Linked")
            {
-             var html = "<h8 class=\"page-header\">Choose your calendar </h8><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
+             var html = "<h6 class=\"section-title\">Choose your calendar </h6><br/><a href = \"/redirect\"><center><img width =\"50px\" src = \"http://2.bp.blogspot.com/-i4O7-MJJJmQ/VFkuulhnkQI/AAAAAAAB_ig/1H6mmPz4Dy8/s1600/calendar-logo.png \" Link Google Calendar</a></center>";
              $.featherlight(html);
            }
          });
@@ -94,4 +111,12 @@ function checkCalendarLinked()
          });
          window.scrollTo(0, 0);
      }
+}
+
+function handleDynamicInputClicks()
+{
+
+     $(document.body).on('click', '.btnLightbox' ,function(){
+                        $('.featherlight').click();
+                    });
 }

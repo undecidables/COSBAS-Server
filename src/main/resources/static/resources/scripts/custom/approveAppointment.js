@@ -29,7 +29,6 @@ function acceptAppointmentListener()
 {
      //Click accept
       $(document).on('click', '.accept', (function(e) {
-       $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Approving Appointment</span> Please Wait...</h6>");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -45,10 +44,9 @@ function acceptAppointmentListener()
               $("#signIn").text(jsonReturned);
             } else {
                location.reload();
-              tempThis.parent().remove();
-              $("#signIn").text("Approve or Deny Appointments");
+              tempThis.parent().parent().parent().parent().remove();
               if(tempChildren - 1 == 0){
-                $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
+                $("#fieldset").append(getErrorMessage("No Appointments Pending"));
               }
             }
           });
@@ -64,7 +62,7 @@ function denyAppointmentListener()
 {
     //Click deny
       $(document).on('click', '.deny', (function(e) {
-        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Denying Appointment</span> Please Wait...</h6>");
+        spawnBusyMessage("Denying Appointment");
         e.preventDefault();
         var tempThis = $(this);
         var tempChildren = $(this).parent().parent().parent().parent().parent().children().length;
@@ -79,10 +77,10 @@ function denyAppointmentListener()
               $("#signIn").text(jsonReturned);
             } else {
                location.reload();
-              tempThis.parent().remove();
+              tempThis.parent().parent().parent().parent().remove();
               $("#signIn").text("Approve or Deny Appointments");
               if(tempChildren - 1 == 0){
-                $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
+                $("#fieldset").append(getWarningMessage("No Appointments Pending"));
               }
             }
           });
@@ -97,7 +95,7 @@ function handleDenyAllAppointments()
     $(document).on('click', '#DenyAll', (function(e) {
         $('.deny').click();
         $("#fieldset").empty();
-        $("#fieldset").append("<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>");
+        $("#fieldset").append(getWarningMessage("No Appointments Pending"));
         //window.location.reload(true);
       }));
 }

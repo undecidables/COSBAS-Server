@@ -6,8 +6,6 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
@@ -20,7 +18,7 @@
 								<div class="controls" id="appointmentStatusRequest">
 									<p class="text-left">Appointment ID:</p>
 									<input class="contact_input" type="string" id="appointmentID" name="appointmentID"/>
-									<i class="fa fa-user"></i>
+									<label for="appointmentID"><i class="fa fa-key"></i></label>
 								</div>
 							</div>
 
@@ -28,10 +26,10 @@
 								<div class="controls" id="statusRequest">
 									<p class="text-left">Appointment made by (your email):</p>
 									<input class="contact_input" type="string" id="requestedBy" name="appointmentBy"/>
-									<i class="fa fa-user"></i>
+									<label for="requestedBy"><i class="fa fa-user"></i></label>
 								</div>
 							</div>
-							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+							<div class="col-md-12 wow fadeInUp" data-wow-delay="0.5s">
 								<button type="submit" id="checkStatus" class="btn btn-common">Check Appointment Status
 								</button>
 							</div>
@@ -41,16 +39,8 @@
 				</div>
 			</div>
 		<div class="push"></div>
-
 	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
-			</div>
-		</div>
-	</footer>
-
+	<object th:include="footer" th:remove="tag"/>
 
 	<!-- Include Bootstrap plugin -->
 	<script src="resources/assets/js/bootstrap.min.js"></script>

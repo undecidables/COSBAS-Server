@@ -88,6 +88,6 @@ public class RegisterRequest {
     }
 
     public String toString() {
-        return (new StringBuilder()).append(time).append(" ").append(userID).append(" by ").append(requestBy).toString();
+        return (new StringBuilder()).append(time).append(",").append(userID).append(",").append(requestBy).toString();
     }
 }

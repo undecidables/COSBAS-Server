@@ -6,8 +6,6 @@
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
@@ -20,17 +18,17 @@
 								<div class="controls" id="appointmentCancel">
 									<p class="text-left">Appointment ID:</p>
 									<input class="contact_input" type="string" name="appointmentID" id="appointmentID"/>
-									<i class="fa fa-user"></i>
+									<label for="appointmentID"><i class="fa fa-key"></i></label>
 								</div>
 							</div>
 							<div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-delay="0.2s">
 								<div class="controls" id="appointmentCancellee">
 									<p class="text-left">Appointment cancelled by (your email):</p>
 									<input class="contact_input" type="string" name="cancelBy" id="cancelBy"/>
-									<i class="fa fa-user"></i>
+									<label for="cancelBy"><i class="fa fa-user"></i></label>
 								</div>
 							</div>
-							<div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+							<div class="col-md-12 wow fadeInUp" data-wow-delay="0.5s">
 								<button type="submit" class="btn btn-common" id="cancelAppointment">Cancel Appointment
 								</button>
 							</div>
@@ -40,16 +38,8 @@
 				</div>
 			</div>
 		<div class="push"></div>
-
 	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
-			</div>
-		</div>
-	</footer>
-
+	<object th:include="footer" th:remove="tag"/>
 
 
 	<!-- Include Bootstrap plugin -->

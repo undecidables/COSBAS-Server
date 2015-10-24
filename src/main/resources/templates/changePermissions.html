@@ -2,33 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head >
 		<object th:include="head :: header" th:remove="tag" />
-		<title>Check Appointment Status</title>
+		<title>Change Permissions</title>
 	</head>
 	<body>
 	<header th:replace="menu :: navigation"></header>
-	<br/>
-	<br/>
 	<section id="contact">
 		<div class="overlay">
 			<div class="container">
-				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Change User</span> Permissions</h1>
+				<h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Change</span> Permissions</h1>
 				<div class="row">
-					<div class="contact-form" id="requests">
-						
+					<div class="contact-form">
+						<form role="form" method="post">
+							<div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+								<div id="permissionAuthorization" class="wow fadeIn alert alert-danger"
+									 data-wow-delay=".2s"><strong><i class="fa fa-exclamation-circle"></i>
+									UNAUTHORIZED: </strong><br/> You are not authorized to change permissions
+								</div>
+
+
+								<div id="permissionForm">
+									<label for="users">User: </label><select id="users" name="users">
+
+									</select>
+									<br/>
+									<div id="permissionsHide">
+										<label for="permissions">Permissions: </label><div id="permissions" name="permissions">
+										
+										</div>
+										<br/>
+										<label for="newPermissions">New Permission: </label><select id="newPermissions"
+																									name="newPermission">
+
+										</select>
+										<br/>
+										<button type="submit" id="update" class="btn btn-common">
+											Add Permission
+										</button>
+									</div>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
-				</div>
-			</div>
-
-		<div class="push"></div>
-
-	</section>
-	<footer class="footer">
-		<div class="container">
-			<div class="copyright text-center">
-				<p>&copy; University of Pretoria, Department of Computer Science</p>
 			</div>
 		</div>
-	</footer>
+		<div class="push"></div>
+	</section>
+	<object th:include="footer" th:remove="tag"/>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/bootstrap.min.js"></script>
+	<!-- One page Nav plugin -->
+	<script src="resources/assets/js/jquery.nav.js"></script>
+	<!-- Include Bootstrap plugin -->
+	<script src="resources/assets/js/owl.carousel.js"></script>
+	<!-- Include wow plugin -->
+	<script src="resources/assets/js/wow.js"></script>
+	<!-- Include mixitup plugin -->
+	<script src="resources/assets/js/jquery.mixitup.js"></script>
+	<!-- ScrollTop -->
+
+
+	<!-- preset js -->
+	<script src="resources/assets/js/style.changer.js"></script>
+	<!-- Modernizr js -->
+	<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+	<!-- Main js -->
+	<script src="resources/scripts/custom/changePermissions.js"></script>
 	</body>
 </html>

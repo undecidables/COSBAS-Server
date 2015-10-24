@@ -43,6 +43,10 @@ public class Permission {
         return userID + " can " + permission;
     }
 
+    public PermissionId getPermission(){
+        return permission;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) {

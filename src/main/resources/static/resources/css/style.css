@@ -1,3 +1,10 @@
+
+
+body
+{
+    visibility:hidden;
+}
+
 .fa-bars
 {
     color: white;
@@ -13,14 +20,15 @@ html, body {
 #contact
 {
     min-height: 100%;
-    	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-    	height: 100%;
-    	margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+    height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
 }
 .footer, .push {
-	height: 155px; /* .push must be the same height as .footer */
-    padding: 4em;
+	height: 100px; /* .push must be the same height as .footer */
+    padding: 2em;
 }
+
 
 .footer
 {
@@ -106,10 +114,25 @@ html, body {
     color: #cccc99;
 }
 
+.alert
+{
+    padding: 64px 20px;
+    font-size: 1.5em;
+}
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9
+{
+    padding: 0;
+}
+
+.cal
+{
+    padding: 90px 0px;
+    padding-bottom: 10px;
+}
 .section-title {
     color: #003366;
     padding: 64px 20px;
-    padding-bottom: 10px;
 }
 
 .controls
@@ -138,8 +161,6 @@ background: #cccc99;
 {
     font-size: 18px;
     color: #0BAFA0;
-    width: 48px;
-    height: 48px;
     background-color: #ffffff;
     padding: 12px;
     text-align: center;
@@ -147,7 +168,7 @@ background: #cccc99;
 }
 #contact .contact-form .btn
 {
-    width:98%;
+    width:100%;
 }
 
 #footer .copyright
@@ -373,3 +394,121 @@ table {
 }
 
 
+
+
+.dropdown-menu
+{
+    background:#003366;
+    width: 200%;
+    padding: 1em;
+    min-width: 250px;
+}
+
+@media (max-width: 1024px) and (min-width: 768px)
+#header .navbar-brand img {
+    padding: 0;
+}
+
+@media (max-width: 1024px) and (min-width: 768px)
+#header .navbar-brand img {
+    padding: 0;
+
+}
+
+/*
+#contact .contact-form .btn {
+
+width: 100%;
+}
+*/
+#contact .contact-form .controls input.contact_input {
+    width: 85%;
+}
+
+label
+{
+    width: 15%;
+}
+
+label >  i {
+    width: 100%;
+}
+/*
+
+
+.fadeInLeft > .controls > .contact_input  {
+    float: left;
+}
+
+.fadeInRight > .controls > .contact_input  {
+    float: right;
+}
+
+.fadeInRight > .controls > .fa  {
+    float: right;
+}*/
+
+
+nav{
+    float: left;
+}
+
+h2
+{
+    margin-top: 0;
+    text-align: center;
+}
+
+
+
+.todayAppoint
+{
+    padding: 2em;
+
+}
+
+.errorIn
+{
+    background: #fff;
+    border: 1px solid lightgrey;
+}
+
+.alert
+{
+    text-align: center;
+}
+.alert > strong
+{
+    font-size: 1em;
+}
+
+.btn-common
+{
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        margin: 10px 20px;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+        margin: 0;
+        background: #003366;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        width: 100%;
+        padding: 15px;
+}
+
+#dayAppointments
+{
+    visibility: hidden;
+    display:none;
+}
+
+.featherlight-close
+{
+    visibility: hidden;
+    display:none;
+}

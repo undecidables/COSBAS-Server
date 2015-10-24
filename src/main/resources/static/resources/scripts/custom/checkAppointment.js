@@ -24,8 +24,8 @@ $(document).ready(function() {
 
         if( checkValidAppointmentID() && checkValidUserChecker())
         {
-            $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>Checking Appointment Status</span> Please Wait...</h6>");
-            checkAppointment();
+           spawnBusyMessage("Checking Appointment Status");
+           checkAppointment();
         }
         });
 });
@@ -41,7 +41,7 @@ function checkValidAppointmentID()
      //add errorID
     if($("#appointmentID").val() != "")
     {
-      $('#errorID').remove();
+      return true;
     }
     else
     {
@@ -49,13 +49,10 @@ function checkValidAppointmentID()
       if($errorNum == 1){
         $('.featherlight').click();
       }
-      $noError = false;
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> A valid appointment ID has to be entered.</p>";
-                  html +=  '<p class="text-left">' +
-                              '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                            '</p>';
-      $.featherlight(html);
+
+      spawnErrorMessage("Please enter a valid Appointment ID");
     }
+    return false;
 }
 
 /**
@@ -68,7 +65,7 @@ function checkValidUserChecker()
      //add status error
     if($("#requestedBy").val() != "")
     {
-      $('#statusError').remove();
+      return true;
     }
     else
     {
@@ -76,13 +73,10 @@ function checkValidUserChecker()
       if($errorNum == 1){
         $('.featherlight').click();
       }
-      $noError = false;
-      var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id=''><i class=\"fa fa-exclamation-circle\"></i> You must enter who it is that wants to check the appointment status</p>";
-                        html +=  '<p class="text-left">' +
-                                    '<button type="submit" id="" class="btnLightbox btn-common">Okay</button>' +
-                                  '</p>';
-      $.featherlight(html);
+
+      spawnErrorMessage("Please enter your name");
     }
+    return false;
 }
 
 /**
@@ -102,11 +96,17 @@ function checkAppointment()
                "appointmentID" : $('#appointmentID').val()},
         url: "/status"
       }).then(function(jsonReturned) {
+        if(jsonReturned == "No such Appointment exists")
+        {
+            spawnCustomErrorMessage("Appointment does not exist", "FAILED");
+            return;
+        }
+
         var obj =  $("<p>"+jsonReturned+"</p>");
         obj.html(obj.html().replace(/\n/g,'<br/>'));
 
         $('.featherlight').click();
-        $.featherlight("<h6 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h6>");
+        $.featherlight("<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>"+obj.html()+"</span></h6>");
 
         $("#appointmentID").val("");
         $("#requestedBy").val("");

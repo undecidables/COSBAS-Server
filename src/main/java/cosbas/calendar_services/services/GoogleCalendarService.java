@@ -244,10 +244,10 @@ public class GoogleCalendarService extends CalendarService {
                             .setMaxResults(25).setTimeMin(convStart).setTimeMax(convEnd).execute();
                     List<Event> items = events.getItems();
                     if (items.size() <= 0) {
-                        System.out.println("No events at all, " + emplid + " is available");
+                        //System.out.println("No events at all, " + emplid + " is available");
                         return true;
                     } else {
-                        System.out.println("There are events found, " + emplid + " is not available");
+                        //System.out.println("There are events found, " + emplid + " is not available");
                         return false;
                     }
                 }
