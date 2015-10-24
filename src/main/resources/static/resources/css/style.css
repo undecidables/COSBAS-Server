@@ -376,6 +376,23 @@ table {
 }
 
 
+#reportFormats, #reportTypes, #staffList
+{
+    color: #000;
+    background-color: #ffffff;
+    float: left;
+    border: 1px solid #0BAFA0;
+    font-size: 14px;
+    font-weight: 300;
+    height: 48px;
+    padding: 0 12px;
+    width: 100%;
+    border: 1px solid #003366;
+    line-height: normal;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 
 
 
