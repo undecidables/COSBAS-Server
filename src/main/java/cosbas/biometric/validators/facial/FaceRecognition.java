@@ -332,7 +332,7 @@ public class FaceRecognition {
         ArrayList<IplImage> eigenVectors = new ArrayList<>(nEigens);
 
         for (int i = 0; i < nEigens; i++) {
-            eigenVectors.set(i, cvCreateImage(
+            eigenVectors.add(cvCreateImage(
                     faceImgSize, // size
                     IPL_DEPTH_32F, // depth
                     1)); // channels

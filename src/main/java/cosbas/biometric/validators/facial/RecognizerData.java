@@ -22,6 +22,26 @@ public class RecognizerData {
     private boolean needsTraining;
     public final List<String> personNames;
 
+    @Transient
+    public List<opencv_core.IplImage> trainingFaces;
+    public List<CvMatStorage> storeTrainingFaces;
+    @Transient
+    public List<opencv_core.IplImage> eigenVectors;
+    public List<CvMatStorage> storeEigenVectors;
+
+    @Transient
+    public opencv_core.IplImage pAvgTrainImg;
+    public CvMatStorage storePAvgTrainImg;
+    @Transient
+    public opencv_core.CvMat eigenValues;
+    public CvMatStorage storeEigenValues;
+    @Transient
+    public opencv_core.CvMat projectedTrainFace;
+    public CvMatStorage storeProjectedTrainFace;
+    @Transient
+    public  opencv_core.CvMat personNumTruthMat;
+    private CvMatStorage storePersonNumTruthMat;
+
     @PersistenceConstructor
     public RecognizerData(String id, boolean needsTraining, List<String> personNames, List<CvMatStorage> storeTrainingFaces, List<CvMatStorage> storeEigenVectors, CvMatStorage storePAvgTrainImg, CvMatStorage storeEigenValues, CvMatStorage storeProjectedTrainFace, CvMatStorage storePersonNumTruthMat, LocalDateTime updated) {
         this.id = id;
@@ -43,27 +63,6 @@ public class RecognizerData {
         this.personNumTruthMat = this.storePersonNumTruthMat.getCVMat();
     }
 
-    @Transient
-    public final List<opencv_core.IplImage> trainingFaces;
-    public final List<CvMatStorage> storeTrainingFaces;
-    @Transient
-    public final List<opencv_core.IplImage> eigenVectors;
-    public final List<CvMatStorage> storeEigenVectors;
-
-    @Transient
-    public final opencv_core.IplImage pAvgTrainImg;
-    public final CvMatStorage storePAvgTrainImg;
-    @Transient
-    public final opencv_core.CvMat eigenValues;
-    public final CvMatStorage storeEigenValues;
-    @Transient
-    public final opencv_core.CvMat projectedTrainFace;
-    public final CvMatStorage storeProjectedTrainFace;
-    @Transient
-    public final opencv_core.CvMat personNumTruthMat;
-    private final CvMatStorage storePersonNumTruthMat;
-
-
     public LocalDateTime updated;
 
     protected RecognizerData(String id, List<String> personNames,
@@ -74,7 +73,7 @@ public class RecognizerData {
                              opencv_core.CvMat projectedTrainFace,
                              opencv_core.CvMat personNumTruthMat,
                              LocalDateTime updated,
-                             Boolean needsTraining) {
+                             boolean needsTraining) {
         this.id = id;
         this.personNames = personNames;
 
