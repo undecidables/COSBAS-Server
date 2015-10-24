@@ -254,7 +254,7 @@ function getReport()
                 break;
             case "ALL_APPOINTMENTS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeS":$('#dateTimeS').val() + "T00:00:00+02:00",
                     "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00",
                     "staffID":$('#staffID').val()
                 };
@@ -266,14 +266,14 @@ function getReport()
                 break;
             case "ALL_ACCESS_RECORDS_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeS":$('#dateTimeS').val() + "T00:00:00+02:00",
                     "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00"
                 };
                 url = "/createAccessRecordBetweenDateTimeReports";
                 break;
             case "ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME":
                 data = {"format" : $('#reportFormat').val(),
-                    "dateTimeS":$('#dateTimeS').val() + "00:00:00+02:00",
+                    "dateTimeS":$('#dateTimeS').val() + "T00:00:00+02:00",
                     "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00",
                     "staffID":$('#staffID').val()
                 };
