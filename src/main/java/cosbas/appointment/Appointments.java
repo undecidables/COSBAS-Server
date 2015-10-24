@@ -23,8 +23,6 @@ import java.util.List;
 @Service
 public class Appointments 
 {
-    Notifications notifyEmail;
-
     /**
      * The database adapter/credentialRepository to use.
      */
@@ -95,23 +93,6 @@ public class Appointments
             //check is cancellee is one who made the appointment/the appointment is with
              List<String> tempVisitors = tempAppointment.getVisitorIDs();
 
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: tempVisitors) {
-                if (s.equals(tempVisitors.get(tempVisitors.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
              for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
              {
                 String visitor = i.next();
@@ -121,8 +102,7 @@ public class Appointments
                     calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
                     //revoke access of key
 
-                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
-                    return "Appointment has been cancelled.";
+                    return "Appointment has been cancelled. {Visitor}";
                 } else if (tempAppointment.getStatus().equals("Cancelled"))
                 {
                     return "Appointment has already been cancelled";
@@ -133,8 +113,7 @@ public class Appointments
              if(cancelleeID.equals(tempAppointment.getStaffID()) && !tempAppointment.getStatus().equals("Cancelled"))
              {
                     calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
-                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
-                    return "Appointment has been cancelled.";
+                    return "Appointment has been cancelled. {Staff}";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
                 return "Appointment has already been cancelled.";
@@ -198,16 +177,17 @@ public class Appointments
             tempAppointment.setStatus("Approved");
             repository.save(tempAppointment);
 
-            TemporaryAccessCode code;
+            /*TemporaryAccessCode code;
             List<TemporaryAccessCode> generatedCodes = visitorCodes.getTemporaryAccessCode(tempAppointment);
 
             int i = 0;
             for (TemporaryAccessCode a: generatedCodes) {
+                System.out.println(generatedCodes.toString());
                 String visitor = tempAppointment.getVisitorIDs().get(i);
                 code = new TemporaryAccessCode(tempAppointment.getId(),visitor,a.getData(),a.getValidFrom(),a.getValidTo());
                 codeRepository.save(code);
                 i++;
-            }
+            }*/
 
             return "Appointment approved";
         } else if(tempAppointment == null){
@@ -232,27 +212,6 @@ public class Appointments
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested")  && staffID.equals(tempAppointment.getStaffID()))
         {
             calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
-
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
-
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
 
             return "Appointment denied";
         } else if(tempAppointment == null){
