@@ -116,12 +116,12 @@ public class Appointments
                     return "Appointment has been cancelled. {Staff}";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
-                return "Appointment has already been cancelled.";
+                return "Appointment has already been cancelled";
              }
 
              return "You are not authorised to cancel this appointment";
         }     
-         return "Appointment does not exist.";
+         return "Appointment does not exist";
     }
 
     /**
