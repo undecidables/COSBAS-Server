@@ -2,6 +2,8 @@ package cosbas.logging;
 
 import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
 import cosbas.user.ContactDetail;
@@ -58,6 +60,9 @@ public class Interceptor {
     @Autowired
     private AppointmentDBAdapter appointmentRepository;
 
+    @Autowired
+    private BiometricDataDAO codeRepository;
+
     ExecutorService exe = Executors.newFixedThreadPool(50);
 
     @AfterReturning(value = "toNotify()", returning = "result")
@@ -105,7 +110,20 @@ public class Interceptor {
                     if (result.toString().equals("Appointment approved")) {
 
                         System.out.println("Notification");
-                        /*Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+
+                        /*
+                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
+
+                        System.out.println();
+                        for (TemporaryAccessCode c: codes) {
+                            System.out.println(c.getData().toString());
+                        }
+
+                        System.out.println();
+                        for (TemporaryAccessCode c: codes) {
+                            System.out.println(c.toString());
+                        }
 
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
@@ -124,6 +142,58 @@ public class Interceptor {
 
                         notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
                         */
+                    }
+                } else if (methodName.equals("denyAppointment")) {
+                    if (result.toString().equals("Appointment denied")){
+
+                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        List<String> attendants = tempAppointment.getVisitorIDs();
+
+                        ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+                        ContactDetail contactDetailsStaff = null;
+
+                        //create ContactDetail objects for visitors
+                        for(String s: attendants) {
+                            if (s.equals(attendants.get(attendants.size()-1))) {
+                                contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                            }
+                            else {
+                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                            }
+                        }
+
+                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
+
+                    }
+                } else if (methodName.equals("cancelAppointment")) {
+                    if (result.toString().equals("Appointment has been cancelled.")) {
+
+                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[1]);
+                        List<String> attendants = tempAppointment.getVisitorIDs();
+
+                        ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
+                        ContactDetail contactDetailsStaff = null;
+
+                        //create ContactDetail objects for visitors
+                        for(String s: attendants) {
+                            if (s.equals(attendants.get(attendants.size()-1))) {
+                                contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
+                            }
+                            else {
+                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                            }
+                        }
+
+                        String[] results = result.toString().split(" ");
+                        String byWhom = results[4];
+
+                        if (byWhom.equals("{Staff}")) {
+                            notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
+                        }
+                        else if (byWhom.equals("{Visitor}")) {
+                            notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
+                        }
+
                     }
                 }
 
