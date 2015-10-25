@@ -20,6 +20,21 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import cosbas.permissions.PermissionId;
+import cosbas.permissions.PermissionManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.security.Principal;
+
+
 /**
  * {@author Szymon}
  */
@@ -48,9 +63,14 @@ public class Interceptor {
         logger.error(joinPoint.toShortString() + " With Exception: " + error.toString());
     }
 
+
     @Pointcut("execution(* cosbas..*(..)) && @annotation(cosbas.notifications.Notify))")
-    public void toNotify()
-    {
+    public void toNotify() {
+		
+	}
+
+    @Pointcut("execution(* cosbas.web.ReportsRestController.*(..)) && @annotation(cosbas.logging.AuthenticateReports))")
+    public void toAuthenticateReporting(){
 
     }
 
@@ -200,5 +220,22 @@ public class Interceptor {
             }
         });
 
+    }
+
+	@Autowired
+    PermissionManager permissionManager;
+
+    @Before(value = "toAuthenticateReporting() && args(principal,..)")
+    public void authenticateReporting(JoinPoint joinPoint, Principal principal)
+    {
+        String userId = principal.getName();
+        if(permissionManager.hasPermission(userId, PermissionId.REPORTS))
+        {
+
+        }
+        else
+        {
+            throw new RuntimeException("Access Denied");
+        }
     }
 }

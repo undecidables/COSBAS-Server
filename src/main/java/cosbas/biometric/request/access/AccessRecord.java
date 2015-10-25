@@ -19,10 +19,10 @@ public class AccessRecord {
     private DoorActions action;
     private String userID;
 
-    public AccessRecord(String DoorID, LocalDateTime dateTime, DoorActions Action, String userID) {
-        this.doorID = DoorID;
+    public AccessRecord(String doorID, LocalDateTime dateTime, DoorActions action, String userID) {
+        this.doorID = doorID;
         this.dateTime = dateTime;
-        this.action = Action;
+        this.action = action;
         this.userID = userID;
     }
 
