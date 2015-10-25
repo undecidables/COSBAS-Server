@@ -79,9 +79,7 @@ public class Interceptor {
 
     @Autowired
     private DeletedAppointmentDBAdapter deletedAppointmentRepository;
-
-    @Autowired
-    private BiometricDataDAO codeRepository;
+    
 
     ExecutorService exe = Executors.newFixedThreadPool(50);
 
