@@ -69,11 +69,6 @@ public class Interceptor {
 		
 	}
 
-    @Pointcut("execution(* cosbas.web.ReportsRestController.*(..)) && @annotation(cosbas.logging.AuthenticateReports))")
-    public void toAuthenticateReporting(){
-
-    }
-
     @Autowired
     Notifications notify;
 
@@ -219,6 +214,11 @@ public class Interceptor {
 
             }
         });
+
+    }
+
+    @Pointcut("execution(* cosbas.web.ReportsRestController.*(..)) && @annotation(cosbas.logging.AuthenticateReports))")
+    public void toAuthenticateReporting(){
 
     }
 
