@@ -2,6 +2,8 @@ package cosbas.logging;
 
 import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
+import cosbas.appointment.DeletedAppointment;
+import cosbas.appointment.DeletedAppointmentDBAdapter;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.notifications.Email;
@@ -76,6 +78,9 @@ public class Interceptor {
     private AppointmentDBAdapter appointmentRepository;
 
     @Autowired
+    private DeletedAppointmentDBAdapter deletedAppointmentRepository;
+
+    @Autowired
     private BiometricDataDAO codeRepository;
 
     ExecutorService exe = Executors.newFixedThreadPool(50);
@@ -96,6 +101,7 @@ public class Interceptor {
 
                 if (methodName.equals("requestAppointment")) {
                     if (!result.toString().equals("Time not available")) {
+
                         String[] results = result.toString().split(" ");
                         String id = results[1];
 
@@ -161,7 +167,7 @@ public class Interceptor {
                 } else if (methodName.equals("denyAppointment")) {
                     if (result.toString().equals("Appointment denied")){
 
-                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        /*Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
@@ -177,13 +183,16 @@ public class Interceptor {
                             }
                         }
 
-                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
+                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);*/
 
                     }
                 } else if (methodName.equals("cancelAppointment")) {
                     if (result.toString().equals("Appointment has been cancelled.")) {
 
-                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[1]);
+                        DeletedAppointment tempAppointment = deletedAppointmentRepository.findByAppointmentID((String) arguments[1]);
+
+                        System.out.print(tempAppointment.getId());
+
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
@@ -208,7 +217,6 @@ public class Interceptor {
                         else if (byWhom.equals("{Visitor}")) {
                             notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
                         }
-
                     }
                 }
 

@@ -17,4 +17,13 @@ public class DeletedAppointment extends Appointment {
         super(staffID, visitorIDs, dateTime, durationMinutes, reason);
         this.appointmentID = appointmentID;
     }
+
+    public String getAppointmentID() {
+        return appointmentID;
+    }
+
+    public void setAppointmentID(String appointmentID) {
+        this.appointmentID = appointmentID;
+    }
+
 }
