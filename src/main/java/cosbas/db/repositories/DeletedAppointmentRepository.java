@@ -1,6 +1,8 @@
 package cosbas.db.repositories;
 
 
+import cosbas.appointment.DeletedAppointment;
+
 /**
  * @author Vivian Venter
  * Interface that handles fetching the deleted appointment objects from MongoDB and saving deleted appointment objects in the db.
