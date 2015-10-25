@@ -2,6 +2,8 @@ package cosbas.db.repositories;
 
 
 import cosbas.appointment.DeletedAppointment;
+import cosbas.appointment.DeletedAppointmentDBAdapter;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * @author Vivian Venter
