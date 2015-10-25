@@ -169,7 +169,7 @@ public class Interceptor {
                 } else if (methodName.equals("denyAppointment")) {
                     if (result.toString().equals("Appointment denied")){
 
-                        /*Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        DeletedAppointment tempAppointment = deletedAppointmentRepository.findByAppointmentID((String) arguments[0]);
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
@@ -185,15 +185,13 @@ public class Interceptor {
                             }
                         }
 
-                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);*/
+                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
 
                     }
                 } else if (methodName.equals("cancelAppointment")) {
                     if (result.toString().contains("Appointment has been cancelled. {")) {
 
                         DeletedAppointment tempAppointment = deletedAppointmentRepository.findByAppointmentID((String) arguments[1]);
-
-                        System.out.print(tempAppointment.getId());
 
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
