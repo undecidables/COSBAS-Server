@@ -92,6 +92,8 @@ public class Interceptor {
         Object[] arguments = joinPoint.getArgs();
 
 
+        System.out.println(result.toString());
+
 
         exe.execute(new Runnable() {
             @Override
@@ -187,7 +189,7 @@ public class Interceptor {
 
                     }
                 } else if (methodName.equals("cancelAppointment")) {
-                    if (result.toString().equals("Appointment has been cancelled.")) {
+                    if (result.toString().contains("Appointment has been cancelled. {")) {
 
                         DeletedAppointment tempAppointment = deletedAppointmentRepository.findByAppointmentID((String) arguments[1]);
 
