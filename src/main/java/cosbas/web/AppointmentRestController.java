@@ -679,20 +679,23 @@ public class AppointmentRestController {
     @Autowired
     UserDAO users;
 
-    @RequestMapping(method= RequestMethod.POST, value="/changeEmail")
-    public String changeEmail(Principal principal,
+    @RequestMapping(method= RequestMethod.POST, value="/updateEmail")
+    public String updateEmail(Principal principal,
                               @RequestParam(value = "email", required = true) String email) {
 
         User user = users.findByUserID(principal.getName());
         ContactDetail newContactDetail = new ContactDetail(ContactTypes.EMAIL, email);
-        if(user.updateContactDetail(ContactTypes.EMAIL, newContactDetail))
-        {
-            users.save(user);
-            return "Successfully updated email.";
+        try {
+            if (user.updateContactDetail(ContactTypes.EMAIL, newContactDetail)) {
+                users.save(user);
+                return "true";
+            } else {
+                return "false";
+            }
         }
-        else
+        catch (Exception e)
         {
-            return "An error has occurred, please try again later or contact your administrator.";
+            return "false";
         }
     }
 }
