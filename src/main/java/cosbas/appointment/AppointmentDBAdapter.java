@@ -19,7 +19,6 @@ public interface AppointmentDBAdapter  {
     <S extends Appointment> S save(S entity);
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
     <S extends Appointment> Iterable<S> save(Iterable<S> entities);
-    Iterable<Appointment> findAll();
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
     void delete(Appointment entity);
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
@@ -38,4 +37,6 @@ public interface AppointmentDBAdapter  {
     List<Appointment> findByDateTimeBetween(LocalDateTime dateS, LocalDateTime dateE);
     @Cacheable("appointments")
     List<Appointment> findByStaffIDAndDateTimeBetween(String staffId, LocalDateTime dateS, LocalDateTime dateE);
+    @Cacheable("appointments")
+    Iterable<Appointment> findAll();
 }

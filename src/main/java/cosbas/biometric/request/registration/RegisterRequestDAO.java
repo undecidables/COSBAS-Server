@@ -22,7 +22,11 @@ public interface RegisterRequestDAO{
     void delete(Iterable<? extends RegisterRequest> entities);
     @CacheEvict(value = "registerRequest",beforeInvocation = true, allEntries = true)
     void deleteAll();
+    @CacheEvict(value = "registerRequest",beforeInvocation = true, allEntries = true)
+    void delete(String userID);
 
+
+    long count();
 
     @Cacheable("registerRequest")
     RegisterRequest findByUserID(String userID);
