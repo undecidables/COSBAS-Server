@@ -3,6 +3,7 @@ package cosbas.biometric.validators.facial;
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -16,17 +17,23 @@ public class RecognizerData {
 
     @Id
     String id;
+
     private boolean needsTraining;
 
-    public final List<String> personNames;
-    public final List<opencv_core.IplImage> trainingFaces;
-    public final opencv_core.IplImage[] eigenVectors;
-    public final opencv_core.IplImage pAvgTrainImg;
-    public final opencv_core.CvMat eigenValues;
-    public final opencv_core.CvMat projectedTrainFace;
-    public final opencv_core.CvMat personNumTruthMat;
-    public final LocalDateTime updated;
+    public List<String> personNames;
+    public List<opencv_core.IplImage> trainingFaces;
+    public opencv_core.IplImage[] eigenVectors;
+    public opencv_core.IplImage pAvgTrainImg;
+    public opencv_core.CvMat eigenValues;
+    public opencv_core.CvMat projectedTrainFace;
+    public opencv_core.CvMat personNumTruthMat;
+    public LocalDateTime updated;
 
+
+    private RecognizerData() {
+        needsTraining = true;
+        updated = LocalDateTime.now().minusDays(1);
+    }
     @PersistenceConstructor
     protected RecognizerData(String id, List<String> personNames,
                              List<opencv_core.IplImage> trainingFaces,

@@ -14,6 +14,7 @@ import cosbas.biometric.request.registration.RegisterRequest;
 import cosbas.biometric.request.registration.RegisterResponse;
 import cosbas.biometric.serialize.BiometricSerializer;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
+import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.permissions.PermissionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-public class
-
-        BiometricController {
+public class BiometricController {
 
     final BiometricSerializer serializer;
     final BiometricParser parser;
@@ -45,8 +44,7 @@ public class
     }
 
     @RequestMapping(/*method= RequestMethod.POST, */value="/biometrics/access", method= RequestMethod.POST)
-    public String access(HttpServletRequest request) throws IOException, ServletException, BiometricTypeException {
-
+    public String access(HttpServletRequest request) throws IOException, ServletException, ValidationException {
         AccessRequest aRequest = parser.parseRequest(request);
         AccessResponse response = authSystem.requestAccess(aRequest);
         return serializer.serializeResponse(response);

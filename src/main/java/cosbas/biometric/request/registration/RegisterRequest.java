@@ -2,7 +2,6 @@ package cosbas.biometric.request.registration;
 
 import cosbas.biometric.data.BiometricData;
 import cosbas.user.ContactDetail;
-import org.apache.commons.lang3.text.StrBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
@@ -89,6 +88,6 @@ public class RegisterRequest {
     }
 
     public String toString() {
-        return (new StringBuilder()).append(time).append(" ").append(userID).append(" by ").append(requestBy).toString();
+        return (new StringBuilder()).append(time).append(",").append(userID).append(",").append(requestBy).toString();
     }
 }

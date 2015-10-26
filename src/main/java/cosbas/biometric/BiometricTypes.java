@@ -22,6 +22,7 @@ public enum BiometricTypes {
 
     public final Class<? extends AccessValidator> validatorClass;
     public final Class<? extends BiometricsPreprocessor> preprocessorClass;
+
     BiometricTypes(Class<? extends AccessValidator> validatorClass, Class<? extends BiometricsPreprocessor> preprocessorClass) {
         this.validatorClass = validatorClass;
         this.preprocessorClass = preprocessorClass;

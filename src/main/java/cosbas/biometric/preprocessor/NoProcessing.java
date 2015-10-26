@@ -5,7 +5,7 @@ import cosbas.biometric.data.BiometricData;
 import org.springframework.stereotype.Component;
 
 /**
- *  {@author Renette}
+ * {@author Renette}
  */
 @Component
 public class NoProcessing implements BiometricsPreprocessor {
