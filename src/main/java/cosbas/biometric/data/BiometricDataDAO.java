@@ -13,7 +13,19 @@ import java.util.List;
  *  This interface exists for the sake of making the type of database pluggable.
  *  Extra Functions follow the query style of SpringData Repositories.
  */
-public interface BiometricDataDAO extends CrudRepository<BiometricData, String> {
+public interface BiometricDataDAO {
+
+
+    <S extends BiometricData> S save(S entity);
+    <S extends BiometricData> Iterable<S> save(Iterable<S> entities);
+
+
+    Iterable<BiometricData> findAll();
+    long count();
+    void delete(BiometricData entity);
+    void delete(Iterable<? extends BiometricData> entities);
+    void deleteAll();
+
     @Cacheable("Biometric-User")
     List<BiometricData> findByUserID(String userID);
     @Cacheable("Biometric-Type")
@@ -25,9 +37,6 @@ public interface BiometricDataDAO extends CrudRepository<BiometricData, String> 
 
     List<BiometricData> deleteByUserID(String userID);
 
-    @Override
-    @CacheEvict("Biometric-Data")
-    <T extends BiometricData> T save(T d);
 
 
 }
