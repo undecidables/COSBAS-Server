@@ -96,16 +96,19 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment request notification to the staff member
      * The template method as specified in the Strategy Interface
-     * @param to - The email address of the staff member to which the email will be send to
+     * @param emails - The email address of the staff member to which the email will be send to
      * @param visitorIDs - The name(s) of the visitor(s)
      * @param tempAppointment - the appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Request(ArrayList<ContactDetail> to, List<String> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Request(ArrayList<ContactDetail> emails, List<String> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageRequest);
-        notification.setTo(to.getDetails());
+
+        String[] to = getStaffEmails(emails);
+
+        notification.setTo(to);
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
@@ -198,16 +201,19 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment approved notification to the staff member
      * The template method as specified in the Strategy Interface
-     * @param to - The email address of the staff member to which the email will be send to
+     * @param emails - The email address of the staff member to which the email will be send to
      * @param visitorIDs - The name(s) of the visitor(s)
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Approve(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Approve(ArrayList<ContactDetail> emails, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageApprove);
-        notification.setTo(to.getDetails());
+
+        String[] to = getStaffEmails(emails);
+
+        notification.setTo(to);
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
@@ -299,17 +305,20 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment cancelled notification to the staff member
      * The template method as specified in the Strategy Interface
-     * @param to - The email address of the staff member to which the email will be send to
+     * @param emails - The email address of the staff member to which the email will be send to
      * @param visitorIDs - The name(s) of the visitor(s)
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
      */
     @Override
-    public void sendStaffNotification_Cancel(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
+    public void sendStaffNotification_Cancel(ArrayList<ContactDetail> emails, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageCancel);
-        notification.setTo(to.getDetails());
+
+        String[] to = getStaffEmails(emails);
+
+        notification.setTo(to);
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
@@ -397,16 +406,19 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment denied notification to the staff member
      * The template method as specified in the Strategy Interface
-     * @param to - The email address of the staff member to which the email will be send to
+     * @param emails - The email address of the staff member to which the email will be send to
      * @param visitorIDs - The name(s) of the visitor(s)
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Deny(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Deny(ArrayList<ContactDetail> emails, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageDeny);
-        notification.setTo(to.getDetails());
+
+        String[] to = getStaffEmails(emails);
+
+        notification.setTo(to);
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
@@ -434,14 +446,17 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the registration notification to the staff member
      * The template method as specified in the Strategy Interface
-     * @param to - The email address of the staff member that has been registered to the COSBAS System
+     * @param emails - The email address of the staff member that has been registered to the COSBAS System
      */
     @Override
-    public void sendStaffNotification_Registration(ArrayList<ContactDetail> to) {
+    public void sendStaffNotification_Registration(ArrayList<ContactDetail> emails) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageReg);
-        notification.setTo(to.getDetails());
+
+        String[] to = getStaffEmails(emails);
+
+        notification.setTo(to);
 
         notification.setText(
             "Dear Staff Member,\n\n" +
@@ -557,13 +572,27 @@ public class Email implements NotificationsStrategy  {
     /**
      * The function that converts the ContactDetail object of each visitor and change it into a String[]
      * @param visitors - the ArrayList of ContactDetails objects
-     * @return to - A String[] that contains only the email adress(es) of the visitor(s)
+     * @return to - A String[] that contains only the email address(es) of the visitor(s)
      */
     private String[] getVisitorEmails(ArrayList<ContactDetail> visitors) {
         String[] to = new String[visitors.size()];
 
         for (int i = 0; i < visitors.size(); i++) {
             to[i] = visitors.get(i).getDetails();
+        }
+        return to;
+    }
+
+    /**
+     * The function that converts the ContactDetail objects of the staff member and change it into a String[]
+     * @param staff- the ArrayList of ContactDetails objects
+     * @return to - A String[] that contains only the email address(es) of the staff member
+     */
+    private String[] getStaffEmails(ArrayList<ContactDetail> staff) {
+        String[] to = new String[staff.size()];
+
+        for (int i = 0; i < staff.size(); i++) {
+            to[i] = staff.get(i).getDetails();
         }
         return to;
     }
