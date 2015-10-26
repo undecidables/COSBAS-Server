@@ -101,7 +101,7 @@ public class Email implements NotificationsStrategy  {
      * @param tempAppointment - the appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Request(ContactDetail to, List<String> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Request(ArrayList<ContactDetail> to, List<String> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageRequest);
@@ -203,7 +203,7 @@ public class Email implements NotificationsStrategy  {
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Approve(ContactDetail to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Approve(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageApprove);
@@ -305,7 +305,7 @@ public class Email implements NotificationsStrategy  {
      * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
      */
     @Override
-    public void sendStaffNotification_Cancel(ContactDetail to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
+    public void sendStaffNotification_Cancel(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageCancel);
@@ -402,7 +402,7 @@ public class Email implements NotificationsStrategy  {
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendStaffNotification_Deny(ContactDetail to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
+    public void sendStaffNotification_Deny(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageDeny);
@@ -437,7 +437,7 @@ public class Email implements NotificationsStrategy  {
      * @param to - The email address of the staff member that has been registered to the COSBAS System
      */
     @Override
-    public void sendStaffNotification_Registration(ContactDetail to) {
+    public void sendStaffNotification_Registration(ArrayList<ContactDetail> to) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageReg);

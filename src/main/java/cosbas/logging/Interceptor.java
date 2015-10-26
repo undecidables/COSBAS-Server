@@ -10,6 +10,8 @@ import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -79,6 +81,9 @@ public class Interceptor {
 
     @Autowired
     private DeletedAppointmentDBAdapter deletedAppointmentRepository;
+
+    @Autowired
+    private UserDAO userRepository;
     
 
     ExecutorService exe = Executors.newFixedThreadPool(50);
@@ -111,15 +116,21 @@ public class Interceptor {
                             List<String> attendants = tempAppointment.getVisitorIDs();
 
                             ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-                            ContactDetail contactDetailsStaff = null;
+                            ArrayList<ContactDetail> contactDetailsStaff = null;
+
+                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                            if (user != null) {
+                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                            }
+
+                            int loopCond = attendants.size();
+                            if (contactDetailsStaff != null) {
+                                 loopCond -= contactDetailsStaff.size();
+                            }
 
                             //create ContactDetail objects for visitors
-                            for (String s : attendants) {
-                                if (s.equals(attendants.get(attendants.size() - 1))) {
-                                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL, s);
-                                } else {
-                                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                                }
+                            for (int i = 0; i < loopCond; i++) {
+                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                             }
 
                             List<String> visitorIDs = (List<String>) arguments[0];
@@ -171,16 +182,16 @@ public class Interceptor {
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-                        ContactDetail contactDetailsStaff = null;
+                        ArrayList<ContactDetail> contactDetailsStaff = null;
+
+                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                        if (user != null) {
+                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                        }
 
                         //create ContactDetail objects for visitors
-                        for(String s: attendants) {
-                            if (s.equals(attendants.get(attendants.size()-1))) {
-                                contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                            }
-                            else {
-                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                            }
+                        for (String s : attendants) {
+                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
                         }
 
                         notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
@@ -194,16 +205,16 @@ public class Interceptor {
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-                        ContactDetail contactDetailsStaff = null;
+                        ArrayList<ContactDetail> contactDetailsStaff = null;
+
+                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                        if (user != null) {
+                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                        }
 
                         //create ContactDetail objects for visitors
-                        for(String s: attendants) {
-                            if (s.equals(attendants.get(attendants.size()-1))) {
-                                contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                            }
-                            else {
-                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                            }
+                        for (String s : attendants) {
+                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
                         }
 
                         String[] results = result.toString().split(" ");

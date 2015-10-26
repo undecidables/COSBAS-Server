@@ -45,44 +45,31 @@ public class Notifications {
      * @param tempAppointment - the appointment object to extract the necessary details
      * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
      */
-    public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ContactDetail contactDetailStaff, NotificationType type, List<String> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
+    public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ArrayList<ContactDetail> contactDetailStaff, NotificationType type, List<String> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
         switch (type) {
             case REQUEST_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Request(contactDetailsVisitor,visitorIDs,tempAppointment);
                     email.sendStaffNotification_Request(contactDetailStaff,visitorIDs,tempAppointment);
-                }
                 break;
 
             case APPROVE_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Approve(contactDetailsVisitor,tempAppointment);
                     email.sendStaffNotification_Approve(contactDetailStaff,contactDetailsVisitor,tempAppointment);
-                }
                 break;
 
             case CANCEL_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Cancel(contactDetailsVisitor,tempAppointment,staffCancelled);
                     email.sendStaffNotification_Cancel(contactDetailStaff,contactDetailsVisitor,tempAppointment,staffCancelled);
-                }
                 break;
             case DENY_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendVisitorNotification_Deny(contactDetailsVisitor,tempAppointment);
                     email.sendStaffNotification_Deny(contactDetailStaff,contactDetailsVisitor,tempAppointment);
-                }
                 break;
 
             case REGISTRATION:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
                     email.sendStaffNotification_Registration(contactDetailStaff);
-                }
                 break;
         }
-
-
-
     }
 
     /**
