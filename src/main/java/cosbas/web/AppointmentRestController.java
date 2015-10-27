@@ -688,19 +688,12 @@ public class AppointmentRestController {
     public String updateEmail(Principal principal,
                               @RequestParam(value = "email", required = true) String email) {
 
-        User user = users.findByUserID(principal.getName());
-        ContactDetail newContactDetail = new ContactDetail(ContactTypes.EMAIL, email);
-        try {
-            if (user.updateContactDetail(ContactTypes.EMAIL, newContactDetail)) {
-                users.save(user);
-                return "true";
-            } else {
-                return "false";
-            }
+        if (principal != null) {
+            String user = principal.getName();
+            userManager.updateDetails(user, new ContactDetail(ContactTypes.EMAIL, email));
+            return"true";
         }
-        catch (Exception e)
-        {
-            return "false";
-        }
+
+        return "false";
     }
 }
