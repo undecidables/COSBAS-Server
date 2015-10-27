@@ -26,6 +26,7 @@ public interface RegisterRequestDAO{
     void delete(String userID);
 
 
+    @Cacheable("registerRequest")
     long count();
 
     @Cacheable("registerRequest")

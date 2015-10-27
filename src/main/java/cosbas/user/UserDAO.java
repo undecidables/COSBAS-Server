@@ -22,6 +22,7 @@ public interface UserDAO {
     @CacheEvict(value = "users",beforeInvocation = true, allEntries = true)
     void delete(String userID);
 
+    @Cacheable("users")
     long count();
     @Cacheable("users")
     Iterable<User> findAll();
