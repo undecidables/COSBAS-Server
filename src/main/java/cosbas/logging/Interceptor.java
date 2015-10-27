@@ -140,7 +140,7 @@ public class Interceptor {
                             }
 
                             if (user != null) {
-                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, tempAppointment, false);
                             }
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
                         }
@@ -185,7 +185,7 @@ public class Interceptor {
                         }
 
                         if (user != null) {
-                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null, tempAppointment, false);
+                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, tempAppointment, false);
                         }
                         notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
 
@@ -215,7 +215,7 @@ public class Interceptor {
                         }
 
                         if (user != null){
-                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
+                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, tempAppointment, false);
                         }
                         notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
 
@@ -252,7 +252,7 @@ public class Interceptor {
                             }
 
                             if (user != null) {
-                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,true);
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,tempAppointment,true);
                             }
 
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
@@ -275,7 +275,7 @@ public class Interceptor {
                             }
 
                             if (user != null) {
-                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,false);
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,tempAppointment,false);
                             }
 
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
