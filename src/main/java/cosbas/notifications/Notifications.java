@@ -50,24 +50,28 @@ public class Notifications {
      * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
      */
     public void sendVisitorNotifications(ArrayList<ContactDetail> contactDetailsVisitor, NotificationType type, List<String> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
-        switch (type) {
-            case REQUEST_APPOINTMENT:
-                    email.sendVisitorNotification_Request(contactDetailsVisitor, visitorIDs, tempAppointment);
-                break;
+        for (int i = 0; i < contactDetailsVisitor.size(); i++) {
+            switch (type) {
+                case REQUEST_APPOINTMENT:
+                    System.out.println(contactDetailsVisitor.size());
+                    System.out.println(visitorIDs.size());
+                    email.sendVisitorNotification_Request(contactDetailsVisitor.get(i), visitorIDs.get(0), tempAppointment);
+                    break;
 
-            case APPROVE_APPOINTMENT:
-                System.out.println(tempAppointment.getId());
+                case APPROVE_APPOINTMENT:
+                    System.out.println(tempAppointment.getId());
                     List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
-                    System.out.println("C3: " + codes.size() + "\n\n" + codes.toString());
-                    email.sendVisitorNotification_Approve(contactDetailsVisitor, tempAppointment, codes);
-                break;
+                    System.out.println("C3: " + codes.size());
+                    email.sendVisitorNotification_Approve(contactDetailsVisitor.get(i), tempAppointment, codes);
+                    break;
 
-            case CANCEL_APPOINTMENT:
-                    email.sendVisitorNotification_Cancel(contactDetailsVisitor, tempAppointment, staffCancelled);
-                break;
-            case DENY_APPOINTMENT:
-                    email.sendVisitorNotification_Deny(contactDetailsVisitor,tempAppointment);
-                break;
+                case CANCEL_APPOINTMENT:
+                    email.sendVisitorNotification_Cancel(contactDetailsVisitor.get(i), tempAppointment, staffCancelled);
+                    break;
+                case DENY_APPOINTMENT:
+                    email.sendVisitorNotification_Deny(contactDetailsVisitor.get(i), tempAppointment);
+                    break;
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
-import cosbas.biometric.data.AccessCode;
 import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.user.ContactDetail;
 import org.springframework.mail.MailException;
@@ -52,21 +51,19 @@ public class Email implements NotificationsStrategy  {
      * The method to send the appointment request notification to the visitor(s)
      * The template method as specified in the Strategy Interface
      * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
-     * @param visitorIDs - The name(s) of the visitor(s)
+     * @param visitorID - The name(s) of the visitor(s)
      * @param tempAppointment - the appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendVisitorNotification_Request(ArrayList<ContactDetail> visitors, List<String> visitorIDs, Appointment tempAppointment) {
+    public void sendVisitorNotification_Request(ContactDetail visitors, String visitorID, Appointment tempAppointment) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageRequest);
-        String[] to = getVisitorEmails(visitors);
-        StringBuilder names = getVisitorNames(visitorIDs);
 
-        notification.setTo(to);
+        notification.setTo(visitors.getDetails());
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
         notification.setText(
-                "Dear " + names.toString() +"\n\n" +
+                "Dear " + visitorID +"\n\n" +
                 "Your request for an appointment with " + tempAppointment.getStaffID() + " has been sent for approval.\n\n" +
 
                 "Request Review:\n" +
@@ -153,17 +150,16 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment approved notification to the visitor(s)
      * The template method as specified in the Strategy Interface
-     * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
+     * @param visitor - The email address(es) of the visitor(s) to which the email will be send to
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      * @param codes
      */
     @Override
-    public void sendVisitorNotification_Approve(ArrayList<ContactDetail> visitors, Appointment tempAppointment, List<TemporaryAccessCode> codes) {
+    public void sendVisitorNotification_Approve(ContactDetail visitor, Appointment tempAppointment, List<TemporaryAccessCode> codes) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageApprove);
-        String[] to = getVisitorEmails(visitors);
 
-        notification.setTo(to);
+        notification.setTo(visitor.getDetails());
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
 
@@ -249,16 +245,15 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment cancelled notification to the visitor(s)
      * The template method as specified in the Strategy Interface
-     * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
+     * @param visitor - The email address(es) of the visitor(s) to which the email will be send to
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendVisitorNotification_Cancel(ArrayList<ContactDetail> visitors, Appointment tempAppointment, boolean staffCancelled) {
+    public void sendVisitorNotification_Cancel(ContactDetail visitor, Appointment tempAppointment, boolean staffCancelled) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageCancel);
-        String[] to = getVisitorEmails(visitors);
 
-        notification.setTo(to);
+        notification.setTo(visitor.getDetails());
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
 
@@ -369,16 +364,15 @@ public class Email implements NotificationsStrategy  {
     /**
      * The method to send the appointment denied notification to the visitor(s)
      * The template method as specified in the Strategy Interface
-     * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
+     * @param visitor - The email address(es) of the visitor(s) to which the email will be send to
      * @param tempAppointment - the appointment object to extract the necessary details of the appointment
      */
     @Override
-    public void sendVisitorNotification_Deny(ArrayList<ContactDetail> visitors, Appointment tempAppointment) {
+    public void sendVisitorNotification_Deny(ContactDetail visitor, Appointment tempAppointment) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageDeny);
-        String[] to = getVisitorEmails(visitors);
 
-        notification.setTo(to);
+        notification.setTo(visitor.getDetails());
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
 
@@ -576,20 +570,6 @@ public class Email implements NotificationsStrategy  {
     }
 
     /**
-     * The function that converts the ContactDetail object of each visitor and change it into a String[]
-     * @param visitors - the ArrayList of ContactDetails objects
-     * @return to - A String[] that contains only the email address(es) of the visitor(s)
-     */
-    private String[] getVisitorEmails(ArrayList<ContactDetail> visitors) {
-        String[] to = new String[visitors.size()];
-
-        for (int i = 0; i < visitors.size(); i++) {
-            to[i] = visitors.get(i).getDetails();
-        }
-        return to;
-    }
-
-    /**
      * The function that converts the ContactDetail objects of the staff member and change it into a String[]
      * @param staff- the ArrayList of ContactDetails objects
      * @return to - A String[] that contains only the email address(es) of the staff member
@@ -601,19 +581,6 @@ public class Email implements NotificationsStrategy  {
             to[i] = staff.get(i).getDetails();
         }
         return to;
-    }
-
-    /**
-     * The function that converts a list to a stringBuilder object
-     * @param visitorIDs - the name(s) of the visitors
-     * @return names - a StringBuilder object in the format "Name1, Name2"
-     */
-    private StringBuilder getVisitorNames(List<String> visitorIDs) {
-        StringBuilder names = new StringBuilder();
-        for (String visitorID : visitorIDs) {
-            names.append(visitorID).append(", ");
-        }
-        return names;
     }
 
     /**

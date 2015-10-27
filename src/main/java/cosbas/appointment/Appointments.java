@@ -189,6 +189,7 @@ public class Appointments
                 System.out.println(a.toString());
                 String visitor = tempAppointment.getVisitorIDs().get(i);
                 code = new TemporaryAccessCode(tempAppointment.getId(),visitor,a.getData(),a.getValidFrom(),a.getValidTo());
+                System.out.println("C1: " + code.toString());
                 codeRepository.save(code);
                 i++;
             }
