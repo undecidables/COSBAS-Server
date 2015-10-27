@@ -30,7 +30,7 @@ public class FingerprintMatching {
             originalImage = getImage(in);
 
             // bifurcations and endpoints is stored in this object
-            originalImageTemplateData   = new FingerprintTemplateData();
+            originalImageTemplateData = new FingerprintTemplateData();
             originalImageTemplateData.createTemplateFingerprintData(originalImage, false);
 
             Num_KeypointsFound = originalImageTemplateData.getEndPoints().size() + originalImageTemplateData.getBifurcations().size();
@@ -49,6 +49,7 @@ public class FingerprintMatching {
 
         System.out.println("Keys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
+        //use the threshold in application.properties
         if (matchingScore >= 0.5) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
