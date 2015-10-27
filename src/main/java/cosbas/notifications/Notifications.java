@@ -1,8 +1,11 @@
 package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
+import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ public class Notifications {
      */
     NotificationsStrategy email = null;
 
+    @Autowired
+    private BiometricDataDAO codeRepository;
 
     /**
      * Enumeration type to specify which type of notification has to be send
@@ -51,7 +56,10 @@ public class Notifications {
                 break;
 
             case APPROVE_APPOINTMENT:
-                    email.sendVisitorNotification_Approve(contactDetailsVisitor, tempAppointment);
+                System.out.println(tempAppointment.getId());
+                    List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
+                    System.out.println("C3: " + codes.size() + "\n\n" + codes.toString());
+                    email.sendVisitorNotification_Approve(contactDetailsVisitor, tempAppointment, codes);
                 break;
 
             case CANCEL_APPOINTMENT:

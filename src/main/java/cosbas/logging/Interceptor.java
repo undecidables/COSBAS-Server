@@ -144,7 +144,7 @@ public class Interceptor {
 
                         System.out.println("Notification");
 
-                       /* Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
                         List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
 
                         System.out.println();
@@ -162,9 +162,14 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
+                        int loopCond = attendants.size();
+                        if (contactDetailsStaff != null) {
+                            loopCond -= contactDetailsStaff.size();
+                        }
+
                         //create ContactDetail objects for visitors
-                        for(String s: attendants) {
-                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
+                        for (int i = 0; i < loopCond; i++) {
+                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                         }
 
                         User user = userRepository.findByUserID(tempAppointment.getStaffID());
@@ -173,7 +178,7 @@ public class Interceptor {
                             notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT,null,tempAppointment,false);
                         }
 
-                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);*/
+                        notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
 
                     }
                 } else if (methodName.equals("denyAppointment")) {

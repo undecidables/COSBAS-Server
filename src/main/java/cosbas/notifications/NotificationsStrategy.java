@@ -1,6 +1,7 @@
 package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.user.ContactDetail;
 
 import java.util.ArrayList;
@@ -36,8 +37,9 @@ public interface NotificationsStrategy {
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address(es) of the visitor(s) to which the email will be send to
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+    * @param codes
     */
-   void sendVisitorNotification_Approve(ArrayList<ContactDetail> to, Appointment tempAppointment);
+   void sendVisitorNotification_Approve(ArrayList<ContactDetail> to, Appointment tempAppointment, List<TemporaryAccessCode> codes);
 
 
    /**

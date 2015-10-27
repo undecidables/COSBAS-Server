@@ -8,6 +8,8 @@ import cosbas.notifications.Notifications;
 import cosbas.notifications.Notify;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,9 @@ public class Appointments
 
     @Autowired
     private BiometricDataDAO codeRepository;
+
+    @Autowired
+    private UserDAO userRepository;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
@@ -176,17 +181,17 @@ public class Appointments
             tempAppointment.setStatus("Approved");
             repository.save(tempAppointment);
 
-            /*TemporaryAccessCode code;
+            TemporaryAccessCode code;
             List<TemporaryAccessCode> generatedCodes = visitorCodes.getTemporaryAccessCode(tempAppointment);
 
             int i = 0;
             for (TemporaryAccessCode a: generatedCodes) {
-                System.out.println(generatedCodes.toString());
+                System.out.println(a.toString());
                 String visitor = tempAppointment.getVisitorIDs().get(i);
                 code = new TemporaryAccessCode(tempAppointment.getId(),visitor,a.getData(),a.getValidFrom(),a.getValidTo());
                 codeRepository.save(code);
                 i++;
-            }*/
+            }
 
             return "Appointment approved";
         } else if(tempAppointment == null){

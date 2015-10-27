@@ -2,6 +2,9 @@ package cosbas.biometric.data;
 
 import cosbas.appointment.Appointment;
 import cosbas.biometric.validators.CodeValidator;
+import cosbas.user.ContactDetail;
+import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -14,8 +17,11 @@ import java.util.List;
  */
 public abstract class AccessCodeGenerator {
 
-       @Autowired
+    @Autowired
     private CodeValidator validator;
+
+    @Autowired
+    private UserDAO userRepository;
 
     public AccessCode getPermanentAccessCode(String user) {
         byte[] code = getCode();
@@ -32,14 +38,25 @@ public abstract class AccessCodeGenerator {
 
         String id = appointment.getId();
 
-
         List<String> visitors = appointment.getVisitorIDs();
-        List<TemporaryAccessCode> codes = new ArrayList<>(visitors.size());
+
+        ArrayList<ContactDetail> contactDetailsStaff = null;
+        User user = userRepository.findByUserID(appointment.getStaffID());
+        if (user != null) {
+            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+        }
+
+        int size = visitors.size();
+        if (contactDetailsStaff != null) {
+            size -= contactDetailsStaff.size();
+        }
+
+        List<TemporaryAccessCode> codes = new ArrayList<>(size);
 
         LocalDateTime from = appointment.getDateTime().minusMinutes(15);
         LocalDateTime to = appointment.getDateTime().plusMinutes(appointment.getDurationMinutes() + 15);
 
-        for (int i = 0; i < visitors.size() - 1; i++) {
+        for (int i = 0; i < size; i++) {
             codes.add(new TemporaryAccessCode(id, visitors.get(i), getCode(), from, to));
         }
 

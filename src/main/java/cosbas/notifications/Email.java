@@ -2,6 +2,7 @@ package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
 import cosbas.biometric.data.AccessCode;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.user.ContactDetail;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -110,7 +111,7 @@ public class Email implements NotificationsStrategy  {
 
         notification.setTo(to);
 
-        int loopCond = visitorIDs.size() - emails.size();;
+        int loopCond = visitorIDs.size() - emails.size();
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < loopCond; i++) {
@@ -154,9 +155,10 @@ public class Email implements NotificationsStrategy  {
      * The template method as specified in the Strategy Interface
      * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
      * @param tempAppointment - The appointment object to extract the necessary details of the appointment
+     * @param codes
      */
     @Override
-    public void sendVisitorNotification_Approve(ArrayList<ContactDetail> visitors, Appointment tempAppointment) {
+    public void sendVisitorNotification_Approve(ArrayList<ContactDetail> visitors, Appointment tempAppointment, List<TemporaryAccessCode> codes) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageApprove);
         String[] to = getVisitorEmails(visitors);
@@ -164,7 +166,6 @@ public class Email implements NotificationsStrategy  {
         notification.setTo(to);
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
-        List<AccessCode> codes = tempAppointment.getAccessKeys();
 
         notification.setText(
                 "Dear User\n\n" +
@@ -423,7 +424,7 @@ public class Email implements NotificationsStrategy  {
 
         notification.setTo(to);
 
-        int loopCond = visitorIDs.size() - emails.size();;
+        int loopCond = visitorIDs.size() - emails.size();
 
         StringBuilder visitors = new StringBuilder();
         for (int i = 0; i < loopCond; i++) {
