@@ -203,6 +203,7 @@ public class Appointments
      * Function used by staff members to deny a requested appointment
      * @param appointmentID - The appointment's unique identifier
      */
+    @Notify
     public String denyAppointment(String appointmentID, String staffID){
 
         //find the appointment in the db

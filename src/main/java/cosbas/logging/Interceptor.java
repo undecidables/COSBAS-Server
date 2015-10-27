@@ -93,10 +93,6 @@ public class Interceptor {
         String methodName = joinPoint.getSignature().getName();
         Object[] arguments = joinPoint.getArgs();
 
-
-        System.out.println(result.toString());
-
-
         exe.execute(new Runnable() {
             @Override
             public void run() {
