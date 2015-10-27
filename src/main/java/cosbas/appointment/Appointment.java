@@ -103,4 +103,8 @@ public class Appointment {
     public void setSummary(String summary) {
         this.summary = summary;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

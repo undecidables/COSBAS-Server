@@ -103,8 +103,7 @@ public class Appointments
                     //revoke access of key
 
                     return "Appointment has been cancelled. {Visitor}";
-                } else if (tempAppointment.getStatus().equals("Cancelled"))
-                {
+                } else if (tempAppointment.getStatus().equals("Cancelled")) {
                     return "Appointment has already been cancelled";
                 }
              }  

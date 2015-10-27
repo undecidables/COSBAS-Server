@@ -166,8 +166,8 @@ public class Email implements NotificationsStrategy  {
 
         notification.setText(
                 "Dear User\n\n" +
-                        "We have good news for you! The request for an \n" +
-                        "appointment (" + tempAppointment.getId() + ") has been approved.\n\n" +
+                        "We have good news for you! Your request for an \n" +
+                        "appointment has been approved.\n\n" +
 
                         "Your access code to the department is: \n" +
                         "\t\t" +
@@ -222,8 +222,7 @@ public class Email implements NotificationsStrategy  {
 
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
-                       "You have successfully approved the appointment\n(" +
-                        tempAppointment.getId() +  ") with:\n" +
+                       "You have successfully approved the appointment with:\n" +
                         visitors +
 
                         "\n\nYou are able to cancel this appointment by going\n" +
@@ -266,6 +265,7 @@ public class Email implements NotificationsStrategy  {
                             "An appointment has been cancelled by you.\n\n" +
 
                             "Appointment Cancelled:\n" +
+                            "Appointment ID: " + tempAppointment.getId() + "\n" +
                             "Appointment with: " + tempAppointment.getStaffID() + "\n" +
                             "Date/Time: " + displayDate + "\n" +
                             "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
@@ -283,6 +283,7 @@ public class Email implements NotificationsStrategy  {
                             "An appointment has been cancelled.\n\n" +
 
                             "Appointment Cancelled:\n" +
+                            "Appointment ID: " + tempAppointment.getId() + "\n" +
                             "Appointment with: " + tempAppointment.getStaffID() + "\n" +
                             "Date/Time: " + displayDate + "\n" +
                             "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
@@ -328,7 +329,7 @@ public class Email implements NotificationsStrategy  {
         if (staffCancelled) {
             notification.setText(
                     "Dear " + tempAppointment.getStaffID() + "\n\n" +
-                            "You have successfully cancelled and removed the appointment\n with:\n" +
+                            "You have successfully cancelled and removed the appointment with:\n" +
                             visitors +
 
                             "\n\nRegards,\nCOSBAS"
@@ -341,6 +342,7 @@ public class Email implements NotificationsStrategy  {
                             "has been cancelled and removed from your calendar.\n\n" +
 
                             "Appointment Cancelled:\n" +
+                            "Appointment ID: " + tempAppointment.getId() + "\n" +
                             "Appointment with: "+ tempAppointment.getStaffID() + "\n" +
                             "Date/Time: " + displayDate + "\n" +
                             "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
@@ -380,9 +382,10 @@ public class Email implements NotificationsStrategy  {
         notification.setText(
                 "Dear User\n\n" +
                         "We have some unfortunate news for you. An appointment \n" +
-                        "(" + tempAppointment.getId() + ") requested by you has been denied.\n\n" +
+                        "requested by you has been denied.\n\n" +
 
                         "Appointment Denied:\n" +
+                        "Appointment ID: " + tempAppointment.getId() + "\n" +
                         "Appointment with: " + tempAppointment.getStaffID() + "\n" +
                         "Date/Time: " + displayDate + "\n" +
                         "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
@@ -426,7 +429,7 @@ public class Email implements NotificationsStrategy  {
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
                         "You have successfully denied the appointment\n(" +
-                        tempAppointment.getId() + ") with:\n" +
+                        tempAppointment + ") with:\n" +
                         visitors +
 
                         "\n\nRegards,\nCOSBAS"
