@@ -1,8 +1,16 @@
-
+@font-face
+{
+    font-family: PT Sans;
+    src: url('PTC55F.ttf');
+}
 
 body
 {
     visibility:hidden;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    color: #003366;
+    background: url('images/back.png');
 }
 
 .fa-bars
@@ -32,8 +40,8 @@ html, body {
 
 .footer
 {
-    background: #003366;
-    color: white;
+
+    color: #003366;
 }
 
 
@@ -46,7 +54,9 @@ html, body {
 
 #header .main-navigation
 {
-    background: #003366;
+    font-family: 'Open Sans', sans-serif;
+    color: #003366;
+    background: rgba(255,255,255,0);
 }
 
 #footer
@@ -64,7 +74,9 @@ html, body {
 
 .btn-common {
     background: #003366;
+    color: white;
 }
+
 
 #contact .contact-form .controls i {
 	color: #003366;
@@ -76,7 +88,7 @@ html, body {
 }
 
 #header .nav li a {
-	color: #fff;
+	color: #003366;
 }
 
 #header .nav li.active a:after, #header .nav li.active a, #header .nav li a:hover::after, #header .nav li a:hover, #header .nav li a:focus
@@ -94,11 +106,11 @@ html, body {
 }
 
 #header .nav li a:after {
-	border-bottom: 2px solid #cccc99;
+	border-bottom: 2px solid rgba(255,255,255,0);
 }
 
 #header .main-navigation {
-	border-bottom: 2px solid #003366;
+	border-bottom: 2px solid rgba(255,255,255,0);
 }
 
 #contact {
@@ -125,14 +137,23 @@ html, body {
     padding: 0;
 }
 
+.featherlight-inner
+{
+    margin-bottom: 0;
+}
 .cal
 {
-    padding: 90px 0px;
+    padding: 100px 0px;
     padding-bottom: 10px;
 }
 .section-title {
+    margin-top: 2.5em;
+    margin-bottom: 1em;
     color: #003366;
-    padding: 64px 20px;
+    padding: 50px 0px;
+    padding-bottom: 50px;
+    font-weight: normal;
+    margin-left: .5em;
 }
 
 .controls
@@ -221,11 +242,11 @@ background: #cccc99;
 
 body
 {
-    background: url('images/bg.png');
+    /*background: url('images/bg.png');*/
 }
 
 .btnLightbox {
-    color: white;
+    color: #fff;
     cursor: pointer;
     display: inline-block;
     margin: 10px 20px;
@@ -245,7 +266,7 @@ body
 #calendar
 {
     width: 100%;
-    background-color: #ffff;
+    background-color: #fff;
 }
 
 table {
@@ -395,10 +416,9 @@ table {
 
 
 
-
 .dropdown-menu
 {
-    background:#003366;
+    background:#fff;
     width: 200%;
     padding: 1em;
     min-width: 250px;
@@ -484,7 +504,7 @@ h2
 
 .btn-common
 {
-        color: white;
+        color: #fff;;
         cursor: pointer;
         display: inline-block;
         margin: 10px 20px;
@@ -499,6 +519,8 @@ h2
         border-radius: 4px;
         width: 100%;
         padding: 15px;
+        text-transform: uppercase;
+        font-weight: normal;
 }
 
 #dayAppointments
@@ -512,3 +534,83 @@ h2
     visibility: hidden;
     display:none;
 }
+
+.fadeInRight
+{
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.fadeInLeft
+{
+   padding-left: 1em;
+   padding-right: 1em;
+}
+
+.fadeInUp
+{
+    padding-left: 1em;
+       padding-right: 1em;
+}
+#permissionForm
+{
+    padding-left: 1em;
+           padding-right: 1em;
+}
+
+#permissionsHide > .fadeInUp
+{
+    padding-left: 0em;
+           padding-right: 0em;
+}
+#appointmentsubmit
+{
+    margin-top: 5%;
+}
+
+#permissionsubmit
+{
+    margin-top: 5%;
+}
+
+.btnLightbox
+{
+    margin-top: 5%;
+}
+
+
+
+#permissions > .table-bordered > tbody > tr > td
+{
+    width: 15%;
+}
+#permissions > .table-bordered > tbody > tr > td#userCol
+{
+    width: 85%;
+}
+
+#users > .table-bordered > tbody > tr > td
+{
+    width: 15%;
+}
+#users > .table-bordered > tbody > tr > td#userCol
+{
+    width: 85%;
+}
+
+td
+{
+    text-align: center;
+    padding: 0.5em;
+}
+
+p
+{
+    margin: 0.5em;
+}
+
+#contact .contact-form .controls i.loading {
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
+}
+

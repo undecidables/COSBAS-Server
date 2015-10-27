@@ -95,10 +95,8 @@ public class AppointmentRestController {
             returnPage += "<option>No active users of the system</option>";
         }
         returnPage += "</select>";
-        returnPage += "<p class=\"text-left\">" +
-                "<br/>" +
-                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>" +
-                "</p>";
+        returnPage += "<br/><br/>" +
+                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>";
 
         return returnPage;
     }
@@ -171,7 +169,8 @@ public class AppointmentRestController {
           String[] parts = appointments.get(i).getDateTime().toString().split("T");
           String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length() - 3);
 
-          if (appointments.get(i).getStaffID().equals(staffMember)) {
+
+          if (appointments.get(i).getStaffID().equals(staffMember) && appointments.get(i).getStatus() != "Approved") {
               returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
                       "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
@@ -179,7 +178,7 @@ public class AppointmentRestController {
                       "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
                       "<td><button type='submit' class='form-control accept approveBtn'><i class=\"fa fa-check-circle\"></i></button></td>" +
                       "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
-                      "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
+                      "<tr hidden=\"hidden\" class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
                       "</tr>" +
                       "</table>";
           }
@@ -187,7 +186,7 @@ public class AppointmentRestController {
       }
 
       if (appointments.size() == 0 || returnPage == "") {
-          returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
+          returnPage += "<h4 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
       }
       return returnPage;
   }
@@ -513,6 +512,8 @@ public class AppointmentRestController {
     List<User> users = biometricSystem.getUsers();
     
     String returnPage = "";
+      returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"appointmentWith\">";
+
 
     if(users != null){
       for(int i = 0; i < users.size(); i++)
@@ -524,15 +525,19 @@ public class AppointmentRestController {
           returnPage += "<option>"+user+"</option>";
         }
       }
-        
+
       if(users.size() == 0){
         returnPage += "<option selected=\"selected\">no users</option>";      
       } 
     } else {
       returnPage += "<option  selected=\"selected\">no users</option>";      
     }
-   
-    return returnPage;
+      returnPage += "</select>";
+      returnPage += "<br/><br/>" +
+              "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>";
+
+
+      return returnPage;
   }
 
   /**
@@ -543,7 +548,7 @@ public class AppointmentRestController {
     PermissionId[] permissions = permissionManager.allPermissions();
     
     String returnPage = "";
-
+      returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"permissionData\">";
     if(permissions != null){
       for(int i = 0; i < permissions.length; i++)
       {
@@ -558,7 +563,11 @@ public class AppointmentRestController {
     } else {
       returnPage += "no permissions";      
     }
-    return returnPage;
+      returnPage += "</select>";
+      returnPage += "<br/><br/>" +
+              "<button type=\"submit\" id=\"permissionsubmit\" class=\"btnLightbox btn-common\">Select Permission</button>";
+
+      return returnPage;
   }
   
   /**
