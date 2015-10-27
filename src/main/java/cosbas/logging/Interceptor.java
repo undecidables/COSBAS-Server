@@ -185,15 +185,20 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                        //create ContactDetail objects for visitors
-                        for (String s : attendants) {
-                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                        }
-
                         User user = userRepository.findByUserID(tempAppointment.getStaffID());
                         if (user != null) {
                             contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
                             notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT,null,tempAppointment,false);
+                        }
+
+                        int loopCond = attendants.size();
+                        if (contactDetailsStaff != null) {
+                            loopCond -= contactDetailsStaff.size();
+                        }
+
+                        //create ContactDetail objects for visitors
+                        for (int i = 0; i < loopCond; i++) {
+                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                         }
 
                         notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
@@ -209,10 +214,6 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                        //create ContactDetail objects for visitors
-                        for (String s : attendants) {
-                            contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                        }
 
                         String[] results = result.toString().split(" ");
                         String byWhom = results[4];
@@ -224,6 +225,17 @@ public class Interceptor {
                                 contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
                                 notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,true);
                             }
+
+                            int loopCond = attendants.size();
+                            if (contactDetailsStaff != null) {
+                                loopCond -= contactDetailsStaff.size();
+                            }
+
+                            //create ContactDetail objects for visitors
+                            for (int i = 0; i < loopCond; i++) {
+                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
+                            }
+
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
 
                         } else if (byWhom.equals("{Visitor}")) {
@@ -233,6 +245,17 @@ public class Interceptor {
                                 contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
                                 notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,false);
                             }
+
+                            int loopCond = attendants.size();
+                            if (contactDetailsStaff != null) {
+                                loopCond -= contactDetailsStaff.size();
+                            }
+
+                            //create ContactDetail objects for visitors
+                            for (int i = 0; i < loopCond; i++) {
+                                contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
+                            }
+
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
                         }
                     }
