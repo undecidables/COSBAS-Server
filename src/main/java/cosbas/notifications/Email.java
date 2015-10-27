@@ -263,7 +263,8 @@ public class Email implements NotificationsStrategy  {
         if(!staffCancelled) {
             notification.setText(
                     "Dear User\n\n" +
-                            "An appointment has been cancelled by you.\n\n" +
+                            "An appointment " +
+                            "(" + tempAppointment.getId() + ") has been cancelled by you.\n\n" +
 
                             "Appointment Cancelled:\n" +
                             "Appointment with: " + tempAppointment.getStaffID() + "\n" +
@@ -279,8 +280,8 @@ public class Email implements NotificationsStrategy  {
         else {
             notification.setText(
                     "Dear User\n\n" +
-                            "We have some unfortunate news for you.\n" +
-                            "An appointment has been cancelled.\n\n" +
+                            "We have some unfortunate news for you. An appointment \n" +
+                            "(" + tempAppointment.getId() + ") has been cancelled.\n\n" +
 
                             "Appointment Cancelled:\n" +
                             "Appointment with: " + tempAppointment.getStaffID() + "\n" +
@@ -328,7 +329,8 @@ public class Email implements NotificationsStrategy  {
         if (staffCancelled) {
             notification.setText(
                     "Dear " + tempAppointment.getStaffID() + "\n\n" +
-                            "You have successfully cancelled and removed the appointment\n with:\n" +
+                            "You have successfully cancelled and removed the appointment\n(" +
+                            tempAppointment.getId() + ") with:\n" +
                             visitors +
 
                             "\n\nRegards,\nCOSBAS"
@@ -337,8 +339,8 @@ public class Email implements NotificationsStrategy  {
         else {
             notification.setText(
                     "Dear " + tempAppointment.getStaffID() + "\n\n" +
-                            "An appointment that is scheduled with you\n" + "" +
-                            "has been cancelled and removed from your calendar.\n\n" +
+                            "An appointment (" + tempAppointment.getId() + ")\n" +
+                            "that is scheduled with you has been cancelled and removed from your calendar.\n\n" +
 
                             "Appointment Cancelled:\n" +
                             "Appointment with: "+ tempAppointment.getStaffID() + "\n" +
