@@ -10,21 +10,9 @@ import java.util.List;
  */
 public class DeletedAppointment extends Appointment {
 
-    private String appointmentID;
-
     @PersistenceConstructor
     public DeletedAppointment(String staffID, List<String> visitorIDs, LocalDateTime dateTime, int durationMinutes, String reason, String appointmentID) {
         super(staffID, visitorIDs, dateTime, durationMinutes, reason);
-        this.appointmentID = appointmentID;
         setId(appointmentID);
     }
-
-    public String getAppointmentID() {
-        return appointmentID;
-    }
-
-    public void setAppointmentID(String appointmentID) {
-        this.appointmentID = appointmentID;
-    }
-
 }
