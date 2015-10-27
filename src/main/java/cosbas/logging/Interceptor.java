@@ -93,6 +93,8 @@ public class Interceptor {
         String methodName = joinPoint.getSignature().getName();
         Object[] arguments = joinPoint.getArgs();
 
+        System.out.println(result.toString());
+
         exe.execute(new Runnable() {
             @Override
             public void run() {
@@ -113,14 +115,9 @@ public class Interceptor {
                             ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                             ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
-                            if (user != null) {
-                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                            }
-
                             int loopCond = attendants.size();
                             if (contactDetailsStaff != null) {
-                                 loopCond -= contactDetailsStaff.size();
+                                loopCond -= contactDetailsStaff.size();
                             }
 
                             //create ContactDetail objects for visitors
@@ -130,7 +127,13 @@ public class Interceptor {
 
                             List<String> visitorIDs = (List<String>) arguments[0];
 
-                            notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
+                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                            if (user != null) {
+                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT,visitorIDs,tempAppointment,false);
+                            }
+
+                            notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
                         }
                     }
                 } else if (methodName.equals("approveAppointment")) {
@@ -171,7 +174,7 @@ public class Interceptor {
                         */
                     }
                 } else if (methodName.equals("denyAppointment")) {
-                    if (result.toString().equals("Appointment denied")){
+                    if (result.toString().equals("Appointment denied")) {
 
                         DeletedAppointment tempAppointment = deletedAppointmentRepository.findByAppointmentID((String) arguments[0]);
                         List<String> attendants = tempAppointment.getVisitorIDs();
@@ -179,17 +182,18 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
-                        if (user != null) {
-                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                        }
-
                         //create ContactDetail objects for visitors
                         for (String s : attendants) {
                             contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
                         }
 
-                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
+                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                        if (user != null) {
+                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT,null,tempAppointment,false);
+                        }
+
+                        notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
 
                     }
                 } else if (methodName.equals("cancelAppointment")) {
@@ -202,11 +206,6 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
-                        if (user != null) {
-                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                        }
-
                         //create ContactDetail objects for visitors
                         for (String s : attendants) {
                             contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
@@ -216,10 +215,22 @@ public class Interceptor {
                         String byWhom = results[4];
 
                         if (byWhom.equals("{Staff}")) {
-                            notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
-                        }
-                        else if (byWhom.equals("{Visitor}")) {
-                            notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
+
+                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                            if (user != null) {
+                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,true);
+                            }
+                            notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
+
+                        } else if (byWhom.equals("{Visitor}")) {
+
+                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                            if (user != null) {
+                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT,null,tempAppointment,false);
+                            }
+                            notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
                         }
                     }
                 }
