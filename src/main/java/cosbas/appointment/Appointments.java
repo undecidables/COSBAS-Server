@@ -1,20 +1,12 @@
 package cosbas.appointment;
 
-import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.*;
 import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.notifications.Email;
-import cosbas.notifications.Notifications;
 import cosbas.notifications.Notify;
-import cosbas.user.ContactDetail;
-import cosbas.user.ContactTypes;
-import cosbas.user.User;
-import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,9 +31,6 @@ public class Appointments
 
     @Autowired
     private BiometricDataDAO codeRepository;
-
-    @Autowired
-    private UserDAO userRepository;
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
