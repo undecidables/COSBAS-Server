@@ -428,8 +428,7 @@ public class Email implements NotificationsStrategy  {
 
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
-                        "You have successfully denied the appointment\n(" +
-                        tempAppointment + ") with:\n" +
+                        "You have successfully denied the appointment with:\n" +
                         visitors +
 
                         "\n\nRegards,\nCOSBAS"
