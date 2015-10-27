@@ -83,6 +83,9 @@ public class Interceptor {
 
     @Autowired
     private UserDAO userRepository;
+
+    @Autowired
+    private BiometricDataDAO codeRepository;
     
 
     ExecutorService exe = Executors.newFixedThreadPool(50);
@@ -115,6 +118,14 @@ public class Interceptor {
                             ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                             ArrayList<ContactDetail> contactDetailsStaff = null;
 
+                            List<String> visitorIDs = (List<String>) arguments[0];
+
+                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                            if (user != null) {
+                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT,visitorIDs,tempAppointment,false);
+                            }
+
                             int loopCond = attendants.size();
                             if (contactDetailsStaff != null) {
                                 loopCond -= contactDetailsStaff.size();
@@ -125,14 +136,6 @@ public class Interceptor {
                                 contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                             }
 
-                            List<String> visitorIDs = (List<String>) arguments[0];
-
-                            User user = userRepository.findByUserID(tempAppointment.getStaffID());
-                            if (user != null) {
-                                contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT,visitorIDs,tempAppointment,false);
-                            }
-
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
                         }
                     }
@@ -141,8 +144,7 @@ public class Interceptor {
 
                         System.out.println("Notification");
 
-                        /*
-                        Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
+                       /* Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
                         List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
 
                         System.out.println();
@@ -158,20 +160,21 @@ public class Interceptor {
                         List<String> attendants = tempAppointment.getVisitorIDs();
 
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-                        ContactDetail contactDetailsStaff = null;
+                        ArrayList<ContactDetail> contactDetailsStaff = null;
 
                         //create ContactDetail objects for visitors
                         for(String s: attendants) {
-                            if (s.equals(attendants.get(attendants.size()-1))) {
-                                contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                            }
-                            else {
                                 contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                            }
                         }
 
-                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
-                        */
+                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                        if (user != null) {
+                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT,null,tempAppointment,false);
+                        }
+
+                        notify.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);*/
+
                     }
                 } else if (methodName.equals("denyAppointment")) {
                     if (result.toString().equals("Appointment denied")) {
