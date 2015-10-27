@@ -17,7 +17,7 @@ public class Appointment {
     private String id;
 
     private String eventID; //Needed for deletion of events.
-    private String staffID;
+    private String	staffID;
     private List<String> visitorIDs; //Maybe use email address since its unique?
 
     private List<AccessCode> accessKeys;
@@ -102,10 +102,5 @@ public class Appointment {
 
     public void setSummary(String summary) {
         this.summary = summary;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-
     }
 }
