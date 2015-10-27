@@ -49,6 +49,34 @@ public class User {
         return this.contact.remove(c);
     }
 
+    public boolean updateContactDetail(ContactTypes type, ContactDetail newContactDetail)
+    {
+        ContactDetail oldContact = null;
+        for (ContactDetail contact: this.contact)
+        {
+            if(contact.getType().equals(ContactTypes.EMAIL))
+            {
+                oldContact = contact;
+                break;
+            }
+        }
+        if (this.removeContactDetail(oldContact))
+        {
+            if(this.addContactDetail(newContactDetail))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public String getUserID() {
         return userID;
     }
