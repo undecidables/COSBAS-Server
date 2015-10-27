@@ -266,7 +266,7 @@ body
 #calendar
 {
     width: 100%;
-    background-color: #ffff;
+    background-color: #fff;
 }
 
 table {
@@ -610,7 +610,7 @@ p
 }
 
 #contact .contact-form .controls i.loading {
-	background: rgba(255,255,255,0);
-	border: 1px solid rgba(255,255,255,0);
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
 }
-}
+
