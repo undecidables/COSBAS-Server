@@ -18,26 +18,27 @@
 									 data-wow-delay=".2s"><strong><i class="fa fa-exclamation-circle"></i>
 									UNAUTHORIZED: </strong><br/> You are not authorized to change permissions
 								</div>
-
-
 								<div id="permissionForm">
-									<label for="users">User: </label><select id="users" name="users">
-
-									</select>
-									<br/>
+									<div class="controls">
+										<p class="text-left">Select User:</p>
+										<input class="contact_input" id="users" name="users"/>
+										<label for="users"><i class="fa fa-user"></i></label>
+									</div>
 									<div id="permissionsHide">
-										<label for="permissions">Permissions: </label><div id="permissions" name="permissions">
-										
-										</div>
-										<br/>
-										<label for="newPermissions">New Permission: </label><select id="newPermissions"
-																									name="newPermission">
+										<div class="controls">
+											<p class="text-left">Current Permissions:</p>
 
-										</select>
-										<br/>
-										<button type="submit" id="update" class="btn btn-common">
-											Add Permission
-										</button>
+											<div id="permissions" name="permissions"/>
+										</div>
+										<div class="controls">
+											<p class="text-left">New Permissions:</p>
+											<label for="newPermissions"><i class="fa fa-cog"></i></label>
+											<input class="contact_input" id="newPermissions" name="newPermission"/>
+										</div>
+										<div class="col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+											<button type="submit" id="update" class="btn btn-common">Add Permission
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>

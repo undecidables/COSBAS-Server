@@ -2,6 +2,7 @@ package cosbas.biometric.validators.facial;
 
 import org.bytedeco.javacpp.opencv_core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 class TemporaryRecognizerData {
     private List<String> personNames;
     private List<opencv_core.IplImage> trainingFaces;
-    private opencv_core.IplImage[] eigenVectors;
+    private ArrayList<opencv_core.IplImage> eigenVectors;
     private opencv_core.IplImage pAvgTrainImg;
     private opencv_core.CvMat eigenValues;
     private opencv_core.CvMat projectedTrainFace;
@@ -35,11 +36,11 @@ class TemporaryRecognizerData {
         this.trainingFaces = trainingFaces;
     }
 
-    public opencv_core.IplImage[] getEigenVectors() {
+    public ArrayList<opencv_core.IplImage> getEigenVectors() {
         return eigenVectors;
     }
 
-    public void setEigenVectors(opencv_core.IplImage[] eigenVectors) {
+    public void setEigenVectors(ArrayList<opencv_core.IplImage> eigenVectors) {
         this.eigenVectors = eigenVectors;
     }
 
@@ -77,7 +78,7 @@ class TemporaryRecognizerData {
 
     public int getnEigens() {
         if (getEigenVectors() != null)
-            return getEigenVectors().length;
+            return getEigenVectors().size();
         else
             return 0;
     }
