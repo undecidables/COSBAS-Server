@@ -26,15 +26,10 @@ import java.util.concurrent.Executors;
 
 import cosbas.permissions.PermissionId;
 import cosbas.permissions.PermissionManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 
