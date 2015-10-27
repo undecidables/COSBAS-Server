@@ -1,6 +1,7 @@
 package cosbas.biometric.validators.fingerprint;
 
 import com.google.api.client.util.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
 
@@ -11,15 +12,21 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by VivianWork on 10/21/2015.
+ *  {@Author Vivian Venter}
+ *  The class to save the template data of each fingerprint
  */
 public class FingerprintTemplateData {
 
-    ArrayList<Point> bifurcations;
-    ArrayList<Point> endPoints;
+    private String staffID;
+    private ArrayList<Point> bifurcations;
+    private ArrayList<Point> endPoints;
+
+    @Autowired
+    private FingerprintDAO fingerprintRepository;
 
     @PersistenceConstructor
-    public FingerprintTemplateData(ArrayList<Point> bifurcations,ArrayList<Point> endPoints) {
+    public FingerprintTemplateData(String staffID, ArrayList<Point> bifurcations,ArrayList<Point> endPoints) {
+        this.staffID = staffID;
         this.bifurcations = bifurcations;
         this.endPoints = endPoints;
     }
@@ -63,7 +70,8 @@ public class FingerprintTemplateData {
         }*/
 
         if(registrationOnly) {
-            //store the data in a file and save in the db
+            //store the data in the db
+            fingerprintRepository.save(new FingerprintTemplateData(getStaffID(),getBifurcations(),getEndPoints()));
         }
         else {
             // something else
@@ -80,5 +88,13 @@ public class FingerprintTemplateData {
 
     public ArrayList<Point> getEndPoints() {
         return endPoints;
+    }
+
+    public String getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 }

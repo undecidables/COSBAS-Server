@@ -1,5 +1,6 @@
 package cosbas.biometric.validators.fingerprint;
 
+import com.google.api.client.util.Value;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.ValidationResponse;
@@ -13,21 +14,22 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * Created by VivianWork on 10/21/2015.
+ * {@Author Vivian Venter}
  */
 public class FingerprintMatching {
-    double matchingScore;
-    InputStream in;
-    BufferedImage originalImage;
-    FingerprintTemplateData originalImageTemplateData;
-    int Num_KeypointsFound;
+    private double matchingScore;
+    private FingerprintTemplateData originalImageTemplateData;
+    private int Num_KeypointsFound;
+
+    @Value("${fingers.threshold}")
+    int THRESHOLD;
 
     public FingerprintMatching(byte[] image) {
         try {
 
             this.matchingScore = 0.0;
-            in = new ByteArrayInputStream(image);
-            originalImage = getImage(in);
+            InputStream in = new ByteArrayInputStream(image);
+            BufferedImage originalImage = getImage(in);
 
             // bifurcations and endpoints is stored in this object
             originalImageTemplateData = new FingerprintTemplateData();
@@ -41,16 +43,15 @@ public class FingerprintMatching {
 
     }
 
-    public ValidationResponse matches(BiometricData DBitem, String userID, DoorActions action){
+    public ValidationResponse matches(FingerprintTemplateData dbItem, String userID, DoorActions action){
 
-        int score = match(originalImageTemplateData.getEndPoints(), enter , originalImageTemplateData.getBifurcations(), enter );
+        int score = match(originalImageTemplateData.getEndPoints(), dbItem.getEndPoints() , originalImageTemplateData.getBifurcations(), dbItem.getBifurcations() );
 
         matchingScore = calculateMatchingScore(score);
 
-        System.out.println("Keys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+        System.out.println("Threshold" + THRESHOLD + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
-        //use the threshold in application.properties
-        if (matchingScore >= 0.5) {
+        if (matchingScore >= THRESHOLD) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
         else {
