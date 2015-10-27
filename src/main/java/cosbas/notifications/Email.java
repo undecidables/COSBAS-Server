@@ -110,11 +110,13 @@ public class Email implements NotificationsStrategy  {
 
         notification.setTo(to);
 
-        StringBuilder visitors = new StringBuilder();
-        for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
-            visitors.append(tempAppointment.getVisitorIDs().get(i)).append("\n");
-        }
+        int loopCond = visitorIDs.size() - emails.size();;
 
+        StringBuilder visitors = new StringBuilder();
+        for (int i = 0; i < loopCond; i++) {
+            visitors.append(tempAppointment.getVisitorIDs().get(i)).append("\n");
+            System.out.println(tempAppointment.getVisitorIDs().get(i));
+        }
 
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
         notification.setText(
@@ -421,9 +423,12 @@ public class Email implements NotificationsStrategy  {
 
         notification.setTo(to);
 
+        int loopCond = visitorIDs.size() - emails.size();;
+
         StringBuilder visitors = new StringBuilder();
-        for (int i = 0; i < tempAppointment.getVisitorIDs().size()-2; i++) {
+        for (int i = 0; i < loopCond; i++) {
             visitors.append(tempAppointment.getVisitorIDs().get(i)).append("\n");
+            System.out.println(tempAppointment.getVisitorIDs().get(i));
         }
 
         notification.setText(
