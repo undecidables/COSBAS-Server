@@ -18,10 +18,7 @@ import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.permissions.Permission;
 import cosbas.permissions.PermissionId;
 import cosbas.permissions.PermissionManager;
-import cosbas.user.ContactDetail;
-import cosbas.user.ContactTypes;
-import cosbas.user.User;
-import cosbas.user.UserDAO;
+import cosbas.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +60,14 @@ public class AppointmentRestController {
     @Autowired
     private BiometricSystem biometricSystem;
 
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    private UserManager userManager;
+
+    @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
     }
