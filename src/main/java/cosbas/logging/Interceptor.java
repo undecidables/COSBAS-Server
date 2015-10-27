@@ -123,7 +123,6 @@ public class Interceptor {
                             User user = userRepository.findByUserID(tempAppointment.getStaffID());
                             if (user != null) {
                                 contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT,visitorIDs,tempAppointment,false);
                             }
 
                             int loopCond = attendants.size();
@@ -136,6 +135,13 @@ public class Interceptor {
                                 contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                             }
 
+                            for (ContactDetail c: contactDetailsVisitor) {
+                                System.out.println(c.getDetails());
+                            }
+
+                            if (user != null) {
+                                notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
+                            }
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs, tempAppointment, false);
                         }
                     }
@@ -162,6 +168,12 @@ public class Interceptor {
                         ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                         ArrayList<ContactDetail> contactDetailsStaff = null;
 
+                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
+                        if (user != null) {
+                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+
+                        }
+
                         int loopCond = attendants.size();
                         if (contactDetailsStaff != null) {
                             loopCond -= contactDetailsStaff.size();
@@ -172,12 +184,9 @@ public class Interceptor {
                             contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                         }
 
-                        User user = userRepository.findByUserID(tempAppointment.getStaffID());
                         if (user != null) {
-                            contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
-                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT,null,tempAppointment,false);
+                            notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null, tempAppointment, false);
                         }
-
                         notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
 
                     }

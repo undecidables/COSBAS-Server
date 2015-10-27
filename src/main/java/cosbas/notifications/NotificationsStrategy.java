@@ -28,9 +28,10 @@ public interface NotificationsStrategy {
     * The method to send the appointment request notification to the staff member
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
+    * @param visitorIDs
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
     */
-   void sendStaffNotification_Request(ArrayList<ContactDetail> to, List<String> visitorIDs, Appointment tempAppointment);
+   void sendStaffNotification_Request(ArrayList<ContactDetail> to, ArrayList<ContactDetail> visitorIDs, Appointment tempAppointment);
 
    /**
     * The method to send the appointment approve notification to the visitor(s)
