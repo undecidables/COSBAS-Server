@@ -2,6 +2,7 @@ $(document).ready(function() {
 	/*
     * Calls the controller function to get all requested registrations for the system
     */
+    handleDynamicInputClicks();
      if(document.title == "Registration Requests"){
      acceptReqistrationListener();
      denyRegistrationListener();
@@ -29,6 +30,24 @@ $(document).ready(function() {
           window.scrollTo(0, 0);
     	  handleDenyAllAppointments();
 	}
+
+
+    $("#trainSystem").click(function(event){
+        event.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: '/trainSystem'
+        }).then(function(result){
+            if(result == 'error')
+            {
+                spawnCustomErrorMessage("An error occured trying to start up system training, please contact your administrator.");
+            }
+            else
+            {
+                spawnSuccessMessage("Training system has started successfully.");
+            }
+        });
+    });
 
 /*
 * Listener for the accept buttons
@@ -111,3 +130,10 @@ function handleDenyAllAppointments()
       }));
 }
 });
+
+function handleDynamicInputClicks()
+{
+    $(document.body).on('click', '#emailErrorOkay',function(){
+        $('.featherlight').click();
+    });
+}
