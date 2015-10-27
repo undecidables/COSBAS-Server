@@ -18,7 +18,10 @@ import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.permissions.Permission;
 import cosbas.permissions.PermissionId;
 import cosbas.permissions.PermissionManager;
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
 import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -645,42 +648,63 @@ public class AppointmentRestController {
    * Function used to remove a permission
    * @return Returns "Permission removed"
    */
-  @RequestMapping(method= RequestMethod.POST, value="/removePermission")
-  public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission, 
-                                @RequestParam(value = "staffID", required = true) String staffID) {
+    @RequestMapping(method= RequestMethod.POST, value="/removePermission")
+    public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission,
+                            @RequestParam(value = "staffID", required = true) String staffID) {
 
-    PermissionId permission = null;
+        PermissionId permission = null;
 
-    switch (stringPermission){
-      case "REGISTRATION_APPROVE": {
-        permission = PermissionId.REGISTRATION_APPROVE; 
-        break;
-      } 
-      case "SUPER":{
-        permission = PermissionId.SUPER; 
-        break;
-      } 
-      case "REPORTS":{
-        permission = PermissionId.REPORTS; 
-        break;
-      } 
-      case "REGISTRATION":{
-        permission = PermissionId.REGISTRATION; 
-        break;
-      } 
-      case "USER_DELETE":
-      {
-        permission = PermissionId.USER_DELETE; 
-        break;
-      } 
-      default:
-      {
-        permission = null;
-      }
+        switch (stringPermission){
+            case "REGISTRATION_APPROVE": {
+                permission = PermissionId.REGISTRATION_APPROVE;
+                break;
+            }
+            case "SUPER":{
+                permission = PermissionId.SUPER;
+                break;
+            }
+            case "REPORTS":{
+                permission = PermissionId.REPORTS;
+                break;
+            }
+            case "REGISTRATION":{
+                permission = PermissionId.REGISTRATION;
+                break;
+            }
+            case "USER_DELETE": {
+                permission = PermissionId.USER_DELETE;
+                break;
+            }
+            default: {
+                permission = null;
+            }
+        }
+
+        permissionManager.removePermission(staffID, permission);
+
+        return "Permission removed";
     }
 
-    permissionManager.removePermission(staffID, permission);
+    @Autowired
+    UserDAO users;
 
-    return "Permission removed";
-  }
+    @RequestMapping(method= RequestMethod.POST, value="/updateEmail")
+    public String updateEmail(Principal principal,
+                              @RequestParam(value = "email", required = true) String email) {
+
+        User user = users.findByUserID(principal.getName());
+        ContactDetail newContactDetail = new ContactDetail(ContactTypes.EMAIL, email);
+        try {
+            if (user.updateContactDetail(ContactTypes.EMAIL, newContactDetail)) {
+                users.save(user);
+                return "true";
+            } else {
+                return "false";
+            }
+        }
+        catch (Exception e)
+        {
+            return "false";
+        }
+    }
 }

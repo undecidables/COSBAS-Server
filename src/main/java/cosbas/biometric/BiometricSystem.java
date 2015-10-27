@@ -15,6 +15,7 @@ import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
 import cosbas.user.User;
 import cosbas.user.UserDAO;
+import cosbas.user.UserManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,12 @@ public class BiometricSystem {
     private BiometricDataDAO biometricDataRepository;
     private ValidatorFactory factory;
     private UserDAO userRepository;
+    private UserManager userManager;
 
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
 
     @Autowired
     public void setRegisterRepository(RegisterRequestDAO registerRepository) {
@@ -118,24 +124,19 @@ public class BiometricSystem {
          * Save to db
          */
         RegisterRequest req = registerRepository.findByUserID(userID);
+
         if (req == null)
             throw new NullArgumentException("No registrations request for this user.");
+
         List<BiometricData> dataCollections = req.getData();
         for (BiometricData d : dataCollections) {
             AccessValidator v = factory.getValidator(d.getType());
             v.registerUser(d, userID);
         }
 
-        biometricDataRepository.save(req.getData());
-
-        User u = userRepository.findOne(userID);
-
-        if (u == null)
-            u = new User(userID, req.getContactDetails());
-        else
-            u.addContactDetails(req.getContactDetails());
-
-        userRepository.save(u);
+        User u = userManager.addContactDetails(userID, req.getContactDetails());
+        biometricDataRepository.save(dataCollections);
+        registerRepository.delete(req);
 
         return u;
     }
@@ -145,7 +146,6 @@ public class BiometricSystem {
     }
 
     public void removeUser(String id) throws BiometricTypeException {
-        userRepository.delete(id);
         List<BiometricData> dataCollections = biometricDataRepository.deleteByUserID(id);
         for (BiometricData d : dataCollections) {
             AccessValidator v = factory.getValidator(d.getType());
