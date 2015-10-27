@@ -2,6 +2,7 @@ $(document).ready(function() {
 
   getUsers();
   getPermissions();
+  handleDynamicInputClicks();
   $("#permissionForm").hide();
 	 /*
     * Calls the controller function to get all users and their permissions
@@ -33,24 +34,35 @@ $(document).ready(function() {
 
     //Function that gets all users of the system
     function getUsers(){
-      $.ajax({
-        type: "post",
-        url: "/getUsersForPermissionUpdate"
-      }).then(function(jsonReturned) {
-          $("#users").empty();
-          $("#users").append(jsonReturned);
-      });
+        $("#users").click(function(){
+        $("#users").prop('disabled', true);
+        $("#users").val("Loading Staff Member List...");
+          $.ajax({
+                  type: "post",
+                  url: "/getUsersForPermissionUpdate"
+                }).then(function(jsonReturned) {
+                  $.featherlight(jsonReturned,null);
+                   $("#users").prop('disabled', false);
+                });
+                window.scrollTo(0, 0);
+        });
     }
 
     //Function that gets all permissions possible
     function getPermissions(){
-      $.ajax({
-        type: "post",
-        url: "/getAllPermissions"
-      }).then(function(jsonReturned) {
-        $("#newPermissions").empty();
-        $("#newPermissions").append(jsonReturned);
-      });
+
+    $("#newPermissions").click(function(){
+        $("#newPermissions").prop('disabled', true);
+        $("#newPermissions").val("Loading Permissions...");
+          $.ajax({
+                  type: "post",
+                  url: "/getAllPermissions"
+                }).then(function(jsonReturned) {
+                  $.featherlight(jsonReturned,null);
+                   $("#newPermissions").prop('disabled', false);
+                });
+                window.scrollTo(0, 0);
+        });
     }
 
     //Function that gets a users permissions
@@ -75,6 +87,7 @@ $(document).ready(function() {
     //Listener for the update click event. Updates the selected user's permissions
     function addPermission(){
       $(document).on('click', '#update', (function(e) {
+        spawnBusyMessage("Adding Permission");
           e.preventDefault();
           $.ajax({
             type: "post",
@@ -82,6 +95,10 @@ $(document).ready(function() {
                    "staffID" : $("#users").val()},
             url: "/addPermission"
           }).then(function(jsonReturned) {
+          if(jsonReturned == "Permission added")
+            spawnSuccessMessage("Permission Added");
+        else
+            spawnErrorMessage(jsonReturned);
             getUserPermissions();
           });
       }));
@@ -89,6 +106,7 @@ $(document).ready(function() {
 
     function removePermissionListener(){
       $(document).on('click', '.deny', (function(e) {
+           spawnBusyMessage("Removing Permission");
           e.preventDefault();
           var tempThis = $(this);
           $.ajax({
@@ -97,7 +115,15 @@ $(document).ready(function() {
                    "staffID" : $("#users").val()},
             url: "/removePermission"
           }).then(function(jsonReturned) {
-            getUserPermissions();
+            if(jsonReturned == "Permission removed")
+            {
+                spawnSuccessMessage("Permission Removed");
+                getUserPermissions();
+            }
+            else
+                spawnErrorMessage(jsonReturned);
+
+
           });
       }));
     }
@@ -106,4 +132,20 @@ $(document).ready(function() {
     $("#users").change(function () {
       getUserPermissions();
     });
+    function handleDynamicInputClicks()
+    {
+        $(document.body).on('click', '#appointmentsubmit' ,function(){
+                    $('.featherlight').click();
+                    $('#users').val($('#appointmentData').val());
+                    getUserPermissions();
+                });
+        $(document.body).on('click', '#permissionsubmit' ,function(){
+                        $('.featherlight').click();
+                        $('#newPermissions').val($('#appointmentData').val());
+                    });
+         $(document.body).on('click', '.btnLightbox' ,function(){
+                            $('.featherlight').click();
+                        });
+    }
 });
+

@@ -1,14 +1,8 @@
 $(document).ready(function(e) {
        $("body").css("visibility", "visible");
-
-
        $('.dropdown').on('shown.bs.dropdown', function () {
          $('.active').removeClass('active');
        })
-
-
-
-
    });
 
 
@@ -72,6 +66,6 @@ function spawnSuccessMessage(message)
 
 function getWarningMessage(message)
 {
-    var html = "<div class=\"wow fadeIn alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> " + message+" </div>";
-        return html;
+    var html = "<div class=\"alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> " + message+" </div>";
+    return html;
 }
