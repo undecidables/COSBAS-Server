@@ -24,7 +24,7 @@ public class FingerprintMatching {
     @Value("${fingers.threshold}")
     int THRESHOLD;
 
-    public FingerprintMatching(byte[] image) {
+    public FingerprintMatching(byte[] image, String userID) {
         try {
 
             this.matchingScore = 0.0;
@@ -32,8 +32,8 @@ public class FingerprintMatching {
             BufferedImage originalImage = getImage(in);
 
             // bifurcations and endpoints is stored in this object
-            originalImageTemplateData = new FingerprintTemplateData();
-            originalImageTemplateData.createTemplateFingerprintData(originalImage, false);
+            FingerprintTemplateCreator creator = new FingerprintTemplateCreator();
+            originalImageTemplateData = creator.createTemplateFingerprintData(userID, originalImage, false);
 
             Num_KeypointsFound = originalImageTemplateData.getEndPoints().size() + originalImageTemplateData.getBifurcations().size();
 
@@ -45,7 +45,7 @@ public class FingerprintMatching {
 
     public ValidationResponse matches(FingerprintTemplateData dbItem, String userID, DoorActions action){
 
-        int score = match(originalImageTemplateData.getEndPoints(), dbItem.getEndPoints() , originalImageTemplateData.getBifurcations(), dbItem.getBifurcations() );
+        int score = match(originalImageTemplateData.getEndPoints(), dbItem.getEndPoints(), originalImageTemplateData.getBifurcations(), dbItem.getBifurcations());
 
         matchingScore = calculateMatchingScore(score);
 

@@ -2,8 +2,8 @@ package cosbas.biometric.validators;
 
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
-import cosbas.biometric.validators.fingerprint.FingerprintDAO;
 import cosbas.biometric.validators.fingerprint.FingerprintMatching;
 import cosbas.biometric.validators.fingerprint.FingerprintTemplateData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class FingerprintValidator extends AccessValidator {
 
     @Autowired
-    private FingerprintDAO fingerprintRepository;
+    private BiometricDataDAO fingerprintRepository;
 
     @Override
     protected Boolean checkValidationType(BiometricTypes type) {
@@ -27,12 +27,12 @@ public class FingerprintValidator extends AccessValidator {
     }
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
-        FingerprintMatching matcher = new FingerprintMatching(request.getData());
+        FingerprintMatching matcher = new FingerprintMatching(request.getData(), request.getUserID());
 
-        List<FingerprintTemplateData> items = fingerprintRepository.findByStaffID(request.getUserID());
+        List<BiometricData> items = fingerprintRepository.findByUserID(request.getUserID());
 
-        for (FingerprintTemplateData dbItem : items) {
-            ValidationResponse response = matcher.matches(dbItem,request.getUserID(), action);
+        for (BiometricData dbItem : items) {
+            ValidationResponse response = matcher.matches((FingerprintTemplateData) dbItem, request.getUserID(), action);
             if (response.approved) return response;
         }
         return ValidationResponse.failedValidation("No Match found");
