@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head >
+        <object th:include="head :: header" th:remove="tag" />
+        <title>Create Report</title>
+    </head>
+    <body>
+    <header th:replace="menu :: navigation"></header>
+    <br/>
+    <br/>
+    <section id="contact">
+        <div class="overlay">
+            <div class="container">
+                <h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Create</span> Report</h1>
+
+                <div class="row">
+                    <div class="contact-form">
+                        <form role="form">
+                            <div class="col-md-8 col-md-offset-2 wow fadeInRight" data-wow-delay="0.2s">
+                                <div id="report">
+                                    <div class="controls">
+                                        <p class="text-left">Report type:</p>
+                                        <input class="contact_input" id="reportType" name="reportType"/>
+                                        <label for="reportType"><i class="fa fa-question"></i></label>
+                                    </div>
+                                    <div class="controls" id="staffIDcontainer">
+                                        <p class="text-left">Staff ID:</p>
+                                        <input class="contact_input" id="staffID" name="staffID"/>
+                                        <label for="staffID"><i class="fa fa-question"></i></label>
+                                    </div>
+                                    <div id="dateContainer">
+                                        <p class="text-left">Between date: </p>
+                                        <div class="controls reportDate">
+                                            <input type="text" class="contact_input date" id="dateTimeS" name="dateTimeS"/>
+                                            <label for="dateTimeS"><i class="fa fa-calendar"></i></label>
+                                        </div>
+                                        <p class="text-left"> And </p>
+                                        <div class="controls reportDate">
+                                            <input type="text" class="contact_input date" id="dateTimeE" name="dateTimeE"/>
+                                            <label for="dateTimeE"><i class="fa fa-calendar"></i></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="controls" id="statusContainer">
+                                        <p class="text-left">Status:</p>
+                                        <input class="contact_input" type="text" id="status" name="status"/>
+                                        <label for="status"><i class="fa fa-question"></i></label>
+                                    </div>
+                                    <div class="controls">
+                                        <p class="text-left">Report format:</p>
+                                        <input class="contact_input" id="reportFormat" name="reportFormat"/>
+                                        <label for="reportFormat"><i class="fa fa-question"></i></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                                <button type="submit" id="createReport" class="btn btn-common">Create Report</button>
+                            </div>
+                        </form>
+                        <div id="files"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="push"></div>
+
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="copyright text-center">
+                <p>&copy; University of Pretoria, Department of Computer Science</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Include Bootstrap plugin -->
+    <script src="resources/assets/js/bootstrap.min.js"></script>
+    <!-- One page Nav plugin -->
+    <script src="resources/assets/js/jquery.nav.js"></script>
+    <!-- Include Bootstrap plugin -->
+    <script src="resources/assets/js/owl.carousel.js"></script>
+    <!-- Include wow plugin -->
+    <script src="resources/assets/js/wow.js"></script>
+    <!-- Include mixitup plugin -->
+    <script src="resources/assets/js/jquery.mixitup.js"></script>
+    <!-- ScrollTop -->
+
+
+    <!-- preset js -->
+    <script src="resources/assets/js/style.changer.js"></script>
+    <!-- Modernizr js -->
+    <script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+    <!-- Main js -->
+    <script src="resources/assets/js/main.js"></script>
+    <!--Custom Script-->
+    <script src="resources/scripts/custom/report.js"></script>
+    </body>
+</html>

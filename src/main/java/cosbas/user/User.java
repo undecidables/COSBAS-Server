@@ -3,9 +3,7 @@ package cosbas.user;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@author Renette}
@@ -31,8 +29,12 @@ public class User {
         this.contact = new HashSet<>();
     }
 
-    public Collection<ContactDetail> getContact() {
-        return contact;
+    public List<ContactDetail> getContact() {
+        List<ContactDetail> temp = new ArrayList<>();
+        for (ContactDetail c: contact){
+            temp.add(c);
+        }
+        return temp;
     }
 
     public boolean addContactDetail(ContactDetail c) {
@@ -45,6 +47,34 @@ public class User {
 
     public boolean removeContactDetail(ContactDetail c) {
         return this.contact.remove(c);
+    }
+
+    public boolean updateContactDetail(ContactTypes type, ContactDetail newContactDetail)
+    {
+        ContactDetail oldContact = null;
+        for (ContactDetail contact: this.contact)
+        {
+            if(contact.getType().equals(ContactTypes.EMAIL))
+            {
+                oldContact = contact;
+                break;
+            }
+        }
+        if (this.removeContactDetail(oldContact))
+        {
+            if(this.addContactDetail(newContactDetail))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public String getUserID() {

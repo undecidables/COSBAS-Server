@@ -3,6 +3,7 @@ package cosbas.biometric.request.access;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,5 +22,8 @@ public interface AccessRecordDAO extends CrudRepository<AccessRecord, String> {
     List<AccessRecord> findByUserID(String userID);
     @Cacheable("Access")
     AccessRecord findById(String id);
+
+    List<AccessRecord> findByDateTimeBetween(LocalDateTime dateS, LocalDateTime dateE);
+    List<AccessRecord> findByUserIDAndDateTimeBetween(String userID, LocalDateTime dateS, LocalDateTime dateE);
 	
 }
