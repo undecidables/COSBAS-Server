@@ -51,7 +51,6 @@ public class Interceptor {
     /**
      * Pointcut and methods defined below are for logging purposes
      */
-
     @Pointcut("execution(* cosbas..*(..)) && !within(cosbas.calendar_services..*) && !within(cosbas.biometric..*)")
     public void toLog() {
 
