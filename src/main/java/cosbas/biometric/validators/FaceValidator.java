@@ -26,7 +26,7 @@ public class FaceValidator extends AccessValidator {
 
     private FaceRecognition recognizer;
 
-    //@Value ("$(faces.certainty}")
+    @Value("${faces.certainty:0.6}")
     double certaintyThreshold = 0.7;
 
     @Autowired
