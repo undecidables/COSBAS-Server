@@ -34,7 +34,9 @@ public class ReportFactory {
         ALL_ACCESS_RECORDS,
         ALL_ACCESS_RECORDS_BETWEEN_DATETIME,
         ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME,
-        ALL_ACCESS_RECORDS_BY_STAFFID
+        ALL_ACCESS_RECORDS_BY_STAFFID,
+        ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME,
+        ALL_ACCESS_RECORDS_BY_USERID
     }
 
     public byte[] getReport(reportTypes type, ReportData data, ReportFormatter.Formats format)
@@ -51,6 +53,8 @@ public class ReportFactory {
             case ALL_ACCESS_RECORDS_BETWEEN_DATETIME:
             case ALL_ACCESS_RECORDS_BY_STAFFID:
             case ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME:
+            case ALL_ACCESS_RECORDS_BY_USERID:
+            case ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME:
                 return formatter.getFile(accessRecordReports.getReport(type, data), format);
             default:
                 return null;
