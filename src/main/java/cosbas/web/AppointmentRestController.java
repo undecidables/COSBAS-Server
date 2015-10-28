@@ -541,6 +541,9 @@ public class AppointmentRestController {
 
         String returnPage = "";
     if(permissions != null){
+
+        String returnPage = "";
+
       for(int i = 0; i < permissions.size(); i++)
       {
         Permission permission = permissions.get(i);
