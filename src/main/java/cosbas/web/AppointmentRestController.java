@@ -538,8 +538,7 @@ public class AppointmentRestController {
     @RequestMapping(method = RequestMethod.POST, value = "/getUserPermissions")
     public String getUserPermissions(@RequestParam(value = "staffID", required = true) String staffID) {
         List<Permission> permissions = permissionManager.permissionsForUser(staffID);
-
-        String returnPage = "";
+        
     if(permissions != null){
 
         String returnPage = "";
