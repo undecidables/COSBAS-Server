@@ -19,10 +19,10 @@ public interface NotificationsStrategy {
     * The method to send the appointment request notification to the visitor(s)
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address(es) of the visitor(s) to which the email will be send to
-    * @param visitorIDs - The name(s) of the visitor(s)
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+    * @param s
     */
-     void sendVisitorNotification_Request(ContactDetail to, String visitorIDs, Appointment tempAppointment);
+     void sendVisitorNotification_Request(ContactDetail to, Appointment tempAppointment, String s);
 
    /**
     * The method to send the appointment request notification to the staff member
@@ -39,8 +39,9 @@ public interface NotificationsStrategy {
     * @param to - The email address(es) of the visitor(s) to which the email will be send to
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
     * @param codes
+    * @param s
     */
-   void sendVisitorNotification_Approve(ContactDetail to, Appointment tempAppointment, TemporaryAccessCode codes);
+   void sendVisitorNotification_Approve(ContactDetail to, Appointment tempAppointment, TemporaryAccessCode codes, String s);
 
 
    /**
@@ -57,8 +58,9 @@ public interface NotificationsStrategy {
     * @param to - The email address(es) of the visitor(s) to which the email will be send to
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
     * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
+    * @param s
     */
-   void sendVisitorNotification_Cancel(ContactDetail to, Appointment tempAppointment, boolean staffCancelled);
+   void sendVisitorNotification_Cancel(ContactDetail to, Appointment tempAppointment, boolean staffCancelled, String s);
 
    /**
     * The method to send the appointment cancel notification to the staff member
@@ -74,8 +76,9 @@ public interface NotificationsStrategy {
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address(es) of the visitor(s) to which the email will be send to
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+    * @param s
     */
-   void sendVisitorNotification_Deny(ContactDetail to, Appointment tempAppointment);
+   void sendVisitorNotification_Deny(ContactDetail to, Appointment tempAppointment, String s);
 
    /**
     * The method to send the appointment deny notification to the staff member
