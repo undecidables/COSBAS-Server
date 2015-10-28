@@ -13,8 +13,8 @@ public class DeletedAppointment extends Appointment {
     private String appointmentID;
 
     @PersistenceConstructor
-    public DeletedAppointment(String staffID, List<String> visitorIDs, LocalDateTime dateTime, int durationMinutes, String reason, String appointmentID) {
-        super(staffID, visitorIDs, dateTime, durationMinutes, reason);
+    public DeletedAppointment(String staffID, List<String> visitorIDs, List<String> visitorNames, LocalDateTime dateTime, int durationMinutes, String reason, String appointmentID) {
+        super(staffID, visitorIDs, visitorNames, dateTime, durationMinutes, reason);
         this.appointmentID = appointmentID;
         setId(appointmentID);
     }

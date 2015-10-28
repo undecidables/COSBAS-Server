@@ -19,18 +19,18 @@ public class Appointment {
     private String eventID; //Needed for deletion of events.
     private String	staffID;
     private List<String> visitorIDs;
-
+    private List<String> visitorNames;
     private LocalDateTime dateTime;
     private int durationMinutes;
-
     private String summary;
     private String reason;
     private String status;
 
 
-    public Appointment(String staffID, List<String> visitorIDs, LocalDateTime dateTime, int durationMinutes, String reason) {
+    public Appointment(String staffID, List<String> visitorIDs, List<String> visitorNames, LocalDateTime dateTime, int durationMinutes, String reason) {
         this.staffID = staffID;
         this.visitorIDs = visitorIDs;
+        this.visitorNames = visitorNames;
         this.dateTime = dateTime;
         this.durationMinutes = durationMinutes;
         this.reason = reason;
@@ -49,6 +49,10 @@ public class Appointment {
 
     public List<String> getVisitorIDs() {
         return visitorIDs;
+    }
+
+    public List<String> getVisitorNames(){
+        return visitorNames;
     }
 
     public LocalDateTime getDateTime() {

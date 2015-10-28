@@ -179,7 +179,7 @@ public class GoogleCalendarService extends CalendarService {
                         }
                     }
                 }
-                Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
+                Appointment newEvent = new Appointment(emplid, attendants, clientName, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());
                 appointmentRepository.save(newEvent);
@@ -207,7 +207,7 @@ public class GoogleCalendarService extends CalendarService {
             if (service != null) {
                 Appointment event = appointmentRepository.findById(id);
 
-                DeletedAppointment deletedAppointment = new DeletedAppointment(event.getStaffID(),event.getVisitorIDs(),event.getDateTime(),event.getDurationMinutes(),event.getReason(),event.getId());
+                DeletedAppointment deletedAppointment = new DeletedAppointment(event.getStaffID(),event.getVisitorIDs(), event.getVisitorNames(),event.getDateTime(),event.getDurationMinutes(),event.getReason(),event.getId());
                 deletedAppointmentRepository.save(deletedAppointment);
 
                 appointmentRepository.delete(event);
@@ -402,7 +402,7 @@ public class GoogleCalendarService extends CalendarService {
             attending.add(attendee.getEmail());
         }
 
-        Appointment anEvent = new Appointment(emplid, attending, start, duration, event.getDescription());
+        Appointment anEvent = new Appointment(emplid, attending, new ArrayList<>(), start, duration, event.getDescription());
         anEvent.setEventID(event.getId());
         anEvent.setSummary(event.getSummary());
         return anEvent;
