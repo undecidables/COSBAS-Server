@@ -425,9 +425,10 @@ public class Email implements NotificationsStrategy  {
      * The method to send the registration notification to the staff member
      * The template method as specified in the Strategy Interface
      * @param emails - The email address of the staff member that has been registered to the COSBAS System
+     * @param staffID - The staffID of the staff member
      */
     @Override
-    public void sendStaffNotification_Registration(ArrayList<ContactDetail> emails) {
+    public void sendStaffNotification_Registration(ArrayList<ContactDetail> emails, String staffID) {
         setProperties();
 
         SimpleMailMessage notification = new SimpleMailMessage(staffTemplateMessageReg);
@@ -437,7 +438,7 @@ public class Email implements NotificationsStrategy  {
         notification.setTo(to);
 
         notification.setText(
-            "Dear Staff Member,\n\n" +
+            "Dear " + staffID + ",\n\n" +
 
                     "We are so pleased to inform you of your successful \n" +
                     "registration on the COSBAS access control system.\n\n" +
@@ -446,7 +447,6 @@ public class Email implements NotificationsStrategy  {
                     "and much more secure." +
 
                     "\n\nRegards,\nCOSBAS"
-
         );
 
         try {

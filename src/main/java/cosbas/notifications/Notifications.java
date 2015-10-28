@@ -83,23 +83,27 @@ public class Notifications {
     public void sendStaffNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ArrayList<ContactDetail> contactDetailStaff, NotificationType type, Appointment tempAppointment, boolean staffCancelled) {
         switch (type) {
             case REQUEST_APPOINTMENT:
-                email.sendStaffNotification_Request(contactDetailStaff,contactDetailsVisitor,tempAppointment);
+                email.sendStaffNotification_Request(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
 
             case APPROVE_APPOINTMENT:
-                email.sendStaffNotification_Approve(contactDetailStaff,contactDetailsVisitor,tempAppointment);
+                email.sendStaffNotification_Approve(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
 
             case CANCEL_APPOINTMENT:
-                email.sendStaffNotification_Cancel(contactDetailStaff,contactDetailsVisitor,tempAppointment,staffCancelled);
+                email.sendStaffNotification_Cancel(contactDetailStaff, contactDetailsVisitor, tempAppointment, staffCancelled);
                 break;
             case DENY_APPOINTMENT:
-                email.sendStaffNotification_Deny(contactDetailStaff,contactDetailsVisitor,tempAppointment);
+                email.sendStaffNotification_Deny(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
+        }
+    }
 
-            case REGISTRATION:
-                email.sendStaffNotification_Registration(contactDetailStaff);
-                break;
+    public void sendRegisterNotifications(ArrayList<ContactDetail> contactDetailsStaff, String staffID, NotificationType registration) {
+        if(contactDetailsStaff.get(0).getType().equals(ContactTypes.EMAIL)) {
+            if(registration == NotificationType.REGISTRATION) {
+                email.sendStaffNotification_Registration(contactDetailsStaff, staffID);
+            }
         }
     }
 
