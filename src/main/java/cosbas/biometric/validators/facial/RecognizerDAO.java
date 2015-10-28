@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * {@author Renette}
  */
-public interface RecognizerDAO extends CrudRepository<RecognizerData, String> {
+public interface RecognizerDAO {
 
     @CacheEvict(value = "recognizer",beforeInvocation = true, allEntries = true)
     <S extends RecognizerData> S save(S entity);

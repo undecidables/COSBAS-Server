@@ -10,21 +10,24 @@ import java.util.List;
  */
 public interface CalendarDBAdapter {
 
-    @CacheEvict(value = "credentialWrapper",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
     <S extends CredentialWrapper> S save(S entity);
-    @CacheEvict(value = "credentialWrapper",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
     <S extends CredentialWrapper> Iterable<S> save(Iterable<S> entities);
-    @CacheEvict(value = "credentialWrapper",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
     void delete(CredentialWrapper entity);
-    @CacheEvict(value = "credentialWrapper",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
+    void delete(String id);
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
     void delete(Iterable<? extends CredentialWrapper> entities);
-    @CacheEvict(value = "credentialWrapper",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "credential", beforeInvocation = true, allEntries = true)
     void deleteAll();
 
+    @Cacheable("credential")
     long count();
 
-    @Cacheable("credentialWrapper")
+    @Cacheable("credential")
     CredentialWrapper findByStaffID(String staffID);
-    @Cacheable("credentialWrapper")
+    @Cacheable("credential")
     List<CredentialWrapper> findAll();
 }
