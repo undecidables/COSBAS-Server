@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * {@author Renette}
@@ -31,7 +30,11 @@ public class User {
     }
 
     public List<ContactDetail> getContact() {
-        return contact.stream().collect(Collectors.toList());
+        List<ContactDetail> temp = new ArrayList<>();
+        for (ContactDetail c: contact){
+            temp.add(c);
+        }
+        return temp;
     }
 
     public boolean addContactDetail(ContactDetail c) {
@@ -46,14 +49,32 @@ public class User {
         return this.contact.remove(c);
     }
 
-    public void removeContactDetailsByType(ContactTypes type) {
-        contact.stream().filter(c -> c.getType() == type).forEach(contact::remove);
-    }
-
-    public void updateContactDetail(ContactTypes type, ContactDetail newContactDetail)
+    public boolean updateContactDetail(ContactTypes type, ContactDetail newContactDetail)
     {
-        removeContactDetailsByType(type);
-        addContactDetail(newContactDetail);
+        ContactDetail oldContact = null;
+        for (ContactDetail contact: this.contact)
+        {
+            if(contact.getType().equals(ContactTypes.EMAIL))
+            {
+                oldContact = contact;
+                break;
+            }
+        }
+        if (this.removeContactDetail(oldContact))
+        {
+            if(this.addContactDetail(newContactDetail))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public String getUserID() {

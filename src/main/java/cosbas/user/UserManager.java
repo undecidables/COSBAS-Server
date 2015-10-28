@@ -38,31 +38,20 @@ public class UserManager {
         return u;
     }
 
-    public void removeContactDetail(String userID, ContactDetail detail) {
+    public void removeContactDetail(String userID, ContactDetail detail) throws NoSuchUserException {
         User u = userRepository.findOne(userID);
 
-        if (u != null) {
-
-            u.removeContactDetail(detail);
-
-            if (u.getContact().isEmpty()) {
-                userRepository.delete(u);
-            } else {
-                userRepository.save(u);
-            }
-        }
-    }
-
-    public void updateDetails(String userID, ContactDetail detail) {
-        User u = userRepository.findOne(userID);
-
-        if (u != null) {
-
-           u.updateContactDetail(detail.getType(), detail);
+        if (u == null) {
+            throw new NoSuchUserException(userID + " does not have any contact details to remove.");
         }
 
-        userRepository.save(u);
+        u.removeContactDetail(detail);
 
+        if (u.getContact().isEmpty()) {
+            userRepository.delete(u);
+        } else {
+            userRepository.save(u);
+        }
     }
 
     public User getUser(String userID) {
