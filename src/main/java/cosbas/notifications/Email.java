@@ -109,6 +109,8 @@ public class Email implements NotificationsStrategy  {
 
         StringBuilder visitorsDisplay = constructVisitorNamesAndEmails(visitors,tempAppointment.getVisitorNames());
 
+        String clientDisplay = getClientDisplayLine(visitors.size());
+
         String displayDate = getDateTimeDisplay(tempAppointment.getDateTime());
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
@@ -120,7 +122,7 @@ public class Email implements NotificationsStrategy  {
                 "Date/Time: " + displayDate + "\n" +
                 "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
                 "Reason: " + tempAppointment.getReason() + "\n\n" +
-                "Client: \n" +
+                clientDisplay +
                 visitorsDisplay +
                 "\n\n" +
 
@@ -137,6 +139,15 @@ public class Email implements NotificationsStrategy  {
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
+        }
+    }
+
+    private String getClientDisplayLine(int size) {
+        if (size == 1) {
+            return "Client: \n";
+        }
+        else {
+            return "Clients: \n";
         }
     }
 
