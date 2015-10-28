@@ -43,8 +43,10 @@ function cancelAppointment()
         url: "/cancelAppointment"
       }).then(function(jsonReturned) {
         $('.featherlight').click();
-        if(jsonReturned == "Appointment does not exist.")
+        if(jsonReturned == "Appointment does not exist")
             spawnCustomErrorMessage("Appointment Does Not Exist", "FAILED");
+        else if(jsonReturned == "You are not authorised to cancel this appointment")
+            spawnCustomErrorMessage("You Are Not Authorised To Cancel This Appointment", "FAILED");
         else
             spawnSuccessMessage("Appointment Cancelled Successfully");
         $("#appointmentID").val("");

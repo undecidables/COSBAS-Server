@@ -16,20 +16,14 @@ import java.util.List;
 public interface AppointmentDBAdapter  {
 
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
-    @Cacheable("appointments")
     <S extends Appointment> S save(S entity);
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
-    @Cacheable("appointments")
     <S extends Appointment> Iterable<S> save(Iterable<S> entities);
-    Iterable<Appointment> findAll();
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
-    @Cacheable("appointments")
     void delete(Appointment entity);
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
-    @Cacheable("appointments")
     void delete(Iterable<? extends Appointment> entities);
     @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
-    @Cacheable("appointments")
     void deleteAll();
 
 
@@ -43,4 +37,6 @@ public interface AppointmentDBAdapter  {
     List<Appointment> findByDateTimeBetween(LocalDateTime dateS, LocalDateTime dateE);
     @Cacheable("appointments")
     List<Appointment> findByStaffIDAndDateTimeBetween(String staffId, LocalDateTime dateS, LocalDateTime dateE);
+    @Cacheable("appointments")
+    Iterable<Appointment> findAll();
 }

@@ -18,21 +18,19 @@ public class Appointment {
 
     private String eventID; //Needed for deletion of events.
     private String	staffID;
-    private List<String> visitorIDs; //Maybe use email address since its unique?
-
-    private List<AccessCode> accessKeys;
-
+    private List<String> visitorIDs;
+    private List<String> visitorNames;
     private LocalDateTime dateTime;
     private int durationMinutes;
-
     private String summary;
     private String reason;
-    private String status; //OR this could be an enum....
+    private String status;
 
 
-    public Appointment(String staffID, List<String> visitorIDs, LocalDateTime dateTime, int durationMinutes, String reason) {
+    public Appointment(String staffID, List<String> visitorIDs, List<String> visitorNames, LocalDateTime dateTime, int durationMinutes, String reason) {
         this.staffID = staffID;
         this.visitorIDs = visitorIDs;
+        this.visitorNames = visitorNames;
         this.dateTime = dateTime;
         this.durationMinutes = durationMinutes;
         this.reason = reason;
@@ -53,12 +51,8 @@ public class Appointment {
         return visitorIDs;
     }
 
-    public List<AccessCode> getAccessKeys() {
-        return accessKeys;
-    }
-
-    public void setAccessKeys(List<AccessCode> accessKeys) {
-        this.accessKeys = accessKeys;
+    public List<String> getVisitorNames(){
+        return visitorNames;
     }
 
     public LocalDateTime getDateTime() {
@@ -102,5 +96,9 @@ public class Appointment {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

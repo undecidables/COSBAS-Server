@@ -541,23 +541,27 @@ public class AppointmentRestController {
 
         String returnPage = "";
 
-        if (permissions != null) {
-            for (Permission permission : permissions) {
-                returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
-                        "<tr>" +
-                        "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
-                        "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
-                        "</tr>" +
-                        "</table>";
-            }
+    if(permissions != null){
 
-            if (permissions.size() == 0) {
-                returnPage += "no permissions";
-            }
-        } else {
-            returnPage += "no permissions";
-        }
-        return returnPage;
+      for(int i = 0; i < permissions.size(); i++)
+      {
+        Permission permission = permissions.get(i);
+
+        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                      "<tr>" +
+                      "<td colspan=\"2\" class=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
+                      "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
+                      "</tr>" +
+                      "</table>";
+      }
+        
+      if(permissions.size() == 0){
+        returnPage += "no permissions";      
+      } 
+    } else {
+      returnPage += "no permissions";      
+    }
+     return returnPage;
     }
 
   /**
@@ -568,7 +572,8 @@ public class AppointmentRestController {
   public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission, 
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-        PermissionId permission = PermissionId.valueOf(stringPermission);
+    PermissionId permission = PermissionId.valueOf(stringPermission);
+
 
         permissionManager.addPermission(staffID, permission);
 

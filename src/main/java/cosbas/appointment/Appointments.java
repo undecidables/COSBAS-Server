@@ -1,17 +1,12 @@
 package cosbas.appointment;
 
-import cosbas.biometric.data.AccessCode;
-import cosbas.biometric.data.AccessCodeGenerator;
+import cosbas.biometric.data.*;
 import cosbas.calendar_services.services.GoogleCalendarService;
-import cosbas.notifications.Email;
-import cosbas.notifications.Notifications;
-import cosbas.user.ContactDetail;
-import cosbas.user.ContactTypes;
+import cosbas.notifications.Notify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,8 +17,6 @@ import java.util.List;
 @Service
 public class Appointments 
 {
-    Notifications notifyEmail;
-
     /**
      * The database adapter/credentialRepository to use.
      */
@@ -36,12 +29,23 @@ public class Appointments
     @Autowired
     private AccessCodeGenerator visitorCodes;
 
+    @Autowired
+    private BiometricDataDAO codeRepository;
+
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
      * @param repository The credentialRepository to be injected.
      */
     public void setRepository(AppointmentDBAdapter repository) {
         this.repository = repository;
+    }
+
+    /**
+     * Setter based dependency injection since mongo automatically creates the bean.
+     * @param repository The AccessCodeRepository to be injected.
+     */
+    public void setRepository(BiometricDataDAO repository) {
+        this.codeRepository = repository;
     }
     
      /**
@@ -53,33 +57,12 @@ public class Appointments
      * @param durationInMinutes - How long you would like the appointment to be
      * @return String appointmentID - The appointment's unique identifier
      */
+     @Notify
     public String requestAppointment(List<String> visitorIDs, String staffID, LocalDateTime dateTime, String reason, int durationInMinutes, List<String> emails){
-        //check is staffmember exists
+        //check is staff member exists
         if(calendar.isAvailable(staffID, dateTime, durationInMinutes)){
 			String a = calendar.makeAppointment(staffID, dateTime, durationInMinutes, reason, visitorIDs, emails);
             String[] tempString = a.split(" ");
-
-            //Notifications
-            Appointment tempAppointment = repository.findById(tempString[0]);
-			notifyEmail = new Notifications();
-			notifyEmail.setEmail(new Email());
-
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor,contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, visitorIDs ,tempAppointment,false);
 
             return "Appointment "+ tempString[0] + " has been saved.";
         } else {
@@ -94,6 +77,7 @@ public class Appointments
      * @param cancelleeID - Identifier of the person wanting to cancel the appointment. Must be a participant of the appointment
      * @param appointmentID - The appointment's unique identifier 
      */
+     @Notify
     public String cancelAppointment(String cancelleeID, String appointmentID){        
         //find appointment with ID
         Appointment tempAppointment = repository.findById(appointmentID);
@@ -102,23 +86,6 @@ public class Appointments
 
             //check is cancellee is one who made the appointment/the appointment is with
              List<String> tempVisitors = tempAppointment.getVisitorIDs();
-
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: tempVisitors) {
-                if (s.equals(tempVisitors.get(tempVisitors.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
 
              for(Iterator<String> i = tempVisitors.iterator(); i.hasNext();)
              {
@@ -129,10 +96,8 @@ public class Appointments
                     calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
                     //revoke access of key
 
-                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, false);
-                    return "Appointment has been cancelled.";
-                } else if (tempAppointment.getStatus().equals("Cancelled"))
-                {
+                    return "Appointment has been cancelled. {Visitor}";
+                } else if (tempAppointment.getStatus().equals("Cancelled")) {
                     return "Appointment has already been cancelled";
                 }
              }  
@@ -141,16 +106,15 @@ public class Appointments
              if(cancelleeID.equals(tempAppointment.getStaffID()) && !tempAppointment.getStatus().equals("Cancelled"))
              {
                     calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
-                    notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.CANCEL_APPOINTMENT, null, tempAppointment, true);
-                    return "Appointment has been cancelled.";
+                    return "Appointment has been cancelled. {Staff}";
              } else if (tempAppointment.getStatus().equals("Cancelled"))
              {
-                return "Appointment has already been cancelled.";
+                return "Appointment has already been cancelled";
              }
 
              return "You are not authorised to cancel this appointment";
         }     
-         return "Appointment does not exist.";
+         return "Appointment does not exist";
     }
 
     /**
@@ -194,6 +158,7 @@ public class Appointments
      * Function used by staff members to approve a requested appointment
      * @param appointmentID - The appointment's unique identifier
      */
+    @Notify
     public String approveAppointment(String appointmentID, String staffID){
         //find the appointment in the db
         Appointment tempAppointment = repository.findById(appointmentID);
@@ -203,32 +168,10 @@ public class Appointments
         {
 
             tempAppointment.setStatus("Approved");
-
-            List<AccessCode> codes = visitorCodes.getTemporaryAccessCode(tempAppointment);
-            tempAppointment.setAccessKeys(codes);
-
             repository.save(tempAppointment);
 
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
-
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.APPROVE_APPOINTMENT, null ,tempAppointment, false);
+            List<TemporaryAccessCode> generatedCodes = visitorCodes.getTemporaryAccessCode(tempAppointment);
+            codeRepository.save(generatedCodes);
 
             return "Appointment approved";
         } else if(tempAppointment == null){
@@ -244,6 +187,7 @@ public class Appointments
      * Function used by staff members to deny a requested appointment
      * @param appointmentID - The appointment's unique identifier
      */
+    @Notify
     public String denyAppointment(String appointmentID, String staffID){
 
         //find the appointment in the db
@@ -253,27 +197,6 @@ public class Appointments
         if(tempAppointment != null && tempAppointment.getStatus().equals("requested")  && staffID.equals(tempAppointment.getStaffID()))
         {
             calendar.removeAppointment(tempAppointment.getStaffID(), appointmentID);
-
-            //Notifications
-            notifyEmail = new Notifications();
-            notifyEmail.setEmail(new Email());
-
-            List<String> attendants = tempAppointment.getVisitorIDs();
-
-            ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
-            ContactDetail contactDetailsStaff = null;
-
-            //create ContactDetail objects for visitors
-            for(String s: attendants) {
-                if (s.equals(attendants.get(attendants.size()-1))) {
-                    contactDetailsStaff = new ContactDetail(ContactTypes.EMAIL,s);
-                }
-                else {
-                    contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, s));
-                }
-            }
-
-            notifyEmail.sendNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.DENY_APPOINTMENT, null, tempAppointment, false);
 
             return "Appointment denied";
         } else if(tempAppointment == null){
