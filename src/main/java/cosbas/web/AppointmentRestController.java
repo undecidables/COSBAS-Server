@@ -540,6 +540,9 @@ public class AppointmentRestController {
         List<Permission> permissions = permissionManager.permissionsForUser(staffID);
 
     if(permissions != null){
+
+        String returnPage = "";
+
       for(int i = 0; i < permissions.size(); i++)
       {
         Permission permission = permissions.get(i);
