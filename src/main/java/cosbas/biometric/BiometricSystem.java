@@ -153,8 +153,8 @@ public class BiometricSystem {
         }
     }
 
-    private <T> List<T> iterableToList(Iterable<T> it, int count) {
-        List<T> list = new ArrayList<>(count);
+    private <T> List<T> iterableToList(Iterable<T> it) {
+        List<T> list = new ArrayList<>();
         for (T t : it) {
             list.add(t);
         }
@@ -163,14 +163,14 @@ public class BiometricSystem {
 
     public List<User> getUsers() {
         Iterable<User> users = userRepository.findAll();
-        int count = (int) userRepository.count();
-        return iterableToList(users, count);
+       // long count =  userRepository.count();
+        return iterableToList(users);
     }
 
     public List<RegisterRequest> getRegisterRequests() {
         Iterable<RegisterRequest> reqs =  registerRepository.findAll();
-        int count = (int) registerRepository.count();
-        return iterableToList(reqs, count);
+        //int count = (int) registerRepository.count();
+        return iterableToList(reqs);
 
     }
 
