@@ -170,19 +170,8 @@ public class Appointments
             tempAppointment.setStatus("Approved");
             repository.save(tempAppointment);
 
-            TemporaryAccessCode code;
             List<TemporaryAccessCode> generatedCodes = visitorCodes.getTemporaryAccessCode(tempAppointment);
-
             codeRepository.save(generatedCodes);
-          /*  int i = 0;
-            for (TemporaryAccessCode a: generatedCodes) {
-                System.out.println(a.toString());
-                String visitor = tempAppointment.getVisitorIDs().get(i);
-                code = new TemporaryAccessCode(tempAppointment.getId(),visitor,a.getData(),a.getValidFrom(),a.getValidTo());
-                System.out.println("C1: " + code.toString());
-                codeRepository.save(code);
-                i++;
-            }*/
 
             return "Appointment approved";
         } else if(tempAppointment == null){

@@ -695,12 +695,12 @@ public class AppointmentRestController {
         User user = users.findByUserID(principal.getName());
         ContactDetail newContactDetail = new ContactDetail(ContactTypes.EMAIL, email);
         try {
-            if (user.updateContactDetail(ContactTypes.EMAIL, newContactDetail)) {
+            /*if (user.updateContactDetail(ContactTypes.EMAIL, newContactDetail)) {
                 users.save(user);
                 return "true";
-            } else {
+            } else {*/
                 return "false";
-            }
+            //}
         }
         catch (Exception e)
         {

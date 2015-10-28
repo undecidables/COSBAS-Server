@@ -79,10 +79,6 @@ public class Interceptor {
     @Autowired
     private UserDAO userRepository;
 
-    @Autowired
-    private BiometricDataDAO codeRepository;
-    
-
     ExecutorService exe = Executors.newFixedThreadPool(50);
 
     @AfterReturning(value = "toNotify()", returning = "result")
@@ -90,8 +86,6 @@ public class Interceptor {
 
         String methodName = joinPoint.getSignature().getName();
         Object[] arguments = joinPoint.getArgs();
-
-        System.out.println(result.toString());
 
         exe.execute(new Runnable() {
             @Override
@@ -130,10 +124,6 @@ public class Interceptor {
                                 contactDetailsVisitor.add(new ContactDetail(ContactTypes.EMAIL, attendants.get(i)));
                             }
 
-                            for (ContactDetail c: contactDetailsVisitor) {
-                                System.out.println(c.getDetails());
-                            }
-
                             if (user != null) {
                                 notify.sendStaffNotifications(contactDetailsVisitor, contactDetailsStaff, Notifications.NotificationType.REQUEST_APPOINTMENT, tempAppointment, false);
                             }
@@ -143,20 +133,7 @@ public class Interceptor {
                 } else if (methodName.equals("approveAppointment")) {
                     if (result.toString().equals("Appointment approved")) {
 
-                        System.out.println("Notification");
-
                         Appointment tempAppointment = appointmentRepository.findById((String) arguments[0]);
-                        List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
-
-                        System.out.println();
-                        for (TemporaryAccessCode c: codes) {
-                            System.out.println(c.getData().toString());
-                        }
-
-                        System.out.println();
-                        for (TemporaryAccessCode c: codes) {
-                            System.out.println(c.toString());
-                        }
 
                         List<String> attendants = tempAppointment.getVisitorIDs();
 

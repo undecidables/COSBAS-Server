@@ -40,7 +40,7 @@ public interface NotificationsStrategy {
     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
     * @param codes
     */
-   void sendVisitorNotification_Approve(ContactDetail to, Appointment tempAppointment, List<TemporaryAccessCode> codes);
+   void sendVisitorNotification_Approve(ContactDetail to, Appointment tempAppointment, TemporaryAccessCode codes);
 
 
    /**

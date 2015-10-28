@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -149,7 +148,7 @@ public class Email implements NotificationsStrategy  {
      * @param codes - The access codes for each visitor
      */
     @Override
-    public void sendVisitorNotification_Approve(ContactDetail visitor, Appointment tempAppointment, List<TemporaryAccessCode> codes) {
+    public void sendVisitorNotification_Approve(ContactDetail visitor, Appointment tempAppointment, TemporaryAccessCode codes) {
         setProperties();
         SimpleMailMessage notification = new SimpleMailMessage(visitorTemplateMessageApprove);
 

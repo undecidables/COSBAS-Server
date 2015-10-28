@@ -54,16 +54,12 @@ public class Notifications {
             if (contactDetailsVisitor.get(i).getType().equals(ContactTypes.EMAIL)) {
                 switch (type) {
                     case REQUEST_APPOINTMENT:
-                        System.out.println(contactDetailsVisitor.size());
-                        System.out.println(visitorIDs.size());
-                        email.sendVisitorNotification_Request(contactDetailsVisitor.get(i), visitorIDs.get(0), tempAppointment);
+                        email.sendVisitorNotification_Request(contactDetailsVisitor.get(i), visitorIDs.get(i), tempAppointment);
                         break;
 
                     case APPROVE_APPOINTMENT:
-                        System.out.println(tempAppointment.getId());
                         List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
-                        System.out.println("C3: " + codes.size());
-                        email.sendVisitorNotification_Approve(contactDetailsVisitor.get(i), tempAppointment, codes);
+                        email.sendVisitorNotification_Approve(contactDetailsVisitor.get(i), tempAppointment, codes.get(i));
                         break;
 
                     case CANCEL_APPOINTMENT:
