@@ -173,9 +173,11 @@ function validateNameInput()
                    {
                      $("#madeByError").remove();
                    }
-                   $tempNames[$i] = $($inputs[$i]).val();
+                  /* $tempNames[$i] = $($inputs[$i]).val();
                    var arr = $tempNames.join(", ");
-                   $tempNames = arr;
+                   $tempNames = arr;*/
+                   $tempNames.push($($inputs[$i]).val());
+                   var arr = $tempNames.join(", ");
 
                  }
                  $('.appointmentBy').val(arr);
@@ -410,7 +412,7 @@ function requestAppointment()
     //send data if no errors
        var appointmentWith = $('#appointmentWith').val();
        var requestedDateTime = ($("#requestedDateTime").val()+"T"+$("#timeStart").val()+":30+02:00");
-       var appointmentBy = $tempNames;
+       var appointmentBy = $tempNames.join(", ");
       $.ajax({
         type: "post",
         data: {"appointmentWith" : appointmentWith,
