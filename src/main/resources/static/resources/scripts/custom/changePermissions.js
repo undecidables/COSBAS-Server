@@ -118,7 +118,7 @@ $(document).ready(function() {
           var tempThis = $(this);
           $.ajax({
             type: "post",
-            data: {"permission" : tempThis.parent().parent().siblings('.userPermission').text(),
+            data: {"permission" : tempThis.parent().parent().find('.userCol').find('.userPermission').text(),
                    "staffID" : $("#users").val()},
             url: "/removePermission"
           }).then(function(jsonReturned) {

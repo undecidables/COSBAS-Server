@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ImportResource("beans.xml")
 @ComponentScan("cosbas")
 @EnableScheduling
-@EnableCaching
+
 public class Application {
 
     public static void main(String[] args) throws Throwable {

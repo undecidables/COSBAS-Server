@@ -586,7 +586,7 @@ public class AppointmentRestController {
 
         returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                       "<tr>" +
-                      "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
+                      "<td colspan=\"2\" class=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
                       "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
                       "</tr>" +
                       "</table>";
@@ -609,35 +609,7 @@ public class AppointmentRestController {
   public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission, 
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-    PermissionId permission = null;
-
-    switch (stringPermission){
-      case "REGISTRATION_APPROVE": {
-        permission = PermissionId.REGISTRATION_APPROVE; 
-        break;
-      } 
-      case "SUPER":{
-        permission = PermissionId.SUPER; 
-        break;
-      } 
-      case "REPORTS":{
-        permission = PermissionId.REPORTS; 
-        break;
-      } 
-      case "REGISTRATION":{
-        permission = PermissionId.REGISTRATION; 
-        break;
-      } 
-      case "USER_DELETE":
-      {
-        permission = PermissionId.USER_DELETE; 
-        break;
-      } 
-      default:
-      {
-        permission = null;
-      }
-    }
+    PermissionId permission = PermissionId.valueOf(stringPermission);
 
     permissionManager.addPermission(staffID, permission);
   
@@ -652,34 +624,7 @@ public class AppointmentRestController {
     public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission,
                             @RequestParam(value = "staffID", required = true) String staffID) {
 
-        PermissionId permission = null;
-
-        switch (stringPermission){
-            case "REGISTRATION_APPROVE": {
-                permission = PermissionId.REGISTRATION_APPROVE;
-                break;
-            }
-            case "SUPER":{
-                permission = PermissionId.SUPER;
-                break;
-            }
-            case "REPORTS":{
-                permission = PermissionId.REPORTS;
-                break;
-            }
-            case "REGISTRATION":{
-                permission = PermissionId.REGISTRATION;
-                break;
-            }
-            case "USER_DELETE": {
-                permission = PermissionId.USER_DELETE;
-                break;
-            }
-            default: {
-                permission = null;
-            }
-        }
-
+        PermissionId permission = PermissionId.valueOf(stringPermission);
         permissionManager.removePermission(staffID, permission);
 
         return "Permission removed";

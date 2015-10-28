@@ -40,7 +40,7 @@ public class Permission {
     }
 
     public String toString() {
-        return userID + " can " + permission;
+        return permission;
     }
 
     public PermissionId getPermission(){
