@@ -49,7 +49,7 @@ public class FingerprintMatching {
 
         matchingScore = calculateMatchingScore(score);
 
-        System.out.println("Threshold" + THRESHOLD + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+        System.out.println("Threshold " + THRESHOLD + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
         if (matchingScore >= THRESHOLD) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
@@ -117,7 +117,6 @@ public class FingerprintMatching {
 
 
         for(Map.Entry<Point,ArrayList<Integer>> entry : intersectionData.entrySet()) {
-            //System.out.print(entry.getKey() + " --> ");
             ArrayList<Integer> data = entry.getValue();
 
             Collections.sort(data);
@@ -128,17 +127,12 @@ public class FingerprintMatching {
                     in.add(entry.getKey());
                 }
             }
-            //System.out.print(entry.getKey() + " --> ");
-            //printArrayLists(data);
         }
 
         for(Map.Entry<Point,ArrayList<Integer>> entry1 : endpointData.entrySet()) {
-            //System.out.print(entry1.getKey() + " --> ");
             ArrayList<Integer> data1 = entry1.getValue();
 
             Collections.sort(data1);
-
-            printArrayLists(data1);
 
             if (!data1.isEmpty()) {
                 if (data1.get(0) <= 10) {
@@ -146,8 +140,6 @@ public class FingerprintMatching {
                     end.add(entry1.getKey());
                 }
             }
-            //System.out.print(entry1.getKey() + " --> ");
-
         }
 
         return score;

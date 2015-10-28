@@ -4,8 +4,6 @@ import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.ValidationResponse;
-import org.apache.commons.lang.StringUtils;
-import org.aspectj.lang.annotation.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -29,7 +27,7 @@ public class FingerprintMatchingTest {
     private final String path = "./src/test/resources/fingerprints/";
     private final String finger1 = "test100.bmp";
 
-    private final String[] fingers = {"test300.bmp","test400.bmp"};
+    private final String[] fingers = {"test600.bmp","test200.bmp","test400.bmp","test300.bmp","test500.bmp"};
 
     FingerprintMatching testee;
     FingerprintTemplateCreator creator;
@@ -67,6 +65,7 @@ public class FingerprintMatchingTest {
 
         BufferedImage newImage;
         for (int i = 0; i < fingers.length; i++) {
+            System.out.println("Counter: " + i);
             newImage = ImageIO.read(new File(path+fingers[i]));
 
             FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley",newImage,false);
