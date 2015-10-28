@@ -8,14 +8,16 @@ import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.GoogleCredentialWrapper;
 import cosbas.calendar_services.authorization.GoogleVariables;
+import cosbas.user.ContactDetail;
+import cosbas.user.ContactTypes;
+import cosbas.user.User;
+import cosbas.user.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * {@author Jason Richard Evans}
@@ -24,16 +26,13 @@ import java.util.List;
 public class GoogleCalendarService extends CalendarService {
     final String SUMMARY = "COSBAS BOOKING: ";
     private final String CALENDAR_ID = "primary";
+    private com.google.api.services.calendar.Calendar service;
     private CalendarDBAdapter credentialRepository;
     private AppointmentDBAdapter appointmentRepository;
+    private UserDAO userRepository;
+
     @Autowired
     private GoogleVariables variables;
-
-    /*@Autowired
-    public void setCalendarServiceFactory(CalendarFactory calendarServiceFactory) {
-        this.calendarServiceFactory = calendarServiceFactory;
-    }*/
-    private com.google.api.services.calendar.Calendar service;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
@@ -43,6 +42,11 @@ public class GoogleCalendarService extends CalendarService {
     @Autowired
     public void setAppointmentRepository(AppointmentDBAdapter appointmentRepository){
         this.appointmentRepository = appointmentRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserDAO userRepository){
+        this.userRepository = userRepository;
     }
 
     /**
@@ -102,7 +106,8 @@ public class GoogleCalendarService extends CalendarService {
             summary += "with " + clientName.get(0);
         }
 
-        String description = "Appointment with the following clients occur at " + startTime.toString() + ".\r\n";
+        String description = "Reason: " + reason + "\r\n" +
+                "Attendants:  " + "\r\n";
         for (String email: clientEmail){
             description += email + ".\r\n";
         }
@@ -128,7 +133,18 @@ public class GoogleCalendarService extends CalendarService {
         for (int i = 0; i < clientName.size(); i++){
             attendees[i] = new EventAttendee().setEmail(clientEmail.get(i));
         }
-        attendees[clientName.size()] = new EventAttendee().setEmail(emplid + "@cs.up.ac.za");
+
+        //getting the employee id from database.
+        User lecturer = userRepository.findByUserID(emplid);
+        if (lecturer != null) {
+            List<ContactDetail> empEmail = new ArrayList<>();
+            empEmail = lecturer.getContact();
+            for (ContactDetail emp: empEmail){
+                if (emp.getType() == ContactTypes.EMAIL){
+                    attendees[clientName.size()] = new EventAttendee().setEmail(emp.getDetails());
+                }
+            }
+        }
         event.setAttendees(Arrays.asList(attendees));
 
         EventReminder[] reminderOverride = new EventReminder[]{
@@ -146,7 +162,15 @@ public class GoogleCalendarService extends CalendarService {
                 event = service.events().insert(CALENDAR_ID, event).execute();
 
                 List<String> attendants = clientEmail;
-                attendants.add(emplid + "@cs.up.ac.za");
+                if (lecturer != null) {
+                    List<ContactDetail> empEmail = new ArrayList<>();
+                    empEmail = lecturer.getContact();
+                    for (ContactDetail emp: empEmail){
+                        if (emp.getType() == ContactTypes.EMAIL){
+                            attendants.add(emp.getDetails());
+                        }
+                    }
+                }
                 Appointment newEvent = new Appointment(emplid, attendants, startTime, Duration, reason);
                 newEvent.setEventID(event.getId());
                 newEvent.setSummary(event.getSummary());

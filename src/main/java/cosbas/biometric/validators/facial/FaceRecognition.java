@@ -73,7 +73,7 @@ public class FaceRecognition {
     public class Trainer implements Runnable {
         @Override
         public void run() {
-            //trainFromDB();
+            trainFromDB();
         }
     }
 
@@ -148,14 +148,14 @@ public class FaceRecognition {
                 }
             }
 
-            IplImage[] eigenVectors = data.getEigenVectors();
+            ArrayList<IplImage> eigenVectors = data.getEigenVectors();
             final FloatPointer floatPointer = new FloatPointer(nEigens);
             for (int i = 0; i < nTrainFaces; i++) {
 
                 cvEigenDecomposite(
                         data.getTrainingFaces().get(i),
                         nEigens,
-                        eigenVectors,
+                        eigenVectors.toArray(new IplImage[eigenVectors.size()]),
                         0,
                         null,
                         data.getpAvgTrainImg(),
@@ -188,7 +188,7 @@ public class FaceRecognition {
         float[] projectedTestFace;
 
         testFace = createIPL(face);
-       int nEigens = data.eigenVectors.length;
+       int nEigens = data.eigenVectors.size();
 
         // project the test images onto the PCA subspace
         projectedTestFace = new float[nEigens];
@@ -200,7 +200,7 @@ public class FaceRecognition {
        cvEigenDecomposite(
                 testFace, // obj
                 nEigens, // nEigObjs
-                data.eigenVectors, // eigInput (Pointer)
+               data.eigenVectors.toArray(new IplImage[data.eigenVectors.size()]), // eigInput (Pointer)
                 0, // ioFlags
                 null, // userData
                 data.pAvgTrainImg, // avg
@@ -282,7 +282,7 @@ public class FaceRecognition {
         faceImgSize.width(trainingFaces.get(0).width());
         faceImgSize.height(trainingFaces.get(0).height());
 
-        IplImage[] eigenVectors = initEigenVectors(nEigens, faceImgSize);
+        ArrayList<IplImage> eigenVectors = initEigenVectors(nEigens, faceImgSize);
 
         CvMat eigenValues = cvCreateMat(
                 1, // rows
@@ -306,7 +306,7 @@ public class FaceRecognition {
         cvCalcEigenObjects(
                 nTrainFaces, // nObjects
                 trainingFaces.toArray(new IplImage[trainingFaces.size()]), // input
-                eigenVectors, // output
+                eigenVectors.toArray(new IplImage[eigenVectors.size()]), // output
                 CV_EIGOBJ_NO_CALLBACK, // ioFlags
                 0, // ioBufSize
                 null, // userData
@@ -328,14 +328,14 @@ public class FaceRecognition {
         data.setEigenVectors(eigenVectors);
     }
 
-    private IplImage[] initEigenVectors(int nEigens, CvSize faceImgSize) {
-        IplImage[] eigenVectors = new IplImage[nEigens];
+    private ArrayList<IplImage> initEigenVectors(int nEigens, CvSize faceImgSize) {
+        ArrayList<IplImage> eigenVectors = new ArrayList<>(nEigens);
 
         for (int i = 0; i < nEigens; i++) {
-            eigenVectors[i] = cvCreateImage(
+            eigenVectors.add(cvCreateImage(
                     faceImgSize, // size
                     IPL_DEPTH_32F, // depth
-                    1); // channels
+                    1)); // channels
         }
         return eigenVectors;
     }
@@ -361,7 +361,7 @@ public class FaceRecognition {
 
                     this.data = newData;
                     dataRepository.deleteAll();
-                   // dataRepository.save(newData);
+                    dataRepository.save(newData);
 
             }
         }  finally {
@@ -383,7 +383,7 @@ public class FaceRecognition {
         int iNearest = 0;
 
         int nTrainFaces = data.trainingFaces.size();
-        int nEigens = data.eigenVectors.length;
+        int nEigens = data.eigenVectors.size();
         for (iTrain = 0; iTrain < nTrainFaces; iTrain++) {
 
             double distSq = 0;

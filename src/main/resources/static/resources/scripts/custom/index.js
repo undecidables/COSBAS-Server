@@ -63,7 +63,7 @@ function spawnCalendar(returned)
        eventRender: function (event, element) {
          element.attr('href', 'javascript:void(0);');
          element.click(function() {
-             var htmlLightbox = "<h6 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h6><br/>"+
+             var htmlLightbox = "<h2 class=\"wow fadeIn\" data-wow-delay=\".2s\"><span>Meeting</span> Details</h2><br/>"+
                                "<p><b>Meeting Members:</b> "+event.withWho+"</p>" +
                                "<p><b>Starting Time:</b> "+moment(event.start).format('MMM Do h:mm A')+"</p>"+
                                "<p><b>Ending Time:</b> "+((moment(event.start).add(moment.duration(parseInt(event.duration), 'minutes')).format('MMM Do h:mm A'))) + " (" + event.duration + " minutes)"+"</p>";

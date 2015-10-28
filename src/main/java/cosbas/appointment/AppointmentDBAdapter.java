@@ -1,8 +1,9 @@
 package cosbas.appointment;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -11,12 +12,35 @@ import java.util.List;
  *  This interface exists for the sake of making the type of database pluggable.
  *  Extra Functions follow the query style of MongoRepositories.
  */
-public interface AppointmentDBAdapter extends CrudRepository<Appointment, String> {
 
-    @Cacheable("Appointments-staff")
+public interface AppointmentDBAdapter  {
+
+    @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
+    @Cacheable("appointments")
+    <S extends Appointment> S save(S entity);
+    @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
+    @Cacheable("appointments")
+    <S extends Appointment> Iterable<S> save(Iterable<S> entities);
+    Iterable<Appointment> findAll();
+    @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
+    @Cacheable("appointments")
+    void delete(Appointment entity);
+    @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
+    @Cacheable("appointments")
+    void delete(Iterable<? extends Appointment> entities);
+    @CacheEvict(value = "appointments",beforeInvocation = true, allEntries = true)
+    @Cacheable("appointments")
+    void deleteAll();
+
+
+    @Cacheable("appointments")
     List<Appointment> findByStaffID(String staffID);
-    @Cacheable("Appointments-id")
+    @Cacheable("appointments")
     Appointment findById(String id);
-    @Cacheable("Appointments-status")
+    @Cacheable("appointments")
     List<Appointment> findByStatusLike(String status);
+    @Cacheable("appointments")
+    List<Appointment> findByDateTimeBetween(LocalDateTime dateS, LocalDateTime dateE);
+    @Cacheable("appointments")
+    List<Appointment> findByStaffIDAndDateTimeBetween(String staffId, LocalDateTime dateS, LocalDateTime dateE);
 }
