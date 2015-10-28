@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
  * {@author Renette}
  */
 public class ContactDetailTest {
-    ContactDetail testee1 = new ContactDetail(ContactTypes.EMAIL, "a@b.c");
+   /* ContactDetail testee1 = new ContactDetail(ContactTypes.EMAIL, "a@b.c");
     ContactDetail testee2 = new ContactDetail(ContactTypes.EMAIL, "a@b.c");
     ContactDetail testee3 = new ContactDetail(ContactTypes.EMAIL, "a@b.cd");
     Object testee4 = new Object();
@@ -40,5 +40,5 @@ public class ContactDetailTest {
         assertTrue(user.updateContactDetail(ContactTypes.EMAIL, contact2));
         assertEquals(user.getContact().get(0).getDetails(), contact2.getDetails());
         assertNotEquals(user.getContact().get(0).getDetails(), contact1.getDetails());
-    }
+    }*/
 }

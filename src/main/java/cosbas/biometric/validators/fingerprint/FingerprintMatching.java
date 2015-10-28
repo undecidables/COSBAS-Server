@@ -4,6 +4,7 @@ import com.google.api.client.util.Value;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.ValidationResponse;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,13 +17,14 @@ import java.util.*;
 /**
  * {@Author Vivian Venter}
  */
+@Service
 public class FingerprintMatching {
     private double matchingScore;
     private FingerprintTemplateData originalImageTemplateData;
     private int Num_KeypointsFound;
 
     @Value("${fingers.threshold}")
-    int THRESHOLD;
+    private int threshold;
 
     public FingerprintMatching(byte[] image, String userID) {
         try {
@@ -49,9 +51,9 @@ public class FingerprintMatching {
 
         matchingScore = calculateMatchingScore(score);
 
-        System.out.println("Threshold " + THRESHOLD + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+        System.out.println("Threshold " + threshold + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
-        if (matchingScore >= THRESHOLD) {
+        if (matchingScore >= threshold) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
         else {
