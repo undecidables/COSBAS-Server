@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  getUsers();
+ // getUsers();
   getPermissions();
   handleDynamicInputClicks();
   $("#permissionForm").hide();
@@ -21,19 +21,14 @@ $(document).ready(function() {
           $("#permissions").empty();
           getUserPermissions();
           removePermissionListener();
-          if(($("#users").val() != "no users") && ($("#permissions").val() != "no permissions"))
-          {
-            $("#update").show();
-          } else {
-            $("#update").hide();
-          }
+          $("#update").show();
         }
       });
       window.scrollTo(0, 0);
      }
 
     //Function that gets all users of the system
-    function getUsers(){
+    /*function getUsers(){
         $("#users").click(function(){
         $("#users").prop('disabled', true);
         $("#users").val("Loading Staff Member List...");
@@ -46,7 +41,7 @@ $(document).ready(function() {
                 });
                 window.scrollTo(0, 0);
         });
-    }
+    }*/
 
     //Function that gets all permissions possible
     function getPermissions(){
@@ -67,19 +62,22 @@ $(document).ready(function() {
 
     //Function that gets a users permissions
     function getUserPermissions(){
-      if($("#users").val() != "no users")
+      if($("#users").val())
       {
         $.ajax({
           type: "post",
           data: {"staffID": $("#users").val()},
           url: "/getUserPermissions"
         }).then(function(jsonReturned) {
-            $("#permissionsHide").show();
+           // $("#permissionsHide").show();
             $("#permissions").empty();
+            if(jsonReturned == ""){
+              jsonReturned = "no permissions";
+            }
             $("#permissions").append(jsonReturned);
           });
       } else {
-        $("#permissionsHide").hide();
+      //  $("#permissionsHide").hide();
       }
     }
     
@@ -87,8 +85,13 @@ $(document).ready(function() {
     //Listener for the update click event. Updates the selected user's permissions
     function addPermission(){
       $(document).on('click', '#update', (function(e) {
-        spawnBusyMessage("Adding Permission");
-          e.preventDefault();
+        e.preventDefault();
+        if(!$("#users").val || !$("#newPermissions").val())
+        {
+          spawnErrorMessage("Please fill in all inputs");
+        } else {
+          spawnBusyMessage("Adding Permission");
+          
           $.ajax({
             type: "post",
             data: {"permission" : $("#newPermissions").val(),
@@ -97,10 +100,14 @@ $(document).ready(function() {
           }).then(function(jsonReturned) {
           if(jsonReturned == "Permission added")
             spawnSuccessMessage("Permission Added");
-        else
+          else
             spawnErrorMessage(jsonReturned);
             getUserPermissions();
           });
+        }
+        
+        getUserPermissions();
+
       }));
     }
 
@@ -111,7 +118,7 @@ $(document).ready(function() {
           var tempThis = $(this);
           $.ajax({
             type: "post",
-            data: {"permission" : tempThis.parent().parent().siblings('.userPermission').text(),
+            data: {"permission" : tempThis.parent().parent().find('.userCol').find('.userPermission').text(),
                    "staffID" : $("#users").val()},
             url: "/removePermission"
           }).then(function(jsonReturned) {
@@ -122,9 +129,10 @@ $(document).ready(function() {
             }
             else
                 spawnErrorMessage(jsonReturned);
-
-
           });
+          
+          getUserPermissions();
+
       }));
     }
 
@@ -132,6 +140,7 @@ $(document).ready(function() {
     $("#users").change(function () {
       getUserPermissions();
     });
+
     function handleDynamicInputClicks()
     {
         $(document.body).on('click', '#appointmentsubmit' ,function(){
