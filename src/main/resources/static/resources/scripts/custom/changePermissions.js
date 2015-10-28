@@ -3,7 +3,7 @@ $(document).ready(function() {
  // getUsers();
   getPermissions();
   handleDynamicInputClicks();
-  //$("#permissionForm").hide();
+  $("#permissionForm").hide();
 	 /*
     * Calls the controller function to get all users and their permissions
     */
@@ -105,6 +105,9 @@ $(document).ready(function() {
             getUserPermissions();
           });
         }
+        
+        getUserPermissions();
+
       }));
     }
 
@@ -126,9 +129,10 @@ $(document).ready(function() {
             }
             else
                 spawnErrorMessage(jsonReturned);
-
-
           });
+          
+          getUserPermissions();
+
       }));
     }
 
