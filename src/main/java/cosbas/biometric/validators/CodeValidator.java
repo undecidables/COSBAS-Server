@@ -101,7 +101,7 @@ public class CodeValidator extends AccessValidator {
 
     @Scheduled(cron="0 0 0 * * *")
     public void cleanup() {
-        //TODO Implement and schedule....
+        repository.deleteByValidToLessThan(LocalDateTime.now().minusDays(1));
     }
 
 
