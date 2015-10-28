@@ -213,7 +213,7 @@ public class Email implements NotificationsStrategy  {
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
                        "You have successfully approved the appointment with:\n" +
-                        visitorsDisplay +
+                        visitorsDisplay.toString() +
 
                         "\n\nYou are able to cancel this appointment by going\n" +
                         "to appointment, cancel appointment and typing\n" +
@@ -577,7 +577,7 @@ public class Email implements NotificationsStrategy  {
         StringBuilder theString = new StringBuilder();
 
         for (int i = 0; i < visitorEmails.size(); i++) {
-            theString.append(visitorNames.get(i)).append(": {").append(visitorEmails.get(i)).append("}\n");
+            theString.append(visitorNames.get(i)).append(": {").append(visitorEmails.get(i).getDetails()).append("}\n");
         }
 
         return theString;
