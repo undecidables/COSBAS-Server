@@ -32,9 +32,6 @@ public class AppointmentController {
     private CalendarFactory calendarServiceFactory;
 
     @Autowired
-    private GoogleCalendarService test;
-
-    @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
     }
