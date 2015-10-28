@@ -37,7 +37,7 @@ public class ContactDetailTest {
         user.addContactDetail(contact1);
         ContactDetail contact2 = new ContactDetail(ContactTypes.EMAIL, "new@gmail.com");
         assertNotEquals(user.getContact().get(0).getDetails(), contact2.getDetails());
-        assertTrue(user.updateContactDetail(ContactTypes.EMAIL, contact2));
+        user.updateContactDetail(ContactTypes.EMAIL, contact2);
         assertEquals(user.getContact().get(0).getDetails(), contact2.getDetails());
         assertNotEquals(user.getContact().get(0).getDetails(), contact1.getDetails());
     }

@@ -47,7 +47,14 @@ public class User {
     }
 
     public void removeContactDetailsByType(ContactTypes type) {
-        contact.stream().filter(c -> c.getType() == type).forEach(contact::remove);
+        for(Iterator<ContactDetail> iterator = contact.iterator(); iterator.hasNext();)
+        {
+            ContactDetail contact = iterator.next();
+            if(contact.getType().equals(type))
+            {
+                iterator.remove();
+            }
+        }
     }
 
     public void updateContactDetail(ContactTypes type, ContactDetail newContactDetail)
