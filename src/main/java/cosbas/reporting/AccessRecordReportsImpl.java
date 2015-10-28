@@ -73,7 +73,7 @@ public class AccessRecordReportsImpl implements AccessRecordReports {
         report.setPageFormat(PageType.A4, PageOrientation.PORTRAIT).columns(
                 Columns.column("Door ID", "doorId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("Action", "action", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
-                Columns.column("User ID", "staffId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
+                Columns.column("User ID", "userId", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue),
                 Columns.column("Date Time", "dateTime", DataTypes.stringType()).setMinWidth(90).setStyle(singleValue)
         ).setColumnStyle(everything).setColumnTitleStyle(columnTitleStyle).title(Components.text("Access Record").setHorizontalTextAlignment(HorizontalTextAlignment.CENTER));
 
@@ -83,7 +83,7 @@ public class AccessRecordReportsImpl implements AccessRecordReports {
 
     private DRDataSource createDataSource(List<AccessRecord> data)
     {
-        DRDataSource dataSource = new DRDataSource("doorId","action","staffId","dateTime");
+        DRDataSource dataSource = new DRDataSource("doorId","action","userId","dateTime");
         for(AccessRecord accessRecord : data)
         {
             dataSource.add(accessRecord.getDoorID(), accessRecord.getAction().toString(), accessRecord.getUserID(), accessRecord.getDateTime().toLocalDate().toString() + " " + accessRecord.getDateTime().toLocalTime().minusSeconds(30).toString());
@@ -104,9 +104,11 @@ public class AccessRecordReportsImpl implements AccessRecordReports {
                 return createAccessRecordBetweenDateTimeReports(data);
 
             case ALL_ACCESS_RECORDS_BY_STAFFID:
+            case ALL_ACCESS_RECORDS_BY_USERID:
                 return createAccessRecordByUserIdReports(data);
 
             case ALL_ACCESS_RECORDS_BY_STAFFID_AND_BETWEEN_DATETIME:
+            case ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME:
                 return createAccessRecordByUserIdAndBetweenDateTimeReports(data);
 
             default:
