@@ -42,7 +42,6 @@ public class ContactDetail {
                 .isEquals();
     }
 
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder(79, 113)
