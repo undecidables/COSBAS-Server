@@ -16,7 +16,6 @@ import java.util.List;
  * Currently the system only allows for email notifications but numerous other methods such as SMS may be used.
  * The Context Class for the Notifications Strategy Pattern
  * @author Vivian Venter
- * @date 10/4/2015.
  */
 @Service
 public class Notifications {
@@ -43,10 +42,10 @@ public class Notifications {
     /**
      * The method that will be used to send the notifications to the visitors
      * Depending on the strategy used it will call the appropriate notification function
-     * @param contactDetailsVisitor - the contact details of the visitor(s)
-     * @param type - the type of notification to send (See NotificationType above)
-     * @param tempAppointment - the appointment object to extract the necessary details
-     * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
+     * @param contactDetailsVisitor - The contact details of the visitor(s)
+     * @param type - The type of notification to send (See NotificationType above)
+     * @param tempAppointment - The appointment object to extract the necessary details
+     * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
      */
     public void sendVisitorNotifications(ArrayList<ContactDetail> contactDetailsVisitor, NotificationType type, Appointment tempAppointment, boolean staffCancelled) {
         for (int i = 0; i < contactDetailsVisitor.size(); i++) {
@@ -75,11 +74,11 @@ public class Notifications {
     /**
      * The method that will be used to send the notifications to the staff member
      * Depending on the strategy used it will call the appropriate notification function
-     * @param contactDetailStaff - the contact details of the staff member
-     * @param contactDetailsVisitor - the contact details of the visitor(s)
-     * @param type - the type of notification to send (See NotificationType above)
-     * @param tempAppointment - the appointment object to extract the necessary details
-     * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
+     * @param contactDetailStaff - The contact details of the staff member
+     * @param contactDetailsVisitor - The contact details of the visitor(s)
+     * @param type - The type of notification to send (See NotificationType above)
+     * @param tempAppointment - The appointment object to extract the necessary details
+     * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
      */
     public void sendStaffNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ArrayList<ContactDetail> contactDetailStaff, NotificationType type, Appointment tempAppointment, boolean staffCancelled) {
         switch (type) {

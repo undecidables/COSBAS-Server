@@ -50,7 +50,7 @@ public class Email implements NotificationsStrategy  {
      * The method to send the appointment request notification to the visitor(s)
      * The template method as specified in the Strategy Interface
      * @param visitors - The email address(es) of the visitor(s) to which the email will be send to
-     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+     * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      * @param visitorName - The name of the visitor
      */
     @Override
@@ -83,7 +83,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R1");
         } catch (MailException ex) {
             System.err.println(ex.getMessage());
         }
@@ -94,8 +93,8 @@ public class Email implements NotificationsStrategy  {
      * The method to send the appointment request notification to the staff member
      * The template method as specified in the Strategy Interface
      * @param emails - The email address of the staff member to which the email will be send to
-     * @param visitors - The email address(ess) of the visitors
-     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+     * @param visitors - The email address(es) of the visitors
+     * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      */
     @Override
     public void sendStaffNotification_Request(ArrayList<ContactDetail> emails, ArrayList<ContactDetail> visitors, Appointment tempAppointment) {
@@ -135,19 +134,9 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R2");
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
-        }
-    }
-
-    private String getClientDisplayLine(int size) {
-        if (size == 1) {
-            return "Client: \n";
-        }
-        else {
-            return "Clients: \n";
         }
     }
 
@@ -196,7 +185,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R3");
         } catch (MailException ex) {
             System.err.println(ex.getMessage());
         }
@@ -237,7 +225,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R4");
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
@@ -297,7 +284,6 @@ public class Email implements NotificationsStrategy  {
         }
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R5");
         } catch (MailException ex) {
             System.err.println(ex.getMessage());
         }
@@ -354,7 +340,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R6");
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
@@ -365,7 +350,7 @@ public class Email implements NotificationsStrategy  {
      * The method to send the appointment denied notification to the visitor(s)
      * The template method as specified in the Strategy Interface
      * @param visitor - The email address(es) of the visitor(s) to which the email will be send to
-     * @param tempAppointment - the appointment object to extract the necessary details of the appointment
+     * @param tempAppointment - The appointment object to extract the necessary details of the appointment
      * @param visitorName - The name of the visitor
      */
     @Override
@@ -396,7 +381,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R7");
         } catch (MailException ex) {
             System.err.println(ex.getMessage());
         }
@@ -431,7 +415,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R8");
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
@@ -468,7 +451,6 @@ public class Email implements NotificationsStrategy  {
 
         try {
             mailSender.send(notification);
-            System.out.println("Email Send! R9");
         }
         catch (MailException ex) {
             System.err.println(ex.getMessage());
@@ -566,7 +548,7 @@ public class Email implements NotificationsStrategy  {
 
     /**
      * The function that converts the ContactDetail objects of the staff member and change it into a String[]
-     * @param staff- the ArrayList of ContactDetails objects
+     * @param staff- The ArrayList of ContactDetails objects
      * @return to - A String[] that contains only the email address(es) of the staff member
      */
     private String[] getStaffEmails(ArrayList<ContactDetail> staff) {
@@ -579,7 +561,7 @@ public class Email implements NotificationsStrategy  {
     }
 
     /**
-     * The function that converts the ContactDetail objects of the visitor and their names and change it into a StringBuilder Object
+     * The function that takes the ContactDetail objects of the visitor and their names and change it into a StringBuilder Object
      * @param visitorEmails - The ArrayList of ContactDetails objects
      * @param visitorNames - The List of names for the visitors
      * @return theString - A StringBuilderObject that contains only the name(s) and email address(es) of the visitor(s) in the format Name: {Email}
@@ -596,12 +578,27 @@ public class Email implements NotificationsStrategy  {
 
     /**
      * A function that formats the output of the date and time
-     * @param dateTime - the LocalDateTime object that represents the date/time of the appointment
-     * @return String - the date/time in the format "yyyy-mm-dd at hh:mm:ss"
+     * @param dateTime - The LocalDateTime object that represents the date/time of the appointment
+     * @return String - The date/time in the format "yyyy-mm-dd at hh:mm:ss"
      */
     private String getDateTimeDisplay(LocalDateTime dateTime) {
         LocalDate date = dateTime.toLocalDate();
         LocalTime time = dateTime.toLocalTime().minusSeconds(30);
         return date + " at " + time;
+    }
+
+
+    /**
+     * The function that determines if we should outpuit Client or Clients
+     * @param size - The Number of visitors
+     * @return - The string to display in the email
+     */
+    private String getClientDisplayLine(int size) {
+        if (size == 1) {
+            return "Client: \n";
+        }
+        else {
+            return "Clients: \n";
+        }
     }
 }

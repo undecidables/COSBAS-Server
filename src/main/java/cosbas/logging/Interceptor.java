@@ -4,8 +4,6 @@ import cosbas.appointment.Appointment;
 import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.appointment.DeletedAppointment;
 import cosbas.appointment.DeletedAppointmentDBAdapter;
-import cosbas.biometric.data.BiometricDataDAO;
-import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.notifications.Email;
 import cosbas.notifications.Notifications;
 import cosbas.user.ContactDetail;
@@ -107,7 +105,6 @@ public class Interceptor {
                             ArrayList<ContactDetail> contactDetailsVisitor = new ArrayList<>();
                             ArrayList<ContactDetail> contactDetailsStaff = null;
 
-                            List<String> visitorIDs = (List<String>) arguments[0];
 
                             User user = userRepository.findByUserID(tempAppointment.getStaffID());
                             if (user != null) {
