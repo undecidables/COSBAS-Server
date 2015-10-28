@@ -539,6 +539,7 @@ public class AppointmentRestController {
     public String getUserPermissions(@RequestParam(value = "staffID", required = true) String staffID) {
         List<Permission> permissions = permissionManager.permissionsForUser(staffID);
 
+        String returnPage = "";
     if(permissions != null){
       for(int i = 0; i < permissions.size(); i++)
       {
@@ -557,7 +558,7 @@ public class AppointmentRestController {
       } 
     } else {
       returnPage += "no permissions";      
-      }
+    }
      return returnPage;
     }
 
