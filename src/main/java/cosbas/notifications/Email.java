@@ -18,7 +18,6 @@ import java.util.Properties;
  * The Email class to send the email notifications to the visitor and staff member
  * The Concrete Class for the Notifications Strategy Pattern
  * @author Vivian Venter
- * @date 10/4/2015.
  */
 
 public class Email implements NotificationsStrategy  {
@@ -122,7 +121,7 @@ public class Email implements NotificationsStrategy  {
                 "Duration: " + tempAppointment.getDurationMinutes() + " minutes\n" +
                 "Reason: " + tempAppointment.getReason() + "\n\n" +
                 "Client: \n" +
-                visitorsDisplay.toString() +
+                visitorsDisplay +
                 "\n\n" +
 
                 "Please log into your COSBAS account, go to \n" +
@@ -214,7 +213,7 @@ public class Email implements NotificationsStrategy  {
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
                        "You have successfully approved the appointment with:\n" +
-                        visitorsDisplay.toString() +
+                        visitorsDisplay +
 
                         "\n\nYou are able to cancel this appointment by going\n" +
                         "to appointment, cancel appointment and typing\n" +
@@ -318,7 +317,7 @@ public class Email implements NotificationsStrategy  {
             notification.setText(
                     "Dear " + tempAppointment.getStaffID() + "\n\n" +
                             "You have successfully cancelled and removed the appointment with:\n" +
-                            visitorsDisplay.toString() +
+                            visitorsDisplay +
 
                             "\n\nRegards,\nCOSBAS"
             );
@@ -414,7 +413,7 @@ public class Email implements NotificationsStrategy  {
         notification.setText(
                 "Dear " + tempAppointment.getStaffID() + "\n\n" +
                         "You have successfully denied the appointment with:\n" +
-                        visitorsDisplay.toString() +
+                        visitorsDisplay +
 
                         "\n\nRegards,\nCOSBAS"
         );
