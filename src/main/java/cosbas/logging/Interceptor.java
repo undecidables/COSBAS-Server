@@ -250,6 +250,14 @@ public class Interceptor {
                             notify.sendVisitorNotifications(contactDetailsVisitor, Notifications.NotificationType.CANCEL_APPOINTMENT, tempAppointment, false);
                         }
                     }
+                } else if (methodName.equals("approveUser")) {
+                    ArrayList<ContactDetail> contactDetailsStaff = null;
+                    User user = userRepository.findByUserID((String) arguments[0]);
+                    if (user != null) {
+                        contactDetailsStaff = (ArrayList<ContactDetail>) user.getContact();
+                    }
+
+                    notify.sendRegisterNotifications(contactDetailsStaff,(String)arguments[0], Notifications.NotificationType.REGISTRATION);
                 }
 
             }

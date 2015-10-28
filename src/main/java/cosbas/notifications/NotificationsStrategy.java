@@ -90,6 +90,7 @@ public interface NotificationsStrategy {
     * The method to send the registration completed notification to the staff member
     * The template method to be overridden by the Concrete Classes
     * @param to - The email address of the staff member to which the email will be send to
+    * @param staffID
     */
-   void sendStaffNotification_Registration(ArrayList<ContactDetail> to);
+   void sendStaffNotification_Registration(ArrayList<ContactDetail> to, String staffID);
 }
