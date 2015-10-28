@@ -19,7 +19,7 @@ public interface BiometricDataDAO {
      * Apply @CacheEvict annotation on functions which will alter the tables/collections in the database, apply @Cacheable annotations to functions that do not alter the database in any way.
      */
 
-    @CacheEvict(value = "biometricDatas",beforeInvocation = true, allEntries = true)
+    @CacheEvict(value = "biometricDatas", beforeInvocation = true, allEntries = true)
     <S extends BiometricData> S save(S entity);
     @CacheEvict(value = "biometricDatas",beforeInvocation = true, allEntries = true)
     <S extends BiometricData> Iterable<S> save(Iterable<S> entities);

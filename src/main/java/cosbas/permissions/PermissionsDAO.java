@@ -17,7 +17,6 @@ public interface PermissionsDAO  {
     <S extends Permission> S save(S entity);
     @CacheEvict(value = "permissions",beforeInvocation = true, allEntries = true)
     <S extends Permission> Iterable<S> save(Iterable<S> entities);
-    Iterable<Permission> findAll();
     @CacheEvict(value = "permissions",beforeInvocation = true, allEntries = true)
     void delete(Permission entity);
     @CacheEvict(value = "permissions",beforeInvocation = true, allEntries = true)
@@ -27,7 +26,8 @@ public interface PermissionsDAO  {
     @CacheEvict(value = "permissions",beforeInvocation = true, allEntries = true)
     List<Permission> deleteByUserIDAndPermission(String userID, PermissionId permission);
 
-
+    @Cacheable("permissions")
+    Iterable<Permission> findAll();
     @Cacheable("permissions")
     List<Permission> findByUserID(String userID);
     @Cacheable("permissions")
