@@ -36,7 +36,7 @@ public abstract class AccessCodeGenerator {
      */
     public List<TemporaryAccessCode> getTemporaryAccessCode(Appointment appointment) {
 
-        String id = appointment.getId();
+        String appointmentID = appointment.getId();
 
         List<String> visitors = appointment.getVisitorIDs();
 
@@ -57,7 +57,7 @@ public abstract class AccessCodeGenerator {
         LocalDateTime to = appointment.getDateTime().plusMinutes(appointment.getDurationMinutes() + 15);
 
         for (int i = 0; i < size; i++) {
-            codes.add(new TemporaryAccessCode(id, visitors.get(i), getCode(), from, to));
+            codes.add(new TemporaryAccessCode(appointmentID, visitors.get(i), getCode(), from, to));
         }
 
         return codes;
