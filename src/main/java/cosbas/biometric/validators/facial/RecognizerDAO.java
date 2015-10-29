@@ -1,5 +1,6 @@
 package cosbas.biometric.validators.facial;
 
+import antlr.StringUtils;
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,6 +32,7 @@ public class RecognizerDAO {
         LocalDateTime updated = entity.updated;
         NameStore names = componentDAO.save(new NameStore(PERSON_NAMES, updated, entity.personNames, entity.needsTraining()));
         String linkedID = names.getId();
+        entity.setNameID(linkedID);
 
         componentDAO.save(entity.trainingFaces.stream().map(tf -> new CvMatStorage(tf, TRAINING_FACES, updated, linkedID)).collect(Collectors.toList()));
         componentDAO.save(entity.eigenVectors.stream().map(tf -> new CvMatStorage(tf, EIGEN_VECTORS, updated, linkedID)).collect(Collectors.toList()));
@@ -50,6 +52,8 @@ public class RecognizerDAO {
     @Cacheable("complete-recognizer")
     RecognizerData findFirstByOrderByUpdatedDesc() {
         NameStore nameStore =  componentDAO.findFirstByOrderBySavedDesc();
+        if (nameStore == null)
+            return null;
         List<String> names = nameStore.getNames();
         LocalDateTime updated = nameStore.getSaved();
         boolean needsTraining = nameStore.isNeedsTraining();
@@ -67,9 +71,18 @@ public class RecognizerDAO {
 
     }
 
-   void saveTraining(RecognizerData data) {
-        NameStore n = (NameStore) componentDAO.findById(data.getNameID());
-        n.setNeedsTraining(data.needsTraining());
-        componentDAO.save(n);
+   RecognizerData saveTraining(RecognizerData data) {
+       String nameID = data.getNameID();
+       if (nameID == null || nameID.isEmpty()) {
+            return save(data);
+       } else {
+           NameStore n = (NameStore) componentDAO.findById(nameID);
+           if (n == null) {
+               return save(data);
+           }
+           n.setNeedsTraining(data.needsTraining());
+           componentDAO.save(n);
+       }
+       return data;
     }
 }

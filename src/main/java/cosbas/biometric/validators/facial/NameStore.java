@@ -1,7 +1,7 @@
 package cosbas.biometric.validators.facial;
 
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * {@author Renette
  */
-@Component
+@Document(collection = "FaceRecognitionData")
 public class NameStore extends RecognizerDataComponent {
 
     public List<String> getNames() {

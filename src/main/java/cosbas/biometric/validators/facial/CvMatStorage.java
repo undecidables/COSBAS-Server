@@ -3,6 +3,7 @@ package cosbas.biometric.validators.facial;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.opencv_core;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author Renette
  */
-@Component
+@Document(collection = "FaceRecognitionData")
 public class CvMatStorage extends RecognizerDataComponent {
 
     private final int cols;

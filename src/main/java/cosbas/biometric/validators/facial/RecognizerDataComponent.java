@@ -2,12 +2,14 @@ package cosbas.biometric.validators.facial;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 /**
  * {@author Renette}
  */
+@Document(collection = "FaceRecognitionData")
 public abstract class RecognizerDataComponent {
     @Id
     private String id;

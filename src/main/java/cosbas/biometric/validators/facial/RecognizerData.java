@@ -11,28 +11,16 @@ import java.util.List;
  */
 public class RecognizerData {
 
-    private boolean needsTraining;
     public final List<String> personNames;
-
     public List<opencv_core.IplImage> trainingFaces;
     public List<opencv_core.IplImage> eigenVectors;
     public opencv_core.IplImage pAvgTrainImg;
     public opencv_core.CvMat eigenValues;
     public opencv_core.CvMat projectedTrainFace;
     public opencv_core.CvMat personNumTruthMat;
-
-    public void setNeedsTraining(boolean needsTraining) {
-        this.needsTraining = needsTraining;
-    }
-
-    public String getNameID() {
-        return nameID;
-    }
-
-    private String nameID;
-
-
     public LocalDateTime updated;
+    private boolean needsTraining;
+    private String nameID;
 
     public RecognizerData(List<String> personNames,
                           List<opencv_core.IplImage> trainingFaces,
@@ -42,7 +30,8 @@ public class RecognizerData {
                           opencv_core.CvMat projectedTrainFace,
                           opencv_core.CvMat personNumTruthMat,
                           LocalDateTime updated,
-                          boolean needsTraining, String nameID) {
+                          boolean needsTraining,
+                          String nameID) {
         this.personNames = personNames;
 
         this.trainingFaces = trainingFaces;
@@ -68,6 +57,17 @@ public class RecognizerData {
         this(personNames, trainingFaces, eigenVectors, pAvgTrainImg, eigenValues, projectedTrainFace, personNumTruthMat, LocalDateTime.now(), false, "");
     }
 
+    public void setNeedsTraining(boolean needsTraining) {
+        this.needsTraining = needsTraining;
+    }
+
+    public String getNameID() {
+        return nameID;
+    }
+
+    public void setNameID(String nameID) {
+        this.nameID = nameID;
+    }
 
     public int getnEigens() {
         if (eigenVectors != null)

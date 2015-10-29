@@ -361,7 +361,7 @@ public class FaceRecognition {
 
                     this.data = newData;
                     dataRepository.deleteAll();
-                   // dataRepository.save(newData);
+                    dataRepository.save(newData);
 
             }
         }  finally {
