@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,6 +32,8 @@ public interface BiometricDataDAO {
     void deleteAll();
     @CacheEvict(value = "Biometric-Data",beforeInvocation = true, allEntries = true)
     List<BiometricData> deleteByUserID(String userID);
+    @CacheEvict(value = "Biometric-Data",beforeInvocation = true, allEntries = true)
+    List<TemporaryAccessCode> deleteByValidToLessThan(LocalDateTime time);
 
     @Cacheable("Biometric-Data")
     Iterable<BiometricData> findAll();

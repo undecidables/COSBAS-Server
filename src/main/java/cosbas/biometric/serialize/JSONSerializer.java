@@ -19,14 +19,12 @@ public class JSONSerializer extends BiometricSerializer {
     @Override
     public String serializeResponse(AccessResponse response) {
         Gson gson = new Gson();
-        //TODO: Fine Tune, everything does not need to be serialized.
          return gson.toJson(response);
     }
 
     @Override
     public String serializeResponse(RegisterResponse response) {
         Gson gson = new Gson();
-        //TODO: Fine Tune, everything does not need to be serialized.
         return gson.toJson(response);
     }
 
