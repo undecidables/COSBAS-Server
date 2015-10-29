@@ -10,7 +10,7 @@ body
     font-family: 'Open Sans', sans-serif;
     text-transform: uppercase;
     color: #003366;
-    background: url('images/back.png');
+    /*background: url('images/back.png');*/
 }
 
 .fa-bars
@@ -615,10 +615,12 @@ p
 
     .ui-state-highlight,
     .ui-widget-content .ui-state-highlight,
-    .ui-widget-header .ui-state-highlight {
+    .ui-widget-header .ui-state-highlight
+    {
         border: 1px solid #000000;
         background: linear-gradient(to bottom, rgba(255,255,255,0) 65%, rgb(22, 121, 173) 100%);
         color: #1678ac;
         text-decoration: underline;
     }
+
 

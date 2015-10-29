@@ -1081,14 +1081,18 @@ Copyright (c) 2014 Daniel Eden
 @keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-            transform: translate3d(0, -100%, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
   }
 
   100% {
     opacity: 1;
     -webkit-transform: none;
             transform: none;
+    background: #003366;
+    color: white;
+    font-color: white;
+
   }
 }
 
