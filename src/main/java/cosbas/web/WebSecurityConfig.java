@@ -82,10 +82,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             ApplicationContext ctx = new AnnotationConfigApplicationContext(LDAPSettings.class);
             LdapContextSource contextSource = ctx.getBean(LdapContextSource.class);
             LdapTemplate ldapTemplate = ctx.getBean(LdapTemplate.class);
-            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication().userDnPatterns("uid={0},ou=Staff,ou=Computer Science,o=University of Pretoria,c=ZA", "uid={0},ou=Students,ou=Computer Science,o=University of Pretoria,c=ZA");
+            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication().userDnPatterns("uid={0},ou=Staff,ou=Computer Science,o=University of Pretoria,c=ZA");
             ldapAuthenticationProviderConfigurer
                     .userSearchFilter("uid={0}")
-                    .userSearchBase("")
+                    .userSearchBase("ou=Staff")
                     .contextSource(contextSource);
         }
     }
