@@ -1,9 +1,12 @@
 package cosbas.web;
 
 import cosbas.authentication.LDAPSettings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -20,6 +23,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @Configuration
 @EnableWebMvcSecurity
 @EnableScheduling
+@PropertySource("classpath:/application.properties")
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
@@ -69,6 +73,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
     /**
      * This configures the authentication method used - it's basically used to customize authentication to integrate with LDAP.
      * We can't get the username from the login request via the configuration as far as I could see, so we have to add userDN patterns (the username is plugged into 'uid={0}' part.
@@ -77,15 +82,18 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected static class AuthenticationConfiguration extends
             GlobalAuthenticationConfigurerAdapter {
 
+        @Autowired
+        Environment env;
+
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             ApplicationContext ctx = new AnnotationConfigApplicationContext(LDAPSettings.class);
             LdapContextSource contextSource = ctx.getBean(LdapContextSource.class);
             LdapTemplate ldapTemplate = ctx.getBean(LdapTemplate.class);
-            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication().userDnPatterns("uid={0},ou=Staff,ou=Computer Science,o=University of Pretoria,c=ZA");
+            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication();
             ldapAuthenticationProviderConfigurer
                     .userSearchFilter("uid={0}")
-                    .userSearchBase("ou=Staff")
+                    .userSearchBase(env.getRequiredProperty("ldap.userSearchBase"))
                     .contextSource(contextSource);
         }
     }
