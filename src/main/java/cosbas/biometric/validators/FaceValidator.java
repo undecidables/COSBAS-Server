@@ -50,7 +50,7 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    @Scheduled(cron="0 0 0 * * *")
+    @Scheduled(cron="${scheduling.faceTrainer}")
     public void train() {
         if (recognizer.needsTraining()) {
             recognizer.trainFromDB();

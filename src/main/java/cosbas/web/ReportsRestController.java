@@ -209,8 +209,8 @@ public class ReportsRestController {
     }
 
     @AuthenticateReports
-    @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByStaffIdAndBetweenDateTimeReports")
-    public void createAccessRecordByStaffIdAndBetweenDateTimeReports(Principal principal,
+    @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdAndBetweenDateTimeReports")
+    public void createAccessRecordByUserIdAndBetweenDateTimeReports(Principal principal,
                                                                        @RequestParam(value = "format", required = true) String format,
                                                                        @RequestParam(value = "staffID", required = true) String staffID,
                                                                        @RequestParam(value = "dateTimeS", required = true) String dateTimeS,
@@ -230,12 +230,13 @@ public class ReportsRestController {
         }
     }
 
+
     @AuthenticateReports
     @RequestMapping(method= RequestMethod.POST, value="/createAccessRecordByUserIdReports")
     public void createAccessRecordByUserIdReports(Principal principal,
-                                                    @RequestParam(value = "format", required = true) String format,
-                                                    @RequestParam(value = "staffID", required = true) String staffID,
-                                                    HttpServletResponse response) {
+                                                  @RequestParam(value = "format", required = true) String format,
+                                                  @RequestParam(value = "staffID", required = true) String staffID,
+                                                  HttpServletResponse response) {
         ReportData data = new ReportData();
         data.setStaffID(staffID);
 

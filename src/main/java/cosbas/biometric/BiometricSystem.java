@@ -13,6 +13,7 @@ import cosbas.biometric.validators.ValidationResponse;
 import cosbas.biometric.validators.ValidatorFactory;
 import cosbas.biometric.validators.exceptions.BiometricTypeException;
 import cosbas.biometric.validators.exceptions.ValidationException;
+import cosbas.notifications.Notify;
 import cosbas.user.User;
 import cosbas.user.UserDAO;
 import cosbas.user.UserManager;
@@ -114,6 +115,7 @@ public class BiometricSystem {
         return factory.getValidator(data.getType()).validate(data, requestAction);
     }
 
+    @Notify
     public User approveUser(String userID) throws BiometricTypeException {
         /**
          * Fetch al data from DB

@@ -24,7 +24,7 @@ public class GoogleVariables {
     public static HttpTransport HTTP_TRANSPORT;
     public static final String APPLICATION_NAME = "COSBAS Calendar Integration Service";
     public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    public static String callbackURI = "http://localhost:8080/callback";
+    public static String callbackURI = "https://localhost:8443/callback";
 
     @Value("${google.clientID}")
     private String clientID;
