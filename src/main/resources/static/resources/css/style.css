@@ -614,3 +614,12 @@ p
     border: 1px solid rgba(255, 255, 255, 0);
 }
 
+    .ui-state-highlight,
+    .ui-widget-content .ui-state-highlight,
+    .ui-widget-header .ui-state-highlight {
+        border: 1px solid #000000;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 65%, rgba(145,232,66,0.75) 100%);
+        color: limegreen;
+        text-decoration: underline;
+    }
+
