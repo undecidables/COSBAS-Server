@@ -1,5 +1,6 @@
 package cosbas.biometric.validators.fingerprint;
 
+import com.google.api.client.util.Value;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
@@ -24,6 +25,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class FingerprintMatchingTest {
 
+    @Value("${fingers.threshold}")
+    private int threshold;
+
     private final String path = "./src/test/resources/fingerprints/";
     private final String finger1 = "test100.bmp";
 
@@ -42,8 +46,7 @@ public class FingerprintMatchingTest {
 
         originalImage = ImageIO.read(new File(path+finger1));
         byte[] dbItem = imagetobyte(originalImage);
-        testee = new FingerprintMatching(dbItem,"BCrawley");
-
+        testee = new FingerprintMatching(dbItem,"BCrawley", threshold);
 
     }
 

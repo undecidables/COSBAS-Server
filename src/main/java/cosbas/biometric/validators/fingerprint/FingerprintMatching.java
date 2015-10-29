@@ -23,12 +23,11 @@ public class FingerprintMatching {
     private FingerprintTemplateData originalImageTemplateData;
     private int Num_KeypointsFound;
 
-    @Value("${fingers.threshold}")
     private int threshold;
 
-    public FingerprintMatching(byte[] image, String userID) {
+    public FingerprintMatching(byte[] image, String userID, int threshold) {
         try {
-
+            this.threshold = threshold;
             this.matchingScore = 0.0;
             InputStream in = new ByteArrayInputStream(image);
             BufferedImage originalImage = getImage(in);
@@ -53,7 +52,7 @@ public class FingerprintMatching {
 
         System.out.println("Threshold " + threshold + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
-        if (matchingScore >= threshold) {
+        if (matchingScore >= 0.5) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
         else {

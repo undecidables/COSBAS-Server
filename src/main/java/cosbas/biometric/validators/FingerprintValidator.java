@@ -1,5 +1,6 @@
 package cosbas.biometric.validators;
 
+import com.google.api.client.util.Value;
 import cosbas.biometric.BiometricTypes;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
@@ -26,8 +27,11 @@ public class FingerprintValidator extends AccessValidator {
         return type == BiometricTypes.FINGER;
     }
 
+    @Value("${fingers.threshold}")
+    private int threshold;
+
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
-        FingerprintMatching matcher = new FingerprintMatching(request.getData(), request.getUserID());
+        FingerprintMatching matcher = new FingerprintMatching(request.getData(), request.getUserID(),threshold);
 
         List<BiometricData> items = fingerprintRepository.findByUserID(request.getUserID());
 
