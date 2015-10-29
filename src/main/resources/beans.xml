@@ -14,17 +14,17 @@
     <mongo:repositories base-package="cosbas.db.repositories" />
 
     <mongo:mongo port="${mongo.port}" host="${mongo.address}">
-        <mongo:options connections-per-host="8"
-                       threads-allowed-to-block-for-connection-multiplier="4"
-                       connect-timeout="1000"
-                       max-wait-time="1500"
-                       auto-connect-retry="true"
-                       socket-keep-alive="true"
-                       socket-timeout="1500"
-                       slave-ok="true"
-                       write-number="1"
-                       write-timeout="0"
-                       write-fsync="true"/>
+        <mongo:options connections-per-host="${mongo.connectionsperhost}"
+                       threads-allowed-to-block-for-connection-multiplier="${mongo.threadsallowedtoblockforconnectionmultiplier}"
+                       connect-timeout="${mongo.connecttimeout}"
+                       max-wait-time="${mongo.maxwaittime}"
+                       auto-connect-retry="${mongo.autoconnectretry}"
+                       socket-keep-alive="${mongo.socketkeepalive}"
+                       socket-timeout="${mongo.sockettimeout}"
+                       slave-ok="${mongo.slaveok}"
+                       write-number="${mongo.writenumber}"
+                       write-timeout="${mongo.writetimeout}"
+                       write-fsync="${mongo.writefsync}"/>
     </mongo:mongo>
 
     <bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager" />
