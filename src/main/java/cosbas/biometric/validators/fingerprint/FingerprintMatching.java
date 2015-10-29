@@ -49,7 +49,7 @@ public class FingerprintMatching {
 
         matchingScore = calculateMatchingScore(score);
 
-        System.out.println("Threshold " + threshold + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
+        //System.out.println("Threshold " + threshold + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
         if (matchingScore >= threshold) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
@@ -147,22 +147,5 @@ public class FingerprintMatching {
 
     private int euclideanDistance(Point a, Point b) {
         return (int) Math.sqrt( (Math.pow((a.x - b.x),2)) + (Math.pow((a.y - b.y),2)));
-    }
-
-
-    private void printArrayLists(ArrayList<Integer> a) {
-        int k = 0;
-
-        System.out.print("\n[ ");
-        for (Integer i : a) {
-            if (k == a.size()-1) {
-                System.out.print(i);
-            }
-            else {
-                System.out.print(i + ",");
-            }
-            k++;
-        }
-        System.out.print(" ]\n");
     }
 }

@@ -34,32 +34,15 @@ public class FingerprintTemplateCreator {
         ArrayList<Point> bifurcations = finger.getMinutiaeIntersections(core, coreRadius);
         ArrayList<Point> endPoints = finger.getMinutiaeEndpoints(core, coreRadius);
 
-        /*BufferedImage i6 = finger.directionToBufferedImage(dir);
-        Graphics g = i6.getGraphics();
-
-        g.setColor(Color.magenta);
-        for (Point point : bifurcations) {
-            g.fillOval(point.x - 2, point.y - 2, 4, 4);
-        }
-
-        g.setColor(Color.blue);
-        for (Point point : endPoints)
-        {
-            g.fillOval(point.x-2, point.y-2, 4, 4);
-        }*/
-
         FingerprintTemplateData fingerprintData = new FingerprintTemplateData(userID, bifurcations, endPoints);
+
         if(registrationOnly) {
-            //store the data in the db
             fingerprintRepository.save(fingerprintData);
             return fingerprintData;
         }
         else {
             return fingerprintData;
         }
-        //BufferedImage i1 = finger.toBufferedImage();
-        //File f1 = new File(path + "temp1_2.bmp");
-        //ImageIO.write(i1, "bmp", f1);
 
     }
 
