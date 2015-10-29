@@ -14,31 +14,31 @@
     <mongo:repositories base-package="cosbas.db.repositories" />
 
     <mongo:mongo port="${mongo.port}" host="${mongo.address}">
-        <mongo:options connections-per-host="8"
-                       threads-allowed-to-block-for-connection-multiplier="4"
-                       connect-timeout="1000"
-                       max-wait-time="1500"
-                       auto-connect-retry="true"
-                       socket-keep-alive="true"
-                       socket-timeout="1500"
-                       slave-ok="true"
-                       write-number="1"
-                       write-timeout="0"
-                       write-fsync="true"/>
+        <mongo:options connections-per-host="${mongo.connectionsperhost}"
+                       threads-allowed-to-block-for-connection-multiplier="${mongo.threadsallowedtoblockforconnectionmultiplier}"
+                       connect-timeout="${mongo.connecttimeout}"
+                       max-wait-time="${mongo.maxwaittime}"
+                       auto-connect-retry="${mongo.autoconnectretry}"
+                       socket-keep-alive="${mongo.socketkeepalive}"
+                       socket-timeout="${mongo.sockettimeout}"
+                       slave-ok="${mongo.slaveok}"
+                       write-number="${mongo.writenumber}"
+                       write-timeout="${mongo.writetimeout}"
+                       write-fsync="${mongo.writefsync}"/>
     </mongo:mongo>
 
     <bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager" />
 
-    <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+    <!--<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
         <constructor-arg name="username" value="${mongo.user}"/>
         <constructor-arg name="password" value="${mongo.password}" />
-    </bean>
+    </bean> -->
 
     <!-- MongoTemplate for connecting and querying the documents in the database -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongo" ref="mongo" />
         <constructor-arg name="databaseName" value="${mongo.database}" />
-        <constructor-arg name="userCredentials" ref="mongoCredentials"/>
+        <!--constructor-arg name="userCredentials" ref="mongoCredentials"/-->
     </bean>
 
     <!-- Bean to send our emails through the gmail smtp server -->

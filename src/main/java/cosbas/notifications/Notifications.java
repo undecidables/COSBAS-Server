@@ -1,8 +1,12 @@
 package cosbas.notifications;
 
 import cosbas.appointment.Appointment;
+import cosbas.biometric.data.BiometricDataDAO;
+import cosbas.biometric.data.TemporaryAccessCode;
 import cosbas.user.ContactDetail;
 import cosbas.user.ContactTypes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +16,8 @@ import java.util.List;
  * Currently the system only allows for email notifications but numerous other methods such as SMS may be used.
  * The Context Class for the Notifications Strategy Pattern
  * @author Vivian Venter
- * @date 10/4/2015.
  */
-
+@Service
 public class Notifications {
 
     /**
@@ -22,6 +25,8 @@ public class Notifications {
      */
     NotificationsStrategy email = null;
 
+    @Autowired
+    private BiometricDataDAO codeRepository;
 
     /**
      * Enumeration type to specify which type of notification has to be send
@@ -35,53 +40,71 @@ public class Notifications {
     }
 
     /**
-     * The method that will be used to send the notifications
+     * The method that will be used to send the notifications to the visitors
      * Depending on the strategy used it will call the appropriate notification function
-     * @param contactDetailsVisitor - the contact details of the visitor(s)
-     * @param contactDetailStaff - the contact details of the staff member
-     * @param type - the type of notification to send (See NotificationType above)
-     * @param visitorIDs -  the name(s) of the visitor(s)
-     * @param tempAppointment - the appointment object to extract the necessary details
-     * @param staffCancelled - a boolean value to indicate if the appointment has been cancelled by the staff member
+     * @param contactDetailsVisitor - The contact details of the visitor(s)
+     * @param type - The type of notification to send (See NotificationType above)
+     * @param tempAppointment - The appointment object to extract the necessary details
+     * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
      */
-    public void sendNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ContactDetail contactDetailStaff, NotificationType type, List<String> visitorIDs, Appointment tempAppointment, boolean staffCancelled) {
+    public void sendVisitorNotifications(ArrayList<ContactDetail> contactDetailsVisitor, NotificationType type, Appointment tempAppointment, boolean staffCancelled) {
+        for (int i = 0; i < contactDetailsVisitor.size(); i++) {
+            if (contactDetailsVisitor.get(i).getType().equals(ContactTypes.EMAIL)) {
+                switch (type) {
+                    case REQUEST_APPOINTMENT:
+                        email.sendVisitorNotification_Request(contactDetailsVisitor.get(i), tempAppointment, tempAppointment.getVisitorNames().get(i));
+                        break;
+
+                    case APPROVE_APPOINTMENT:
+                        List<TemporaryAccessCode> codes = codeRepository.findByAppointmentID(tempAppointment.getId());
+                        email.sendVisitorNotification_Approve(contactDetailsVisitor.get(i), tempAppointment, codes.get(i), tempAppointment.getVisitorNames().get(i));
+                        break;
+
+                    case CANCEL_APPOINTMENT:
+                        email.sendVisitorNotification_Cancel(contactDetailsVisitor.get(i), tempAppointment, staffCancelled, tempAppointment.getVisitorNames().get(i));
+                        break;
+                    case DENY_APPOINTMENT:
+                        email.sendVisitorNotification_Deny(contactDetailsVisitor.get(i), tempAppointment, tempAppointment.getVisitorNames().get(i));
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * The method that will be used to send the notifications to the staff member
+     * Depending on the strategy used it will call the appropriate notification function
+     * @param contactDetailStaff - The contact details of the staff member
+     * @param contactDetailsVisitor - The contact details of the visitor(s)
+     * @param type - The type of notification to send (See NotificationType above)
+     * @param tempAppointment - The appointment object to extract the necessary details
+     * @param staffCancelled - A boolean value to indicate if the appointment has been cancelled by the staff member
+     */
+    public void sendStaffNotifications(ArrayList<ContactDetail> contactDetailsVisitor, ArrayList<ContactDetail> contactDetailStaff, NotificationType type, Appointment tempAppointment, boolean staffCancelled) {
         switch (type) {
             case REQUEST_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Request(contactDetailsVisitor,visitorIDs,tempAppointment);
-                    email.sendStaffNotification_Request(contactDetailStaff,visitorIDs,tempAppointment);
-                }
+                email.sendStaffNotification_Request(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
 
             case APPROVE_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Approve(contactDetailsVisitor,tempAppointment);
-                    email.sendStaffNotification_Approve(contactDetailStaff,contactDetailsVisitor,tempAppointment);
-                }
+                email.sendStaffNotification_Approve(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
 
             case CANCEL_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Cancel(contactDetailsVisitor,tempAppointment,staffCancelled);
-                    email.sendStaffNotification_Cancel(contactDetailStaff,contactDetailsVisitor,tempAppointment,staffCancelled);
-                }
+                email.sendStaffNotification_Cancel(contactDetailStaff, contactDetailsVisitor, tempAppointment, staffCancelled);
                 break;
             case DENY_APPOINTMENT:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendVisitorNotification_Deny(contactDetailsVisitor,tempAppointment);
-                    email.sendStaffNotification_Deny(contactDetailStaff,contactDetailsVisitor,tempAppointment);
-                }
-                break;
-
-            case REGISTRATION:
-                if(contactDetailStaff.getType().equals(ContactTypes.EMAIL)) {
-                    email.sendStaffNotification_Registration(contactDetailStaff);
-                }
+                email.sendStaffNotification_Deny(contactDetailStaff, contactDetailsVisitor, tempAppointment);
                 break;
         }
+    }
 
-
-
+    public void sendRegisterNotifications(ArrayList<ContactDetail> contactDetailsStaff, String staffID, NotificationType registration) {
+        if(contactDetailsStaff.get(0).getType().equals(ContactTypes.EMAIL)) {
+            if(registration == NotificationType.REGISTRATION) {
+                email.sendStaffNotification_Registration(contactDetailsStaff, staffID);
+            }
+        }
     }
 
     /**

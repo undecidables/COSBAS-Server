@@ -156,12 +156,11 @@ function createNameInput()
 */
 function validateNameInput()
 {
-    var emailString;
-      $temp = [];
+        var emailString;
+        $tempNames = [];
         $(document.body).on('click', '#namesubmit' ,function(){
                //check appointmentBy
                $allFilledIn = true;
-
                $inputs = $(".nameinput");
                for($i = 0; $i < $inputs.length; $i++){
                  if($($inputs[$i]).val() == "")
@@ -174,16 +173,20 @@ function validateNameInput()
                    {
                      $("#madeByError").remove();
                    }
-                   $temp[$i] = $($inputs[$i]).val();
-                    $temp = $temp.join(", ");
+                  /* $tempNames[$i] = $($inputs[$i]).val();
+                   var arr = $tempNames.join(", ");
+                   $tempNames = arr;*/
+                   $tempNames.push($($inputs[$i]).val());
+                   var arr = $tempNames.join(", ");
+
                  }
+                 $('.appointmentBy').val(arr);
                }
                if(!$allFilledIn)
                {
                     spawnErrorMessage("All members' names must be entered.");
-
                }
-            $('.appointmentBy').val($temp);
+
         });
 }
 
@@ -282,32 +285,6 @@ function validateEmailInput()
       $('.featherlight').click();
       $('.email').val($tempEmail);
   });
-}
-
-/*
-* Check that no errors occured then send the UI data to the server
-* Feedback is shown via a lightbox
-*/
-function validateGlobalSubmit()
-{
-    var dateVar = calculateDate();
-    var timeVar = calculateTime();
-
-    //check time
-    if($("#requestedDateTime").val() == dateVar && $("#timeStart").val() <= timeVar)
-    {
-        var html = "<p class='error col-md-8 col-md-offset-2 section-title okay' id='timeError'><i class=\"fa fa-exclamation-circle\"></i> The appointments must be in the future. </p>";
-                html +=  '<p class="text-left">' +
-                            '<button type="submit" id="emailErrorOkay" class="btnLightbox btn-common">Okay</button>' +
-                          '</p>';
-      $element = $(html);
-      $.featherlight($element);
-      return false;
-    }
-    else
-    {
-      return true;
-    }
 }
 
 
@@ -433,11 +410,14 @@ function validateGlobalSubmit()
 function requestAppointment()
 {
     //send data if no errors
+       var appointmentWith = $('#appointmentWith').val();
+       var requestedDateTime = ($("#requestedDateTime").val()+"T"+$("#timeStart").val()+":30+02:00");
+       var appointmentBy = $tempNames.join(", ");
       $.ajax({
         type: "post",
-        data: {"appointmentWith" : $('#appointmentWith').val(),
-               "requestedDateTime" : ($("#requestedDateTime").val()+"T"+$("#timeStart").val()+":30+02:00"),
-               "appointmentBy" : $temp,
+        data: {"appointmentWith" : appointmentWith,
+               "requestedDateTime" : requestedDateTime,
+               "appointmentBy" : appointmentBy,
                "appointmentDuration" : $duration,
                "appointmentReason" : $('#appointmentReason').val(),
                "appointmentEmails" : $tempEmail},

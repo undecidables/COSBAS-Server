@@ -125,8 +125,6 @@ function handleDenyAllAppointments()
 {
     $(document).on('click', '#DenyAll', (function(e) {
         $('.deny').click();
-        $("#requests").empty();
-        $("#requests").append(getWarningMessage("No pending registration requests"));
       }));
 }
 });

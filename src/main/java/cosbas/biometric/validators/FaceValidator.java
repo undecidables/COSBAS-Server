@@ -26,7 +26,7 @@ public class FaceValidator extends AccessValidator {
 
     private FaceRecognition recognizer;
 
-    //@Value ("$(faces.certainty}")
+    @Value("${faces.certainty:0.6}")
     double certaintyThreshold = 0.7;
 
     @Autowired
@@ -50,7 +50,7 @@ public class FaceValidator extends AccessValidator {
             return ValidationResponse.failedValidation("Recognition too uncertain.");
     }
 
-    @Scheduled(cron="0 0 0 * * *")
+    @Scheduled(cron="${scheduling.faceTrainer}")
     public void train() {
         if (recognizer.needsTraining()) {
             recognizer.trainFromDB();

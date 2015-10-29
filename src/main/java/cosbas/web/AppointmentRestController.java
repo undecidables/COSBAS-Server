@@ -19,7 +19,7 @@ import cosbas.calendar_services.services.GoogleCalendarService;
 import cosbas.permissions.Permission;
 import cosbas.permissions.PermissionId;
 import cosbas.permissions.PermissionManager;
-import cosbas.user.User;
+import cosbas.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,7 +60,14 @@ public class AppointmentRestController {
     //Private variable used to call the appointment class functions of the biometricSystem class
     @Autowired
     private BiometricSystem biometricSystem;
+    private UserManager userManager;
 
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {
         this.credentialRepository = credentialRepository;
     }
@@ -85,36 +92,33 @@ public class AppointmentRestController {
         List<CredentialWrapper> credentials = credentialRepository.findAll();
         String returnPage = "";
         returnPage += "<select class=\"contact_input\" id=\"appointmentData\" name=\"appointmentWith\">";
-        for (int i = 0; i < credentials.size(); i++) {
+        for (CredentialWrapper credential : credentials) {
 
             // System.out.println(credentials.get(i));
-            returnPage += "<option>" + credentials.get(i).getStaffID() + "</option>";
+            returnPage += "<option>" + credential.getStaffID() + "</option>";
         }
 
         if (credentials.size() == 0) {
             returnPage += "<option>No active users of the system</option>";
         }
         returnPage += "</select>";
-        returnPage += "<p class=\"text-left\">" +
-                "<br/>" +
-                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>" +
-                "</p>";
+        returnPage += "<br/><br/>" +
+                "<button type=\"submit\" id=\"appointmentsubmit\" class=\"btnLightbox btn-common\">Select Staff Member</button>";
 
         return returnPage;
     }
 
     /**
      * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
-     *
-     * @param appointmentWith     - String staff memeber ID as gotten from the html dropdown on the html page
+     * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
      * @param appointmentDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
-     * @param appointmentBy       - String list of members in the group that is making the appointment as inputted on the htm form
-     * @param duration            - Integer duration of the appointment in minutes as inputted on the html form
-     * @param reason              - String reason for the appointment being made as indicated on the html form
+     * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
+     * @param duration - Integer duration of the appointment in minutes as inputted on the html form
+     * @param reason - String reason for the appointment being made as indicated on the html form
      * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
      */
 
-    @RequestMapping(method = RequestMethod.POST, value = "/requestAppointment")
+    @RequestMapping(method= RequestMethod.POST, value="/requestAppointment")
     public String requestAppointment(
             @RequestParam(value = "appointmentWith", required = true) String appointmentWith,
             @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
@@ -129,13 +133,12 @@ public class AppointmentRestController {
 
     /**
      * Function used to cancel an appointment via the form on the cancel.html page
-     *
-     * @param cancellee     - String of the name of the person who wants to cancel the appointment.
+     * @param cancellee - String of the name of the person who wants to cancel the appointment.
      * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
      * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
      */
 
-    @RequestMapping(method = RequestMethod.POST, value = "/cancelAppointment")
+    @RequestMapping(method= RequestMethod.POST, value="/cancelAppointment")
     public String cancelAppointment(
             @RequestParam(value = "cancellee", required = true) String cancellee,
             @RequestParam(value = "appointmentID", required = true) String appointmentID) {
@@ -145,13 +148,12 @@ public class AppointmentRestController {
 
     /**
      * Function to check the status of the appointment entered on the status.html form
-     *
-     * @param requester     - String name of the person requesting the status of the appointment
+     * @param requester - String name of the person requesting the status of the appointment
      * @param appointmentID - String appoitnment ID of the appointment that you want to check
      * @return Returns the status and information of the appointment or an appropriate string describing the error
      */
 
-    @RequestMapping(method = RequestMethod.POST, value = "/status")
+    @RequestMapping(method= RequestMethod.POST, value="/status")
     public String checkStatus(
             @RequestParam(value = "requester", required = true) String requester,
             @RequestParam(value = "appointmentID", required = true) String appointmentID) {
@@ -171,26 +173,26 @@ public class AppointmentRestController {
         String staffMember = principal.getName();
         String returnPage = "";
 
-        for (int i = 0; i < appointments.size(); i++) {
-            String[] parts = appointments.get(i).getDateTime().toString().split("T");
+        for (Appointment appointment1 : appointments) {
+            String[] parts = appointment1.getDateTime().toString().split("T");
             String tempDateTime = parts[0] + " at " + parts[1].substring(0, parts[1].length() - 3);
 
-            if (appointments.get(i).getStaffID().equals(staffMember)) {
+            if (appointment1.getStaffID().equals(staffMember)) {
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                         "<tr>" +
-                        "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
+                        "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointment1.getVisitorIDs()) + "</p></td>" +
                         "<td colspan=\"2\"><p>On: " + tempDateTime + "</p></td>" +
-                        "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                        "<td colspan=\"2\"><p>Duration: " + appointment1.getDurationMinutes() + " minutes</p></td>" +
                         "<td><button type='submit' class='form-control accept approveBtn'><i class=\"fa fa-check-circle\"></i></button></td>" +
                         "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
-                        "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointments.get(i).getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
+                        "<tr class=\"hiddenData\"><td><input type='text' class='appointmentID' value='" + appointment1.getId() + "' hidden/><input type='text' class='staffID' value='" + staffMember + "' hidden/></td>" +
                         "</tr>" +
                         "</table>";
             }
 
         }
 
-        if (appointments.size() == 0 || returnPage == "") {
+        if (appointments.size() == 0 || returnPage.equals("")) {
             returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
         }
         return returnPage;
@@ -243,7 +245,7 @@ public class AppointmentRestController {
         String returnPage = "[";
 
         for (int i = 0; i < appointments.size(); i++) {
-            String[] parts = appointments.get(i).getDateTime().toString().split("T");
+            // String[] parts = appointments.get(i).getDateTime().toString().split("T");
             int duration = appointments.get(i).getDurationMinutes();
             String startDate = appointments.get(i).getDateTime().toString();
             String summary = appointments.get(i).getSummary();
@@ -270,17 +272,17 @@ public class AppointmentRestController {
         String returnPage = "";
 
         if (appointments != null) {
-            for (int i = 0; i < appointments.size(); i++) {
-                List<String> with = appointments.get(i).getVisitorIDs();
-                int duration = appointments.get(i).getDurationMinutes();
-                String reason = appointments.get(i).getReason();
-                String[] parts = appointments.get(i).getDateTime().toString().split("T");
+            for (Appointment appointment1 : appointments) {
+                //List<String> with = appointment1.getVisitorIDs();
+                //int duration = appointment1.getDurationMinutes();
+                //String reason = appointment1.getReason();
+                String[] parts = appointment1.getDateTime().toString().split("T");
                 String tempDateTime = parts[1].substring(0, parts[1].length() - 3);
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                         "<tr>" +
-                        "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointments.get(i).getVisitorIDs()) + "</p></td>" +
+                        "<td colspan=\"2\"><p class='text-left'>Appointment with " + Joiner.on(", ").join(appointment1.getVisitorIDs()) + "</p></td>" +
                         "<td colspan=\"2\"><p>At: " + tempDateTime + "</p></td>" +
-                        "<td colspan=\"2\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                        "<td colspan=\"2\"><p>Duration: " + appointment1.getDurationMinutes() + " minutes</p></td>" +
                         "</tr>" +
                         "</table>";
             }
@@ -296,14 +298,12 @@ public class AppointmentRestController {
 
     /**
      * Function used to check if the current logged in user has already linked their callendar or not so that a pop up can be given to link a calendar if needed.
-     *
      * @return Returns Linked or Not Linked depending on if the calendar was already linked.
      */
 
     @RequestMapping(method = RequestMethod.POST, value = "/calendarLinked")
     public String getLinkedCalendar(Principal principal) {
-        CredentialWrapper credentials = null;
-        credentials = credentialRepository.findByStaffID(principal.getName());
+        CredentialWrapper credentials = credentialRepository.findByStaffID(principal.getName());
 
         if (credentials == null) {
             return "Not Linked";
@@ -326,19 +326,20 @@ public class AppointmentRestController {
         String returnPage = "";
 
         if (appointments != null) {
-            for (int i = 0; i < appointments.size(); i++) {
-                List<String> with = appointments.get(i).getVisitorIDs();
-                int duration = appointments.get(i).getDurationMinutes();
-                String reason = appointments.get(i).getReason();
-                String[] parts = appointments.get(i).getDateTime().toString().split("T");
+            for (Appointment appointment1 : appointments) {
+                //List<String> with = appointment1.getVisitorIDs();
+                //int duration = appointment1.getDurationMinutes();
+                //String reason = appointment1.getReason();
+                String[] parts = appointment1.getDateTime().toString().split("T");
                 String tempDateTime = parts[1].substring(0, parts[1].length() - 3);
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                         "<tr>" +
                         "<td colspan=\"2\"><p>Appoinment at: " + tempDateTime + "</p></td>" +
-                        "<td colspan=\"5\"><p>Duration: " + appointments.get(i).getDurationMinutes() + " minutes</p></td>" +
+                        "<td colspan=\"5\"><p>Duration: " + appointment1.getDurationMinutes() + " minutes</p></td>" +
                         "</tr>" +
                         "</table>";
             }
+
 
             if (appointments.size() == 0) {
                 returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";
@@ -360,8 +361,8 @@ public class AppointmentRestController {
 
         String returnPage = "";
         if (requests != null) {
-            for (int i = 0; i < requests.size(); i++) {
-                String[] requestDetails = requests.get(i).toString().split(",");
+            for (RegisterRequest request : requests) {
+                String[] requestDetails = request.toString().split(",");
 
                 String[] requestDateTime = requestDetails[0].split("T");
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
@@ -388,7 +389,7 @@ public class AppointmentRestController {
     /**
      * Function to approve a registration request
      *
-     * @Returns feedback from the biometric function
+     * @return feedback from the biometric function
      */
     @RequestMapping(method = RequestMethod.POST, value = "/approveRequest")
     public String approveRequest(@RequestParam(value = "staffID", required = true) String staffID) {
@@ -404,7 +405,7 @@ public class AppointmentRestController {
     /**
      * Function to deny a registration request
      *
-     * @Returns feedback from the biometric function
+     * @return feedback from the biometric function
      */
     @RequestMapping(method = RequestMethod.POST, value = "/denyRequest")
     public String denyRequest(@RequestParam(value = "staffID", required = true) String staffID) {
@@ -420,38 +421,12 @@ public class AppointmentRestController {
     /**
      * Function to check if logged in user is authorized to approve or deny registration requests
      *
-     * @Returns the string "authorized" or "not authorized"
+     * @return the string "authorized" or "not authorized"
      */
     @RequestMapping(method = RequestMethod.POST, value = "/authorizedToAccessRequests")
     public String authorizedToAccessRequests(Principal principal,
                                              @RequestParam(value = "authorized", required = true) String authorized) {
-        PermissionId permission = null;
-
-        switch (authorized) {
-            case "REGISTRATION_APPROVE": {
-                permission = PermissionId.REGISTRATION_APPROVE;
-                break;
-            }
-            case "SUPER": {
-                permission = PermissionId.SUPER;
-                break;
-            }
-            case "REPORTS": {
-                permission = PermissionId.REPORTS;
-                break;
-            }
-            case "REGISTRATION": {
-                permission = PermissionId.REGISTRATION;
-                break;
-            }
-            case "USER_DELETE": {
-                permission = PermissionId.USER_DELETE;
-                break;
-            }
-            default: {
-                permission = null;
-            }
-        }
+        PermissionId permission = PermissionId.valueOf(authorized);
         if (permissionManager.hasPermission(principal.getName(), permission)) {
             return "authorized";
         } else {
@@ -461,18 +436,18 @@ public class AppointmentRestController {
 
     /**
      * Function used to return all the users registered on the system
-     *
      * @return Returns string with the html code to display the users that are registered on the system
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/getRegisteredUsers")
+    @RequestMapping(method= RequestMethod.POST, value="/getRegisteredUsers")
     public String getRegisteredUsers() {
         List<User> users = biometricSystem.getUsers();
+
 
         String returnPage = "";
 
         if (users != null) {
-            for (int i = 0; i < users.size(); i++) {
-                String user = users.get(i).toString();
+            for (User user1 : users) {
+                String user = user1.toString();
 
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                         "<tr>" +
@@ -481,6 +456,7 @@ public class AppointmentRestController {
                         "</tr>" +
                         "</table>";
             }
+
 
             if (users.size() == 0) {
                 returnPage += "<div id=\"permissionAuthorization\" class=\"wow fadeIn alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> No Users On The System</div>";
@@ -512,8 +488,8 @@ public class AppointmentRestController {
     /**
      * Function to return all users on the system for permission altering
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/getUsersForPermissionUpdate")
-    public String getUsersForPermissionUpdate() {
+    @RequestMapping(method= RequestMethod.POST, value="/getUsersForPermissionUpdate")
+    public String getUsersForPermissionUpdate(){
         List<User> users = biometricSystem.getUsers();
 
         String returnPage = "";
@@ -548,9 +524,7 @@ public class AppointmentRestController {
         String returnPage = "";
 
         if (permissions != null) {
-            for (int i = 0; i < permissions.length; i++) {
-                PermissionId permission = permissions[i];
-
+            for (PermissionId permission : permissions) {
                 returnPage += "<option>" + permission + "</option>";
             }
 
@@ -564,6 +538,7 @@ public class AppointmentRestController {
     }
 
     /**
+
      * Function to return all user's permissions
      */
     @RequestMapping(method = RequestMethod.POST, value = "/getUserPermissions")
@@ -572,19 +547,21 @@ public class AppointmentRestController {
 
         String returnPage = "";
 
-        if (permissions != null) {
-            for (int i = 0; i < permissions.size(); i++) {
+        if(permissions != null){
+
+            for(int i = 0; i < permissions.size(); i++)
+            {
                 Permission permission = permissions.get(i);
 
                 returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
                         "<tr>" +
-                        "<td colspan=\"2\" id=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
+                        "<td colspan=\"2\" class=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
                         "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
                         "</tr>" +
                         "</table>";
             }
 
-            if (permissions.size() == 0) {
+            if(permissions.size() == 0){
                 returnPage += "no permissions";
             }
         } else {
@@ -595,40 +572,14 @@ public class AppointmentRestController {
 
     /**
      * Function used to add a permission
-     *
      * @return the string "Permission added"
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/addPermission")
+    @RequestMapping(method= RequestMethod.POST, value="/addPermission")
     public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission,
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-        PermissionId permission = null;
+        PermissionId permission = PermissionId.valueOf(stringPermission);
 
-        switch (stringPermission) {
-            case "REGISTRATION_APPROVE": {
-                permission = PermissionId.REGISTRATION_APPROVE;
-                break;
-            }
-            case "SUPER": {
-                permission = PermissionId.SUPER;
-                break;
-            }
-            case "REPORTS": {
-                permission = PermissionId.REPORTS;
-                break;
-            }
-            case "REGISTRATION": {
-                permission = PermissionId.REGISTRATION;
-                break;
-            }
-            case "USER_DELETE": {
-                permission = PermissionId.USER_DELETE;
-                break;
-            }
-            default: {
-                permission = null;
-            }
-        }
 
         permissionManager.addPermission(staffID, permission);
 
@@ -637,44 +588,32 @@ public class AppointmentRestController {
 
     /**
      * Function used to remove a permission
-     *
      * @return Returns "Permission removed"
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/removePermission")
+    @RequestMapping(method= RequestMethod.POST, value="/removePermission")
     public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission,
                                    @RequestParam(value = "staffID", required = true) String staffID) {
 
-        PermissionId permission = null;
-
-        switch (stringPermission) {
-            case "REGISTRATION_APPROVE": {
-                permission = PermissionId.REGISTRATION_APPROVE;
-                break;
-            }
-            case "SUPER": {
-                permission = PermissionId.SUPER;
-                break;
-            }
-            case "REPORTS": {
-                permission = PermissionId.REPORTS;
-                break;
-            }
-            case "REGISTRATION": {
-                permission = PermissionId.REGISTRATION;
-                break;
-            }
-            case "USER_DELETE": {
-                permission = PermissionId.USER_DELETE;
-                break;
-            }
-            default: {
-                permission = null;
-            }
-        }
+        PermissionId permission = PermissionId.valueOf(stringPermission);
 
         permissionManager.removePermission(staffID, permission);
 
         return "Permission removed";
+    }
+
+
+
+    @RequestMapping(method= RequestMethod.POST, value="/updateEmail")
+    public String updateEmail(Principal principal,
+                              @RequestParam(value = "email", required = true) String email) {
+
+        if (principal != null) {
+            String user = principal.getName();
+            userManager.updateDetails(user, new ContactDetail(ContactTypes.EMAIL, email));
+            return "true";
+        }
+
+        return "false";
     }
 
     @Autowired

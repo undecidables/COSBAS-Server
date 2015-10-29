@@ -7,11 +7,11 @@
 package cosbas.web;
 
 
-import cosbas.calendar_services.*;
+import cosbas.calendar_services.CalendarFactory;
+import cosbas.calendar_services.CalendarType;
 import cosbas.calendar_services.authorization.Authorizer;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
-import cosbas.calendar_services.services.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,18 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class AppointmentController {
 
     private CalendarDBAdapter credentialRepository;
     private CalendarFactory calendarServiceFactory;
-
-    @Autowired
-    private GoogleCalendarService test;
 
     @Autowired
     public void setCredentialRepository(CalendarDBAdapter credentialRepository) {

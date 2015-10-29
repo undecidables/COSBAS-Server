@@ -21,6 +21,8 @@ function hideInputs()
     $("#staffIDcontainer").hide();
     $("#dateContainer").hide();
     $("#statusContainer").hide();
+    $("#userIDcontainer").hide();
+
 }
 
 function initializeTimePicker()
@@ -179,6 +181,13 @@ function showInputs()
         case "ALL_ACCESS_RECORDS_BY_STAFFID":
             $("#staffIDcontainer").show();
             break;
+        case "ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME":
+            $("#userIDcontainer").show();
+            $("#dateContainer").show();
+            break;
+        case "ALL_ACCESS_RECORDS_BY_USERID":
+            $("#userIDcontainer").show();
+            break;
         default:
             break;
 
@@ -284,6 +293,20 @@ function getReport()
                     "staffID":$('#staffID').val()
                 };
                 url = "/createAccessRecordByUserIdReports";
+                break;
+            case "ALL_ACCESS_RECORDS_BY_USERID":
+                data = {"format" : $('#reportFormat').val(),
+                    "staffID":$('#userID').val()
+                };
+                url = "/createAccessRecordByUserIdReports";
+                break;
+            case "ALL_ACCESS_RECORDS_BY_USERID_AND_BETWEEN_DATETIME":
+                data = {"format" : $('#reportFormat').val(),
+                    "dateTimeS":$('#dateTimeS').val() + "T00:00:00+02:00",
+                    "dateTimeE":$('#dateTimeE').val() + "T23:59:59+02:00",
+                    "staffID":$('#userID').val()
+                };
+                url = "/createAccessRecordByUserIdAndBetweenDateTimeReports";
                 break;
             default:
                 break;
