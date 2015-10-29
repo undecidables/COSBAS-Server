@@ -34,10 +34,6 @@ public class FingerprintValidator extends AccessValidator {
     private FingerprintMatching matcher;
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
-        if (fingerprintRepository == null) {
-            System.out.println("NULL REPO!!!1");
-        }
-
         matcher = new FingerprintMatching(request.getData(), request.getUserID(),threshold,fingerprintRepository);
 
         List<BiometricData> items = fingerprintRepository.findByUserID(request.getUserID());
@@ -46,6 +42,6 @@ public class FingerprintValidator extends AccessValidator {
             ValidationResponse response = matcher.matches((FingerprintTemplateData) dbItem, request.getUserID(), action);
             if (response.approved) return response;
         }
-        return ValidationResponse.failedValidation("No Match found");
+        return ValidationResponse.failedValidation("No Match found for " + request.getUserID());
     }
 }

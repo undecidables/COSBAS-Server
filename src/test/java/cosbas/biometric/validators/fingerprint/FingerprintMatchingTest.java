@@ -61,7 +61,7 @@ public class FingerprintMatchingTest {
 
 
 
-    /*@Test
+    @Test
     public void testFingerprintMatching() throws IOException {
         creator = new FingerprintTemplateCreator();
 
@@ -70,7 +70,7 @@ public class FingerprintMatchingTest {
             System.out.println("Counter: " + i);
             newImage = ImageIO.read(new File(path+fingers[i]));
 
-            FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley",newImage,false, fingerprintRepository);
+            FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley",newImage,false, biometricRepo);
             ValidationResponse response = testee.matches(tester,"BCrawley", DoorActions.IN);
 
             if (response.approved) {
@@ -80,15 +80,15 @@ public class FingerprintMatchingTest {
                 System.out.println("Returned Certainty too low try again: " + response.certainty);
             }
         }
-    }*/
+    }
 
-    @Test
+    /*@Test
     public void testFingerprintDB() throws IOException {
         creator = new FingerprintTemplateCreator();
         BufferedImage newImage = ImageIO.read(new File(path+fingers[3]));
 
         if (biometricRepo == null) {
-            System.out.println("REPO IS FUCKING NULL!!!");
+            System.out.println("REPO IS NULL!!!");
         }
 
         FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley", newImage, true, biometricRepo);
@@ -109,6 +109,6 @@ public class FingerprintMatchingTest {
         }
         return;
 
-    }
+    }*/
 
 }

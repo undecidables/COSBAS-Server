@@ -39,6 +39,7 @@ public class FingerProcessing implements BiometricsPreprocessor {
             FingerprintTemplateData registration = creator.createTemplateFingerprintData(null, originalImage, true, fingerprintRepository);
 
             return registration;
+
         } catch (IOException e) {
             e.printStackTrace();
         }

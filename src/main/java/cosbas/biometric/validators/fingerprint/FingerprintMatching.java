@@ -51,7 +51,7 @@ public class FingerprintMatching {
 
         System.out.println("Threshold " + threshold + "\nKeys: " + Num_KeypointsFound + "\nMatched: " + score + "\nMatching Score: " + matchingScore);
 
-        if (matchingScore >= 0.5) {
+        if (matchingScore >= threshold) {
             return new ValidationResponse(true, "Match Found For " + userID, matchingScore);
         }
         else {
