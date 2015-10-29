@@ -347,7 +347,7 @@ public class FaceRecognition {
             if (newData != null && (data == null || newData.updated.isAfter(data.updated))) {
                 this.data = newData;
                 dataRepository.deleteAll();
-               // dataRepository.save(newData);
+                dataRepository.save(newData);
             }
         }  finally {
             dataUpdateLock.unlock();
@@ -429,8 +429,10 @@ public class FaceRecognition {
                 trainingLock.lock();
                 dataUpdateLock.lock();
 
-                if (data != null)
+                if (data != null) {
                     data.setNeedsTraining();
+                    dataRepository.saveTraining(data);
+                }
 
             } finally {
                 dataUpdateLock.unlock();
