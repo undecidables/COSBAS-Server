@@ -69,7 +69,7 @@ html, body {
 
 ::selection {
   background: #003366;
-  color: #fff;
+  color: #003366;
 }
 
 .btn-common {
@@ -89,6 +89,10 @@ html, body {
 
 #header .nav li a {
 	color: white;
+}
+
+#header .nav li > a > ul > li > a{
+    color: #003366;
 }
 
 #header .nav li.active a:after, #header .nav li.active a, #header .nav li a:hover::after, #header .nav li a:hover, #header .nav li a:focus
