@@ -17,8 +17,11 @@ import org.springframework.stereotype.Component;
 public class FacialProcessing implements BiometricsPreprocessor {
 
     private final String encoding = ".png";
-    @Value("${faces.imageSize}")
-    private int dimesions = 150;
+    @Value("${faces.imageWidth}")
+    private int imageWidth;
+
+    @Value("${faces.imageHeight}")
+    private int imageHeight;
     @Autowired
     private ImageProcessor<opencv_core.Mat> helper;
 
@@ -48,7 +51,7 @@ public class FacialProcessing implements BiometricsPreprocessor {
     public BiometricData processRegister(byte[] data, BiometricTypes type) {
 
         opencv_core.Mat greyscale = helper.grayScalefromBytes(data);
-        opencv_core.Mat resized = helper.scaleImage(greyscale, dimesions, dimesions);
+        opencv_core.Mat resized = helper.scaleImage(greyscale, imageWidth, imageHeight);
         byte[] newData = helper.toBytes(resized, encoding);
 
         return new BiometricData(type, newData);

@@ -18,7 +18,9 @@ public class NumericalAccessCodeGenerator extends AccessCodeGenerator {
      * The length of a new code. It has a default value of {@value} if 'codes.newlength' is not specified in the application properties.
      */
     @Value("${codes.newlength:5}")
-    protected int CODE_LENGTH = 5;
+    protected int CODE_LENGTH;
+    @Value("${codes.duplicateTries:10}")
+    protected int CODE_TRIES;
 
     @Autowired
     private CodeValidator validator;
@@ -28,9 +30,16 @@ public class NumericalAccessCodeGenerator extends AccessCodeGenerator {
     }
 
     protected byte[] getCode() {
-        byte[] code = generate(CODE_LENGTH);
+        int length = CODE_LENGTH;
+        byte[] code = generate(length);
+        int tries = 0;
         while(validator.isDuplicate(code)) {
-            code = generate(CODE_LENGTH);
+            tries++;
+            if (tries > CODE_TRIES) {
+                tries = 0;
+                length++;
+            }
+            code = generate(length);
         }
         return code;
     }
