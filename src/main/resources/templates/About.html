@@ -7,8 +7,79 @@
 <body>
 <header th:replace="menu :: navigation"></header>
 
-<div> " " </div>
+<section id="about" class="about-section">
+    <div class="container">
+        <!--<img src="resources/headerCS.gif" alt=""> </img>-->
+        <h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>About</span> Us</h1>
 
+        <div class="row">
+
+            <div id="slide" class="owl-carousel">
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Tienie Pritchard</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Elzahn Botha</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Renette Ros</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Szymon Ziolkowski</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Jason Evans</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Vivian Venter</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="push"></div>
+</section>
 <object th:include="footer" th:remove="tag"/>
 
 <!-- Include Bootstrap plugin -->

@@ -628,3 +628,28 @@ p
     }
 
 
+#header .nav li a {
+    color: white;
+}
+
+.dropdown-menu {
+    background: #003366;
+    width: 200%;
+    padding: 1em;
+    min-width: 250px;
+}
+
+#about .section-title span {
+    color: black;
+
+}
+
+.info h4
+{
+    color: black;
+}
+
+.info p
+{
+    color: black;
+}
