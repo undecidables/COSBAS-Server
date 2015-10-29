@@ -12,6 +12,7 @@ import cosbas.appointment.AppointmentDBAdapter;
 import cosbas.appointment.Appointments;
 import cosbas.biometric.BiometricSystem;
 import cosbas.biometric.request.registration.RegisterRequest;
+import cosbas.biometric.validators.FaceValidator;
 import cosbas.calendar_services.authorization.CalendarDBAdapter;
 import cosbas.calendar_services.authorization.CredentialWrapper;
 import cosbas.calendar_services.services.GoogleCalendarService;
@@ -35,7 +36,7 @@ import java.util.List;
 
 @RestController
 public class AppointmentRestController {
-    
+
     //Private variable used to call the appointment class functions of the appointment class
     @Autowired
     private Appointments appointment;
@@ -73,6 +74,7 @@ public class AppointmentRestController {
 
     /**
      * Setter based dependency injection since mongo automatically creates the bean.
+     *
      * @param repository The repository to be injected.
      */
     public void setRepository(AppointmentDBAdapter repository) {
@@ -80,9 +82,10 @@ public class AppointmentRestController {
     }
 
     /**
-   * Function used to set up the active users of the system that needs to appear in the list of people an appointment can be made with. It is called as soon as the page is loaded
-   * @return Returns the list of active users to be placed in the selection element
-   */
+     * Function used to set up the active users of the system that needs to appear in the list of people an appointment can be made with. It is called as soon as the page is loaded
+     *
+     * @return Returns the list of active users to be placed in the selection element
+     */
 
     @RequestMapping(method = RequestMethod.POST, value = "/getActiveUsers")
     public String getActiveUsers() {
@@ -105,58 +108,58 @@ public class AppointmentRestController {
         return returnPage;
     }
 
-  /**
-   * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
-   * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
-   * @param appointmentDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
-   * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
-   * @param duration - Integer duration of the appointment in minutes as inputted on the html form
-   * @param reason - String reason for the appointment being made as indicated on the html form
-   * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
-   */
+    /**
+     * Fuction used to save the appointment that the user has inputted into the html form on the makeAppointment.html page
+     * @param appointmentWith - String staff memeber ID as gotten from the html dropdown on the html page
+     * @param appointmentDateTime - String Requested date time for the appointment as inputted into the html form it is converted to LocalDateTime in the function
+     * @param appointmentBy - String list of members in the group that is making the appointment as inputted on the htm form
+     * @param duration - Integer duration of the appointment in minutes as inputted on the html form
+     * @param reason - String reason for the appointment being made as indicated on the html form
+     * @return the returned string from the requestAppointment function - It can either be an error message or the appointment identifier
+     */
 
-  @RequestMapping(method= RequestMethod.POST, value="/requestAppointment")
-  public String requestAppointment(
-                     @RequestParam(value = "appointmentWith", required = true) String appointmentWith,
-                     @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
-                     @RequestParam(value = "appointmentBy", required = true) List<String> appointmentBy,
-                     @RequestParam(value = "appointmentDuration", required = true) int duration,
-                     @RequestParam(value = "appointmentReason", required = true) String reason,
-                     @RequestParam(value = "appointmentEmails", required = true) List<String> emails) {
+    @RequestMapping(method= RequestMethod.POST, value="/requestAppointment")
+    public String requestAppointment(
+            @RequestParam(value = "appointmentWith", required = true) String appointmentWith,
+            @RequestParam(value = "requestedDateTime", required = true) String appointmentDateTime,
+            @RequestParam(value = "appointmentBy", required = true) List<String> appointmentBy,
+            @RequestParam(value = "appointmentDuration", required = true) int duration,
+            @RequestParam(value = "appointmentReason", required = true) String reason,
+            @RequestParam(value = "appointmentEmails", required = true) List<String> emails) {
 
-    LocalDateTime dateTime = LocalDateTime.parse(appointmentDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-    return appointment.requestAppointment(appointmentBy, appointmentWith, dateTime, reason, duration, emails);
-  }
+        LocalDateTime dateTime = LocalDateTime.parse(appointmentDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        return appointment.requestAppointment(appointmentBy, appointmentWith, dateTime, reason, duration, emails);
+    }
 
-  /**
-   * Function used to cancel an appointment via the form on the cancel.html page
-   * @param cancellee - String of the name of the person who wants to cancel the appointment.
-   * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
-   * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
-   */
+    /**
+     * Function used to cancel an appointment via the form on the cancel.html page
+     * @param cancellee - String of the name of the person who wants to cancel the appointment.
+     * @param appointmentID - String appointmentID, the appointment ID of the appointment that is being cancelled.
+     * @return the status of the appointment - whether the appoitnment was canceled or if an error occured
+     */
 
-  @RequestMapping(method= RequestMethod.POST, value="/cancelAppointment")
-  public String cancelAppointment(
-                     @RequestParam(value = "cancellee", required = true) String cancellee,
-                     @RequestParam(value = "appointmentID", required = true) String appointmentID) {
+    @RequestMapping(method= RequestMethod.POST, value="/cancelAppointment")
+    public String cancelAppointment(
+            @RequestParam(value = "cancellee", required = true) String cancellee,
+            @RequestParam(value = "appointmentID", required = true) String appointmentID) {
 
-    return appointment.cancelAppointment(cancellee, appointmentID);
-  }
+        return appointment.cancelAppointment(cancellee, appointmentID);
+    }
 
-  /**
-   * Function to check the status of the appointment entered on the status.html form
-   * @param requester - String name of the person requesting the status of the appointment
-   * @param appointmentID - String appoitnment ID of the appointment that you want to check
-   * @return Returns the status and information of the appointment or an appropriate string describing the error
-   */
+    /**
+     * Function to check the status of the appointment entered on the status.html form
+     * @param requester - String name of the person requesting the status of the appointment
+     * @param appointmentID - String appoitnment ID of the appointment that you want to check
+     * @return Returns the status and information of the appointment or an appropriate string describing the error
+     */
 
-  @RequestMapping(method= RequestMethod.POST, value="/status")
-  public String checkStatus(
-                     @RequestParam(value = "requester", required = true) String requester,
-                     @RequestParam(value = "appointmentID", required = true) String appointmentID) {
+    @RequestMapping(method= RequestMethod.POST, value="/status")
+    public String checkStatus(
+            @RequestParam(value = "requester", required = true) String requester,
+            @RequestParam(value = "appointmentID", required = true) String appointmentID) {
 
-    return appointment.checkStatus(requester, appointmentID);
-  }
+        return appointment.checkStatus(requester, appointmentID);
+    }
 
     /**
      * Function used to set up the requested appointments that need to be approved or denied. It is called as soon as the page is loaded
@@ -189,11 +192,11 @@ public class AppointmentRestController {
 
         }
 
-      if (appointments.size() == 0 || returnPage.equals("")) {
-          returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
-      }
-      return returnPage;
-  }
+        if (appointments.size() == 0 || returnPage.equals("")) {
+            returnPage += "<h4 class=\"page-header wow fadeIn\" data-wow-delay=\".2s\"><span>No Appointments</span> Pending</h4>";
+        }
+        return returnPage;
+    }
 
     /**
      * Function to approve a pending appointment
@@ -325,7 +328,7 @@ public class AppointmentRestController {
         if (appointments != null) {
             for (Appointment appointment1 : appointments) {
                 //List<String> with = appointment1.getVisitorIDs();
-               //int duration = appointment1.getDurationMinutes();
+                //int duration = appointment1.getDurationMinutes();
                 //String reason = appointment1.getReason();
                 String[] parts = appointment1.getDateTime().toString().split("T");
                 String tempDateTime = parts[1].substring(0, parts[1].length() - 3);
@@ -336,6 +339,7 @@ public class AppointmentRestController {
                         "</tr>" +
                         "</table>";
             }
+
 
             if (appointments.size() == 0) {
                 returnPage += "<h3 class=\"section-title wow fadeIn\" data-wow-delay=\".2s\"><span>You have no appointments</span> For Today</h3>";
@@ -430,14 +434,14 @@ public class AppointmentRestController {
         }
     }
 
-  /**
-   * Function used to return all the users registered on the system
-   * @return Returns string with the html code to display the users that are registered on the system
-   */
-  @RequestMapping(method= RequestMethod.POST, value="/getRegisteredUsers")
-  public String getRegisteredUsers() {
-    List<User> users = biometricSystem.getUsers();
-      
+    /**
+     * Function used to return all the users registered on the system
+     * @return Returns string with the html code to display the users that are registered on the system
+     */
+    @RequestMapping(method= RequestMethod.POST, value="/getRegisteredUsers")
+    public String getRegisteredUsers() {
+        List<User> users = biometricSystem.getUsers();
+
 
         String returnPage = "";
 
@@ -452,6 +456,7 @@ public class AppointmentRestController {
                         "</tr>" +
                         "</table>";
             }
+
 
             if (users.size() == 0) {
                 returnPage += "<div id=\"permissionAuthorization\" class=\"wow fadeIn alert alert-warning\" data-wow-delay=\".2s\"><strong><i class=\"fa fa-exclamation-triangle\"></i>  INFORMATION: </strong><br/> No Users On The System</div>";
@@ -480,14 +485,14 @@ public class AppointmentRestController {
         return "User removed";
     }
 
-  /**
-  * Function to return all users on the system for permission altering
-  */
-  @RequestMapping(method= RequestMethod.POST, value="/getUsersForPermissionUpdate")
-  public String getUsersForPermissionUpdate(){
-    List<User> users = biometricSystem.getUsers();
-    
-    String returnPage = "";
+    /**
+     * Function to return all users on the system for permission altering
+     */
+    @RequestMapping(method= RequestMethod.POST, value="/getUsersForPermissionUpdate")
+    public String getUsersForPermissionUpdate(){
+        List<User> users = biometricSystem.getUsers();
+
+        String returnPage = "";
 
         if (users != null) {
             for (int i = 0; i < users.size(); i++) {
@@ -533,6 +538,7 @@ public class AppointmentRestController {
     }
 
     /**
+
      * Function to return all user's permissions
      */
     @RequestMapping(method = RequestMethod.POST, value = "/getUserPermissions")
@@ -541,52 +547,52 @@ public class AppointmentRestController {
 
         String returnPage = "";
 
-    if(permissions != null){
+        if(permissions != null){
 
-      for(int i = 0; i < permissions.size(); i++)
-      {
-        Permission permission = permissions.get(i);
+            for(int i = 0; i < permissions.size(); i++)
+            {
+                Permission permission = permissions.get(i);
 
-        returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
-                      "<tr>" +
-                      "<td colspan=\"2\" class=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
-                      "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
-                      "</tr>" +
-                      "</table>";
-      }
-        
-      if(permissions.size() == 0){
-        returnPage += "no permissions";      
-      } 
-    } else {
-      returnPage += "no permissions";      
+                returnPage += "<table class=\"table table-striped table-bordered table-condensed form-group\">" +
+                        "<tr>" +
+                        "<td colspan=\"2\" class=\"userCol\"><p class=\"userPermission\">" + permission.toString() + "</p></td>" +
+                        "<td><button class='form-control deny denyBtn' type='submit' value='Deny'><i class = \"fa fa-times\"></i></button></td></tr>" +
+                        "</tr>" +
+                        "</table>";
+            }
+
+            if(permissions.size() == 0){
+                returnPage += "no permissions";
+            }
+        } else {
+            returnPage += "no permissions";
+        }
+        return returnPage;
     }
-     return returnPage;
-    }
 
-  /**
-   * Function used to add a permission
-   * @return the string "Permission added"
-   */
-  @RequestMapping(method= RequestMethod.POST, value="/addPermission")
-  public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission, 
+    /**
+     * Function used to add a permission
+     * @return the string "Permission added"
+     */
+    @RequestMapping(method= RequestMethod.POST, value="/addPermission")
+    public String addPermission(@RequestParam(value = "permission", required = true) String stringPermission,
                                 @RequestParam(value = "staffID", required = true) String staffID) {
 
-    PermissionId permission = PermissionId.valueOf(stringPermission);
+        PermissionId permission = PermissionId.valueOf(stringPermission);
 
 
         permissionManager.addPermission(staffID, permission);
 
         return "Permission added";
     }
-    
-  /**
-   * Function used to remove a permission
-   * @return Returns "Permission removed"
-   */
+
+    /**
+     * Function used to remove a permission
+     * @return Returns "Permission removed"
+     */
     @RequestMapping(method= RequestMethod.POST, value="/removePermission")
     public String removePermission(@RequestParam(value = "permission", required = true) String stringPermission,
-                            @RequestParam(value = "staffID", required = true) String staffID) {
+                                   @RequestParam(value = "staffID", required = true) String staffID) {
 
         PermissionId permission = PermissionId.valueOf(stringPermission);
 
@@ -594,6 +600,7 @@ public class AppointmentRestController {
 
         return "Permission removed";
     }
+
 
 
     @RequestMapping(method= RequestMethod.POST, value="/updateEmail")
@@ -607,5 +614,21 @@ public class AppointmentRestController {
         }
 
         return "false";
+    }
+
+    @Autowired
+    FaceValidator faceValidator;
+
+    @RequestMapping(method = RequestMethod.POST, value = "/trainSystem")
+    public String trainSystem() {
+        try
+        {
+            faceValidator.forceTrain();
+        }
+        catch (Exception e)
+        {
+            return "error";
+        }
+        return "success";
     }
 }
