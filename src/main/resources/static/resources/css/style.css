@@ -55,8 +55,8 @@ html, body {
 #header .main-navigation
 {
     font-family: 'Open Sans', sans-serif;
-    color: #003366;
-    background: rgba(255,255,255,0);
+    color: white;
+    background: #003366;
 }
 
 #footer
@@ -88,7 +88,7 @@ html, body {
 }
 
 #header .nav li a {
-	color: #003366;
+	color: white;
 }
 
 #header .nav li.active a:after, #header .nav li.active a, #header .nav li a:hover::after, #header .nav li a:hover, #header .nav li a:focus
