@@ -631,4 +631,20 @@ public class AppointmentRestController {
         }
         return "success";
     }
+
+    @RequestMapping(method= RequestMethod.POST, value="/canRegister")
+    public String canRegister(Principal principal,
+                              @RequestParam(value = "staffID", required = true) String staffID) {
+
+
+        if(permissionManager.hasPermission(staffID, PermissionId.REGISTRATION))
+        {
+            return "true";
+        }
+        else
+        {
+            return "false";
+        }
+    }
+
 }
