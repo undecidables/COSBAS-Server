@@ -3,6 +3,7 @@ package cosbas.biometric.validators.fingerprint;
 
 import cosbas.biometric.data.BiometricDataDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,10 +14,7 @@ import java.util.ArrayList;
  */
 public class FingerprintTemplateCreator {
 
-    @Autowired
-    private BiometricDataDAO fingerprintRepository;
-
-    public FingerprintTemplateData createTemplateFingerprintData(String userID, BufferedImage image, boolean registrationOnly) {
+    public FingerprintTemplateData createTemplateFingerprintData(String userID, BufferedImage image, boolean registrationOnly, BiometricDataDAO fingerprintRepository) {
 
         Fingerprint finger = new Fingerprint(image);
         finger.setColors(Color.black, Color.green);
@@ -57,7 +55,6 @@ public class FingerprintTemplateCreator {
             return fingerprintData;
         }
         else {
-            // s
             return fingerprintData;
         }
         //BufferedImage i1 = finger.toBufferedImage();

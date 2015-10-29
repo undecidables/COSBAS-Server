@@ -28,10 +28,17 @@ public class FingerprintValidator extends AccessValidator {
     }
 
     @Value("${fingers.threshold}")
-    private int threshold;
+    private double threshold;
+
+    @Autowired
+    private FingerprintMatching matcher;
 
     public ValidationResponse identifyUser(BiometricData request, DoorActions action) {
-        FingerprintMatching matcher = new FingerprintMatching(request.getData(), request.getUserID(),threshold);
+        if (fingerprintRepository == null) {
+            System.out.println("NULL REPO!!!1");
+        }
+
+        matcher = new FingerprintMatching(request.getData(), request.getUserID(),threshold,fingerprintRepository);
 
         List<BiometricData> items = fingerprintRepository.findByUserID(request.getUserID());
 

@@ -1,10 +1,10 @@
 package cosbas.biometric.validators.fingerprint;
 
-import com.google.api.client.util.Value;
-import cosbas.biometric.data.BiometricData;
+import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
 import cosbas.biometric.validators.ValidationResponse;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,15 +17,14 @@ import java.util.*;
 /**
  * {@Author Vivian Venter}
  */
-@Service
 public class FingerprintMatching {
     private double matchingScore;
     private FingerprintTemplateData originalImageTemplateData;
     private int Num_KeypointsFound;
 
-    private int threshold;
+    private double threshold;
 
-    public FingerprintMatching(byte[] image, String userID, int threshold) {
+    public FingerprintMatching(byte[] image, String userID, double threshold, BiometricDataDAO fingerprintRepository) {
         try {
             this.threshold = threshold;
             this.matchingScore = 0.0;
@@ -34,7 +33,7 @@ public class FingerprintMatching {
 
             // bifurcations and endpoints is stored in this object
             FingerprintTemplateCreator creator = new FingerprintTemplateCreator();
-            originalImageTemplateData = creator.createTemplateFingerprintData(userID, originalImage, false);
+            originalImageTemplateData = creator.createTemplateFingerprintData(userID, originalImage, false, fingerprintRepository);
 
             Num_KeypointsFound = originalImageTemplateData.getEndPoints().size() + originalImageTemplateData.getBifurcations().size();
 

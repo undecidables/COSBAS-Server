@@ -1,6 +1,5 @@
 package cosbas.biometric.validators.fingerprint;
 
-import com.google.api.client.util.Value;
 import cosbas.biometric.data.BiometricData;
 import cosbas.biometric.data.BiometricDataDAO;
 import cosbas.biometric.request.DoorActions;
@@ -8,10 +7,13 @@ import cosbas.biometric.validators.ValidationResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,9 +26,6 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class FingerprintMatchingTest {
-
-    @Value("${fingers.threshold}")
-    private int threshold;
 
     private final String path = "./src/test/resources/fingerprints/";
     private final String finger1 = "test100.bmp";
@@ -46,7 +45,7 @@ public class FingerprintMatchingTest {
 
         originalImage = ImageIO.read(new File(path+finger1));
         byte[] dbItem = imagetobyte(originalImage);
-        testee = new FingerprintMatching(dbItem,"BCrawley", threshold);
+        testee = new FingerprintMatching(dbItem,"BCrawley", 0.5, biometricRepo);
 
     }
 
@@ -62,7 +61,7 @@ public class FingerprintMatchingTest {
 
 
 
-    @Test
+    /*@Test
     public void testFingerprintMatching() throws IOException {
         creator = new FingerprintTemplateCreator();
 
@@ -71,7 +70,7 @@ public class FingerprintMatchingTest {
             System.out.println("Counter: " + i);
             newImage = ImageIO.read(new File(path+fingers[i]));
 
-            FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley",newImage,false);
+            FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley",newImage,false, fingerprintRepository);
             ValidationResponse response = testee.matches(tester,"BCrawley", DoorActions.IN);
 
             if (response.approved) {
@@ -81,6 +80,35 @@ public class FingerprintMatchingTest {
                 System.out.println("Returned Certainty too low try again: " + response.certainty);
             }
         }
+    }*/
+
+    @Test
+    public void testFingerprintDB() throws IOException {
+        creator = new FingerprintTemplateCreator();
+        BufferedImage newImage = ImageIO.read(new File(path+fingers[3]));
+
+        if (biometricRepo == null) {
+            System.out.println("REPO IS FUCKING NULL!!!");
+        }
+
+        FingerprintTemplateData tester = creator.createTemplateFingerprintData("BCrawley", newImage, true, biometricRepo);
+
+        List<BiometricData> tester1 = biometricRepo.findByUserID("BCrawley");
+
+        if(tester1 != null) {
+            System.out.println("Tester1 null");
+
+            FingerprintTemplateData finger = (FingerprintTemplateData) tester1.get(0);
+
+            if (finger != null) {
+
+                ArrayList<Point> bi = finger.getBifurcations();
+                System.out.println(bi.get(0));
+
+            }
+        }
+        return;
+
     }
 
 }
