@@ -1,12 +1,15 @@
 package cosbas.biometric.helper;
 
 import cosbas.biometric.validators.exceptions.ValidationException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -58,6 +61,15 @@ public abstract class FaceDetector<T> {
 
     public byte[] getCenterFace(byte[] data, String resultEncoding) throws ValidationException {
         T image = converter.grayScalefromBytes(data);
+
+        byte[] newData = converter.toBytes(image, ".png");
+        File file = new File("test.png");
+        try {
+            FileUtils.writeByteArrayToFile(file, newData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         List<Rectangle> rectangles = detectFaces(image);
         if (rectangles.isEmpty())
             throw new ValidationException("No faces detected.");

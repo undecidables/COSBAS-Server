@@ -1,5 +1,6 @@
 package cosbas.biometric.helper;
 
+import org.apache.commons.io.FileUtils;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_objdetect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,10 @@ public class OpenCVFaceDetector extends FaceDetector<opencv_core.Mat> {
 
     @PostConstruct
     public void constructClassifier() throws IOException {
-        try {
+
             faceDetector = new opencv_objdetect.CascadeClassifier(classifierFilename);
-        }
-        catch (Exception e) {
-            throw new IOException("Cannot load classifier file: " + e.getMessage());
-        }
+
+            byte[] image = FileUtils.readFileToByteArray(new File(classifierFilename));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class OpenCVFaceDetector extends FaceDetector<opencv_core.Mat> {
 
     @Override
     public Rectangle mostCenterRect(List<Rectangle> rects, double imageCenterX, double imageCenterY) {
-        double bestDist = Point.distance(0,0, imageCenterX, imageCenterY);
+        double bestDist = Integer.MAX_VALUE;
 
         Rectangle bestRect = null;
         for (Rectangle rect: rects) {

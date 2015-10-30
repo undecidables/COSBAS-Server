@@ -45,7 +45,9 @@ public class MatProcessor implements ImageProcessor<opencv_core.Mat> {
     @Override
     public opencv_core.Mat scaleImage(opencv_core.Mat original, int width, int height) {
         opencv_core.Mat resizedImage = new opencv_core.Mat();
-        opencv_core.Size sz = new opencv_core.Size(width, height);
+        opencv_core.Size sz = new opencv_core.Size(Math.abs(width),Math.abs(height));
+
+
         resize(original, resizedImage, sz);
         return resizedImage;
     }
@@ -53,7 +55,8 @@ public class MatProcessor implements ImageProcessor<opencv_core.Mat> {
     @Override
     public opencv_core.Mat crop(opencv_core.Mat mat, Rectangle rectangle) {
         /** Use clone to ensure deep copy */
-        return (new opencv_core.Mat(mat, new opencv_core.Rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height))).clone();
+        opencv_core.Mat tmp = new opencv_core.Mat(mat, new opencv_core.Rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height)).clone();
+        return tmp;
     }
 
     @Override
