@@ -25,6 +25,14 @@ html, body {
 	height: 100%;
 }
 
+#about
+{
+    min-height: 100%;
+    height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
+}
+
 #contact
 {
     min-height: 100%;
