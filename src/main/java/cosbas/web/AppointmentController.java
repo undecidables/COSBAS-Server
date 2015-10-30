@@ -169,4 +169,9 @@ public class AppointmentController {
     {
       return "changePermissions";
     }
+
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String aboutPage(){
+        return "about";
+    }
 }
