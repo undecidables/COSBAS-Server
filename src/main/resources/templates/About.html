@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head >
     <object th:include="head :: header" th:remove="tag" />
-    <title>COSBAS Service</title>
+    <title>About Us</title>
 </head>
 <body>
 <header th:replace="menu :: navigation"></header>
-
 <section id="about" class="about-section">
     <div class="container">
         <!--<img src="resources/headerCS.gif" alt=""> </img>-->
@@ -87,6 +86,7 @@
 </section>
 <object th:include="footer" th:remove="tag"/>
 
+
 <!-- Include Bootstrap plugin -->
 <script src="resources/assets/js/bootstrap.min.js"></script>
 <!-- One page Nav plugin -->
@@ -106,6 +106,6 @@
 <script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
 <!-- Main js -->
 <script src="resources/assets/js/main.js"></script>
-
+<script src="resources/scripts/custom/registrationRequests.js"></script>
 </body>
 </html>
