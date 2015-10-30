@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+    <object th:include="head :: header" th:remove="tag" />
+    <title>About Us</title>
+</head>
+<body>
+<header th:replace="menu :: navigation"></header>
+<section id="about" class="about-section">
+    <div class="container">
+        <!--<img src="resources/headerCS.gif" alt=""> </img>-->
+        <h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>About</span> COSBAS</h1>
+
+        <div class="row">
+           <div class="col-sm-6 col-md-6 col-md-offset-3 wow fadeIn text-center">
+               <p>The COSBAS project was the ingenuous idea of Prof. A. Engelbrecht of the University of Pretoria. The
+               of this project was also enrolled students in the Software Engineering module.</p>
+           </div>
+            <br />
+            <h1 class="section-title wow fadeIn" data-wow-delay=".2s"><span>Developers</span> Us</h1>
+            <div id="slide" class="owl-carousel">
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Tienie Pritchard</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Elzahn Botha</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Renette Ros</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Szymon Ziolkowski</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col-sm-6 col-md-6 wow fadeInLeft" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Jason Evans</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 wow fadeInRight" data-wow-offset="10">
+                        <div class="side-left">
+                            <div class="info">
+                                <h4>Vivian Venter</h4>
+
+                                <p>Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="push"></div>
+</section>
+<object th:include="footer" th:remove="tag"/>
+
+
+<!-- Include Bootstrap plugin -->
+<script src="resources/assets/js/bootstrap.min.js"></script>
+<!-- One page Nav plugin -->
+<script src="resources/assets/js/jquery.nav.js"></script>
+<!-- Include Bootstrap plugin -->
+<script src="resources/assets/js/owl.carousel.js"></script>
+<!-- Include wow plugin -->
+<script src="resources/assets/js/wow.js"></script>
+<!-- Include mixitup plugin -->
+<script src="resources/assets/js/jquery.mixitup.js"></script>
+<!-- ScrollTop -->
+
+
+<!-- preset js -->
+<script src="resources/assets/js/style.changer.js"></script>
+<!-- Modernizr js -->
+<script src="resources/assets/js/modernizr-2.8.0.main.js"></script>
+<!-- Main js -->
+<script src="resources/assets/js/main.js"></script>
+<script src="resources/scripts/custom/registrationRequests.js"></script>
+</body>
+</html>

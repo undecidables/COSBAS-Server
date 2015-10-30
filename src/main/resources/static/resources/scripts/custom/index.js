@@ -56,12 +56,12 @@ function spawnCalendar(returned)
         defaultView: 'month',
        viewRender: function(currentView){
          $('#loadingCalendar').remove();
-         $(".fc-prev-button").hide();
+         /*$(".fc-prev-button").hide();
          $(".fc-next-button").hide();
          $(".fc-today-button").hide();
          $(".fc-month-button").hide();
          $(".fc-agendaWeek-button").hide();
-         $(".fc-agendaDay-button").hide();
+         $(".fc-agendaDay-button").hide();*/
        },
        eventRender: function (event, element) {
          element.attr('href', 'javascript:void(0);');
