@@ -29,10 +29,10 @@
 
     <bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager" />
 
-    <!--<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+    <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
         <constructor-arg name="username" value="${mongo.user}"/>
         <constructor-arg name="password" value="${mongo.password}" />
-    </bean> -->
+    </bean>
 
     <!-- MongoTemplate for connecting and querying the documents in the database -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
