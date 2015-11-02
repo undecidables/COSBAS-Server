@@ -70,11 +70,15 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 @Scope("singleton")
 public class FaceRecognition {
 
-    public class Trainer implements Runnable {
+    private class Trainer implements Runnable {
         @Override
         public void run() {
             trainFromDB();
         }
+    }
+
+    public Trainer getTrainer() {
+        return new Trainer();
     }
 
     volatile RecognizerData data;

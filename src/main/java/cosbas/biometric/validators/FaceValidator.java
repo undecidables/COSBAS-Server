@@ -53,12 +53,12 @@ public class FaceValidator extends AccessValidator {
     @Scheduled(cron="${scheduling.faceTrainer}")
     public void train() {
         if (recognizer.needsTraining()) {
-            recognizer.trainFromDB();
+            (new Thread(recognizer.getTrainer())).start();
         }
     }
 
     public void forceTrain() {
-        recognizer.trainFromDB();
+        (new Thread(recognizer.getTrainer())).start();
     }
 
     @Override
@@ -71,5 +71,6 @@ public class FaceValidator extends AccessValidator {
         super.deregisterUser(request);
         recognizer.setNeedsTraining();
     }
+
 
 }
